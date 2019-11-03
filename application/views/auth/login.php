@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <title>Login &mdash; Stisla</title>
+  <title><?= $title; ?></title>
 
   <!-- General CSS Files -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -27,7 +27,7 @@
             <img src="<?= base_url() ?>/assets/img/skpapps.png" alt="logo" class="mb-5 mt-2">
             <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">SKP-APPS</span></h4>
 
-            <form method="POST" action="#" class="needs-validation" novalidate="">
+            <form method="POST" action="<?= base_url('Auth') ?>" class="needs-validation" novalidate="">
               <div class="form-group">
                 <label for="username">Username</label>
                 <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>

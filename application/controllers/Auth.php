@@ -1,7 +1,15 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+require FCPATH .  "/vendor/autoload.php";
+
+use Araditama\AuthSIAM\AuthSIAM;
+
 class Auth extends CI_Controller
 {
+    private $username = "cek";
+    private $password;
+
     public function __construct()
     {
         parent::__construct();
@@ -9,33 +17,57 @@ class Auth extends CI_Controller
     }
     public function index()
     {
-        $this->load->view('auth/login');
+
+        $this->form_validation->set_rules('username', 'Username', 'required|trim');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $data['title'] = 'SKP-APPS Login';
+            $this->load->view('auth/login', $data);
+        } else {
+            // validasi success
+            $this->_login();
+        }
     }
     private function _login()
     {
-        $username = $this->input->post('username');
-        $password = $this->input->post('password');
+        $auth = new AuthSIAM;
 
-        $user = $this->db->get_where('user', ['username' => $username])->row_array();
-
-        // Cek ketersediaan user
-        if ($user) {
-            // cek password
-            if (password_verify($password, $user['password'])) {
-                $this->session->set_userdata('username', $username);
-                $this->session->set_userdata('status_user', $user['status_user']);
-                if ($user['status_user'] == 0) {
-                    redirect('admin');
-                } else {
-                    redirect('operator');
-                }
-            } else {
-                $this->session->set_flashdata('message', '<div class="alert alert-danger text-center align-middle mb-3" role="alert"><p>Password salah !</p></div>');
-                redirect('auth');
-            }
+        $this->username = $this->input->post('username');
+        $this->password = $this->input->post('password');
+        // contoh array dari credentials yang akan diproses
+        $data = [
+            'nim' => $this->username,
+            'password' => $this->password
+        ];
+        // memanggil method auth dari objek yang telah dibuat dengan method GET
+        $result = $auth->auth($data);
+        if ($result['msg']) {
+            $data = [
+                "username" => $result['data']['nim'],
+                "status_user_id" => $result['data']['status']
+            ];
+            $this->session->set_userdata($data);
+            redirect('Mahasiswa');
+            var_dump($data);
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger text-center align-middle mb-3" role="alert"><p>Username tidak terdaftar !</p></div>');
-            redirect('auth');
+
+            $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
+            if ($user['is_active'] == 1) {
+                // cek password
+                if (password_verify($this->password, $user['password'])) {
+                    $data = [
+                        'username' => $user['username'],
+                        'user_profile_kode' => $user['user_profile_kode']
+                    ];
+
+                    $this->session->set_userdata($data);
+                    if ($user['status_user_id'] == 2) { } elseif ($user['status_user_id'] == 3) { } elseif ($user['status_user_id'] == 4) { } elseif ($user['status_user_id'] == 5) { }
+                } else {
+                    $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Wrong Password !</div> ');
+                    redirect('auth');
+                }
+            }
         }
     }
     public function logout()
