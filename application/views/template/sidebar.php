@@ -12,13 +12,13 @@
                 <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
             </li>
             <li class="nav-item ">
-                <a href="#" class="nav-link"><i class="fas fa-rocket"></i><span>Poin S</span></a>
+                <a href="#" class="nav-link"><i class="fas fa-rocket"></i><span>Poin Skp</span></a>
             </li>
             <li class="nav-item ">
-                <a href="#" class="nav-link"><i class="fas fa-fire"></i><span>Dashboard</span></a>
+                <a href="#" class="nav-link"><i class="fas fa-clipboard"></i><span>Pengajuan</span></a>
             </li>
             <li class="nav-item ">
-                <a href="#" class="nav-link"><i class="fas fa-briefcase"></i><span>Dashboard</span></a>
+                <a href="#" class="nav-link"><i class="fas fa-briefcase"></i><span>Beasiswa</span></a>
             </li>
 
             <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
