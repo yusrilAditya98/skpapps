@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.0.1
+-- version 4.7.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Nov 05, 2019 at 07:17 AM
--- Server version: 10.4.6-MariaDB
--- PHP Version: 7.3.8
+-- Host: 127.0.0.1
+-- Generation Time: 06 Nov 2019 pada 08.37
+-- Versi Server: 10.1.28-MariaDB
+-- PHP Version: 7.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -25,12 +25,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `anggota_kegiatan`
+-- Struktur dari tabel `anggota_kegiatan`
 --
 
 CREATE TABLE `anggota_kegiatan` (
   `id_anggota_kegiatan` int(10) NOT NULL,
-  `nim` int(5) NOT NULL,
+  `nim` varchar(50) NOT NULL,
   `id_kegiatan` int(10) NOT NULL,
   `keaktifan` int(1) NOT NULL,
   `id_prestasi` int(10) NOT NULL
@@ -39,7 +39,7 @@ CREATE TABLE `anggota_kegiatan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `beasiswa`
+-- Struktur dari tabel `beasiswa`
 --
 
 CREATE TABLE `beasiswa` (
@@ -51,7 +51,7 @@ CREATE TABLE `beasiswa` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `bidang_kegiatan`
+-- Struktur dari tabel `bidang_kegiatan`
 --
 
 CREATE TABLE `bidang_kegiatan` (
@@ -60,7 +60,7 @@ CREATE TABLE `bidang_kegiatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `bidang_kegiatan`
+-- Dumping data untuk tabel `bidang_kegiatan`
 --
 
 INSERT INTO `bidang_kegiatan` (`id_bidang`, `nama_bidang`) VALUES
@@ -74,7 +74,7 @@ INSERT INTO `bidang_kegiatan` (`id_bidang`, `nama_bidang`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dana_pagu_lembaga`
+-- Struktur dari tabel `dana_pagu_lembaga`
 --
 
 CREATE TABLE `dana_pagu_lembaga` (
@@ -88,19 +88,19 @@ CREATE TABLE `dana_pagu_lembaga` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Dasar_penilaian`
+-- Struktur dari tabel `dasar_penilaian`
 --
 
-CREATE TABLE `Dasar_penilaian` (
+CREATE TABLE `dasar_penilaian` (
   `id_dasar_penilaian` int(10) NOT NULL,
   `nama_dasar_penilaian` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `Dasar_penilaian`
+-- Dumping data untuk tabel `dasar_penilaian`
 --
 
-INSERT INTO `Dasar_penilaian` (`id_dasar_penilaian`, `nama_dasar_penilaian`) VALUES
+INSERT INTO `dasar_penilaian` (`id_dasar_penilaian`, `nama_dasar_penilaian`) VALUES
 (1, 'Sert/SK'),
 (2, 'Sert/SK/SP'),
 (3, 'Presensi/Kartu Pemilih'),
@@ -124,7 +124,7 @@ INSERT INTO `Dasar_penilaian` (`id_dasar_penilaian`, `nama_dasar_penilaian`) VAL
 -- --------------------------------------------------------
 
 --
--- Table structure for table `dokumentasi_kegiatan`
+-- Struktur dari tabel `dokumentasi_kegiatan`
 --
 
 CREATE TABLE `dokumentasi_kegiatan` (
@@ -139,7 +139,7 @@ CREATE TABLE `dokumentasi_kegiatan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jenis_kegiatan`
+-- Struktur dari tabel `jenis_kegiatan`
 --
 
 CREATE TABLE `jenis_kegiatan` (
@@ -149,7 +149,7 @@ CREATE TABLE `jenis_kegiatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `jenis_kegiatan`
+-- Dumping data untuk tabel `jenis_kegiatan`
 --
 
 INSERT INTO `jenis_kegiatan` (`id_jenis_kegiatan`, `jenis_kegiatan`, `id_bidang`) VALUES
@@ -196,7 +196,7 @@ INSERT INTO `jenis_kegiatan` (`id_jenis_kegiatan`, `jenis_kegiatan`, `id_bidang`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `jurusan`
+-- Struktur dari tabel `jurusan`
 --
 
 CREATE TABLE `jurusan` (
@@ -205,7 +205,7 @@ CREATE TABLE `jurusan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `jurusan`
+-- Dumping data untuk tabel `jurusan`
 --
 
 INSERT INTO `jurusan` (`kode_jurusan`, `nama_jurusan`) VALUES
@@ -216,7 +216,7 @@ INSERT INTO `jurusan` (`kode_jurusan`, `nama_jurusan`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kegiatan`
+-- Struktur dari tabel `kegiatan`
 --
 
 CREATE TABLE `kegiatan` (
@@ -249,7 +249,7 @@ CREATE TABLE `kegiatan` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kegiatan_sumber_dana`
+-- Struktur dari tabel `kegiatan_sumber_dana`
 --
 
 CREATE TABLE `kegiatan_sumber_dana` (
@@ -261,7 +261,7 @@ CREATE TABLE `kegiatan_sumber_dana` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `kuliah_tamu`
+-- Struktur dari tabel `kuliah_tamu`
 --
 
 CREATE TABLE `kuliah_tamu` (
@@ -278,7 +278,7 @@ CREATE TABLE `kuliah_tamu` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lembaga`
+-- Struktur dari tabel `lembaga`
 --
 
 CREATE TABLE `lembaga` (
@@ -294,11 +294,11 @@ CREATE TABLE `lembaga` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `mahasiswa`
+-- Struktur dari tabel `mahasiswa`
 --
 
 CREATE TABLE `mahasiswa` (
-  `nim` int(5) NOT NULL,
+  `nim` varchar(50) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `total_poin_skp` int(10) NOT NULL,
   `alamat_kos` varchar(255) NOT NULL,
@@ -308,16 +308,23 @@ CREATE TABLE `mahasiswa` (
   `nomor_hp` varchar(15) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `mahasiswa`
+--
+
+INSERT INTO `mahasiswa` (`nim`, `nama`, `total_poin_skp`, `alamat_kos`, `alamat_rumah`, `email`, `kode_prodi`, `nomor_hp`) VALUES
+('165150201111230', 'Aditya Yusril Fikri', 0, 'Jln. Simpang Candi Panggung', 'Jln. H. Naim Btn Bumi Mataram Indah Blok B/5 Jempong Barat', 'adit9b02@gmail.com', 7, '083129097726');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `penerima_beasiswa`
+-- Struktur dari tabel `penerima_beasiswa`
 --
 
 CREATE TABLE `penerima_beasiswa` (
   `id_penerima` int(5) NOT NULL,
   `id_beasiswa` int(5) NOT NULL,
-  `nim` int(5) NOT NULL,
+  `nim` varchar(50) NOT NULL,
   `tahun_menerima` date NOT NULL,
   `lama_menerima` date NOT NULL,
   `nominal` double NOT NULL,
@@ -329,24 +336,24 @@ CREATE TABLE `penerima_beasiswa` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `peserta_kuliah_tamu`
+-- Struktur dari tabel `peserta_kuliah_tamu`
 --
 
 CREATE TABLE `peserta_kuliah_tamu` (
   `id_peserta_kuliah_tamu` int(5) NOT NULL,
-  `nim` int(5) NOT NULL,
+  `nim` varchar(50) NOT NULL,
   `id_kuliah_tamu` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `poin_skp`
+-- Struktur dari tabel `poin_skp`
 --
 
 CREATE TABLE `poin_skp` (
   `id_poin_skp` int(10) NOT NULL,
-  `nim` int(5) NOT NULL,
+  `nim` varchar(50) NOT NULL,
   `nama_kegiatan` varchar(50) NOT NULL,
   `validasi_prestasi` int(10) NOT NULL,
   `tgl_pelaksanaan` date NOT NULL,
@@ -360,7 +367,7 @@ CREATE TABLE `poin_skp` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `poin_skp_sumber_dana`
+-- Struktur dari tabel `poin_skp_sumber_dana`
 --
 
 CREATE TABLE `poin_skp_sumber_dana` (
@@ -372,19 +379,19 @@ CREATE TABLE `poin_skp_sumber_dana` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `Prestasi`
+-- Struktur dari tabel `prestasi`
 --
 
-CREATE TABLE `Prestasi` (
+CREATE TABLE `prestasi` (
   `id_prestasi` int(10) NOT NULL,
   `nama_prestasi` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `Prestasi`
+-- Dumping data untuk tabel `prestasi`
 --
 
-INSERT INTO `Prestasi` (`id_prestasi`, `nama_prestasi`) VALUES
+INSERT INTO `prestasi` (`id_prestasi`, `nama_prestasi`) VALUES
 (1, 'Peserta'),
 (2, 'Ketua'),
 (3, 'Wakil Ketua'),
@@ -407,7 +414,7 @@ INSERT INTO `Prestasi` (`id_prestasi`, `nama_prestasi`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `prodi`
+-- Struktur dari tabel `prodi`
 --
 
 CREATE TABLE `prodi` (
@@ -417,7 +424,7 @@ CREATE TABLE `prodi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `prodi`
+-- Dumping data untuk tabel `prodi`
 --
 
 INSERT INTO `prodi` (`kode_prodi`, `nama_prodi`, `kode_jurusan`) VALUES
@@ -441,7 +448,7 @@ INSERT INTO `prodi` (`kode_prodi`, `nama_prodi`, `kode_jurusan`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `semua_prestasi`
+-- Struktur dari tabel `semua_prestasi`
 --
 
 CREATE TABLE `semua_prestasi` (
@@ -453,7 +460,7 @@ CREATE TABLE `semua_prestasi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `semua_prestasi`
+-- Dumping data untuk tabel `semua_prestasi`
 --
 
 INSERT INTO `semua_prestasi` (`id_semua_prestasi`, `bobot`, `id_semua_tingkatan`, `id_prestasi`, `id_dasar_penilaian`) VALUES
@@ -642,7 +649,7 @@ INSERT INTO `semua_prestasi` (`id_semua_prestasi`, `bobot`, `id_semua_tingkatan`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `semua_tingkatan`
+-- Struktur dari tabel `semua_tingkatan`
 --
 
 CREATE TABLE `semua_tingkatan` (
@@ -652,7 +659,7 @@ CREATE TABLE `semua_tingkatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `semua_tingkatan`
+-- Dumping data untuk tabel `semua_tingkatan`
 --
 
 INSERT INTO `semua_tingkatan` (`id_semua_tingkatan`, `id_jenis_kegiatan`, `id_tingkatan`) VALUES
@@ -751,7 +758,7 @@ INSERT INTO `semua_tingkatan` (`id_semua_tingkatan`, `id_jenis_kegiatan`, `id_ti
 -- --------------------------------------------------------
 
 --
--- Table structure for table `sumber_dana`
+-- Struktur dari tabel `sumber_dana`
 --
 
 CREATE TABLE `sumber_dana` (
@@ -760,7 +767,7 @@ CREATE TABLE `sumber_dana` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `sumber_dana`
+-- Dumping data untuk tabel `sumber_dana`
 --
 
 INSERT INTO `sumber_dana` (`id_sumber_dana`, `nama_sumber_dana`) VALUES
@@ -773,7 +780,37 @@ INSERT INTO `sumber_dana` (`id_sumber_dana`, `nama_sumber_dana`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tingkatan`
+-- Struktur dari tabel `tgl_valid_lpj`
+--
+
+CREATE TABLE `tgl_valid_lpj` (
+  `id` int(11) NOT NULL,
+  `tgl_v_bem` date NOT NULL,
+  `tgl_v_kemahasiswaan` date NOT NULL,
+  `tgl_v_wd3` date NOT NULL,
+  `tgl_v_psik` date NOT NULL,
+  `tgl_v_keuangan` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tgl_valid_proposal`
+--
+
+CREATE TABLE `tgl_valid_proposal` (
+  `id` int(11) NOT NULL,
+  `tgl_bem` date NOT NULL,
+  `tgl_kemahasiswaan` date NOT NULL,
+  `tgl_wd3` date NOT NULL,
+  `tgl_psik` date NOT NULL,
+  `tgl_keuangan` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `tingkatan`
 --
 
 CREATE TABLE `tingkatan` (
@@ -782,7 +819,7 @@ CREATE TABLE `tingkatan` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
--- Dumping data for table `tingkatan`
+-- Dumping data untuk tabel `tingkatan`
 --
 
 INSERT INTO `tingkatan` (`id_tingkatan`, `nama_tingkatan`) VALUES
@@ -814,22 +851,36 @@ INSERT INTO `tingkatan` (`id_tingkatan`, `nama_tingkatan`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user`
+-- Struktur dari tabel `user`
 --
 
 CREATE TABLE `user` (
   `id_user` int(10) NOT NULL,
   `nama` varchar(50) NOT NULL,
   `username` varchar(10) NOT NULL,
-  `password` varchar(10) NOT NULL,
+  `password` varchar(100) NOT NULL,
   `user_profil_kode` int(5) NOT NULL,
   `is_active` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `user`
+--
+
+INSERT INTO `user` (`id_user`, `nama`, `username`, `password`, `user_profil_kode`, `is_active`) VALUES
+(1, 'HMJ', '100', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 2, 1),
+(2, 'BEM', '101', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 3, 1),
+(3, 'Rara', '102', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 4, 1),
+(4, 'Sauki', '103', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 5, 1),
+(5, 'Pujo', '104', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 6, 1),
+(6, 'Ini Akademik', '105', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 8, 1),
+(7, 'agus', '106', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 7, 1),
+(8, 'admin', '107', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 9, 1);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_access_menu`
+-- Struktur dari tabel `user_access_menu`
 --
 
 CREATE TABLE `user_access_menu` (
@@ -838,10 +889,26 @@ CREATE TABLE `user_access_menu` (
   `menu_id` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `user_access_menu`
+--
+
+INSERT INTO `user_access_menu` (`id`, `user_profil_kode`, `menu_id`) VALUES
+(1, 1, 1),
+(2, 2, 2),
+(3, 3, 2),
+(4, 3, 3),
+(5, 4, 4),
+(6, 5, 5),
+(7, 6, 6),
+(8, 7, 7),
+(9, 8, 8),
+(10, 9, 9);
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_menu`
+-- Struktur dari tabel `user_menu`
 --
 
 CREATE TABLE `user_menu` (
@@ -849,10 +916,25 @@ CREATE TABLE `user_menu` (
   `menu` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `user_menu`
+--
+
+INSERT INTO `user_menu` (`id`, `menu`) VALUES
+(1, 'Mahasiswa'),
+(2, 'Lembaga'),
+(3, 'Bem'),
+(4, 'Kemahasiswaan'),
+(5, 'Pimpinan'),
+(6, 'Keuangan'),
+(7, 'PSIK'),
+(8, 'Akademik'),
+(9, 'Admin');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_profil`
+-- Struktur dari tabel `user_profil`
 --
 
 CREATE TABLE `user_profil` (
@@ -860,25 +942,101 @@ CREATE TABLE `user_profil` (
   `jenis_user` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data untuk tabel `user_profil`
+--
+
+INSERT INTO `user_profil` (`user_profil_kode`, `jenis_user`) VALUES
+(1, 'Mahasiswa'),
+(2, 'Lembaga'),
+(3, 'BEM'),
+(4, 'Kemahasiswaan'),
+(5, 'Pimpinan'),
+(6, 'Keuangan'),
+(7, 'PSIK'),
+(8, 'Akademik'),
+(9, 'Admin');
+
 -- --------------------------------------------------------
 
 --
--- Table structure for table `user_sub_menu`
+-- Struktur dari tabel `user_sub_menu`
 --
 
 CREATE TABLE `user_sub_menu` (
   `id` int(10) NOT NULL,
-  `judul` int(10) NOT NULL,
-  `url` int(10) NOT NULL,
-  `ikon` int(10) NOT NULL,
-  `user_access_menuid` int(10) NOT NULL,
-  `menu_id` int(10) NOT NULL
+  `judul` varchar(50) NOT NULL,
+  `url` varchar(50) NOT NULL,
+  `ikon` varchar(50) NOT NULL,
+  `menu_id` int(10) NOT NULL,
+  `has_sub` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `user_sub_menu`
+--
+
+INSERT INTO `user_sub_menu` (`id`, `judul`, `url`, `ikon`, `menu_id`, `has_sub`) VALUES
+(1, 'Dashboard', 'Mahasiswa', 'fas fa-fire', 1, 0),
+(2, 'Poin Skp', 'Mahasiswa/poin_skp', 'fas fa-rocket', 1, 0),
+(3, 'Pengajuan', 'Mahasiswa/pengajuan', 'fas fa-clipboard', 1, 1),
+(4, 'Beasiswa', 'Mahasiswa/beasiswa', 'fas fa-briefcase', 1, 0),
+(5, 'Dashboard', 'Kegiatan', 'fas fa-rocket', 2, 0),
+(6, 'Pengajuan', 'Kegiatan/pengajuan', 'fas fa-rocket', 2, 1),
+(7, 'Anggaran', 'Kegiatan/anggaran', 'fas fa-rocket', 2, 0),
+(8, 'Validasi', 'kegiatan/validasi', 'fas fa-rocket', 3, 1),
+(9, 'Dashboard', 'Kemahasiswaan', 'fas fa-rocket', 4, 0),
+(10, 'Validasi', 'Kemahasiswaan/validasi', 'fas fa-rocket', 4, 1),
+(11, 'Poin Skp', 'Kemahasiswaan/validasi', 'fas fa-briefcase', 4, 0),
+(12, 'Lembaga', 'Kemahasiswaan/lembaga', 'fas fa-rocket', 4, 0),
+(13, 'Anggaran', 'Kemahasiswaan/anggaran', 'fas fa-rocket', 4, 0),
+(14, 'Beasiswa', 'Kemahasiswaan/beasiswa', 'fas fa-rocket', 4, 0),
+(15, 'Dashboard', 'Pimpinan', 'fas fa-rocket', 5, 0),
+(16, 'Poin Skp Mahasiswa', 'Pimpinan/poinskp', 'fas fa-rocket', 5, 0),
+(17, 'Anggaran Pengeluaran', 'Pimpinan/Anggaran', 'fas fa-rocket', 5, 0),
+(18, 'Dashboard', 'Publikasi', 'fas fa-rocket', 7, 0),
+(19, 'Validasi', 'Publikasi/validasi', 'fas fa-rocket', 7, 1),
+(20, 'Dashboard', 'Keuangan', 'fas fa-rocket', 6, 0),
+(21, 'Validasi', 'Keuangan/validasi', 'fas fa-briefcase', 6, 1),
+(22, 'Dashboard', 'Akademik', 'fas fa-rocket', 8, 0),
+(23, 'Kegiatan', 'Akademik/kegiatan', 'fas fa-rocket', 8, 0),
+(24, 'Dashboard', 'Admin', 'fas fa-rocket', 9, 0),
+(25, 'Manegement User', 'Admin/ManagementUser', 'fas fa-rocket', 9, 0);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `validasi_lpj`
+-- Struktur dari tabel `user_sub_sub_menu`
+--
+
+CREATE TABLE `user_sub_sub_menu` (
+  `id_sub_sub_menu` int(11) NOT NULL,
+  `nama` varchar(50) NOT NULL,
+  `url` varchar(50) NOT NULL,
+  `id_sub_menu` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data untuk tabel `user_sub_sub_menu`
+--
+
+INSERT INTO `user_sub_sub_menu` (`id_sub_sub_menu`, `nama`, `url`, `id_sub_menu`) VALUES
+(1, 'Proposal', 'Mahasiswa/pengajuan_proposal', 3),
+(2, 'LPJ', 'Mahasiswa/pengajuan_lpj', 3),
+(3, 'Rancangan', 'Kegiatan/pengajuan_rancangan', 6),
+(4, 'Proposal', 'Kegiatan/pengajuan_proposal', 6),
+(5, 'LPJ', 'Kegiatan/pengajuan_lpj', 6),
+(6, 'Proposal', 'Kegiatan/validasi_proposal', 8),
+(7, 'LPJ', 'Kegiatan/validasi_lpj', 8),
+(8, 'Rancangan', 'Kemahasiswaan/validasi_rancangan', 10),
+(9, 'Proposal', 'Kemahasiswaan/validasi_proposal', 10),
+(10, 'LPJ', 'Kemahasiswaan/validasi_lpj', 10),
+(11, 'Skp', 'Kemahasiswaan/validasi_poin_skp', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `validasi_lpj`
 --
 
 CREATE TABLE `validasi_lpj` (
@@ -889,13 +1047,14 @@ CREATE TABLE `validasi_lpj` (
   `validasi_wd3_lpj` int(10) NOT NULL,
   `validasi_keuangan_lpj` int(10) NOT NULL,
   `id_kegiatan` int(10) NOT NULL,
-  `komentar_revisi` varchar(200) NOT NULL
+  `komentar_revisi` varchar(200) NOT NULL,
+  `id_v_lpj` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `validas_proposal`
+-- Struktur dari tabel `validas_proposal`
 --
 
 CREATE TABLE `validas_proposal` (
@@ -906,7 +1065,8 @@ CREATE TABLE `validas_proposal` (
   `validasi_wd3_proposal` int(10) NOT NULL,
   `validasi_keuangan_proposal` int(10) NOT NULL,
   `id_kegiatan` int(10) NOT NULL,
-  `komentar_revisi` varchar(200) NOT NULL
+  `komentar_revisi` varchar(200) NOT NULL,
+  `id_tgl_v_proposal` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -917,10 +1077,10 @@ CREATE TABLE `validas_proposal` (
 -- Indexes for table `anggota_kegiatan`
 --
 ALTER TABLE `anggota_kegiatan`
-  ADD PRIMARY KEY (`id_anggota_kegiatan`,`nim`,`id_kegiatan`),
-  ADD KEY `FKanggota_ke860844` (`nim`),
+  ADD PRIMARY KEY (`id_anggota_kegiatan`),
   ADD KEY `FKanggota_ke292503` (`id_kegiatan`),
-  ADD KEY `FKanggota_ke69235` (`id_prestasi`);
+  ADD KEY `FKanggota_ke69235` (`id_prestasi`),
+  ADD KEY `nim` (`nim`);
 
 --
 -- Indexes for table `beasiswa`
@@ -942,9 +1102,9 @@ ALTER TABLE `dana_pagu_lembaga`
   ADD KEY `FKdana_pagu_66288` (`id_lembaga`);
 
 --
--- Indexes for table `Dasar_penilaian`
+-- Indexes for table `dasar_penilaian`
 --
-ALTER TABLE `Dasar_penilaian`
+ALTER TABLE `dasar_penilaian`
   ADD PRIMARY KEY (`id_dasar_penilaian`);
 
 --
@@ -1006,25 +1166,25 @@ ALTER TABLE `mahasiswa`
 -- Indexes for table `penerima_beasiswa`
 --
 ALTER TABLE `penerima_beasiswa`
-  ADD PRIMARY KEY (`id_penerima`,`id_beasiswa`,`nim`),
+  ADD PRIMARY KEY (`id_penerima`),
   ADD KEY `FKpenerima_b395565` (`id_beasiswa`),
-  ADD KEY `FKpenerima_b21975` (`nim`);
+  ADD KEY `nim` (`nim`);
 
 --
 -- Indexes for table `peserta_kuliah_tamu`
 --
 ALTER TABLE `peserta_kuliah_tamu`
   ADD PRIMARY KEY (`id_peserta_kuliah_tamu`),
-  ADD KEY `FKpeserta_ku267686` (`nim`),
-  ADD KEY `FKpeserta_ku237267` (`id_kuliah_tamu`);
+  ADD KEY `FKpeserta_ku237267` (`id_kuliah_tamu`),
+  ADD KEY `nim` (`nim`);
 
 --
 -- Indexes for table `poin_skp`
 --
 ALTER TABLE `poin_skp`
   ADD PRIMARY KEY (`id_poin_skp`),
-  ADD KEY `FKpoin_skp820903` (`nim`),
-  ADD KEY `FKpoin_skp828253` (`prestasiid_prestasi`);
+  ADD KEY `FKpoin_skp828253` (`prestasiid_prestasi`),
+  ADD KEY `nim` (`nim`);
 
 --
 -- Indexes for table `poin_skp_sumber_dana`
@@ -1035,9 +1195,9 @@ ALTER TABLE `poin_skp_sumber_dana`
   ADD KEY `FKpoin_skp_s47051` (`id_sumber_dana`);
 
 --
--- Indexes for table `Prestasi`
+-- Indexes for table `prestasi`
 --
-ALTER TABLE `Prestasi`
+ALTER TABLE `prestasi`
   ADD PRIMARY KEY (`id_prestasi`);
 
 --
@@ -1068,6 +1228,18 @@ ALTER TABLE `semua_tingkatan`
 --
 ALTER TABLE `sumber_dana`
   ADD PRIMARY KEY (`id_sumber_dana`);
+
+--
+-- Indexes for table `tgl_valid_lpj`
+--
+ALTER TABLE `tgl_valid_lpj`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tgl_valid_proposal`
+--
+ALTER TABLE `tgl_valid_proposal`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `tingkatan`
@@ -1110,22 +1282,37 @@ ALTER TABLE `user_sub_menu`
   ADD KEY `FKuser_sub_m552904` (`menu_id`);
 
 --
+-- Indexes for table `user_sub_sub_menu`
+--
+ALTER TABLE `user_sub_sub_menu`
+  ADD PRIMARY KEY (`id_sub_sub_menu`),
+  ADD KEY `id_sub_menu` (`id_sub_menu`);
+
+--
 -- Indexes for table `validasi_lpj`
 --
 ALTER TABLE `validasi_lpj`
   ADD PRIMARY KEY (`id_validasi_lpj`),
-  ADD KEY `FKvalidasi_l452496` (`id_kegiatan`);
+  ADD KEY `FKvalidasi_l452496` (`id_kegiatan`),
+  ADD KEY `id_v_lpj` (`id_v_lpj`);
 
 --
 -- Indexes for table `validas_proposal`
 --
 ALTER TABLE `validas_proposal`
   ADD PRIMARY KEY (`id_validasi_proposal`),
-  ADD KEY `FKvalidas_pr868320` (`id_kegiatan`);
+  ADD KEY `FKvalidas_pr868320` (`id_kegiatan`),
+  ADD KEY `id_tgl_v_proposal` (`id_tgl_v_proposal`);
 
 --
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `anggota_kegiatan`
+--
+ALTER TABLE `anggota_kegiatan`
+  MODIFY `id_anggota_kegiatan` int(10) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `beasiswa`
@@ -1146,9 +1333,9 @@ ALTER TABLE `dana_pagu_lembaga`
   MODIFY `id_dana_pagu` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `Dasar_penilaian`
+-- AUTO_INCREMENT for table `dasar_penilaian`
 --
-ALTER TABLE `Dasar_penilaian`
+ALTER TABLE `dasar_penilaian`
   MODIFY `id_dasar_penilaian` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
@@ -1194,12 +1381,6 @@ ALTER TABLE `lembaga`
   MODIFY `id_lembaga` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `mahasiswa`
---
-ALTER TABLE `mahasiswa`
-  MODIFY `nim` int(5) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `peserta_kuliah_tamu`
 --
 ALTER TABLE `peserta_kuliah_tamu`
@@ -1218,9 +1399,9 @@ ALTER TABLE `poin_skp_sumber_dana`
   MODIFY `id_prestasi_sumber` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `Prestasi`
+-- AUTO_INCREMENT for table `prestasi`
 --
-ALTER TABLE `Prestasi`
+ALTER TABLE `prestasi`
   MODIFY `id_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
@@ -1257,31 +1438,31 @@ ALTER TABLE `tingkatan`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_user` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `user_access_menu`
 --
 ALTER TABLE `user_access_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `user_menu`
 --
 ALTER TABLE `user_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_profil`
 --
 ALTER TABLE `user_profil`
-  MODIFY `user_profil_kode` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `user_profil_kode` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `validasi_lpj`
@@ -1296,132 +1477,140 @@ ALTER TABLE `validas_proposal`
   MODIFY `id_validasi_proposal` int(10) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)
 --
 
 --
--- Constraints for table `anggota_kegiatan`
+-- Ketidakleluasaan untuk tabel `anggota_kegiatan`
 --
 ALTER TABLE `anggota_kegiatan`
   ADD CONSTRAINT `FKanggota_ke292503` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`),
   ADD CONSTRAINT `FKanggota_ke69235` FOREIGN KEY (`id_prestasi`) REFERENCES `semua_prestasi` (`id_semua_prestasi`),
-  ADD CONSTRAINT `FKanggota_ke860844` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
+  ADD CONSTRAINT `anggota_kegiatan_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
 
 --
--- Constraints for table `dana_pagu_lembaga`
+-- Ketidakleluasaan untuk tabel `dana_pagu_lembaga`
 --
 ALTER TABLE `dana_pagu_lembaga`
   ADD CONSTRAINT `FKdana_pagu_66288` FOREIGN KEY (`id_lembaga`) REFERENCES `lembaga` (`id_lembaga`);
 
 --
--- Constraints for table `dokumentasi_kegiatan`
+-- Ketidakleluasaan untuk tabel `dokumentasi_kegiatan`
 --
 ALTER TABLE `dokumentasi_kegiatan`
   ADD CONSTRAINT `FKdokumentas294249` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`);
 
 --
--- Constraints for table `jenis_kegiatan`
+-- Ketidakleluasaan untuk tabel `jenis_kegiatan`
 --
 ALTER TABLE `jenis_kegiatan`
   ADD CONSTRAINT `FKjenis_kegi525923` FOREIGN KEY (`id_bidang`) REFERENCES `bidang_kegiatan` (`id_bidang`);
 
 --
--- Constraints for table `kegiatan`
+-- Ketidakleluasaan untuk tabel `kegiatan`
 --
 ALTER TABLE `kegiatan`
   ADD CONSTRAINT `FKkegiatan281979` FOREIGN KEY (`id_lembaga`) REFERENCES `lembaga` (`id_lembaga`),
   ADD CONSTRAINT `FKkegiatan912318` FOREIGN KEY (`id_tingkatan`) REFERENCES `tingkatan` (`id_tingkatan`);
 
 --
--- Constraints for table `kuliah_tamu`
+-- Ketidakleluasaan untuk tabel `kuliah_tamu`
 --
 ALTER TABLE `kuliah_tamu`
   ADD CONSTRAINT `FKkuliah_tam750240` FOREIGN KEY (`id_prestasi`) REFERENCES `semua_prestasi` (`id_semua_prestasi`);
 
 --
--- Constraints for table `mahasiswa`
+-- Ketidakleluasaan untuk tabel `mahasiswa`
 --
 ALTER TABLE `mahasiswa`
   ADD CONSTRAINT `FKmahasiswa477977` FOREIGN KEY (`kode_prodi`) REFERENCES `prodi` (`kode_prodi`);
 
 --
--- Constraints for table `penerima_beasiswa`
+-- Ketidakleluasaan untuk tabel `penerima_beasiswa`
 --
 ALTER TABLE `penerima_beasiswa`
-  ADD CONSTRAINT `FKpenerima_b21975` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`),
-  ADD CONSTRAINT `FKpenerima_b395565` FOREIGN KEY (`id_beasiswa`) REFERENCES `beasiswa` (`id`);
+  ADD CONSTRAINT `FKpenerima_b395565` FOREIGN KEY (`id_beasiswa`) REFERENCES `beasiswa` (`id`),
+  ADD CONSTRAINT `penerima_beasiswa_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
 
 --
--- Constraints for table `peserta_kuliah_tamu`
+-- Ketidakleluasaan untuk tabel `peserta_kuliah_tamu`
 --
 ALTER TABLE `peserta_kuliah_tamu`
   ADD CONSTRAINT `FKpeserta_ku237267` FOREIGN KEY (`id_kuliah_tamu`) REFERENCES `kuliah_tamu` (`id_kuliah_tamu`),
-  ADD CONSTRAINT `FKpeserta_ku267686` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
+  ADD CONSTRAINT `peserta_kuliah_tamu_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
 
 --
--- Constraints for table `poin_skp`
+-- Ketidakleluasaan untuk tabel `poin_skp`
 --
 ALTER TABLE `poin_skp`
-  ADD CONSTRAINT `FKpoin_skp820903` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`),
-  ADD CONSTRAINT `FKpoin_skp828253` FOREIGN KEY (`prestasiid_prestasi`) REFERENCES `semua_prestasi` (`id_semua_prestasi`);
+  ADD CONSTRAINT `FKpoin_skp828253` FOREIGN KEY (`prestasiid_prestasi`) REFERENCES `semua_prestasi` (`id_semua_prestasi`),
+  ADD CONSTRAINT `poin_skp_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
 
 --
--- Constraints for table `poin_skp_sumber_dana`
+-- Ketidakleluasaan untuk tabel `poin_skp_sumber_dana`
 --
 ALTER TABLE `poin_skp_sumber_dana`
   ADD CONSTRAINT `FKpoin_skp_s414399` FOREIGN KEY (`id_poin_skp`) REFERENCES `poin_skp` (`id_poin_skp`),
   ADD CONSTRAINT `FKpoin_skp_s47051` FOREIGN KEY (`id_sumber_dana`) REFERENCES `sumber_dana` (`id_sumber_dana`);
 
 --
--- Constraints for table `prodi`
+-- Ketidakleluasaan untuk tabel `prodi`
 --
 ALTER TABLE `prodi`
   ADD CONSTRAINT `FKprodi600209` FOREIGN KEY (`kode_jurusan`) REFERENCES `jurusan` (`kode_jurusan`);
 
 --
--- Constraints for table `semua_prestasi`
+-- Ketidakleluasaan untuk tabel `semua_prestasi`
 --
 ALTER TABLE `semua_prestasi`
-  ADD CONSTRAINT `FKsemua_pres210510` FOREIGN KEY (`id_prestasi`) REFERENCES `Prestasi` (`id_prestasi`),
-  ADD CONSTRAINT `FKsemua_pres948843` FOREIGN KEY (`id_dasar_penilaian`) REFERENCES `Dasar_penilaian` (`id_dasar_penilaian`),
+  ADD CONSTRAINT `FKsemua_pres210510` FOREIGN KEY (`id_prestasi`) REFERENCES `prestasi` (`id_prestasi`),
+  ADD CONSTRAINT `FKsemua_pres948843` FOREIGN KEY (`id_dasar_penilaian`) REFERENCES `dasar_penilaian` (`id_dasar_penilaian`),
   ADD CONSTRAINT `semua_prestasi_ibfk_1` FOREIGN KEY (`id_semua_tingkatan`) REFERENCES `semua_tingkatan` (`id_semua_tingkatan`);
 
 --
--- Constraints for table `semua_tingkatan`
+-- Ketidakleluasaan untuk tabel `semua_tingkatan`
 --
 ALTER TABLE `semua_tingkatan`
   ADD CONSTRAINT `semua_tingkatan_ibfk_1` FOREIGN KEY (`id_jenis_kegiatan`) REFERENCES `jenis_kegiatan` (`id_jenis_kegiatan`);
 
 --
--- Constraints for table `user`
+-- Ketidakleluasaan untuk tabel `user`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `FKuser946152` FOREIGN KEY (`user_profil_kode`) REFERENCES `user_profil` (`user_profil_kode`);
 
 --
--- Constraints for table `user_access_menu`
+-- Ketidakleluasaan untuk tabel `user_access_menu`
 --
 ALTER TABLE `user_access_menu`
   ADD CONSTRAINT `FKuser_acces132616` FOREIGN KEY (`menu_id`) REFERENCES `user_menu` (`id`),
   ADD CONSTRAINT `FKuser_acces470624` FOREIGN KEY (`user_profil_kode`) REFERENCES `user_profil` (`user_profil_kode`);
 
 --
--- Constraints for table `user_sub_menu`
+-- Ketidakleluasaan untuk tabel `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
   ADD CONSTRAINT `FKuser_sub_m552904` FOREIGN KEY (`menu_id`) REFERENCES `user_menu` (`id`);
 
 --
--- Constraints for table `validasi_lpj`
+-- Ketidakleluasaan untuk tabel `user_sub_sub_menu`
 --
-ALTER TABLE `validasi_lpj`
-  ADD CONSTRAINT `FKvalidasi_l452496` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`);
+ALTER TABLE `user_sub_sub_menu`
+  ADD CONSTRAINT `user_sub_sub_menu_ibfk_1` FOREIGN KEY (`id_sub_menu`) REFERENCES `user_sub_menu` (`id`);
 
 --
--- Constraints for table `validas_proposal`
+-- Ketidakleluasaan untuk tabel `validasi_lpj`
+--
+ALTER TABLE `validasi_lpj`
+  ADD CONSTRAINT `FKvalidasi_l452496` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`),
+  ADD CONSTRAINT `validasi_lpj_ibfk_1` FOREIGN KEY (`id_v_lpj`) REFERENCES `tgl_valid_lpj` (`id`);
+
+--
+-- Ketidakleluasaan untuk tabel `validas_proposal`
 --
 ALTER TABLE `validas_proposal`
-  ADD CONSTRAINT `FKvalidas_pr868320` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`);
+  ADD CONSTRAINT `FKvalidas_pr868320` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`),
+  ADD CONSTRAINT `validas_proposal_ibfk_1` FOREIGN KEY (`id_tgl_v_proposal`) REFERENCES `tgl_valid_proposal` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

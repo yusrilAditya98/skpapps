@@ -15,7 +15,6 @@ function is_logged_in()
             'user_profil_kode' => $role_id,
             'menu_id' => $menu_id
         ]);
-
         if ($userAccess->num_rows() < 1) {
             redirect('auth/blocked');
         }

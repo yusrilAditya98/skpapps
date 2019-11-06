@@ -45,11 +45,11 @@ class Auth extends CI_Controller
         if ($result['msg']) {
             $data = [
                 "username" => $result['data']['nim'],
-                "status_user_id" => $result['data']['status']
+                "nama" => $result['data']['nama'],
+                "user_profil_kode" => $result['data']['status']
             ];
             $this->session->set_userdata($data);
             redirect('Mahasiswa');
-            var_dump($data);
         } else {
 
             $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
@@ -58,11 +58,25 @@ class Auth extends CI_Controller
                 if (password_verify($this->password, $user['password'])) {
                     $data = [
                         'username' => $user['username'],
-                        'user_profile_kode' => $user['user_profile_kode']
+                        "nama" => $user['nama'],
+                        'user_profil_kode' => $user['user_profil_kode']
                     ];
-
                     $this->session->set_userdata($data);
-                    if ($user['status_user_id'] == 2) { } elseif ($user['status_user_id'] == 3) { } elseif ($user['status_user_id'] == 4) { } elseif ($user['status_user_id'] == 5) { }
+                    if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
+                        redirect('Kegiatan');
+                    } elseif ($user['user_profil_kode'] == 4) {
+                        redirect('Kemahasiswaan');
+                    } elseif ($user['user_profil_kode'] == 5) {
+                        redirect('Pimpinan');
+                    } elseif ($user['user_profil_kode'] == 6) {
+                        redirect('Keuangan');
+                    } elseif ($user['user_profil_kode'] == 7) {
+                        redirect('Publikasi');
+                    } elseif ($user['user_profil_kode'] == 8) {
+                        redirect('Akademik');
+                    } elseif ($user['user_profil_kode'] == 9) {
+                        redirect('Admin');
+                    }
                 } else {
                     $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Wrong Password !</div> ');
                     redirect('auth');
@@ -73,6 +87,8 @@ class Auth extends CI_Controller
     public function logout()
     {
         $this->session->unset_userdata('username');
+        $this->session->unset_userdata('nama');
+        $this->session->unset_userdata('user_profil_kode');
 
         $this->session->set_flashdata('message', '<div class="alert alert-success text-center align-middle mb-3" role="alert"><p>Logout berhasil</p></div>');
         redirect('auth');
