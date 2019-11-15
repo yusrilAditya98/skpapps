@@ -63,9 +63,9 @@
                         <h4>Point Satuan Kredit Prestasi</h4>
                     </div>
                     <div class="card-body text-center mb-2" style="margin-top:-1rem;">
-                        <h1 class="display-3 mb-4" style="color: black;">75 <span style="font-size: 1rem; margin-left: -1rem;">points</span>
+                        <h1 class="display-3 mb-4" style="color: black;"><?= $mahasiswa[0]['total_poin_skp'] ?> <span style="font-size: 1rem; margin-left: -1rem;">points</span>
                         </h1>
-                        <a href="form_tambah_skp.html" class="btn btn-icon btn-success" style="width:100%">
+                        <a href="<?= base_url('Mahasiswa') ?>/tambahPoinSkp" class="btn btn-icon btn-success" style="width:100%">
                             Tambah Point SKP <i class="fas fa-plus pl-2"></i></a>
                     </div>
                 </div>
@@ -89,110 +89,163 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12 col-md-6 col-lg-6">
-                                <a href="form_tambah_skp.html" class="btn btn-icon btn-success mb-3">
-                                    Tambah Point SKP <i class="fas fa-plus pl-2"></i></a>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-6">
+                            <div class="col-12 col-md-12 col-lg-12">
                                 <a href="#" class="btn btn-icon btn-warning mb-3" style="float:right">
                                     Cetak SKP <i class="fas fa-print pl-2"></i></a>
                             </div>
                         </div>
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th scope="col">No</th>
-                                    <th scope="col">Tanggal Pengajuan</th>
-                                    <th scope="col" style="width:17rem;">Nama Kegiatan</th>
-                                    <th scope="col">Tingkat</th>
-                                    <th scope="col">Bobot SKP</th>
-                                    <th scope="col">Validasi</th>
-                                    <th scope="col">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td>20/02/2019</td>
-                                    <td> <a href="#detailKegiatan" data-toggle="modal" data-target="#detailKegiatan">Lomba Badan Usaha Ekonomi
-                                            Kreatif Malang Raya</a> </td>
-                                    <td>Nasioal</td>
-                                    <td>35</td>
-                                    <td>
-                                        <div class="badge badge-danger"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <a href="#" class="btn btn-icon btn-info"><i class="fas fa-edit"></i></a>
-                                            </div>
-                                            <div class="col-6">
-                                                <a href="#" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td>30/03/2019</td>
-                                    <td><a href="">Seminar Internasional Asean Economics Singapura</a></td>
-                                    <td>Nasioal</td>
-                                    <td>50</td>
-                                    <td>
-                                        <div class="badge badge-success"><i class="fa fa-check" aria-hidden="true"></i></div>
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <a href="#" class="btn btn-icon btn-info"><i class="fas fa-edit"></i></a>
-                                            </div>
-                                            <div class="col-6">
-                                                <a href="#" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Tanggal Pengajuan</th>
+                                        <th scope="col" style="width:17rem;">Nama Kegiatan</th>
+                                        <th scope="col">Tingkat</th>
+                                        <th scope="col">Bobot SKP</th>
+                                        <th scope="col">Validasi</th>
+                                        <th scope="col">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 1;
+                                    foreach ($poinskp as $p) : ?>
+                                        <tr>
+                                            <td scope="row"><?= $i++ ?></td>
+                                            <td><?= $p['tgl_pengajuan'] ?></td>
+                                            <td> <a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" class="detailSkp"><?= $p['nama_kegiatan'] ?></a> </td>
+                                            <td><?= $p['nama_tingkatan'] ?><br><small><?= $p['nama_prestasi'] ?></small></td>
+                                            <td><?= $p['bobot'] ?></td>
+                                            <td>
+                                                <?php if ($p['validasi_prestasi'] == 0) : ?>
+                                                    <div class="badge badge-primary">Proses</div>
+                                                <?php elseif ($p['validasi_prestasi'] == 1) : ?>
+                                                    <i class="fa fa-check text-success" aria-hidden="true"></i>
+                                                <?php elseif ($p['validasi_prestasi'] == 2) : ?>
+                                                    <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id="<?= $p['id_poin_skp'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+
+                                                <div class="row">
+                                                    <?php if ($p['validasi_prestasi'] == 1) : ?>
+                                                        <span class="text-success">Disetujui</span>
+                                                    <?php else : ?>
+                                                        <div class="col-6">
+                                                            <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-icon btn-info"><i class="fas fa-edit"></i></a>
+                                                        </div>
+                                                        <div class="col-6">
+                                                            <a href="<?= base_url('Mahasiswa/hapusPoinSkp/') . $p['id_poin_skp'] ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
+<!-- Modal Detail Poin SKP -->
 <div class="modal fade" tabindex="-1" role="dialog" id="detailKegiatan">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-lg"" role=" document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Modal title</h5>
+                <h5 class="modal-title">Detail Poin Skp</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <form>
-                    <div class="form-group">
-                        <label for="recipient-name" class="col-form-label">Jenis Kegiatan</label>
-                        <input type="text" class="form-control" id="recipient-name" disabled>
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card profile-widget">
+                        <div class="profile-widget-header">
+                            <img alt="image" src="<?= base_url() ?>/assets/img/medal.png" style="width: 100px" class="rounded-circle profile-widget-picture">
+                            <div class="profile-widget-items">
+                                <div class="profile-widget-item">
+                                    <div class="profile-widget-item-label">Tingkatan</div>
+                                    <div class="profile-widget-item-value"><span class="d-tingkat"></span></div>
+                                </div>
+                                <div class="profile-widget-item">
+                                    <div class="profile-widget-item-label">Partisipasi/jabatan</div>
+                                    <div class="profile-widget-item-value"><span class="d-partisipasi"></span></div>
+                                </div>
+                                <div class="profile-widget-item">
+                                    <div class="profile-widget-item-label">Bobot</div>
+                                    <div class="profile-widget-item-value"><span class="d-bobot"></span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="profile-widget-description">
+                            <div class="profile-widget-name"><span class="d-bidang"></span>
+                                <div class="text-muted d-inline font-weight-normal">
+                                    <div class="slash"></div> <span class="d-jenis"></span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Nama Kegiatan</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control d-nama" readonly="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Tanggal Pelaksanaan</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control d-tgl" readonly="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Tempat Pelaksanaan</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control d-tempat" readonly="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">File Bukti</label>
+                                <div class="col-sm-9">
+                                    <a href="" class="d-file"></a>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Nama Lembaga / Kegiatan /
-                            Kepanitian</label>
-                        <input type="text" class="form-control" id="recipient-name" disabled>
+                </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Info revisi -->
+<div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
+    <div class="modal-dialog modal-lg" role=" document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title">Catatan Revisi</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <div class="card profile-widget">
+                        <div class="profile-widget-description">
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Catatan Revisi</label>
+                                <div class="col-sm-9">
+                                    <textarea class="form-control d-catatan" style="height:200px" readonly></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Partisipasi/Jabatan</label>
-                        <input type="text" class="form-control" id="recipient-name" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Point SKP</label>
-                        <input type="text" class="form-control" id="recipient-name" disabled>
-                    </div>
-                    <div class="form-group">
-                        <label for="message-text" class="col-form-label">Tanggal Pelaksanaan</label>
-                        <input type="text" class="form-control" id="recipient-name" disabled>
-                    </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer bg-whitesmoke br">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

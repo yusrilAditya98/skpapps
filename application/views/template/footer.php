@@ -15,13 +15,18 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2/build/pdf.min.js"></script>
 <script src="<?= base_url() ?>assets/js/stisla.js"></script>
+
 
 <!-- JS Libraies -->
 <script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/datatables/dataTables.select.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/select/select2.full.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/datepicker/daterangepicker.js"></script>
 <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/ionicons/modules-ion-icons.js"></script>
 
 <!-- Page Specific JS File -->
 <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
@@ -29,6 +34,24 @@
 <!-- Template JS File -->
 <script src="<?= base_url() ?>assets/js/scripts.js"></script>
 <script src="<?= base_url() ?>assets/js/custom.js"></script>
+
+<?php if ($this->session->userdata('user_profil_kode') == 1) : ?>
+    <script src="<?= base_url() ?>assets/js/mahasiswa/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 2 || $this->session->userdata('user_profil_kode') == 3) : ?>
+    <script src="<?= base_url() ?>assets/js/lemabaga/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
+    <script src="<?= base_url() ?>assets/js/kemahasiswaan/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>
+    <script src="<?= base_url() ?>assets/js/pimpinana/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 6) : ?>
+    <script src="<?= base_url() ?>assets/js/keuangan/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 7) : ?>
+    <script src="<?= base_url() ?>assets/js/psik/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
+    <script src="<?= base_url() ?>assets/js/akademik/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 9) : ?>
+    <script src="<?= base_url() ?>assets/js/admin/mahasiswa.js"></script>
+<?php endif; ?>
 
 </body>
 

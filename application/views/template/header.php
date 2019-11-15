@@ -13,7 +13,11 @@
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/datatables.min.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables//select.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/select.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/select/select2.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datepicker/daterangepicker.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/ionicons/ionicons.min.css">
+
 
 
 
