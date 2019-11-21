@@ -6,11 +6,77 @@ $.ajax({
 	method: 'get',
 	dataType: 'json',
 	success: function (data) {
+		let k_bidang = $('.k_bidang').val();
 		let bidang = '';
 		for (var i in data) {
-			bidang += `<option class="bidang" value="` + data[i].id_bidang + `">` + data[i].nama_bidang + `</option>`
+			if (k_bidang == data[i].id_bidang) {
+				bidang += `<option selected class="bidang" value="` + data[i].id_bidang + `">` + data[i].nama_bidang + `</option>`
+			} else {
+				bidang += `<option class="bidang" value="` + data[i].id_bidang + `">` + data[i].nama_bidang + `</option>`
+			}
 		}
 		$('.bidangKegiatan').append(bidang)
+
+		let bidangKegiatan = $('.bidangKegiatan').val()
+		$('.jenis').remove();
+		$.ajax({
+			url: segments[0] + '/skpapps/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+			method: 'get',
+			dataType: 'json',
+			success: function (data) {
+				let k_jenis = $('.k_jenis').val();
+				let jenis = '';
+				for (var i in data) {
+					if (k_jenis == data[i].id_jenis_kegiatan) {
+						jenis += `<option selected class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
+					} else {
+						jenis += `<option class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
+					}
+				}
+				$('.jenisKegiatan').append(jenis)
+
+				let jenisKegiatan = $('.jenisKegiatan').val()
+				$('.tingkat').remove();
+				$.ajax({
+					url: segments[0] + '/skpapps/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+					method: 'get',
+					dataType: 'json',
+					success: function (data) {
+						let k_tingkat = $('.k_tingkat').val();
+						let tingkat = '';
+						for (var i in data) {
+							if (k_tingkat == data[i].id_semua_tingkatan) {
+								tingkat += `<option selected class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+							} else {
+								tingkat += `<option class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+							}
+
+						}
+						$('.tingkatKegiatan').append(tingkat)
+
+						let tingkatKegiatan = $('.tingkatKegiatan').val()
+						$('.partisipasi').remove();
+						$.ajax({
+							url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+							method: 'get',
+							dataType: 'json',
+							success: function (data) {
+								let partisipasi = '';
+								let k_partisipasi = $('.k_partisipasi').val();
+								for (var i in data) {
+									if (k_partisipasi == data[i].id_semua_prestasi) {
+										partisipasi += `<option checked class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+									} else {
+										partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+									}
+								}
+								$('.partisipasiKegiatan').append(partisipasi)
+							}
+						})
+					}
+				})
+			}
+		})
 	}
 })
 
@@ -22,9 +88,14 @@ $('.bidangKegiatan').on("change", function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			let k_jenis = $('.k_jenis').val();
 			let jenis = '';
 			for (var i in data) {
-				jenis += `<option class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
+				if (k_jenis == data[i].id_jenis_kegiatan) {
+					jenis += `<option selected class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
+				} else {
+					jenis += `<option class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
+				}
 			}
 			$('.jenisKegiatan').append(jenis)
 		}
@@ -39,9 +110,15 @@ $('.jenisKegiatan').on("change", function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			let k_tingkat = $('.k_tingkat').val();
 			let tingkat = '';
 			for (var i in data) {
-				tingkat += `<option class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+				if (k_tingkat == data[i].id_semua_tingkatan) {
+					tingkat += `<option selected class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+				} else {
+					tingkat += `<option class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+				}
+
 			}
 			$('.tingkatKegiatan').append(tingkat)
 		}
@@ -51,6 +128,7 @@ $('.jenisKegiatan').on("change", function () {
 $('#tingkatKegiatan').on("change", function () {
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
 	$('.partisipasi').remove();
+	$('.d-m').remove()
 	$.ajax({
 		url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 		method: 'get',
@@ -96,8 +174,7 @@ $('.detailSkp').on("click", function () {
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
-			$('.d-file').attr('href', segments[0] + '/skpapps/file_bukti/poinskp/' + data[0].file_bukti)
-			$('.d-file').html(data[0].file_bukti)
+			$('.d-file').attr('href', segments[0] + '/skpapps/file_bukti/' + data[0].file_bukti)
 		}
 	})
 })
@@ -109,7 +186,6 @@ $('.d-revisi').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data)
 			$('.d-catatan').html(data[0].catatan)
 		}
 	})
@@ -139,7 +215,7 @@ $('.submit-mhs').on('click', function () {
 				check.push($('.t-anggota#id-' + data[i].nim + ' .cek').is(":checked"));
 			}
 			for (var j in data) {
-				if (check[j] == true) {
+				if (check[j] == true && valPosisi[j] != 0) {
 					oMhs = [];
 					oMhs.push(nim[j]);
 					oMhs.push(nama[j]);
@@ -161,7 +237,6 @@ $('.submit-mhs').on('click', function () {
 						<td>` + aMhs[k][2] + `
 							<input  type="hidden" name="prestasi_` + id + `" value="` + aMhs[k][3] + `" id="nim_` + id + `" >
 						</td>
-						<td><a href="" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a></td>
 					</tr>
 				`)
 				id++
@@ -175,4 +250,20 @@ $('.submit-mhs').on('click', function () {
 $('#danaKegiatan').keyup(function () {
 	let nominal = $('#danaKegiatan').val() * 0.7
 	$('#danaKegiatanDiterima').val(nominal)
+})
+
+
+let tingkatKegiatanLpj = $('.tingkatKegiatan').val()
+
+$.ajax({
+	url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatanLpj,
+	method: 'get',
+	dataType: 'json',
+	success: function (data) {
+		let partisipasi = '';
+		for (var i in data) {
+			partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+		}
+		$('.partisipasiKegiatan').append(partisipasi)
+	}
 })

@@ -42,15 +42,15 @@
 <?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
     <script src="<?= base_url() ?>assets/js/kemahasiswaan/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>
-    <script src="<?= base_url() ?>assets/js/pimpinana/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/pimpinana/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 6) : ?>
-    <script src="<?= base_url() ?>assets/js/keuangan/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/keuangan/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 7) : ?>
-    <script src="<?= base_url() ?>assets/js/psik/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/psik/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
-    <script src="<?= base_url() ?>assets/js/akademik/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/akademik/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 9) : ?>
-    <script src="<?= base_url() ?>assets/js/admin/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/admin/script.js"></script>
 <?php endif; ?>
 
 </body>

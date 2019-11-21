@@ -53,34 +53,41 @@ class Auth extends CI_Controller
         } else {
 
             $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
-            if ($user['is_active'] == 1) {
-                // cek password
-                if (password_verify($this->password, $user['password'])) {
-                    $data = [
-                        'username' => $user['username'],
-                        "nama" => $user['nama'],
-                        'user_profil_kode' => $user['user_profil_kode']
-                    ];
-                    $this->session->set_userdata($data);
-                    if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
-                        redirect('Kegiatan');
-                    } elseif ($user['user_profil_kode'] == 4) {
-                        redirect('Kemahasiswaan');
-                    } elseif ($user['user_profil_kode'] == 5) {
-                        redirect('Pimpinan');
-                    } elseif ($user['user_profil_kode'] == 6) {
-                        redirect('Keuangan');
-                    } elseif ($user['user_profil_kode'] == 7) {
-                        redirect('Publikasi');
-                    } elseif ($user['user_profil_kode'] == 8) {
-                        redirect('Akademik');
-                    } elseif ($user['user_profil_kode'] == 9) {
-                        redirect('Admin');
+            if ($user != null) {
+
+
+                if ($user['is_active'] == 1) {
+                    // cek password
+                    if (password_verify($this->password, $user['password'])) {
+                        $data = [
+                            'username' => $user['username'],
+                            "nama" => $user['nama'],
+                            'user_profil_kode' => $user['user_profil_kode']
+                        ];
+                        $this->session->set_userdata($data);
+                        if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
+                            redirect('Kegiatan');
+                        } elseif ($user['user_profil_kode'] == 4) {
+                            redirect('Kemahasiswaan');
+                        } elseif ($user['user_profil_kode'] == 5) {
+                            redirect('Pimpinan');
+                        } elseif ($user['user_profil_kode'] == 6) {
+                            redirect('Keuangan');
+                        } elseif ($user['user_profil_kode'] == 7) {
+                            redirect('Publikasi');
+                        } elseif ($user['user_profil_kode'] == 8) {
+                            redirect('Akademik');
+                        } elseif ($user['user_profil_kode'] == 9) {
+                            redirect('Admin');
+                        }
+                    } else {
+                        $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Wrong Password !</div> ');
+                        redirect('Auth');
                     }
-                } else {
-                    $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Wrong Password !</div> ');
-                    redirect('auth');
                 }
+            } else {
+                $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data tidak ditemukan !</div> ');
+                redirect('Auth');
             }
         }
     }

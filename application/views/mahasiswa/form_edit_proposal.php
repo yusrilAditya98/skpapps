@@ -1,19 +1,19 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Form Pengajuan Proposal</h1>
+            <h1>Form Edit Pengajuan Proposal</h1>
         </div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Form Tambah Point SKP</h4>
+                        <h4> Edit Pengajuan Proposal</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12">
                                 <div class="form-tambah-skp">
-                                    <form action="<?= base_url('Mahasiswa/tambahProposal') ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
+                                    <form action="<?= base_url('Mahasiswa/editProposal/') . $kegiatan['id_kegiatan'] ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                         <div class="bagian-personality">
                                             <h5>Informasi Personality</h5>
                                             <div class="form-group">
@@ -26,7 +26,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="noTlpm">No Telepon / Whatsapp</label>
-                                                <input type="number" class="form-control" id="noTlpm" name="noTlpn" required>
+                                                <input type="number" class="form-control" id="noTlpm" name="noTlpn" value="<?= $kegiatan['no_whatsup'] ?>" required>
                                                 <div class="invalid-feedback">
                                                     No Telepon / Whatsapp harap diisi
                                                 </div>
@@ -36,23 +36,30 @@
                                             <h5>Informasi Dana</h5>
                                             <div class="form-group">
                                                 <label for="danaKegiatan">Besar Anggaran</label>
-                                                <input type="number" class="form-control" id="danaKegiatan" name="danaKegiatan" required>
+                                                <input type="number" class="form-control" id="danaKegiatan" name="danaKegiatan" value="<?= $kegiatan['dana_kegiatan']  ?>" required>
                                                 <div class="invalid-feedback">
                                                     Besar anggaran harap diisi
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="danaKegiatanDiterima">Anggran Diterima</label>
-                                                <input type="text" class="form-control" id="danaKegiatanDiterima" name="danaKegiatanDiterima" readonly>
+                                                <input type="text" class="form-control" id="danaKegiatanDiterima" name="danaKegiatanDiterima" value="<?= $kegiatan['dana_cair'] ?>" readonly>
                                                 <small id="anggaranHelp" class="form-text text-muted">Dana
                                                     anggaran yang akan diterima 70% dari besar anggaran
                                                     pengajuan</small>
                                             </div>
                                             <div class="sumber-dana-chekboxes mb-3">
                                                 <h6>Sumber Dana</h6>
-
+                                                <?php foreach ($dana_kegiatan as $d) : ?>
+                                                    <div class="form-check py-1">
+                                                        <input class="form-check-input" type="hidden" value="0" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
+                                                        <input checked class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
+                                                        <label class="form-check-label" for="dana <?= $d['id_sumber_dana'] ?>">
+                                                            <?= $d['nama_sumber_dana'] ?>
+                                                        </label>
+                                                    </div>
+                                                <?php endforeach; ?>
                                                 <?php foreach ($dana as $d) : ?>
-
                                                     <div class="form-check py-1">
                                                         <input class="form-check-input" type="hidden" value="0" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
                                                         <input class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
@@ -68,14 +75,14 @@
                                             <h5>Informasi Acara</h5>
                                             <div class="form-group">
                                                 <label for="namaKegiatan">Judul Acara / Kegiatan</label>
-                                                <input type="text" class="form-control" id="namaKegiatan" name="namaKegiatan" required>
+                                                <input type="text" class="form-control" id="namaKegiatan" name="namaKegiatan" value="<?= $kegiatan['nama_kegiatan']  ?>" required>
                                                 <div class="invalid-feedback">
                                                     Nama Kegiatan harap diisi
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
-                                                <textarea class="form-control" id="deskripsiKegiatan" name="deskripsiKegiatan" style="height: 100px;" required></textarea>
+                                                <textarea class="form-control" id="deskripsiKegiatan" name="deskripsiKegiatan" style="height: 100px;" required><?= $kegiatan['deskripsi_kegiatan']  ?></textarea>
                                                 <div class="invalid-feedback">
                                                     Nama Kegiatan harap diisi
                                                 </div>
@@ -85,6 +92,7 @@
                                                 <select class="custom-select bidangKegiatan select2" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
                                                     <option value="">-- Pilih Bidang Kegiatan --</option>
                                                 </select>
+                                                <input type="hidden" class="k_bidang" name="k_bidang" value="<?= ($tingkat ? $tingkat[0]['id_bidang'] : 0) ?>">
                                                 <div class=" invalid-feedback">
                                                     Bidang kegiatan harap dipilih
                                                 </div>
@@ -94,6 +102,7 @@
                                                 <select class="custom-select jenisKegiatan select2" id="jenisKegiatan" name="jenisKegiatan" required>
                                                     <option value="">-- Pilih Jenis Kegiatan --</option>
                                                 </select>
+                                                <input type="hidden" class="k_jenis" name="k_jenis" value="<?= ($tingkat ? $tingkat[0]['id_jenis_kegiatan'] : 0) ?>">
                                                 <div class=" invalid-feedback">
                                                     Jenis kegiatan harap dipilih
                                                 </div>
@@ -103,20 +112,22 @@
                                                 <select class="custom-select tingkatKegiatan select2" id="tingkatKegiatan" name="tingkatKegiatan" required>
                                                     <option value="">-- Pilih Tingkat Kegiatan --</option>
                                                 </select>
+                                                <input type="hidden" class="k_tingkat" name="k_tingkat" value="<?= ($tingkat ? $tingkat[0]['id_semua_tingkatan'] : 0) ?>">
+                                                <input type="hidden" class="k_partisipasi" name="k_partisipasi" value="<?= ($tingkat ? $tingkat[0]['id_semua_prestasi'] : 0) ?>">
                                                 <div class=" invalid-feedback">
                                                     Tingkat kegiatan harap dipilih
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
-                                                <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
+                                                <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" value="<?= $kegiatan['tanggal_kegiatan'] ?>" required>
                                                 <div class="invalid-feedback">
                                                     Tanggal pelaksanaan harap diisi
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="tempatPelaksanaan">Tempat Pelaksanaan</label>
-                                                <input type="text" class="form-control" id="tempatPelaksanaan" name="tempatPelaksanaan" required>
+                                                <input type="text" class="form-control" id="tempatPelaksanaan" name="tempatPelaksanaan" value="<?= $kegiatan['lokasi_kegiatan'] ?>" required>
                                                 <div class="invalid-feedback">
                                                     Tempat pelaksanaan harap diisi
                                                 </div>
@@ -129,7 +140,7 @@
                                                 <div class="col-12 col-md-12 col-lg-12">
                                                     <a class="btn btn-icon btn-primary mb-3 text-white daftarMahasiswa" style="float:right" data-toggle="modal" data-target="#daftarMahasiswa">
                                                         Pilih Anggota <i class="fas fa-plus pl-2 text-white"></i></a>
-                                                    <input type="hidden" value="0" name="jumlahAnggota" id="jumlahAnggota">
+                                                    <input type="hidden" value="<?= count($tingkat) ?>" name="jumlahAnggota" id="jumlahAnggota">
                                                 </div>
                                             </div>
                                             <div class="table-responsive">
@@ -140,25 +151,37 @@
                                                             <th>Nim</th>
                                                             <th>Nama</th>
                                                             <th>Posisi</th>
-
                                                         </tr>
                                                     </thead>
                                                     <tbody class="daftar-mhs">
-
-
+                                                        <?php if ($tingkat) : ?>
+                                                            <?php $index = 1;
+                                                                $id = 1;
+                                                                foreach ($tingkat as $a) : ?>
+                                                                <tr class="d-m">
+                                                                    <td><?= $index++ ?></td>
+                                                                    <td><?= $a['nim'] ?>
+                                                                        <input type="hidden" name="nim_<?= $id ?>" value="<?= $a['nim'] ?>" id="nim_<?= $id ?>">
+                                                                    </td>
+                                                                    <td><?= $a['nama'] ?></td>
+                                                                    <td><?= $a['nama_prestasi'] ?>
+                                                                        <input type="hidden" name="prestasi_<?= $id ?>" value="<?= $a['id_prestasi'] ?>" id="nim_<?= $id; ?>">
+                                                                    </td>
+                                                                </tr>
+                                                            <?php $id++;
+                                                                endforeach; ?>
+                                                        <?php endif; ?>
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
+
                                         <div class=" bagian-upload mt-5">
                                             <h5>Informasi Upload</h5>
 
                                             <div class="form-group">
-                                                <label for="fileProposal">Upload File Proposal</label>
-                                                <input type="file" class="form-control-file btn" id="fileProposal" name="fileProposal" required>
-                                                <div class="invalid-feedback">
-                                                    File proposal harap diisi
-                                                </div>
+                                                <label for="fileProposal">Upload File Proposal - <a class="btn btn-primary" href="<?= base_url('file_bukti/proposal/') . $kegiatan['proposal_kegiatan'] ?>">Lihat</a></label>
+                                                <input type="file" class="form-control-file btn" id="fileProposal" name="fileProposal">
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                     Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                     Mega,
@@ -169,11 +192,9 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="beritaProposal">Upload Berita Kegiatan
-                                                    Proposal</label>
-                                                <input type="file" class="form-control-file btn" name="beritaProposal" id="beritaProposal" required>
-                                                <div class="invalid-feedback">
-                                                    Berita kegiatan harap diisi
-                                                </div>
+                                                    Proposal - <a class="btn btn-primary" href="<?= base_url('file_bukti/berita_propsoal/') . $kegiatan['berita_proposal'] ?>">Lihat</a></label>
+                                                <input type="file" class="form-control-file btn" name="beritaProposal" id="beritaProposal">
+
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                     Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                     Mega,
@@ -184,29 +205,25 @@
                                                     <span><a href="#">Disini</a></span></small>
                                             </div>
                                             <div class="form-group">
-                                                <label for="gambarKegiatanProposal1">Upload Gambar Kegiatan 1 / Acara
-                                                    Pendukung</label>
-                                                <input type="file" class="form-control-file btn" name="gambarKegiatanProposal1" id="gambarKegiatanProposal1" required>
-                                                <div class="invalid-feedback">
-                                                    Gambar kegiatan harap diisi
-                                                </div>
+                                                <label for="gambarKegiatanProposal1">Upload Gambar Kegiatan 1 / Acara Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_1'] ?>">Lihat</a></label>
+                                                <input type="file" class="form-control-file btn" name="gambarKegiatanProposal1" id="gambarKegiatanProposal1">
                                                 <small class="form-text text-muted">
                                                     Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
                                                 </small>
                                             </div>
                                             <div class="form-group">
-                                                <label for="gambarKegiatanProposal2">Upload Gambar Kegiatan 2 / Acara
-                                                    Pendukung</label>
-                                                <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2" required>
+                                                <label for="gambarKegiatanProposal2">Upload Gambar Kegiatan 2 / Acara Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_2'] ?>">Lihat</a></label>
+                                                <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2">
                                                 <small class="form-text text-muted">
                                                     Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
                                                 </small>
                                             </div>
                                         </div>
+
                                         <div class="action-button">
                                             <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
-                                                Kirim Proposal <i class="fas fa-plus"></i></button>
-                                            <a href="<?= base_url('Mahasiswa/pengajuan_proposal') ?>" style="float:right" class="btn btn-icon btn-secondary">
+                                                Edit Proposal <i class="fas fa-plus"></i></button>
+                                            <a href="<?= base_url('Mahasiswa/pengajuanProposal') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>
                                         </div>
                                     </form>
@@ -256,7 +273,6 @@
                                     </td>
                                     <td class="t-cek">
                                         <input type="checkbox" class="cek" id="checkbox<?= $m['nim'] ?>">
-                                        <!--  -->
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

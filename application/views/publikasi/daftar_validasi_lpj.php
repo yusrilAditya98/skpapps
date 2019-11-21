@@ -2,13 +2,14 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Validasi Pengajuan Proposal Kegiatan</h1>
+            <h1>Validasi Pengajuan LPJ Kegiatan</h1>
         </div>
+        <?= $this->session->flashdata('message'); ?>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Permintaan Pengajuan Rancangan Kegiatan</h4>
+                        <h4>Permintaan Pengajuan LPJ Kegiatan</h4>
 
                     </div>
                     <div class="card-body">
@@ -49,19 +50,19 @@
                                                     1
                                                 </div>
                                             </td>
-                                            <td><?= $k['tgl_pengajuan_proposal'] ?></td>
+                                            <td><?= $k['tgl_pengajuan_lpj'] ?></td>
                                             <td><?= $k['nama_lembaga'] ?></td>
                                             <td>
                                                 <a href="#" data-toggle="modal" data-target="#detailKegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
-                                                <?php if ($k['status_selesai_proposal'] == 0) : ?>
+                                                <?php if ($k['status_selesai_lpj'] == 0) : ?>
                                                     <span><i class="fa fa-dot-circle mr-2 text-primary"></i>Belum diproses</span>
-                                                <?php elseif ($k['status_selesai_proposal'] == 1) : ?>
+                                                <?php elseif ($k['status_selesai_lpj'] == 1) : ?>
                                                     <span>Sedang Berlangsung</span>
-                                                <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
+                                                <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
                                                     <span><i class="fa fa-dot-circle mr-2 text-warning"></i>Revisi</span>
-                                                <?php elseif ($k['status_selesai_proposal'] == 3) : ?>
+                                                <?php elseif ($k['status_selesai_lpj'] == 3) : ?>
                                                     <span><i class="fa fa-dot-circle mr-2 text-success"></i>Selesai</span>
                                                 <?php endif; ?>
                                             </td>
@@ -84,23 +85,23 @@
                                             <?php endforeach; ?>
 
                                             <td class="text-center">
-                                                <?php foreach ($validasi as $v) : ?>
-                                                    <?php if ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 3)) : ?>
-                                                        <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                            <a href="<?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-icon btn-success"><i class="fas fa-check"> </i>kmhsn</a>
-
-                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-km" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
-
+                                                <?php for ($i = 0; $i < count($validasi); $i++) : ?>
+                                                    <?php if ($validasi[$i]['id_kegiatan'] == $k['id_kegiatan'] && $validasi[$i]['jenis_validasi'] == 4) : ?>
+                                                        <?php if ($validasi[$i]['status_validasi'] != 1) : ?>
+                                                            <span>Belum bisa validasi</span>
+                                                            <?php break; ?>
                                                         <?php endif; ?>
-                                                    <?php elseif ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 4)) : ?>
-                                                        <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                            <a href=" <?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn btn-icon btn-success"><i class="fas fa-check"> </i>wd 3</a>
-                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd 3</a>
-                                                        <?php elseif ($v['status_validasi'] == 1) : ?>
-                                                            Selesai
+                                                    <?php elseif ($validasi[$i]['id_kegiatan'] == $k['id_kegiatan'] && $validasi[$i]['jenis_validasi'] == 5) : ?>
+                                                        <?php if ($validasi[$i]['status_validasi'] == 2 || $validasi[$i]['status_validasi'] == 4) : ?>
+                                                            <a href="<?= base_url('Kegiatan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=5" class="btn btn-icon btn-success"><i class="fas fa-check"> </i></a>
+                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-rev" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i></a>
+                                                        <?php elseif ($validasi[$i]['status_validasi'] == 1) : ?>
+                                                            <span>Selesai</span>
+                                                        <?php elseif ($validasi[$i]['status_validasi'] == 0) : ?>
+                                                            <span>Belum Bisa</span>
                                                         <?php endif; ?>
                                                     <?php endif; ?>
-                                                <?php endforeach; ?>
+                                                <?php endfor; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

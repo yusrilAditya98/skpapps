@@ -1,18 +1,16 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Pengajuan Proposal</h1>
+            <h1>Pengajuan LPJ</h1>
         </div>
         <?= $this->session->flashdata('message'); ?>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Daftar Pengajuan Proposal Kegiatan</h4>
+                        <h4>Daftar Pengajuan LPJ Kegiatan</h4>
                     </div>
                     <div class="card-body">
-                        <a href="<?= base_url('Mahasiswa/tambahProposal') ?>" style="float:right" class="btn btn-icon btn-success mb-3">
-                            Pengajuan Proposal <i class="fas fa-plus pl-2"></i></a>
                         <div class="table-responsive">
                             <table class="table table-bordered">
                                 <thead class="text-center">
@@ -40,17 +38,16 @@
                                             <td><a href=""><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
-                                                <?php if ($k['status_selesai_proposal'] == 0) : ?>
+                                                <?php if ($k['status_selesai_lpj'] == 0) : ?>
                                                     <span><i class="fa fa-dot-circle mr-2 text-primary"></i>Belum diproses</span>
-                                                <?php elseif ($k['status_selesai_proposal'] == 1) : ?>
+                                                <?php elseif ($k['status_selesai_lpj'] == 1) : ?>
                                                     <span>Sedang Berlangsung</span>
-                                                <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
+                                                <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
                                                     <span><i class="fa fa-dot-circle mr-2 text-warning"></i>Revisi</span>
-                                                <?php elseif ($k['status_selesai_proposal'] == 3) : ?>
+                                                <?php elseif ($k['status_selesai_lpj'] == 3) : ?>
                                                     <span><i class="fa fa-dot-circle mr-2 text-success"></i>Selesai</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <?php $jenis_revisi = 0; ?>
                                             <?php foreach ($validasi as $v) : ?>
                                                 <?php if ($v['id_kegiatan'] == $k['id_kegiatan']) : ?>
                                                     <td class="text-center">
@@ -58,7 +55,6 @@
                                                             <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 2) : ?>
                                                             <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id="<?= $k['id_kegiatan'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
-                                                            <?php $jenis_revisi = $v['jenis_validasi']; ?>
                                                         <?php elseif ($v['status_validasi'] == 0) : ?>
                                                             <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 4) : ?>
@@ -70,11 +66,10 @@
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
                                             <td>
-                                                <?php if ($k['status_selesai_proposal'] == 0) : ?>
-                                                    <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
-                                                    <a href="<?= base_url('Mahasiswa/hapusKegiatan/') . $k['id_kegiatan']; ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a>
-                                                <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
-                                                    <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
+                                                <?php if ($k['status_selesai_lpj'] == 0) : ?>
+                                                    <a href="<?= base_url('Mahasiswa/tambahLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-outline-success"><i class="fas fa-edit"></i>Ajukan Lpj</a>
+                                                <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
+                                                    <a href="<?= base_url('Mahasiswa/editLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

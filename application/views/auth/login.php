@@ -26,6 +26,7 @@
           <div class="p-4 m-3">
             <img src="<?= base_url() ?>/assets/img/skpapps.png" alt="logo" class="mb-5 mt-2">
             <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">SKP-APPS</span></h4>
+            <?= $this->session->flashdata('message'); ?>
 
             <form method="POST" action="<?= base_url('Auth') ?>" class="needs-validation" novalidate="">
               <div class="form-group">

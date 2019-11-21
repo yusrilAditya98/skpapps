@@ -17,9 +17,8 @@ $('.detailSkp').on("click", function () {
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
-			$('.d-file').attr('href', segments[0] + '/skpapps/file_bukti/poinskp/' + data[0].file_bukti)
+			$('.d-file').attr('href', segments[0] + '/skpapps/file_bukti/' + data[0].file_bukti)
 			$('.form-revisi').attr('action', segments[0] + '/skpapps/Kemahasiswaan/validasiSkp/' + data[0].id_poin_skp)
-			$('.d-file').html(data[0].file_bukti)
 		}
 	})
 })
@@ -38,20 +37,28 @@ $('.d-revisi').on("click", function () {
 	})
 })
 
-// pdf
-pdfjsLib.getDocument(segments[0] + '/skpapps/file_bukti/berita_proposal/cek2.pdf').then(doc => {
-	console.log('this file has' + doc._pdfInfo.numPages + " pages");
-	doc.getPage(1).then(page => {
-		var myCanvas = document.getElementById('file_proposal');
-		var context = myCanvas.getContext("2d");
+$('.d-valid-km').on("click", function () {
 
-		var viewPort = page.getViewport(1);
-		myCanvas.width = viewPort.width;
-		myCanvas.height = viewPort.height;
+	let id_kegiatan = $(this).data('kegiatan');
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kemahasiswaan/validasiProposal/' + id_kegiatan)
+	$('.jenis_validasi').val(3)
 
-		page.render({
-			canvasContext: context,
-			viewPort: viewport
-		})
-	})
+})
+$('.d-valid').on("click", function () {
+	let id_kegiatan = $(this).data('kegiatan');
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kemahasiswaan/validasiProposal/' + id_kegiatan)
+	$('.jenis_validasi').val(4)
+})
+
+$('.d-valid-km-lpj').on("click", function () {
+
+	let id_kegiatan = $(this).data('kegiatan');
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kemahasiswaan/validasiLpj/' + id_kegiatan)
+	$('.jenis_validasi').val(3)
+
+})
+$('.d-valid-lpj').on("click", function () {
+	let id_kegiatan = $(this).data('kegiatan');
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kemahasiswaan/validasiLpj/' + id_kegiatan)
+	$('.jenis_validasi').val(4)
 })

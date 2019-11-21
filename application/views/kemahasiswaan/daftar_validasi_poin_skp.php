@@ -52,11 +52,8 @@
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-
                                 </tbody>
                             </table>
-
-
                         </div>
                     </div>
                 </div>
@@ -66,7 +63,7 @@
 </div>
 
                                     <!-- modal detail skp -->
-   <div class=" modal fade" tabindex="-1" role="dialog" id="detailKegiatan">
+<div class=" modal fade" tabindex="-1" role="dialog" id="detailKegiatan">
                                                             <div class="modal-dialog modal-lg"" role=" document">
                                                                 <div class="modal-content">
                                                                     <div class="modal-header">
@@ -122,7 +119,7 @@
                                                                                     <div class="form-group row">
                                                                                         <label class="col-sm-3 col-form-label">File Bukti</label>
                                                                                         <div class="col-sm-9">
-                                                                                            <a href="" class="d-file"></a>
+                                                                                            <a href="" class="d-file btn btn-primary">lihat</a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

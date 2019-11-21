@@ -208,7 +208,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">File Bukti</label>
                                 <div class="col-sm-9">
-                                    <a href="" class="d-file"></a>
+                                    <a href="" class="d-file btn btn-primary">lihat</a>
                                 </div>
                             </div>
                         </div>
@@ -223,7 +223,7 @@
     </div>
 </div>
 
-<!-- Info revisi -->
+<!-- modal revisi -->
 <div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
     <div class="modal-dialog modal-lg" role=" document">
         <div class="modal-content ">
@@ -233,23 +233,26 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="col-12 col-md-12 col-lg-12">
-                    <div class="card profile-widget">
-                        <div class="profile-widget-description">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Catatan Revisi</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control d-catatan" style="height:200px" readonly></textarea>
+            <form class="form-revisi" method="post">
+                <div class="modal-body">
+                    <div class="col-12 col-md-12 col-lg-12">
+                        <div class="card profile-widget">
+                            <div class="profile-widget-description">
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Catatan Revisi</label>
+                                    <div class="col-sm-9">
+                                        <textarea name="catatan" class="form-control d-catatan" style="height:200px"></textarea>
+                                    </div>
+                                    <input type="hidden" name="valid" value="2">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer bg-whitesmoke br">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
+                <div class="modal-footer bg-whitesmoke br">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
