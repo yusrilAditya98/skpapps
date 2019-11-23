@@ -37,11 +37,14 @@ class Model_kegiatan extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    public function getInfoKegiatan($id_kegiatan)
+    public function getInfoKegiatan($id_kegiatan, $penanggung_jawab = null)
     {
         $this->db->select('*');
         $this->db->from('kegiatan');
         $this->db->where('id_kegiatan', $id_kegiatan);
+        if ($penanggung_jawab != null) {
+            $this->db->where('id_penanggung_jawab', $penanggung_jawab);
+        }
         return $this->db->get()->row_array();
     }
     public function getInfoDana($id_kegiatan)
@@ -83,6 +86,15 @@ class Model_kegiatan extends CI_Model
         $this->db->join('tingkatan as t ', 't.id_tingkatan=st.id_tingkatan', 'left');
         $this->db->join('bidang_kegiatan as bk', 'bk.id_bidang=jk.id_bidang', 'left');
         $this->db->where('ak.id_kegiatan', $id_kegiatan);
+        return $this->db->get()->result_array();
+    }
+
+    public function getInfoValidasi($id)
+    {
+        $this->db->select('u.nama,vk.*');
+        $this->db->from('validasi_kegiatan as vk');
+        $this->db->join('user as u', 'vk.id_user=u.id_user');
+        $this->db->where('vk.id', $id);
         return $this->db->get()->result_array();
     }
 

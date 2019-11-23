@@ -17,8 +17,8 @@ $('.detailSkp').on("click", function () {
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
-			$('.d-file').attr('href', segments[0] + '/skpapps/file_bukti/' + data[0].file_bukti)
 			$('.form-revisi').attr('action', segments[0] + '/skpapps/Kemahasiswaan/validasiSkp/' + data[0].id_poin_skp)
+			$('.d-file').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
 		}
 	})
 })

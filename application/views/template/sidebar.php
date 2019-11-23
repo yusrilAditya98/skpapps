@@ -1,4 +1,5 @@
 <!-- QUERY MENU -->
+
 <?php
 $role_id = $this->session->userdata('user_profil_kode');
 $queryMenu = "SELECT `user_menu`.`id`, `menu`
@@ -49,10 +50,18 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                                 <a href="<?= base_url() . $sb['url'] ?>" class="nav-link "><i class="<?= $sb['ikon'] ?>"></i><span><?= $sb['judul']  ?></span></a>
                             <?php endif; ?>
 
+
                             <ul class="dropdown-menu">
                                 <?php foreach ($subSubMenu as $ssb) : ?>
                                     <?php if ($ssb['id_sub_menu'] == $sb['id']) : ?>
-                                        <li><a class="nav-link" href="<?= base_url() . $ssb['url'] ?>"><?= $ssb['nama'] ?></a></li>
+                                        <li>
+                                            <a class="nav-link" href="<?= base_url() . $ssb['url'] ?>">
+                                                <?= $ssb['nama'] ?>
+                                                <?php if ($ssb['id_sub_sub_menu'] == 10 && $notif_kmhs != 0) : ?>
+                                                    <small class="ml-5 badge badge-warning"><?= $notif_kmhs ?></small>
+                                                <?php endif; ?>
+                                            </a>
+                                        </li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
                             </ul>

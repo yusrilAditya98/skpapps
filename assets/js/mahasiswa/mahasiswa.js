@@ -15,68 +15,73 @@ $.ajax({
 				bidang += `<option class="bidang" value="` + data[i].id_bidang + `">` + data[i].nama_bidang + `</option>`
 			}
 		}
+
 		$('.bidangKegiatan').append(bidang)
 
 		let bidangKegiatan = $('.bidangKegiatan').val()
 		$('.jenis').remove();
-		$.ajax({
-			url: segments[0] + '/skpapps/mahasiswa/jenisKegiatan/' + bidangKegiatan,
-			method: 'get',
-			dataType: 'json',
-			success: function (data) {
-				let k_jenis = $('.k_jenis').val();
-				let jenis = '';
-				for (var i in data) {
-					if (k_jenis == data[i].id_jenis_kegiatan) {
-						jenis += `<option selected class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
-					} else {
-						jenis += `<option class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
-					}
-				}
-				$('.jenisKegiatan').append(jenis)
+		if (bidangKegiatan) {
+			$.ajax({
+				url: segments[0] + '/skpapps/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+				method: 'get',
+				dataType: 'json',
+				success: function (data) {
+					let k_jenis = $('.k_jenis').val();
+					let jenis = '';
 
-				let jenisKegiatan = $('.jenisKegiatan').val()
-				$('.tingkat').remove();
-				$.ajax({
-					url: segments[0] + '/skpapps/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
-					method: 'get',
-					dataType: 'json',
-					success: function (data) {
-						let k_tingkat = $('.k_tingkat').val();
-						let tingkat = '';
-						for (var i in data) {
-							if (k_tingkat == data[i].id_semua_tingkatan) {
-								tingkat += `<option selected class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
-							} else {
-								tingkat += `<option class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
-							}
-
+					for (var i in data) {
+						if (k_jenis == data[i].id_jenis_kegiatan) {
+							jenis += `<option selected class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
+						} else {
+							jenis += `<option class="jenis" value="` + data[i].id_jenis_kegiatan + `">` + data[i].jenis_kegiatan + `</option>`
 						}
-						$('.tingkatKegiatan').append(tingkat)
-
-						let tingkatKegiatan = $('.tingkatKegiatan').val()
-						$('.partisipasi').remove();
-						$.ajax({
-							url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
-							method: 'get',
-							dataType: 'json',
-							success: function (data) {
-								let partisipasi = '';
-								let k_partisipasi = $('.k_partisipasi').val();
-								for (var i in data) {
-									if (k_partisipasi == data[i].id_semua_prestasi) {
-										partisipasi += `<option checked class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
-									} else {
-										partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
-									}
-								}
-								$('.partisipasiKegiatan').append(partisipasi)
-							}
-						})
 					}
-				})
-			}
-		})
+					$('.jenisKegiatan').append(jenis)
+
+					let jenisKegiatan = $('.jenisKegiatan').val()
+					$('.tingkat').remove();
+					$.ajax({
+						url: segments[0] + '/skpapps/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+						method: 'get',
+						dataType: 'json',
+						success: function (data) {
+							let k_tingkat = $('.k_tingkat').val();
+							let tingkat = '';
+							for (var i in data) {
+								if (k_tingkat == data[i].id_semua_tingkatan) {
+									tingkat += `<option selected class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+								} else {
+									tingkat += `<option class="tingkat" value="` + data[i].id_semua_tingkatan + `">` + data[i].nama_tingkatan + `</option>`
+								}
+
+							}
+							$('.tingkatKegiatan').append(tingkat)
+
+							let tingkatKegiatan = $('.tingkatKegiatan').val()
+							$('.partisipasi').remove();
+							$.ajax({
+								url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+								method: 'get',
+								dataType: 'json',
+								success: function (data) {
+
+									let partisipasi = '';
+									let k_partisipasi = $('.k_partisipasi').val();
+									for (var i in data) {
+										if (k_partisipasi == data[i].id_semua_prestasi) {
+											partisipasi += `<option checked class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+										} else {
+											partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+										}
+									}
+									$('.partisipasiKegiatan').append(partisipasi)
+								}
+							})
+						}
+					})
+				}
+			})
+		}
 	}
 })
 
@@ -129,6 +134,7 @@ $('#tingkatKegiatan').on("change", function () {
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
 	$('.partisipasi').remove();
 	$('.d-m').remove()
+
 	$.ajax({
 		url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 		method: 'get',
@@ -174,7 +180,8 @@ $('.detailSkp').on("click", function () {
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
-			$('.d-file').attr('href', segments[0] + '/skpapps/file_bukti/' + data[0].file_bukti)
+			$('.d-file').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
+
 		}
 	})
 })
@@ -253,17 +260,25 @@ $('#danaKegiatan').keyup(function () {
 })
 
 
-let tingkatKegiatanLpj = $('.tingkatKegiatan').val()
+// let tingkatKegiatanLpj = $('.tingkatKegiatan').val()
 
-$.ajax({
-	url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatanLpj,
-	method: 'get',
-	dataType: 'json',
-	success: function (data) {
-		let partisipasi = '';
-		for (var i in data) {
-			partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
-		}
-		$('.partisipasiKegiatan').append(partisipasi)
-	}
-})
+// if (tingkatKegiatanLpj) {
+// 	let id_kegiatan = $('.id_kegiatan').val();
+// 	$.ajax({
+// 		url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatanLpj,
+// 		method: 'get',
+// 		dataType: 'json',
+// 		success: function (data) {
+// 			let partisipasi = '';
+// 			for (var i in data) {
+// 				console.log(i)
+// 				if ($('.t-prestasi_' + i).val() == data[i].id_semua_prestasi) {
+// 					partisipasi += `<option selected class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+// 				} else {
+// 					partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+// 				}
+// 			}
+// 			$('.partisipasiKegiatan').append(partisipasi)
+// 		}
+// 	})
+// }

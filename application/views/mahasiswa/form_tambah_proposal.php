@@ -4,7 +4,7 @@
             <h1>Form Pengajuan Proposal</h1>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-12">
+            <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Form Tambah Point SKP</h4>
@@ -206,7 +206,8 @@
                                         <div class="action-button">
                                             <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Kirim Proposal <i class="fas fa-plus"></i></button>
-                                            <a href="<?= base_url('Mahasiswa/pengajuan_proposal') ?>" style="float:right" class="btn btn-icon btn-secondary">
+
+                                            <a href="<?= base_url('Mahasiswa/pengajuanProposal') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>
                                         </div>
                                     </form>

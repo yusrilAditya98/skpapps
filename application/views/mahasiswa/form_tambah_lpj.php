@@ -65,6 +65,7 @@
                                             <div class="form-group">
                                                 <label for="namaKegiatan">Judul Acara / Kegiatan</label>
                                                 <input type="text" class="form-control" id="namaKegiatan" name="namaKegiatan" value="<?= $kegiatan['nama_kegiatan'] ?>" readonly required>
+                                                <input type="hidden" class="form-control id_kegiatan" id="id_kegiatan" value="<?= $kegiatan['id_kegiatan'] ?>" readonly required>
                                                 <div class="invalid-feedback">
                                                     Nama Kegiatan harap diisi
                                                 </div>
@@ -85,14 +86,14 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenisKegiatan">Jenis Kegiatan</label>
-                                                <input type="text" class="form-control" id="jenisKegiatan" name="jenisKegiatan" value="<?= $tingkat[0]['jenis_kegiatan'] ?>" readonly required>
+                                                <input type="text" class="form-control k_jenis" id="jenisKegiatan" name="jenisKegiatan" value="<?= $tingkat[0]['jenis_kegiatan'] ?>" readonly required>
                                                 <div class=" invalid-feedback">
                                                     Jenis kegiatan harap dipilih
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="tingkatKegiatan">Tingkat Kegiatan</label>
-                                                <input type="hidden" class="form-control tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" value="<?= $tingkat[0]['id_semua_tingkatan'] ?>" readonly required>
+                                                <input type="hidden" class="form-control k_tingkat tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" value="<?= $tingkat[0]['id_semua_tingkatan'] ?>" readonly required>
                                                 <input type="text" class="form-control" value="<?= $tingkat[0]['nama_tingkatan'] ?>" readonly required>
                                                 <div class=" invalid-feedback">
                                                     Tingkat kegiatan harap dipilih
@@ -137,6 +138,7 @@
                                                                 <td><?= $a['nama'] ?></td>
                                                                 <td>
                                                                     <select class="custom-select partisipasiKegiatan" name="prestasi_<?= $a['id_anggota_kegiatan'] ?>" id="partisipasiKegiatan" required>
+                                                                        <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
                                                                     </select>
                                                                 </td>
                                                                 <td>
@@ -205,7 +207,7 @@
                                         </div>
                                         <div class="action-button">
                                             <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
-                                                Kirim Proposal <i class="fas fa-plus"></i></button>
+                                                Kirim Lpj <i class="fas fa-plus"></i></button>
                                             <a href="<?= base_url('Mahasiswa/pengajuanLpj') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>
                                         </div>

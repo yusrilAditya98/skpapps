@@ -5,7 +5,7 @@
         </div>
         <?= $this->session->flashdata('message'); ?>
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-12">
+            <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Daftar Pengajuan Proposal Kegiatan</h4>
@@ -37,7 +37,7 @@
                                         <tr>
                                             <th scope="row">1</th>
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
-                                            <td><a href=""><?= $k['nama_kegiatan'] ?></a>
+                                            <td><a href="" data-toggle="modal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>
@@ -57,7 +57,7 @@
                                                         <?php if ($v['status_validasi'] == 1) :  ?>
                                                             <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 2) : ?>
-                                                            <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id="<?= $k['id_kegiatan'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                            <div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id="<?= $v['id'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                             <?php $jenis_revisi = $v['jenis_validasi']; ?>
                                                         <?php elseif ($v['status_validasi'] == 0) : ?>
                                                             <i class="fa fa-circle text-secondary" aria-hidden="true"></i>

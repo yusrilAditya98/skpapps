@@ -130,21 +130,36 @@
                                                     </thead>
                                                     <tbody class="daftar-mhs">
                                                         <?php $i = 1;
+                                                        $j = 0;
                                                         foreach ($anggota as $a) : ?>
                                                             <tr>
                                                                 <td><?= $i++ ?></td>
                                                                 <td><?= $a['nim'] ?></td>
                                                                 <td><?= $a['nama'] ?></td>
                                                                 <td>
+
                                                                     <select class="custom-select partisipasiKegiatan" name="prestasi_<?= $a['id_anggota_kegiatan'] ?>" id="partisipasiKegiatan" required>
+                                                                        <?php foreach ($prestasi as $p) : ?>
+                                                                            <?php if ($p['id_semua_prestasi'] == $a['id_semua_prestasi']) : ?>
+                                                                                <option selected value="<?= $p['id_semua_prestasi'] ?>"><?= $p['nama_prestasi'] ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $p['id_semua_prestasi'] ?>"><?= $p['nama_prestasi'] ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
                                                                     </select>
                                                                 </td>
                                                                 <td>
                                                                     <input type="hidden" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="0">
-                                                                    <input checked type="checkbox" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="1">
+                                                                    <?php if ($a['keaktifan'] == 1) : ?>
+                                                                        <input checked type="checkbox" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="1">
+                                                                    <?php else : ?>
+                                                                        <input type="checkbox" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="1">
+                                                                    <?php endif; ?>
                                                                 </td>
                                                             </tr>
-                                                        <?php endforeach; ?>
+                                                        <?php
+                                                            $j++;
+                                                        endforeach; ?>
 
                                                     </tbody>
                                                 </table>

@@ -52,7 +52,7 @@
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
                                             <td><?= $k['nama_lembaga'] ?></td>
                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#detailKegiatan"><?= $k['nama_kegiatan'] ?></a>
+                                                <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>
@@ -71,7 +71,7 @@
                                                         <?php if ($v['status_validasi'] == 1) :  ?>
                                                             <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 2) : ?>
-                                                            <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id=""><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                            <div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id="<?= $v['id'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                         <?php elseif ($v['status_validasi'] == 4) : ?>
                                                             <i class="fa fa-circle text-primary" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 0) : ?>
@@ -316,6 +316,7 @@
         </div>
     </div>
 </div>
+
 <!-- modal revisi -->
 <div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
     <div class="modal-dialog modal-lg" role=" document">
@@ -331,6 +332,7 @@
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="card profile-widget">
                             <div class="profile-widget-description">
+
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Catatan Revisi</label>
                                     <div class="col-sm-9">

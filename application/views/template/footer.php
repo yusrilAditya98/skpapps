@@ -28,6 +28,7 @@
 <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/ionicons/modules-ion-icons.js"></script>
 
+
 <!-- Page Specific JS File -->
 <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
 

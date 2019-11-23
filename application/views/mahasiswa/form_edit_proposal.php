@@ -13,7 +13,8 @@
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12">
                                 <div class="form-tambah-skp">
-                                    <form action="<?= base_url('Mahasiswa/editProposal/') . $kegiatan['id_kegiatan'] ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
+                                    <form action="<?= base_url('Mahasiswa/editProposal/') . $kegiatan['id_kegiatan']  ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
+                                        <input type="hidden" name="id_kegiatan" value="<?= $kegiatan['id_kegiatan'] ?>">
                                         <div class="bagian-personality">
                                             <h5>Informasi Personality</h5>
                                             <div class="form-group">
@@ -180,7 +181,7 @@
                                             <h5>Informasi Upload</h5>
 
                                             <div class="form-group">
-                                                <label for="fileProposal">Upload File Proposal - <a class="btn btn-primary" href="<?= base_url('file_bukti/proposal/') . $kegiatan['proposal_kegiatan'] ?>">Lihat</a></label>
+                                                <label for="fileProposal">Upload File Proposal - <a class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/') . $kegiatan['proposal_kegiatan'] ?>">Lihat</a></label>
                                                 <input type="file" class="form-control-file btn" id="fileProposal" name="fileProposal">
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                     Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
@@ -192,7 +193,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="beritaProposal">Upload Berita Kegiatan
-                                                    Proposal - <a class="btn btn-primary" href="<?= base_url('file_bukti/berita_propsoal/') . $kegiatan['berita_proposal'] ?>">Lihat</a></label>
+                                                    Proposal - <a class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/') . $kegiatan['berita_proposal'] ?>">Lihat</a></label>
                                                 <input type="file" class="form-control-file btn" name="beritaProposal" id="beritaProposal">
 
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
@@ -223,6 +224,7 @@
                                         <div class="action-button">
                                             <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Edit Proposal <i class="fas fa-plus"></i></button>
+                                            <input type="hidden" value="<?= $jenis_revisi ?>" name="jenis_revisi">
                                             <a href="<?= base_url('Mahasiswa/pengajuanProposal') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>
                                         </div>

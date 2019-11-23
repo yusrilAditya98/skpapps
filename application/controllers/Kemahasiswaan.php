@@ -19,6 +19,8 @@ class Kemahasiswaan extends CI_Controller
     public function index()
     {
         $data['title'] = 'Dashboard';
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -29,6 +31,8 @@ class Kemahasiswaan extends CI_Controller
     // Berfungsi untuk melakukan validasi rancangan kegiatan mahasiswa
     public function validasi_rancangan()
     {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
         $this->load->view("template/header");
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar");
@@ -41,6 +45,8 @@ class Kemahasiswaan extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
 
@@ -48,6 +54,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("kemahasiswaan/daftar_validasi_proposal");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
 
@@ -57,6 +64,8 @@ class Kemahasiswaan extends CI_Controller
 
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
 
@@ -71,12 +80,15 @@ class Kemahasiswaan extends CI_Controller
     public function daftarPoinSkp()
     {
         $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
         $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
-        $data['title'] = 'Poin Skp';
+        $data['title'] = 'Validasi';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("kemahasiswaan/daftar_validasi_poin_skp", $this->dataPengajuanSkp);
+
         $this->load->view("template/footer");
     }
 
@@ -98,6 +110,7 @@ class Kemahasiswaan extends CI_Controller
     public function validasiProposal($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
+
         $id = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
         $jenis_validasi = $this->input->get('jenis_validasi');
         $status_proposal = 1;
@@ -219,5 +232,12 @@ class Kemahasiswaan extends CI_Controller
         foreach ($anggota as $a) {
             $this->_update($a['nim']);
         }
+    }
+
+    public function validasiKegiatan($id)
+    {
+        $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['validasi'] = $this->kegiatan->getInfoValidasi($id);
+        echo json_encode($data['validasi']);
     }
 }
