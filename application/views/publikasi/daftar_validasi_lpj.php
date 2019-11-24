@@ -93,7 +93,7 @@
                                                         <?php endif; ?>
                                                     <?php elseif ($validasi[$i]['id_kegiatan'] == $k['id_kegiatan'] && $validasi[$i]['jenis_validasi'] == 5) : ?>
                                                         <?php if ($validasi[$i]['status_validasi'] == 2 || $validasi[$i]['status_validasi'] == 4) : ?>
-                                                            <a href="<?= base_url('Kegiatan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=5" class="btn btn-icon btn-success"><i class="fas fa-check"> </i></a>
+                                                            <a href="<?= base_url('Publikasi/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=5" class="btn btn-icon btn-success"><i class="fas fa-check"> </i></a>
                                                             <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-rev" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i></a>
                                                         <?php elseif ($validasi[$i]['status_validasi'] == 1) : ?>
                                                             <span>Selesai</span>

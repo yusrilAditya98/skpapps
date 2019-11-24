@@ -5,117 +5,71 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Kegiatan extends CI_Controller
 {
 
+    private $rancangan = [];
+
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') == 1 || $this->session->userdata('user_profil_kode') == 2 || $this->session->userdata('user_profil_kode') == 5 || $this->session->userdata('user_profil_kode') == 8 || $this->session->userdata('user_profil_kode') == 9) {
+        if ($this->session->userdata('user_profil_kode') != 2 || $this->session->userdata('user_profil_kode') == 3) {
             redirect('auth/blocked');
         }
     }
 
+
     public function index()
-    { }
-
-
-    // Berfungsi untuk melakukan validasi Proposal kegiatan mahasiswa dan lembaga
-    public function daftarProposal()
     {
-        $data['title'] = 'Validasi';
-        $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
-        $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
+        $data['title'] = 'Dashboard';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("Publikasi/daftar_validasi_proposal");
+        if ($this->session->userdata('user_profil_kode') == 2) {
+            $this->load->view("dashboard/dashboard_lembaga");
+        } else {
+            $this->load->view("dashboard/dashboard_bem");
+        }
         $this->load->view("template/footer");
     }
 
-    public function daftarLpj()
+    // menampilkan daftar pengajuan rancangan kegiatan
+    public function pengajuanRancangan()
     {
-        $data['title'] = 'Validasi';
-        $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
-        $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
+        $data['title'] = 'Pengajuan';
+        $this->load->model("Model_lembaga", 'lembaga');
+        $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
+        $data['rancangan'] = $this->lembaga->getRancanganKegiatan($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("Publikasi/daftar_validasi_lpj");
+        $this->load->view("lembaga/rancangan");
         $this->load->view("template/footer");
     }
-    public function validasiProposal($id_kegiatan)
-    {
-        $this->load->model('Model_kegiatan', 'kegiatan');
-        $id = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $jenis_validasi = $this->input->get('jenis_validasi');
-        $status_proposal = 1;
-        $data = [
-            'status_validasi' => $this->input->get('valid'),
-            'tanggal_validasi' => date("Y-m-d"),
-            'id_user' => $id['id_user'],
-            'catatan_revisi' => '-'
-        ];
-        if ($this->input->post('revisi')) {
-            $data['status_validasi'] = $this->input->post('valid');
-            $data['catatan_revisi'] = $this->input->post('catatan');
-            $jenis_validasi = $this->input->post('jenis_validasi');
-            $status_proposal = 2;
-        }
-        $this->kegiatan->updateStatusProposal($id_kegiatan, $status_proposal);
-        $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'proposal');
-        // update validasi
-        if ($this->input->get('valid') == 1 && $this->session->userdata('user_profil_kode') != 6) {
-            $val_selanjutnya = [
-                'status_validasi' => 4,
-                'id_user' => 8,
-            ];
-            $jenis_validasi = 1 + $this->input->get('jenis_validasi');
-            $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'proposal');
-        }
-        if ($this->session->userdata('user_profil_kode') == 7) {
-            redirect('Kegiatan/daftarProposal');
-        } elseif ($this->session->userdata('user_profil_kode') == 6) {
-            redirect('Keuangan/daftarPengajuanKeuangan');
-        } elseif ($this->session->userdata('user_profil_kode') == 2) {
-            redirect('Lembaga/daftarProposal');
-        }
-    }
 
-    public function validasiLpj($id_kegiatan)
+    // tambah rancangan kegiatan
+    public function tambahRancanganKegiatan()
     {
-        $this->load->model('Model_kegiatan', 'kegiatan');
-        $id = $this->db->get_where('user', ['username' => $this->session->userdata('username')])->row_array();
-        $jenis_validasi = $this->input->get('jenis_validasi');
-        $status_lpj = 1;
-        $data = [
-            'status_validasi' => $this->input->get('valid'),
-            'tanggal_validasi' => date("Y-m-d"),
-            'id_user' => $id['id_user'],
-            'catatan_revisi' => '-'
-        ];
-        if ($this->input->post('revisi')) {
-            $data['status_validasi'] = $this->input->post('valid');
-            $data['catatan_revisi'] = $this->input->post('catatan');
-            $jenis_validasi = $this->input->post('jenis_validasi');
-            $status_lpj = 2;
-        }
-        $this->kegiatan->updateStatusLpj($id_kegiatan, $status_lpj);
-        $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'lpj');
-        // update validasi
-        if ($this->input->get('valid') == 1 && $this->session->userdata('user_profil_kode') != 6) {
-            $val_selanjutnya = [
-                'status_validasi' => 4,
-                'id_user' => 8,
+        $data['title'] = 'Pengajuan';
+        $this->load->model("Model_lembaga", 'lembaga');
+        $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
+
+        $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
+        if ($this->form_validation->run() == false) {
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("lembaga/form_tambah_rancangan");
+            $this->load->view("template/footer");
+        } else {
+            $this->rancangan = [
+                'nama_proker' => $this->input->post('namaKegiatan'),
+                'tanggal_mulai_pelaksanaan' => $this->input->post('tglPelaksanaan'),
+                'tanggal_selesai_pelaksanaan' => $this->input->post('tglSelesaiPelaksanaan'),
+                'anggaran_kegiatan' => $this->input->post('danaKegiatan'),
+                'id_lembaga' => $this->session->userdata('username'),
+                'status_rancangan' => 0,
+                'tahun_kegiatan' => $this->input->post('tahunKegiatan'),
             ];
-            $jenis_validasi = 1 + $this->input->get('jenis_validasi');
-            $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'lpj');
-        }
-        if ($this->session->userdata('user_profil_kode') == 7) {
-            redirect('Kegiatan/daftarLpj');
-        } elseif ($this->session->userdata('user_profil_kode') == 6) {
-            redirect('Keuangan/daftarPengajuanKeuangan');
-        } elseif ($this->session->userdata('user_profil_kode') == 2) {
-            redirect('Lembaga/daftarProposal');
+            $this->lembaga->insertRancanganKegiatan($this->rancangan);
+            redirect('Kegiatan/pengajuanRancangan');
         }
     }
 }

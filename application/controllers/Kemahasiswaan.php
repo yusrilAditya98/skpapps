@@ -9,6 +9,7 @@ class Kemahasiswaan extends CI_Controller
     private $dataskp = [];
     private $totalPoinSKp;
     private $proposalKegiatan = [];
+    private $lembaga = [];
 
     public function __construct()
     {
@@ -28,17 +29,37 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("template/footer");
     }
 
-    // Berfungsi untuk melakukan validasi rancangan kegiatan mahasiswa
-    public function validasi_rancangan()
+    // update pebukaan rancangan kegiatan lembaga
+    public function pembukaanRancanganKegiatan()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['lembaga'] =  $this->kemahasiswaan->getInfoLembaga();
+        $index = 0;
+        foreach ($data['lembaga'] as $l) {
+            $this->lembaga[$index++] = [
+                'id_lembaga' => $l['id_lembaga'],
+                'status_rencana_kegiatan' => 1,
+                'tahun_rancangan' => $this->input->post('tahun_rancangan')
+            ];
+        }
+        $this->kemahasiswaan->updateStatusRencanaKegiatan($this->lembaga);
+        redirect('Kemahasiswaan/lembaga');
+    }
+
+    // Berfungsi untuk melakukan validasi rancangan kegiatan mahasiswa
+    public function daftarRancangan()
+    {
+        $data['title'] = 'Pengajuan';
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
-        $this->load->view("template/header");
+        $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar");
         $this->load->view("kemahasiswaan/daftar_validasi_rancangan");
         $this->load->view("template/footer");
     }
+
+
 
     // Berfungsi untuk melakukan validasi Proposal kegiatan mahasiswa dan lembaga
     public function daftarProposal()
@@ -183,6 +204,22 @@ class Kemahasiswaan extends CI_Controller
         redirect('Kemahasiswaan/daftarLpj');
     }
 
+    // lihat daftar lembaga di FEB
+    public function lembaga()
+    {
+        $data['title'] = 'Lembaga';
+
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/lembaga");
+        $this->load->view("modal/modal");
+        $this->load->view("template/footer");
+    }
+
 
     // detail kegiatan skp
     public function detailKegiatan($id_kegiatan = null)
@@ -208,31 +245,7 @@ class Kemahasiswaan extends CI_Controller
         $this->db->update('mahasiswa');
     }
 
-    private function _tambahPoinSkpAnggota($id_kegiatan)
-    {
-        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $anggota = $this->db->get_where('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan, 'keaktifan' => 1])->result_array();
-        $kegiatan = $this->db->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
-        $i = 0;
-        foreach ($anggota as $a) {
-            $this->dataskp[$i++] = [
-                'nim' => $a['nim'],
-                'nama_kegiatan' => $kegiatan['nama_kegiatan'],
-                'validasi_prestasi' => 1,
-                'tgl_pengajuan' => $kegiatan['tgl_pengajuan_lpj'],
-                'tgl_pelaksanaan' => $kegiatan['tanggal_kegiatan'],
-                'file_bukti' => 'lpj/' . $kegiatan['lpj_kegiatan'],
-                'tempat_pelaksanaan' => $kegiatan['lokasi_kegiatan'],
-                'catatan' => '-',
-                'prestasiid_prestasi' => $a['id_prestasi'],
-            ];
-        }
-        $this->kemahasiswaan->insertPoinSkp($this->dataskp);
 
-        foreach ($anggota as $a) {
-            $this->_update($a['nim']);
-        }
-    }
 
     public function validasiKegiatan($id)
     {

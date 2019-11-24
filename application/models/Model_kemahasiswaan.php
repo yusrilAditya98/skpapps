@@ -19,4 +19,17 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('kategori', $kategori);
         return $this->db->get()->result_array();
     }
+
+    public function getInfoLembaga()
+    {
+        $this->db->select('*');
+        $this->db->from('lembaga');
+        $this->db->where_not_in('id_lembaga', 0);
+        return $this->db->get()->result_array();
+    }
+
+    public function updateStatusRencanaKegiatan($data)
+    {
+        $this->db->update_batch('lembaga', $data, 'id_lembaga');
+    }
 }
