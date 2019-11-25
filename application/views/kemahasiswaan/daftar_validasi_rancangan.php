@@ -17,29 +17,39 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Tanggal Kegiatan</th>
+                                        <th>Tahun</th>
                                         <th>Nama Lembaga</th>
                                         <th>Jumlah Kegiatan</th>
+                                        <th>Total Anggaran</th>
                                         <th>Validasi</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php for ($i = 0; $i < 10; $i++) : ?>
+                                    <?php foreach ($rancangan as $r) : ?>
                                         <tr>
                                             <td>1</td>
-                                            <td>20 Agu 2019</td>
-                                            <td>BEM</td>
+                                            <td><?= $r['tahun_pengajuan'] ?></td>
+                                            <td><?= $r['nama_lembaga'] ?></td>
                                             <td>15</td>
+                                            <td><?= $r['total_anggaran'] ?></td>
                                             <td>
-                                                <i class="circle fas fa-check text-success"></i>
+                                                <?php if ($r['status_rancangan'] == 1) :  ?>
+                                                    <i class="fa fa-check text-success" aria-hidden="true"></i>
+                                                <?php elseif ($r['status_rancangan'] == 2) : ?>
+                                                    <div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id=""><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                <?php elseif ($r['status_rancangan'] == 3) : ?>
+                                                    <i class="fa fa-circle text-primary" aria-hidden="true"></i>
+                                                <?php elseif ($r['status_rancangan'] == 0) : ?>
+                                                    <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
+                                                <?php endif; ?>
                                             </td>
                                             <td>
-                                                <a href="#" class="btn btn-icon btn-success"><i class="fas fa-check"></i></a>
-                                                <a href="#" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
+                                                <a href="<?= base_url('Kemahasiswaan/detailRancanganKegiatan/?id_lembaga=') . $r['id_lembaga'] . '&tahun=' . $r['tahun_pengajuan'] ?>" class="btn btn-icon btn-info"><i class="fas fa-info"></i></a>
+
                                             </td>
                                         </tr>
-                                    <?php endfor; ?>
+                                    <?php endforeach; ?>
 
                                 </tbody>
                             </table>

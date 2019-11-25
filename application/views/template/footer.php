@@ -39,7 +39,7 @@
 <?php if ($this->session->userdata('user_profil_kode') == 1) : ?>
     <script src="<?= base_url() ?>assets/js/mahasiswa/mahasiswa.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 2 || $this->session->userdata('user_profil_kode') == 3) : ?>
-    <script src="<?= base_url() ?>assets/js/lemabaga/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/lembaga/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
     <script src="<?= base_url() ?>assets/js/kemahasiswaan/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>

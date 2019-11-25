@@ -10,12 +10,28 @@ $queryMenu = "SELECT `user_menu`.`id`, `menu`
                 ";
 $menu = $this->db->query($queryMenu)->result_array();
 
-$menuId = $menu[0]['id'];
-$querySubMenu = "SELECT user_sub_menu.* FROM `user_sub_menu` JOIN `user_menu` 
-                            ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
-                        WHERE `user_sub_menu`.`menu_id`= $menuId
-                        ";
-$subMenu = $this->db->query($querySubMenu)->result_array();
+$menuId = [];
+$temp = [];
+$i = 0;
+foreach ($menu as $m) {
+    $menuId[$i++] = $m['id'];
+}
+
+$j = 0;
+foreach ($menuId as $m) {
+    $querySubMenu = "SELECT user_sub_menu.* FROM `user_sub_menu` JOIN `user_menu` 
+                                ON `user_sub_menu`.`menu_id` = `user_menu`.`id`
+                            WHERE `user_sub_menu`.`menu_id`= $m
+                            ";
+    $temp[$j++] = $this->db->query($querySubMenu)->result_array();
+}
+$k = 0;
+foreach ($temp as $t) {
+    foreach ($t as $ts) {
+        $subMenu[$k++] = $ts;
+    }
+}
+
 
 
 $querySubSubMenu = "SELECT * FROM `user_sub_sub_menu` 
@@ -66,7 +82,6 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                                 <?php endforeach; ?>
                             </ul>
                             </li>
-
                         <?php endif; ?>
                     <?php endforeach; ?>
                 <?php endforeach; ?>

@@ -32,4 +32,40 @@ class Model_kemahasiswaan extends CI_Model
     {
         $this->db->update_batch('lembaga', $data, 'id_lembaga');
     }
+
+    public function getRekapRancangan()
+    {
+        $this->db->select('l.nama_lembaga,rkl.*');
+        $this->db->from('rekapan_kegiatan_lembaga as rkl');
+        $this->db->join('lembaga as l', 'l.id_lembaga=rkl.id_lembaga', 'left');
+        return $this->db->get()->result_array();
+    }
+
+    public function detailRancangan($id_lembaga, $tahun)
+    {
+        $this->db->select('drk.*,l.nama_lembaga');
+        $this->db->from('daftar_rancangan_kegiatan as drk');
+        $this->db->join('lembaga as l', 'l.id_lembaga = drk.id_lembaga', 'left');
+        $this->db->where('drk.id_lembaga', $id_lembaga);
+        $this->db->where('drk.tahun_kegiatan', $tahun);
+        return $this->db->get()->result_array();
+    }
+
+    public function updateStatusProker($data)
+    {
+        $this->db->update_batch('daftar_rancangan_kegiatan', $data);
+    }
+
+    public function updateRekapKegiatan($id_lembaga, $tahun, $status)
+    {
+        $this->db->set('status_rancangan', $status);
+        $this->db->where('id_lembaga', $id_lembaga);
+        $this->db->where('tahun_pengajuan', $tahun);
+        $this->db->update('rekapan_kegiatan_lembaga');
+    }
+
+    public function updateDataStatusProker($data)
+    {
+        $this->db->update_batch('daftar_rancangan_kegiatan', $data, 'id_daftar_rancangan');
+    }
 }

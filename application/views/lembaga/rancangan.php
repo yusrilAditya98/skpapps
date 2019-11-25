@@ -49,8 +49,12 @@
 										sebelum diajakun
 									</div>
 									<div class="col-12 col-lg-4">
-										<a href="#" class="btn btn-icon btn-success" style="box-shadow: none; float:right">
-											Ajukan Kegiatan <i class="fab fa-telegram-plane pl-2"></i></a>
+										<form action="<?= base_url('Kegiatan/ajukanRancangan') ?>" method="post">
+											<input type="hidden" class="t-anggaran" name="totalAnggaran">
+											<input type="hidden" class="t-pengajuan" name="tahunPengajuan" value="<?= $lembaga['tahun_rancangan'] ?>">
+											<button type="submit" class="btn btn-icon btn-success" style="box-shadow: none; float:right">
+												Ajukan Kegiatan <i class="fab fa-telegram-plane pl-2"></i></button>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -61,45 +65,63 @@
 									<tr>
 										<th scope="col">No</th>
 										<th scope="col">Tahun Periode</th>
-										<th scope="col">Nama Kegiatan</th>
-										<th scope="col">Dana Anggaran</th>
-										<th scope="col">Validasi</th>
+										<th scope="col">Nama Lembaga</th>
+										<th scope="col">Jumlah Kegiatan</th>
+										<th scope="col">Kegiatan tervalidasi</th>
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
 								<tbody>
-									<?php foreach ($rancangan as $r) : ?>
+									<?php $temp = 0;
+									foreach ($rancangan as $r) : ?>
 										<tr class="text-center">
 											<th scope="row">1</th>
 											<td><?= $r['tahun_rancangan'] ?></td>
 											<td><a href=""><?= $r['nama_proker'] ?></a>
 											</td>
+											<?php $temp += $r['anggaran_kegiatan']; ?>
 											<td>Rp.<?= $r['anggaran_kegiatan'] ?> ,-</td>
 											<td>
 												<?php if ($r['status_rancangan'] == 1) :  ?>
 													<i class="fa fa-check text-success" aria-hidden="true"></i>
 												<?php elseif ($r['status_rancangan'] == 2) : ?>
-													<div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id="<?= $r['id'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
-												<?php elseif ($r['status_rancangan'] == 4) : ?>
+													<div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id=""><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+												<?php elseif ($r['status_rancangan'] == 3) : ?>
 													<i class="fa fa-circle text-primary" aria-hidden="true"></i>
 												<?php elseif ($r['status_rancangan'] == 0) : ?>
 													<i class="fa fa-circle text-secondary" aria-hidden="true"></i>
-												<?php elseif ($r['status_rancangan'] == 3) : ?>
-													<i class="fa fa-minus" aria-hidden="true"></i>
 												<?php endif; ?>
 											</td>
 											<td>
 												<div class="row">
-													<div class="col-lg-6">
-														<a href="#" class="btn btn-icon btn-info"> <i class="fas fa-edit"></i></a>
-													</div>
-													<div class="col-lg-6">
-														<a href="#" class="btn btn-icon btn-danger"> <i class="fas fa-trash"></i></a>
-													</div>
+													<?php if ($r['status_rancangan'] == 0 || $r['status_rancangan'] == 2) : ?>
+														<div class="col-lg-6">
+															<a href="<?= base_url('Kegiatan/editRancanganKegiatan/') . $r['id_daftar_rancangan'] ?>" class="btn btn-icon btn-info"> <i class="fas fa-edit"></i></a>
+														</div>
+														<div class="col-lg-4">
+															<a href="<?= base_url('Kegiatan/hapusRancanganKegiatan/') . $r['id_daftar_rancangan'] ?>" class="btn btn-icon btn-danger"> <i class="fas fa-trash"></i></a>
+														</div>
+													<?php elseif ($r['status_rancangan'] == 1) : ?>
+														<div class="col-lg-12">
+															<a href="<?= base_url('Kegiatan/tambahProposal/') . $r['id_daftar_rancangan'] ?>" class="badge btn btn-outline-success">Ajukan Proposal</a>
+														</div>
+													<?php elseif ($r['status_rancangan'] == 3) : ?>
+														<div class="col-lg-6">
+															<span class="text-primary">Proses</span>
+														</div>
+													<?php elseif ($r['status_rancangan'] == 4) : ?>
+														<div class="col-lg-12">
+															<span class="text-primary">Sudah Mengajukan</span>
+														</div>
+													<?php endif; ?>
 												</div>
 											</td>
 										</tr>
 									<?php endforeach; ?>
+									<tr class="text-center">
+										<td scope="col" colspan="3">Total Anggaran</td>
+										<td scope="col">Rp.<span class="total-anggaran"> <?= $temp ?></span></td>
+									</tr>
 								</tbody>
 							</table>
 						</div>

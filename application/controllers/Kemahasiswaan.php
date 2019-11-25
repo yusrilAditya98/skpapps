@@ -52,11 +52,54 @@ class Kemahasiswaan extends CI_Controller
         $data['title'] = 'Pengajuan';
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar");
         $this->load->view("kemahasiswaan/daftar_validasi_rancangan");
         $this->load->view("template/footer");
+    }
+
+    // Berfungsi untuk menampilkan detail rancangan kegiatan pada tahun tertentu
+    public function detailRancanganKegiatan()
+    {
+
+        $data['title'] = 'Validasi';
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $id_lembaga = $this->input->get('id_lembaga');
+        $tahun_pengajuan = $this->input->get('tahun');
+        $data['detail_rancangan'] = $this->kemahasiswaan->detailRancangan($id_lembaga, $tahun_pengajuan);
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar");
+        $this->load->view("kemahasiswaan/detail_rancangan_kegiatan");
+        $this->load->view("template/footer");
+    }
+
+    // validasi rancangan proker lembaga
+    public function validasiRancanganProker()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $id_lembaga = $this->input->post('id_lembaga');
+        $tahun_pengajuan = $this->input->post('tahun');
+        $data['detail_rancangan'] = $this->kemahasiswaan->detailRancangan($id_lembaga, $tahun_pengajuan);
+        $proker = [];
+
+        $index = 0;
+        foreach ($data['detail_rancangan'] as $r) {
+            $proker[$index++] = [
+                'id_daftar_rancangan' => $r['id_daftar_rancangan'],
+                'status_rancangan' => $this->input->post('valid_' . $r['id_daftar_rancangan']),
+            ];
+        }
+
+        $this->kemahasiswaan->updateDataStatusProker($proker);
+
+        $status_rancangan = $this->input->post('valid');
+        // update rekapan kegiatan
+        $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, $status_rancangan);
+        redirect('Kemahasiswaan/daftarRancangan');
     }
 
 
