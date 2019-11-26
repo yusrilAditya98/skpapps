@@ -5,6 +5,9 @@
  *
  */
 // cek detai revisian
+$('.uang').mask('000.000.000', {
+	reverse: true
+});
 $('.detail-revisi').on('click', function () {
 	let id = $(this).data('id');
 	$.ajax({

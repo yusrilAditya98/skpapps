@@ -10,6 +10,7 @@ class Kemahasiswaan extends CI_Controller
     private $totalPoinSKp;
     private $proposalKegiatan = [];
     private $lembaga = [];
+    private  $rancangan = [];
 
     public function __construct()
     {
@@ -30,18 +31,14 @@ class Kemahasiswaan extends CI_Controller
     }
 
     // update pebukaan rancangan kegiatan lembaga
-    public function pembukaanRancanganKegiatan()
+    public function pembukaanRancanganKegiatan($id_lembaga)
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['lembaga'] =  $this->kemahasiswaan->getInfoLembaga();
         $index = 0;
-        foreach ($data['lembaga'] as $l) {
-            $this->lembaga[$index++] = [
-                'id_lembaga' => $l['id_lembaga'],
-                'status_rencana_kegiatan' => 1,
-                'tahun_rancangan' => $this->input->post('tahun_rancangan')
-            ];
-        }
+        $this->lembaga[$index++] = [
+            'id_lembaga' => $id_lembaga,
+            'status_rencana_kegiatan' => 0,
+        ];
         $this->kemahasiswaan->updateStatusRencanaKegiatan($this->lembaga);
         redirect('Kemahasiswaan/lembaga');
     }
@@ -295,5 +292,51 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['validasi'] = $this->kegiatan->getInfoValidasi($id);
         echo json_encode($data['validasi']);
+    }
+
+
+    public function anggaran()
+    {
+        $data['title'] = 'Anggaran';;
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['lembaga'] = $this->kemahasiswaan->getRekapRancangan();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_anggaran");
+        $this->load->view("template/footer");
+    }
+
+    public function tambahAnggaranKegiatan()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga();
+
+        $index = 0;
+        foreach ($data['lembaga'] as $l) {
+            $this->lembaga[$index] = [
+                'id_lembaga' => $l['id_lembaga'],
+                'tahun_pengajuan' => $this->input->post('tahun_rancangan'),
+                'anggaran_kemahasiswaan' => $this->input->post('lembaga_' . $l['id_lembaga']),
+                'anggaran_lembaga' => 0,
+                'status_rancangan' => 0
+            ];
+            $this->rancangan[$index++] = [
+                'id_lembaga' => $l['id_lembaga'],
+                'status_rencana_kegiatan' => 1,
+                'tahun_rancangan' => $this->input->post('tahun_rancangan')
+            ];
+        }
+
+        $this->kemahasiswaan->updateStatusRencanaKegiatan($this->rancangan);
+        $this->kemahasiswaan->insertAnggaranRancangan($this->lembaga);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+        <div class="alert-body">
+          <div class="alert-title">Success</div>
+          Dana pagu lembaga berhasil ditambahkan !
+        </div>
+      </div>');
+        redirect('Kemahasiswaan/anggaran');
     }
 }

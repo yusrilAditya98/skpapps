@@ -35,7 +35,7 @@ class Model_kemahasiswaan extends CI_Model
 
     public function getRekapRancangan()
     {
-        $this->db->select('l.nama_lembaga,rkl.*');
+        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
         $this->db->join('lembaga as l', 'l.id_lembaga=rkl.id_lembaga', 'left');
         return $this->db->get()->result_array();
@@ -67,5 +67,10 @@ class Model_kemahasiswaan extends CI_Model
     public function updateDataStatusProker($data)
     {
         $this->db->update_batch('daftar_rancangan_kegiatan', $data, 'id_daftar_rancangan');
+    }
+
+    public function insertAnggaranRancangan($data)
+    {
+        $this->db->insert_batch('rekapan_kegiatan_lembaga', $data);
     }
 }

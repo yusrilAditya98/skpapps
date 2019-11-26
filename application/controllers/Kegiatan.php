@@ -36,6 +36,7 @@ class Kegiatan extends CI_Controller
         $this->load->model("Model_lembaga", 'lembaga');
         $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
         $data['rancangan'] = $this->lembaga->getRancanganKegiatan($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
+        $data['dana_pagu'] = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -49,7 +50,7 @@ class Kegiatan extends CI_Controller
         $data['title'] = 'Pengajuan';
         $this->load->model("Model_lembaga", 'lembaga');
         $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
-
+        $dana = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
         if ($this->form_validation->run() == false) {
             $this->load->view("template/header", $data);
@@ -58,17 +59,40 @@ class Kegiatan extends CI_Controller
             $this->load->view("lembaga/form_tambah_rancangan");
             $this->load->view("template/footer");
         } else {
-            $this->rancangan = [
-                'nama_proker' => $this->input->post('namaKegiatan'),
-                'tanggal_mulai_pelaksanaan' => $this->input->post('tglPelaksanaan'),
-                'tanggal_selesai_pelaksanaan' => $this->input->post('tglSelesaiPelaksanaan'),
-                'anggaran_kegiatan' => $this->input->post('danaKegiatan'),
-                'id_lembaga' => $this->session->userdata('username'),
-                'status_rancangan' => 0,
-                'tahun_kegiatan' => $this->input->post('tahunKegiatan'),
-            ];
-            $this->lembaga->insertRancanganKegiatan($this->rancangan);
-            redirect('Kegiatan/pengajuanRancangan');
+            $dana_proker = $this->input->post('danaKegiatan');
+            $jumlah_dana_lembaga = $dana['anggaran_lembaga'] + $dana_proker;
+
+            if ($jumlah_dana_lembaga > $dana['anggaran_kemahasiswaan']) {
+                $this->session->set_flashdata('message', '<div class="alert alert-warning alert-has-icon">
+                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-body">
+                  <div class="alert-title">Warning</div>
+                    Anggaran lembaga melebihi dana pagu!
+                </div>
+              </div>');
+                redirect('Kegiatan/pengajuanRancangan');
+            } else {
+                $this->rancangan = [
+                    'nama_proker' => $this->input->post('namaKegiatan'),
+                    'tanggal_mulai_pelaksanaan' => $this->input->post('tglPelaksanaan'),
+                    'tanggal_selesai_pelaksanaan' => $this->input->post('tglSelesaiPelaksanaan'),
+                    'anggaran_kegiatan' => $this->input->post('danaKegiatan'),
+                    'id_lembaga' => $this->session->userdata('username'),
+                    'status_rancangan' => 0,
+                    'tahun_kegiatan' => $this->input->post('tahunKegiatan'),
+                ];
+                $this->lembaga->insertRancanganKegiatan($this->rancangan);
+                $this->lembaga->updateAnggaranLembaga($jumlah_dana_lembaga, $this->session->userdata('username'), $this->input->post('tahunKegiatan'));
+
+                $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-body">
+                  <div class="alert-title">Success</div>
+                 Rancangan kegiatan berhasil ditambah!
+                </div>
+              </div>');
+                redirect('Kegiatan/pengajuanRancangan');
+            }
         }
     }
 
@@ -79,9 +103,12 @@ class Kegiatan extends CI_Controller
         $data['title'] = 'Pengajuan';
         $this->load->model("Model_lembaga", 'lembaga');
         $data['rancangan'] = $this->lembaga->getDataRancangan($id_rancangan);
+        $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
+        $dana = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
         if ($data['rancangan']['id_lembaga'] != $this->session->userdata('username')) {
             redirect('Kegiatan/pengajuanRancangan');
         }
+
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
         if ($this->form_validation->run() == false) {
             $this->load->view("template/header", $data);
@@ -90,20 +117,46 @@ class Kegiatan extends CI_Controller
             $this->load->view("lembaga/form_edit_rancangan");
             $this->load->view("template/footer");
         } else {
-            $this->rancangan = [
-                'nama_proker' => $this->input->post('namaKegiatan'),
-                'tanggal_mulai_pelaksanaan' => $this->input->post('tglPelaksanaan'),
-                'tanggal_selesai_pelaksanaan' => $this->input->post('tglSelesaiPelaksanaan'),
-                'anggaran_kegiatan' => $this->input->post('danaKegiatan'),
-                'id_lembaga' => $this->session->userdata('username'),
-                'status_rancangan' => 0,
-                'tahun_kegiatan' => $this->input->post('tahunKegiatan'),
-            ];
-            if ($data['rancangan']['status_rancangan'] == 2) {
-                $this->rancangan['status_rancangan'] = 3;
+
+            $dana_proker_lama = $data['rancangan']['anggaran_kegiatan'];
+            $dana_proker_baru = $this->input->post('danaKegiatan');
+            $jumlah_dana_lembaga_lama = $dana['anggaran_lembaga'] - $dana_proker_lama;
+            $jumlah_dana_lembaga_baru = $jumlah_dana_lembaga_lama + $dana_proker_baru;
+            if ($jumlah_dana_lembaga_baru > $dana['anggaran_kemahasiswaan']) {
+                $this->session->set_flashdata('message', '<div class="alert alert-warning alert-has-icon">
+                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-body">
+                  <div class="alert-title">Warning</div>
+                    Anggaran lembaga melebihi dana pagu!
+                </div>
+              </div>');
+                redirect('Kegiatan/pengajuanRancangan');
+            } else {
+                $this->rancangan = [
+                    'nama_proker' => $this->input->post('namaKegiatan'),
+                    'tanggal_mulai_pelaksanaan' => $this->input->post('tglPelaksanaan'),
+                    'tanggal_selesai_pelaksanaan' => $this->input->post('tglSelesaiPelaksanaan'),
+                    'anggaran_kegiatan' => $this->input->post('danaKegiatan'),
+                    'id_lembaga' => $this->session->userdata('username'),
+                    'status_rancangan' => 0,
+                    'tahun_kegiatan' => $this->input->post('tahunKegiatan'),
+                ];
+                if ($data['rancangan']['status_rancangan'] == 2) {
+                    $this->rancangan['status_rancangan'] = 3;
+                }
+                $this->lembaga->updateRancanganKegiatan($this->rancangan, $id_rancangan);
+                $this->lembaga->updateAnggaranLembaga($jumlah_dana_lembaga_baru, $this->session->userdata('username'), $this->input->post('tahunKegiatan'));
+
+
+                $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-body">
+                  <div class="alert-title">Success</div>
+                 Rancangan kegiatan berhasil diperbaharui!
+                </div>
+              </div>');
+                redirect('Kegiatan/pengajuanRancangan');
             }
-            $this->lembaga->updateRancanganKegiatan($this->rancangan, $id_rancangan);
-            redirect('Kegiatan/pengajuanRancangan');
         }
     }
 
@@ -113,12 +166,28 @@ class Kegiatan extends CI_Controller
         $data['title'] = 'Pengajuan';
         $this->load->model("Model_lembaga", 'lembaga');
         $data['rancangan'] = $this->lembaga->getDataRancangan($id_rancangan);
+        $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
+        $dana = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
         if ($data['rancangan']['id_lembaga'] != $this->session->userdata('username')) {
             redirect('Kegiatan/pengajuanRancangan');
         }
+        $dana_proker_lama = $data['rancangan']['anggaran_kegiatan'];
+        $jumlah_dana_lembaga_baru = $dana['anggaran_lembaga'] - $dana_proker_lama;
+
+        $this->lembaga->updateAnggaranLembaga($jumlah_dana_lembaga_baru, $this->session->userdata('username'), $data['rancangan']['tahun_kegiatan']);
+
         $this->lembaga->deleteRancanganKegiatan($id_rancangan);
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+        <div class="alert-body">
+          <div class="alert-title">Success</div>
+         Rancangan kegiatan berhasil dihapus!
+        </div>
+      </div>');
         redirect('Kegiatan/pengajuanRancangan');
     }
+
 
     // pengajuan rancangan kegiatan
     // 0 belum setuju; 1 setuju ; 2 revisi ; 3 pengajuan ; 4 sedang mengajukan
@@ -141,15 +210,8 @@ class Kegiatan extends CI_Controller
 
         // update status rancangan menjadi disable buat mengajukan kegiatan
         $this->lembaga->updateStatusRencanaKegiatan($this->session->userdata('username'), 0);
-
-        $rekapan = [
-            'id_lembaga' => $this->session->userdata('username'),
-            'tahun_pengajuan' => $this->input->post('tahunPengajuan'),
-            'total_anggaran' => $this->input->post('totalAnggaran'),
-            'status_rancangan' => 3
-        ];
-        // insert rancangan kegiatan list
-        $this->lembaga->insertRekapanKegiatan($rekapan);
+        // update statues rancangan kegiatan list
+        $this->lembaga->updateStatusRancanganByPeriode(3, $this->session->userdata('username'), $this->input->post('tahunPengajuan'));
         redirect('Kegiatan/pengajuanRancangan');
     }
 

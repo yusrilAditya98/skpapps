@@ -37,6 +37,14 @@ class Model_lembaga extends CI_Model
         $this->db->update('lembaga');
     }
 
+    public function updateAnggaranLembaga($anggaran, $id_lembaga, $tahun)
+    {
+        $this->db->set('anggaran_lembaga', $anggaran);
+        $this->db->where('id_lembaga', $id_lembaga);
+        $this->db->where('tahun_pengajuan', $tahun);
+        $this->db->update('rekapan_kegiatan_lembaga');
+    }
+
     public function insertRekapanKegiatan($data)
     {
         $this->db->insert('rekapan_kegiatan_lembaga', $data);
@@ -68,5 +76,25 @@ class Model_lembaga extends CI_Model
         $this->db->from('daftar_rancangan_kegiatan as drk');
         $this->db->where('drk.id_daftar_rancangan', $id_rancangan);
         return $this->db->get()->row_array();
+    }
+    public function getDanaPagu($id_lembaga = null, $tahun_rancangan = null)
+    {
+        $this->db->select('*');
+        $this->db->from('rekapan_kegiatan_lembaga as rkl');
+        if ($id_lembaga != null) {
+            $this->db->where('rkl.id_lembaga', $id_lembaga);
+        }
+        if ($tahun_rancangan != null) {
+            $this->db->where('rkl.tahun_pengajuan', $tahun_rancangan);
+        }
+        return $this->db->get()->row_array();
+    }
+
+    public function updateStatusRancanganByPeriode($status_rancangan, $id_lembaga, $tahun)
+    {
+        $this->db->set('status_rancangan', $status_rancangan);
+        $this->db->where('id_lembaga', $id_lembaga);
+        $this->db->where('tahun_pengajuan', $tahun);
+        $this->db->update('rekapan_kegiatan_lembaga');
     }
 }

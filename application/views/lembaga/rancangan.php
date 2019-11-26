@@ -4,8 +4,9 @@
 		<div class="section-header">
 			<h1>Pengajuan Rancangan</h1>
 		</div>
+		<?= $this->session->flashdata('message'); ?>
 		<div class="row">
-			<div class="col-12 col-md-6 col-lg-4">
+			<div class="col-12 col-md-4 col-lg-4">
 				<div class="card">
 					<div class="card-header">
 						<h4>Tambah Rancangan Kegiatan</h4>
@@ -20,7 +21,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-md-6 col-lg-5">
+			<div class="col-12 col-md-4 col-lg-4">
 				<div class="card">
 					<div class="card-header">
 						<h4>Panduan Pengajuan Rancangan Kegiatan</h4>
@@ -28,6 +29,17 @@
 					<div class="card-body text-center">
 						<a href="form_tambah_proposal.html" class="btn btn-icon btn-primary mb-3">
 							Download Panduan <i class="fas fa-download pl-2"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-4 col-lg-4">
+				<div class="card">
+					<div class="card-header">
+						<h4>Dana Pagu Lembaga / Periode <?= $lembaga['tahun_rancangan'] ?></h4>
+					</div>
+					<div class="card-body text-center">
+						<h2>Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
+						</h2>
 					</div>
 				</div>
 			</div>
@@ -80,7 +92,7 @@
 											<td><a href=""><?= $r['nama_proker'] ?></a>
 											</td>
 											<?php $temp += $r['anggaran_kegiatan']; ?>
-											<td>Rp.<?= $r['anggaran_kegiatan'] ?> ,-</td>
+											<td>Rp.<?= number_format($r['anggaran_kegiatan'], 2, ',', '.') ?> ,-</td>
 											<td>
 												<?php if ($r['status_rancangan'] == 1) :  ?>
 													<i class="fa fa-check text-success" aria-hidden="true"></i>
@@ -120,7 +132,7 @@
 									<?php endforeach; ?>
 									<tr class="text-center">
 										<td scope="col" colspan="3">Total Anggaran</td>
-										<td scope="col">Rp.<span class="total-anggaran"> <?= $temp ?></span></td>
+										<td scope="col">Rp.<span class="total-anggaran"> <?= number_format($temp, 2, ',', '.') ?> </span></td>
 									</tr>
 								</tbody>
 							</table>

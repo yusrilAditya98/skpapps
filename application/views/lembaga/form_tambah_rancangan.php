@@ -39,7 +39,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="danaKegiatan">Dana Anggaran</label>
-                                <input type="number" class="form-control" id="danaKegiatan" name="danaKegiatan" required>
+                                <input type="number" class="form-control uang" id="danaKegiatan" name="danaKegiatan" required>
                                 <div class="invalid-feedback">
                                     Dana kegiatan harap diisi
                                 </div>

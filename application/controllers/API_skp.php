@@ -75,4 +75,11 @@ class API_skp extends CI_Controller
         $data['dokumentasi'] = $this->kegiatan->getDokumentasi($id_kegiatan);
         echo json_encode($data);
     }
+
+    public function dataLembaga()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga();
+        echo json_encode($data['lembaga']);
+    }
 }
