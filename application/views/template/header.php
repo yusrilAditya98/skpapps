@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-    <title>General Dashboard &mdash; Stisla</title>
+    <title><?= $title; ?></title>
 
     <!-- General CSS Files -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -13,7 +13,10 @@
     <!-- CSS Libraries -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/datatables.min.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/dataTables.bootstrap4.min.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables//select.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datatables/select.bootstrap4.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/select/select2.min.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datepicker/daterangepicker.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/modules/ionicons/ionicons.min.css">
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">

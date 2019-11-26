@@ -3,20 +3,20 @@ var segments = url.split("/");
 
 $(window).on('load', function () {
 	$.ajax({
-		url: segments[0] + '/SiUjian/agendaDosen/getRuangan',
+		url: segments[0] + '/siruas-api/api/ruangan',
 		dataType: 'json',
 		type: 'get',
 		success: function (dataRuangan) {
-			console.log(dataRuangan);
-			dataRuangan.forEach(function (ruangan) {
-				$('#ruangan').append(`<option value="` + ruangan + `">` + ruangan + `</option>`)
+			// console.log(dataRuangan);
+			dataRuangan.data.forEach(function (ruangan) {
+				$('#ruangan').append(`<option value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
 			})
 		}
 	});
 })
 
 
-$('.detail-kegiatan').on('click', function () {
+$('.detail-kegiatan-info').on('click', function () {
 	let id = $(this).data('id');
 	// console.log(id);
 	$.ajax({
@@ -24,13 +24,14 @@ $('.detail-kegiatan').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			// console.log(data);
+			console.log(data);
 			var link_image = window.location.origin + '/skpapps/assets/qrcode/kuliah_tamu_' + data['kode_qr'] + '.png';
 			$('.kode_qr').attr('src', link_image);
 			$('.judul_kegiatan').html(data['nama_event']);
 			$('.tanggal_event').html('Tanggal : ' + data['tanggal_event']);
 			$('.deskripsi').html(data['deskripsi']);
 			$('.pemateri').html('Oleh : ' + data['pemateri']);
+			$('.lokasi').html('Lokasi : ' + data['lokasi']);
 			$('.waktu_kegiatan').html('Waktu Pelaksanaan : ' + data['waktu_mulai'] + " - " + data['waktu_selesai']);
 
 			if (data['peserta_kegiatan'].length != 0) {

@@ -17,6 +17,7 @@ $('.detail-SKP').on('click', function () {
 	});
 
 	// Data SKP
+	// console.log(id);
 	$.ajax({
 		url: segments[0] + '/skpapps/pimpinan/get_detail_skp/' + id,
 		method: 'get',

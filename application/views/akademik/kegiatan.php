@@ -53,7 +53,7 @@
                                                     ?>
                                             </td>
                                             <td>
-                                                <button class="btn btn-primary detail-kegiatan" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>
+                                                <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>
                                                 <?php if ($k['status_terlaksana'] == 0) {
                                                         echo '<button class="btn btn-success edit-kegiatan" data-toggle="modal" data-target=".modalEditKegiatan" data-id="' . $k['id_kuliah_tamu'] . '">Edit</button>
                                                               <button class="btn btn-danger hapus-kegiatan" value="' . $k['id_kuliah_tamu'] . '">Hapus</button>';
@@ -95,6 +95,7 @@
                                 <h5 class="card-title judul_kegiatan"></h5>
                                 <p class="card-text pemateri"></p>
                                 <p class="card-text deskripsi"></p>
+                                <p class="card-text lokasi"></p>
                                 <div class="row">
                                     <p class="col-lg-5"><small class="text-muted tanggal_event"></small></p>
                                     <p class="col-lg-7"><small class="text-muted waktu_kegiatan"></small></p>

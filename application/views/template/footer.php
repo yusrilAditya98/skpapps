@@ -21,7 +21,10 @@
 <script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/datatables/dataTables.bootstrap4.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/datatables/dataTables.select.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/select/select2.full.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/datepicker/daterangepicker.js"></script>
 <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
+<script src="<?= base_url() ?>assets/modules/ionicons/modules-ion-icons.js"></script>
 
 <!-- Page Specific JS File -->
 <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
@@ -30,7 +33,27 @@
 <script src="<?= base_url() ?>assets/js/scripts.js"></script>
 <script src="<?= base_url() ?>assets/js/custom.js"></script>
 <script src="<?= base_url() ?>assets/js/kegiatan.js"></script>
+<script src="<?= base_url() ?>assets/js/kategori.js"></script>
 <script src="<?= base_url() ?>assets/js/skp.js"></script>
+
+<?php if ($this->session->userdata('user_profil_kode') == 1) : ?>
+    <script src="<?= base_url() ?>assets/js/mahasiswa/mahasiswa.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 2 || $this->session->userdata('user_profil_kode') == 3) : ?>
+    <script src="<?= base_url() ?>assets/js/lembaga/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
+    <script src="<?= base_url() ?>assets/js/kemahasiswaan/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>
+    <script src="<?= base_url() ?>assets/js/pimpinana/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 6) : ?>
+    <script src="<?= base_url() ?>assets/js/keuangan/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 7) : ?>
+    <script src="<?= base_url() ?>assets/js/psik/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
+    <script src="<?= base_url() ?>assets/js/akademik/script.js"></script>
+<?php elseif ($this->session->userdata('user_profil_kode') == 9) : ?>
+    <script src="<?= base_url() ?>assets/js/admin/script.js"></script>
+<?php endif; ?>
+
 <!-- Sweet alert custom -->
 <script src="<?= base_url('assets/') ?>js/sweet-alert.js"></script>
 
