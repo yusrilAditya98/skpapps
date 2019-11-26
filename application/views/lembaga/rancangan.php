@@ -66,7 +66,7 @@
 										<th scope="col">No</th>
 										<th scope="col">Tahun Periode</th>
 										<th scope="col">Nama Lembaga</th>
-										<th scope="col">Jumlah Kegiatan</th>
+										<th scope="col">Anggaran Kegiatan</th>
 										<th scope="col">Kegiatan tervalidasi</th>
 										<th scope="col">Action</th>
 									</tr>

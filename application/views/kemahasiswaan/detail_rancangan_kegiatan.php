@@ -21,6 +21,7 @@
                                             <th>Nama Lembaga</th>
                                             <th>Nama Proker</th>
                                             <th>Tanggal Pelaksanaan</th>
+                                            <th>Dana Anggaran</th>
                                             <th>Validasi</th>
                                             <th>Action</th>
                                         </tr>
@@ -33,6 +34,7 @@
                                                 <td><?= $r['nama_lembaga'] ?></td>
                                                 <td><?= $r['nama_proker'] ?></td>
                                                 <td><?= date("d M Y", strtotime($r['tanggal_mulai_pelaksanaan'])) . ' - ' . date("d M Y", strtotime($r['tanggal_selesai_pelaksanaan']))  ?></td>
+                                                <td><?= $r['anggaran_kegiatan'] ?></td>
                                                 <td>
                                                     <?php if ($r['status_rancangan'] == 1) :  ?>
                                                         <i class="fa fa-check text-success" aria-hidden="true"></i>
@@ -44,6 +46,7 @@
                                                         <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
                                                     <?php endif; ?>
                                                 </td>
+
                                                 <td>
                                                     <div class="custom-control custom-radio custom-control-inline">
                                                         <input type="radio" id="customRadioInline<?= $r['id_daftar_rancangan'] ?>" name="valid_<?= $r['id_daftar_rancangan'] ?>" class="custom-control-input" value="1">

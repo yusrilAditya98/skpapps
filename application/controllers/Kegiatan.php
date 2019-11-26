@@ -578,11 +578,13 @@ class Kegiatan extends CI_Controller
     public function tambahLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $this->load->model('Model_poinskp', 'poinskp');
         $data['title'] = "Pengajuan";
         $data['kegiatan'] = $this->kegiatan->getInfoKegiatan($id_kegiatan, $this->session->userdata('username'));
         $data['dana'] = $this->kegiatan->getInfoDana($id_kegiatan);
         $data['anggota'] = $this->kegiatan->getInfoAnggota($id_kegiatan);
         $data['tingkat'] = $this->kegiatan->getInfoTingkat($id_kegiatan);
+        $data['prestasi'] = $this->poinskp->getPrestasi($data['tingkat'][0]['id_semua_tingkatan']);
 
         if ($data['kegiatan'] == null || $data['kegiatan']['status_selesai_lpj'] == 3) {
             redirect('Mahasiswa/pengajuanLpj');
@@ -598,8 +600,6 @@ class Kegiatan extends CI_Controller
             $this->load->view("lembaga/form_tambah_lpj");
             $this->load->view("template/footer");
         } else {
-
-
 
             $gambar = [];
             $lpj = [
@@ -621,7 +621,7 @@ class Kegiatan extends CI_Controller
                 } else {
                     echo 'data gagal ditambah';
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                    redirect("Kegiatan/pengajuanLpj");
                 }
             }
 
@@ -640,7 +640,7 @@ class Kegiatan extends CI_Controller
                     unlink(FCPATH . "file_bukti/lpj/" . $lpj['lpj_kegiatan']);
                     echo 'data gagal ditambah';
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                    redirect("Kegiatan/pengajuanLpj");
                 }
             }
             // upload gambar kegiatan
@@ -658,7 +658,7 @@ class Kegiatan extends CI_Controller
                     unlink(FCPATH . "file_bukti/lpj/" . $lpj['lpj_kegiatan']);
                     echo 'data gagal ditambah';
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                    redirect("Kegiatan/pengajuanLpj");
                 }
             }
             $this->kegiatan->updateKegiatan($lpj, $id_kegiatan);
@@ -687,11 +687,6 @@ class Kegiatan extends CI_Controller
                 if ($v['jenis_validasi'] == 2) {
                     $data_validasi[$j++] = [
                         'id' => $v['id'],
-                        'status_validasi' => 3,
-                    ];
-                } elseif ($v['jenis_validasi'] == 3) {
-                    $data_validasi[$j++] = [
-                        'id' => $v['id'],
                         'status_validasi' => 4,
                     ];
                 } else {
@@ -710,7 +705,7 @@ class Kegiatan extends CI_Controller
                   Data lpj berhasil perbaharui !
                 </div>
               </div>');
-            redirect("Mahasiswa/pengajuanLpj");
+            redirect("Kegiatan/pengajuanLpj");
         }
     }
 

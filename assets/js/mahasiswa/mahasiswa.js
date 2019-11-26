@@ -26,6 +26,7 @@ $.ajax({
 				method: 'get',
 				dataType: 'json',
 				success: function (data) {
+
 					let k_jenis = $('.k_jenis').val();
 					let jenis = '';
 
