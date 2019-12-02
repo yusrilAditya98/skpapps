@@ -32,7 +32,7 @@ class Model_poinskp extends CI_Model
         $this->db->insert('poin_skp');
     }
 
-    public function getPoinSkp($username = null, $id_poin_skp = null)
+    public function getPoinSkp($username = null, $id_poin_skp = null, $limit)
     {
         $this->db->select('sp.bobot,ps.*,t.*,p.*,jk.*,bk.*,st.id_semua_tingkatan,m.nama');
         $this->db->from('poin_skp as ps');
@@ -49,6 +49,10 @@ class Model_poinskp extends CI_Model
         if ($id_poin_skp != null) {
             $this->db->where('ps.id_poin_skp', $id_poin_skp);
         }
+        if ($limit != null) {
+            $this->db->limit($limit);
+        }
+
         $this->db->order_by('ps.validasi_prestasi', 'ASC');
         return $this->db->get()->result_array();
     }

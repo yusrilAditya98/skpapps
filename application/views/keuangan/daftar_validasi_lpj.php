@@ -13,9 +13,6 @@
 
                     </div>
                     <div class="card-body">
-                        <a href="#" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</a>
-                    </div>
-                    <div class="card-body">
 
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-2">
@@ -41,14 +38,11 @@
 
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($kegiatan as $k) : ?>
+                                    <?php $j = 1;
+                                    foreach ($kegiatan as $k) : ?>
                                         <tr>
                                             <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
-                                                    <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
-                                                    1
-                                                </div>
+                                                <?= $j++ ?>
                                             </td>
                                             <td><?= $k['tgl_pengajuan_lpj'] ?></td>
                                             <td><?= $k['nama_lembaga'] ?></td>

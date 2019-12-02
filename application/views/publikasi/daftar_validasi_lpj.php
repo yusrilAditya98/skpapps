@@ -13,20 +13,13 @@
 
                     </div>
                     <div class="card-body">
-                        <a href="#" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</a>
-                    </div>
-                    <div class="card-body">
 
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-2">
                                 <thead>
 
                                     <th class="text">
-                                        <div class="custom-checkbox custom-control">
-                                            <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
-                                            <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
-                                            No
-                                        </div>
+                                        No
                                     </th>
                                     <th>Tanggal Pengajuan</th>
                                     <th>Nama Pengaju</th>
@@ -41,19 +34,16 @@
 
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($kegiatan as $k) : ?>
+                                    <?php $j = 1;
+                                    foreach ($kegiatan as $k) : ?>
                                         <tr>
                                             <td>
-                                                <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
-                                                    <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
-                                                    1
-                                                </div>
+                                                <?= $j++ ?>
                                             </td>
                                             <td><?= $k['tgl_pengajuan_lpj'] ?></td>
                                             <td><?= $k['nama_lembaga'] ?></td>
                                             <td>
-                                                <a class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
+                                                <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_lpj'] == 0) : ?>

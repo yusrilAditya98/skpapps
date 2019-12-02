@@ -23,6 +23,10 @@ class Mahasiswa extends CI_Controller
     public function index()
     {
         $data['title'] = "Dashboard";
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['poinskp'] = $this->poinskp->getPoinSkp($this->session->userdata('username'), null, 5);
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($this->session->userdata('username'));
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -201,9 +205,6 @@ class Mahasiswa extends CI_Controller
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
                 'waktu_pengajuan' => time()
             ];
-            var_dump($proposal);
-            die;
-
 
             // upload file proposal
             if ($_FILES['fileProposal']['name']) {
@@ -895,6 +896,22 @@ class Mahasiswa extends CI_Controller
           </div>');
             redirect("Mahasiswa/pengajuanLpj");
         }
+    }
+
+    // form pengajuan beasiswa 
+    public function beasiswa()
+    {
+
+        // set rules form validation
+        $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Pengajuan";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("mahasiswa/beasiswa");
+            $this->load->view("template/footer");
+        } else { }
     }
 
 
