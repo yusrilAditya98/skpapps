@@ -27,7 +27,7 @@ class Publikasi extends CI_Controller
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("Publikasi/daftar_validasi_proposal");
+        $this->load->view("publikasi/daftar_validasi_proposal");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
@@ -40,7 +40,7 @@ class Publikasi extends CI_Controller
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("Publikasi/daftar_validasi_lpj");
+        $this->load->view("publikasi/daftar_validasi_lpj");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
