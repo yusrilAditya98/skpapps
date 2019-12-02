@@ -56,6 +56,7 @@
                                                         <input checked type="radio" id="customRadioInline2_<?= $r['id_daftar_rancangan'] ?>" name="valid_<?= $r['id_daftar_rancangan'] ?>" class="custom-control-input" value="2">
                                                         <label class="custom-control-label" for="customRadioInline2_<?= $r['id_daftar_rancangan'] ?>">Revisi</label>
                                                     </div>
+                                                    <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="" class="btn btn-primary"><i class="fas fa-edit"></i></button>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

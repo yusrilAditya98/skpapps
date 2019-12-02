@@ -33,6 +33,7 @@ class Publikasi extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("Publikasi/daftar_validasi_proposal");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
 
@@ -40,12 +41,13 @@ class Publikasi extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("Publikasi/daftar_validasi_lpj");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
     public function validasiProposal($id_kegiatan)

@@ -20,6 +20,21 @@ class Model_kemahasiswaan extends CI_Model
         return $this->db->get()->result_array();
     }
 
+    public function getNotifValidasiRancangan()
+    {
+        $this->db->select('*');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->where('status_rancangan', 3);
+        return $this->db->get()->result_array();
+    }
+    public function getNotifValidasiSkp()
+    {
+        $this->db->select('*');
+        $this->db->from('poin_skp');
+        $this->db->where('validasi_prestasi', 0);
+        return $this->db->get()->result_array();
+    }
+
     public function getInfoLembaga()
     {
         $this->db->select('*');
@@ -33,11 +48,20 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->update_batch('lembaga', $data, 'id_lembaga');
     }
 
-    public function getRekapRancangan()
+    public function getRekapRancangan($tahun = null, $lembaga = null, $status = null)
     {
         $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
         $this->db->join('lembaga as l', 'l.id_lembaga=rkl.id_lembaga', 'left');
+        if ($tahun != null) {
+            $this->db->where('rkl.tahun_pengajuan', $tahun);
+        }
+        if ($lembaga != null) {
+            $this->db->where('rkl.id_lembaga', $lembaga);
+        }
+        if ($status != null) {
+            $this->db->where('rkl.status_rancangan', $status);
+        }
         return $this->db->get()->result_array();
     }
 

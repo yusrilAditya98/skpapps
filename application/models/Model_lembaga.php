@@ -6,6 +6,14 @@ class Model_lembaga extends CI_Model
 {
 
     private $dataRacangan = [];
+
+    public function getTahunRancangan()
+    {
+        $this->db->select('tahun_kegiatan');
+        $this->db->from('daftar_rancangan_kegiatan');
+        $this->db->group_by('tahun_kegiatan');
+        return $this->db->get()->result_array();
+    }
     public function getDataLembaga($id_lembaga)
     {
         $this->db->select('*');

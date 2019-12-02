@@ -71,12 +71,28 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                                 <?php foreach ($subSubMenu as $ssb) : ?>
                                     <?php if ($ssb['id_sub_menu'] == $sb['id']) : ?>
                                         <li>
-                                            <a class="nav-link" href="<?= base_url() . $ssb['url'] ?>">
-                                                <?= $ssb['nama'] ?>
-                                                <?php if ($ssb['id_sub_sub_menu'] == 10 && $notif_kmhs != 0) : ?>
-                                                    <small class="ml-5 badge badge-warning"><?= $notif_kmhs ?></small>
-                                                <?php endif; ?>
-                                            </a>
+                                            <div class="row">
+                                                <div class="col-lg-8">
+                                                    <a class="nav-link" href="<?= base_url() . $ssb['url'] ?>">
+                                                        <?= $ssb['nama'] ?>
+                                                    </a>
+                                                </div>
+                                                <div class="col-lg-4 float-right">
+                                                    <!-- notif rancangan -->
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 8 && $notif['notif_kmhs_rancangan'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_kmhs_rancangan'] ?></span>
+                                                    <?php endif; ?>
+                                                    <!-- notif proposal -->
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 9 && $notif['notif_kmhs_proposal'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_kmhs_proposal'] ?></span>
+                                                    <?php endif; ?>
+                                                    <!-- notif lpj -->
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 10 && $notif['notif_kmhs_lpj'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_kmhs_lpj'] ?></span>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+
                                         </li>
                                     <?php endif; ?>
                                 <?php endforeach; ?>

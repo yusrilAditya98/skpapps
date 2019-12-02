@@ -40,6 +40,7 @@
 					<div class="card-body text-center">
 						<h2>Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
 						</h2>
+						<span>Sisa dana : Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?></span>
 					</div>
 				</div>
 			</div>
@@ -71,26 +72,57 @@
 								</div>
 							</div>
 						<?php endif ?>
+						<div class="float-right">
+							<form action="<?= base_url('Kegiatan/pengajuanRancangan') ?>" method="get">
+								<div class="form-group">
+									<div class="input-group">
+
+										<select name="tahun" class="custom-select" id="inputGroupSelect04">
+											<option value="" selected="">Tahun...</option>
+											<?php foreach ($tahun as $t) : ?>
+												<option value="<?= $t['tahun_kegiatan'] ?>"><?= $t['tahun_kegiatan'] ?></option>
+											<?php endforeach; ?>
+										</select>
+										<div class="input-group-append">
+											<button class="btn btn-outline-primary" type="submit">cari</button>
+										</div>
+
+									</div>
+								</div>
+							</form>
+						</div>
+
 						<div class="table-responsive">
 							<table class="table table-bordered">
 								<thead class="text-center">
 									<tr>
 										<th scope="col">No</th>
 										<th scope="col">Tahun Periode</th>
+										<th scope="col">Tanggal Pelaksanaan</th>
 										<th scope="col">Nama Lembaga</th>
 										<th scope="col">Anggaran Kegiatan</th>
 										<th scope="col">Kegiatan tervalidasi</th>
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody class="text-center">
+
 									<?php $temp = 0;
+									$i = 1;
 									foreach ($rancangan as $r) : ?>
-										<tr class="text-center">
-											<th scope="row">1</th>
-											<td><?= $r['tahun_rancangan'] ?></td>
-											<td><a href=""><?= $r['nama_proker'] ?></a>
+
+										<tr>
+											<th scope="row"><?= $i++ ?></th>
+											<td><?= $r['tahun_kegiatan'] ?>
+											<td>
+												<?php $date = date_create($r['tanggal_mulai_pelaksanaan']);
+													echo date_format($date, "d M Y"); ?>
+												-
+												<?php $date = date_create($r['tanggal_selesai_pelaksanaan']);
+													echo date_format($date, "d M Y"); ?>
 											</td>
+											</td>
+											<td><?= $r['nama_proker'] ?></td>
 											<?php $temp += $r['anggaran_kegiatan']; ?>
 											<td>Rp.<?= number_format($r['anggaran_kegiatan'], 2, ',', '.') ?> ,-</td>
 											<td>
@@ -118,7 +150,7 @@
 															<a href="<?= base_url('Kegiatan/tambahProposal/') . $r['id_daftar_rancangan'] ?>" class="badge btn btn-outline-success">Ajukan Proposal</a>
 														</div>
 													<?php elseif ($r['status_rancangan'] == 3) : ?>
-														<div class="col-lg-6">
+														<div class="col-lg-12">
 															<span class="text-primary">Proses</span>
 														</div>
 													<?php elseif ($r['status_rancangan'] == 4) : ?>

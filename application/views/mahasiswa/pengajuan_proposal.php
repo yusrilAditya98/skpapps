@@ -33,11 +33,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $index = 1; ?>
                                     <?php foreach ($kegiatan as $k) : ?>
                                         <tr>
-                                            <th scope="row">1</th>
+                                            <th scope="row"><?= $index++ ?></th>
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
-                                            <td><a href="" data-toggle="modal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
+                                            <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-jenis="proposal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>

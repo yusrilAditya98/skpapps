@@ -11,6 +11,7 @@ class Kemahasiswaan extends CI_Controller
     private $proposalKegiatan = [];
     private $lembaga = [];
     private  $rancangan = [];
+    private $notif = [];
 
     public function __construct()
     {
@@ -18,11 +19,21 @@ class Kemahasiswaan extends CI_Controller
         is_logged_in();
     }
 
+    private function _notifKmhs()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_kmhs_lpj'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $this->notif['notif_kmhs_proposal'] = count($this->kemahasiswaan->getNotifValidasi(3, 'proposal'));
+        $this->notif['notif_kmhs_rancangan'] = count($this->kemahasiswaan->getNotifValidasiRancangan());
+        $this->notif['notif_kmhs_skp'] = count($this->kemahasiswaan->getNotifValidasiSkp());
+        return $this->notif;
+    }
+
     public function index()
     {
+        $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Dashboard';
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -46,10 +57,20 @@ class Kemahasiswaan extends CI_Controller
     // Berfungsi untuk melakukan validasi rancangan kegiatan mahasiswa
     public function daftarRancangan()
     {
-        $data['title'] = 'Pengajuan';
+        $data['title'] = 'Validasi';
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
-        $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
+        $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga();
+        $data['filter'] = $this->kegiatan->getDataFilterRancangan();
+        $data['notif'] = $this->_notifKmhs();
+        if ($this->input->get('tahun') != null || $this->input->get('lembaga') != null || $this->input->get('status') != null) {
+            $tahun = $this->input->get('tahun');
+            $lembaga = $this->input->get('lembaga');
+            $status =  $this->input->get('status');
+            $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan($tahun, $lembaga, $status);
+        } else {
+            $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
+        }
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar");
@@ -63,7 +84,7 @@ class Kemahasiswaan extends CI_Controller
 
         $data['title'] = 'Validasi';
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['notif'] = $this->_notifKmhs();
         $id_lembaga = $this->input->get('id_lembaga');
         $tahun_pengajuan = $this->input->get('tahun');
         $data['detail_rancangan'] = $this->kemahasiswaan->detailRancangan($id_lembaga, $tahun_pengajuan);
@@ -71,6 +92,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar");
         $this->load->view("kemahasiswaan/detail_rancangan_kegiatan");
+        $this->load->view("modal/modal_revisi");
         $this->load->view("template/footer");
     }
 
@@ -99,15 +121,14 @@ class Kemahasiswaan extends CI_Controller
         redirect('Kemahasiswaan/daftarRancangan');
     }
 
-
-
     // Berfungsi untuk melakukan validasi Proposal kegiatan mahasiswa dan lembaga
     public function daftarProposal()
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['notif'] = $this->_notifKmhs();
+
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
 
@@ -126,7 +147,7 @@ class Kemahasiswaan extends CI_Controller
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['notif'] = $this->_notifKmhs();
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
 
@@ -134,6 +155,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("kemahasiswaan/daftar_validasi_lpj");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
 
@@ -142,7 +164,7 @@ class Kemahasiswaan extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['notif'] = $this->_notifKmhs();
         $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
         $data['title'] = 'Validasi';
         $this->load->view("template/header", $data);
@@ -250,7 +272,7 @@ class Kemahasiswaan extends CI_Controller
         $data['title'] = 'Lembaga';
 
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['notif_kmhs'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $data['notif'] = $this->_notifKmhs();
         $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -338,5 +360,22 @@ class Kemahasiswaan extends CI_Controller
         </div>
       </div>');
         redirect('Kemahasiswaan/anggaran');
+    }
+
+    public function cetakPengajuanProposal()
+    {
+        $data['kegiatan'] = [];
+        $kegiatan = $this->db->get('kegiatan')->result_array();
+        $index = 0;
+        foreach ($kegiatan as $k) {
+            if ($this->input->post('cek_' . $k['id_kegiatan'])) {
+                $data['kegiatan'][$index] = [
+                    'nama_kegiatan' => $k['nama_kegiatan'],
+                    'nama_kegiatan' => $k['nama_kegiatan']
+                ];
+            }
+            $index++;
+        }
+        $this->load->view('kemahasiswaan/tampilan1', $data);
     }
 }

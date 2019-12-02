@@ -182,14 +182,12 @@ class Mahasiswa extends CI_Controller
             // get id tingkatan
             $sm_id = $this->input->post('tingkatKegiatan');
             $idTingkatan = $this->db->get_where('semua_tingkatan', ['id_semua_tingkatan' => $sm_id])->row_array();
-
-
             $proposal = [
                 'nama_kegiatan' => $this->input->post('namaKegiatan'),
                 'status_selesai_proposal' => 0,
                 'status_selesai_lpj' => 0,
                 'dana_kegiatan' => $this->input->post('danaKegiatan'),
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_proposal' => $this->input->post('danaKegiatanDiterima'),
                 'id_lembaga' => 0,
                 'tanggal_kegiatan' => $this->input->post('tglPelaksanaan'),
                 'lokasi_kegiatan' => $this->input->post('tempatPelaksanaan'),
@@ -198,10 +196,13 @@ class Mahasiswa extends CI_Controller
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
                 'tgl_pengajuan_proposal' => date("Y-m-d"),
                 'id_penanggung_jawab' => $this->input->post('nim'),
+                'nama_penanggung_jawab' => $this->input->post('namaMahasiswa'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
                 'waktu_pengajuan' => time()
             ];
+            var_dump($proposal);
+            die;
 
 
             // upload file proposal
@@ -428,7 +429,7 @@ class Mahasiswa extends CI_Controller
                 'status_selesai_proposal' => 1,
                 'status_selesai_lpj' => 0,
                 'dana_kegiatan' => $this->input->post('danaKegiatan'),
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_proposal' => $this->input->post('danaKegiatanDiterima'),
                 'id_lembaga' => 0,
                 'tanggal_kegiatan' => $this->input->post('tglPelaksanaan'),
                 'lokasi_kegiatan' => $this->input->post('tempatPelaksanaan'),
@@ -608,11 +609,13 @@ class Mahasiswa extends CI_Controller
     public function tambahLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $this->load->model('Model_poinskp', 'poinskp');
         $data['title'] = "Pengajuan";
         $data['kegiatan'] = $this->kegiatan->getInfoKegiatan($id_kegiatan, $this->session->userdata('username'));
         $data['dana'] = $this->kegiatan->getInfoDana($id_kegiatan);
         $data['anggota'] = $this->kegiatan->getInfoAnggota($id_kegiatan);
         $data['tingkat'] = $this->kegiatan->getInfoTingkat($id_kegiatan);
+        $data['prestasi'] = $this->poinskp->getPrestasi($data['tingkat'][0]['id_semua_tingkatan']);
 
         if ($data['kegiatan'] == null || $data['kegiatan']['status_selesai_lpj'] == 3) {
             redirect('Mahasiswa/pengajuanLpj');
@@ -634,7 +637,7 @@ class Mahasiswa extends CI_Controller
             $gambar = [];
             $lpj = [
                 'status_selesai_lpj' => 1,
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_lpj' => $this->input->post('danaKegiatanDiterima'),
                 'tgl_pengajuan_lpj' => date("Y-m-d"),
             ];
 
@@ -770,7 +773,7 @@ class Mahasiswa extends CI_Controller
             $gambar = [];
             $lpj = [
                 'status_selesai_lpj' => 1,
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_lpj' => $this->input->post('danaKegiatanDiterima'),
             ];
 
             // upload file proposal

@@ -31,11 +31,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $i = 1; ?>
                                     <?php foreach ($kegiatan as $k) : ?>
                                         <tr>
-                                            <th scope="row">1</th>
+                                            <th scope="row"><?= $i++; ?></th>
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
-                                            <td><a href=""><?= $k['nama_kegiatan'] ?></a>
+                                            <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_lpj'] == 0) : ?>

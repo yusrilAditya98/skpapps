@@ -25,6 +25,8 @@ $('.detail-revisi').on('click', function () {
 
 $('.detail-kegiatan').on('click', function () {
 	let id = $(this).data('id');
+	let jenis = $(this).data('jenis')
+	let dana = '';
 	$('.s-dana').remove()
 	$('.k-anggota').remove()
 	$.ajax({
@@ -32,14 +34,27 @@ $('.detail-kegiatan').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data)
-			$('.k-pengaju').val(data.kegiatan['nama_kegiatan'])
+			console.log(jenis)
+			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
 			$('.k-nim').val(data.kegiatan['id_penanggung_jawab'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
 			$('.k-dana').val(data.kegiatan['dana_kegiatan'])
-			let dana = '';
+			if (jenis == 'proposal') {
+				$('.k-dana-cair').val(data.kegiatan['dana_proposal'])
+				$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
+				$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
+				$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
+				$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
+			} else if (jenis == 'lpj') {
+				$('.k-dana-cair').val(data.kegiatan['dana_lpj'])
+				$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
+				$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
+				$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
+				$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_2'])
+			}
+
 			for (var i in data.dana) {
-				dana += `<span class="s-dana">` + data.dana[i].nama_sumber_dana + `</span><br>`
+				dana += `<span class="s-dana">` + data.dana[i].nama_sumber_dana + `</span><br class="s-dana">`
 			}
 			$('.k-sumber').append(dana);
 			$('.k-nama_kegiatan').val(data.kegiatan['nama_kegiatan'])
@@ -49,15 +64,13 @@ $('.detail-kegiatan').on('click', function () {
 			$('.k-tingkat_kegiatan').val(data.tingkat[0]['nama_tingkatan'])
 			$('.k-tgl_kegiatan').val(data.kegiatan['tanggal_kegiatan'])
 			$('.k-tempat').val(data.kegiatan['lokasi_kegiatan'])
-			$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
-			$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
-			$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
-			$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
 
+
+			let index = 1;
 			for (var j in data.tingkat) {
 				$('.daftar-mhs').append(`
 				<tr class="k-anggota">
-					<td>` + (j) + `</td>
+					<td>` + (index++) + `</td>
 					<td>` + data.tingkat[j].nim + `</td>
 					<td>` + data.tingkat[j].nama + `</td>
 					<td>` + data.tingkat[j].nama_prestasi + `</td>
@@ -67,5 +80,28 @@ $('.detail-kegiatan').on('click', function () {
 		}
 	})
 })
+
+$(document).ready(function () {
+	$('#dataTabelProposal').DataTable({
+		initComplete: function () {
+			this.api().columns([2, 4]).every(function () {
+				var column = this;
+				var select = $('<select class="form-control-sm" ><option value=""></option></select>')
+					.appendTo($(column.footer()).empty())
+					.on('change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
+						column
+							.search(val ? '^' + val + '$' : '', true, false)
+							.draw();
+					});
+				column.data().unique().sort().each(function (d, j) {
+					select.append('<option value="' + d + '">' + d + '</option>')
+				});
+			});
+		}
+	});
+});
 
 "use strict";

@@ -35,12 +35,21 @@ class Kegiatan extends CI_Controller
         $data['title'] = 'Pengajuan';
         $this->load->model("Model_lembaga", 'lembaga');
         $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
-        $data['rancangan'] = $this->lembaga->getRancanganKegiatan($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
-        $data['dana_pagu'] = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
+        $data['tahun'] = $this->lembaga->getTahunRancangan();
+        $tahun = $this->input->get('tahun');
+        if ($tahun) {
+            $data['rancangan'] = $this->lembaga->getRancanganKegiatan($this->session->userdata('username'), $tahun);
+            $data['dana_pagu'] = $this->lembaga->getDanaPagu($this->session->userdata('username'), $tahun);
+        } else {
+            $data['rancangan'] = $this->lembaga->getRancanganKegiatan($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
+            $data['dana_pagu'] = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
+        }
+
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("lembaga/rancangan");
+
         $this->load->view("template/footer");
     }
 
@@ -260,7 +269,7 @@ class Kegiatan extends CI_Controller
                 'status_selesai_proposal' => 0,
                 'status_selesai_lpj' => 0,
                 'dana_kegiatan' => $this->input->post('danaKegiatan'),
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_proposal' => $this->input->post('danaKegiatanDiterima'),
                 'id_lembaga' => $this->session->userdata('username'),
                 'tanggal_kegiatan' => $this->input->post('tglPelaksanaan'),
                 'lokasi_kegiatan' => $this->input->post('tempatPelaksanaan'),
@@ -269,6 +278,7 @@ class Kegiatan extends CI_Controller
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
                 'tgl_pengajuan_proposal' => date("Y-m-d"),
                 'id_penanggung_jawab' => $this->input->post('nim'),
+                'nama_penanggung_jawab' => $this->input->post('namaLembaga'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
                 'waktu_pengajuan' => time()
@@ -382,6 +392,7 @@ class Kegiatan extends CI_Controller
                     'id_prestasi' => $this->input->post('prestasi_' . $i)
                 ];
             }
+
             $this->kegiatan->insertAnggotaKegiatan($data_anggota);
 
             // insert validasi 
@@ -437,11 +448,11 @@ class Kegiatan extends CI_Controller
         $data['dana_kegiatan'] = $this->kegiatan->getInfoDana($id_kegiatan);
         $data['dana'] = $this->kegiatan->getSumberDanaLain($id_kegiatan);
         $data['validasi'] = $this->kegiatan->getDataValidasi($id_kegiatan, null, 'proposal');
-        $data['jenis_revisi'] = $this->input->get('jenis_revisi');
+        $data['jenis_revisi'] = $this->input->post('jenis_revisi');
         $gambar = [];
 
         if ($data['kegiatan'] == null || $data['kegiatan']['status_selesai_proposal'] == 3) {
-            redirect('Mahasiswa/pengajuanProposal');
+            redirect('lembaga/pengajuanProposal');
         }
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
@@ -456,28 +467,26 @@ class Kegiatan extends CI_Controller
             // get id tingkatan
             $sm_id = $this->input->post('tingkatKegiatan');
             $idTingkatan = $this->db->get_where('semua_tingkatan', ['id_semua_tingkatan' => $sm_id])->row_array();
-
             $proposal = [
                 'nama_kegiatan' => $this->input->post('namaKegiatan'),
                 'status_selesai_proposal' => 1,
-                'status_selesai_lpj' => 0,
                 'dana_kegiatan' => $this->input->post('danaKegiatan'),
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
-                'id_lembaga' => 0,
+                'dana_proposal' => $this->input->post('danaKegiatanDiterima'),
                 'tanggal_kegiatan' => $this->input->post('tglPelaksanaan'),
                 'lokasi_kegiatan' => $this->input->post('tempatPelaksanaan'),
-                'periode' => date("Y"),
-                'acc_rancangan' => 1,
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
                 'tgl_pengajuan_proposal' => date("Y-m-d"),
-                'id_penanggung_jawab' => $this->input->post('nim'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
                 'waktu_pengajuan' => time()
             ];
+
             if ($this->input->post('jenis_revisi') == 0) {
                 $proposal['status_selesai_proposal'] = 0;
+            } elseif ($this->input->post('jenis_revisi') == 5 || $this->input->post('jenis_revisi') == 6) {
+                $proposal = $this->_cekDataRevisi($this->input->post('jenis_revisi'));
             }
+
 
             // update file proposal
             if ($_FILES['fileProposal']['name']) {
@@ -557,43 +566,43 @@ class Kegiatan extends CI_Controller
                 $this->kegiatan->updateDokumentasiKegiatan($gambar, $id_kegiatan);
             }
 
-            // insert dana kegiatan
-            $dana = [
-                0 => $this->input->post('dana1'),
-                1 => $this->input->post('dana2'),
-                2 => $this->input->post('dana3'),
-                3 => $this->input->post('dana4'),
-                4 => $this->input->post('dana5')
-            ];
-            $data_dana = [];
-            foreach ($dana as $d) {
-                if ($d != 0) {
-                    $data_dana[$d] = [
-                        'id_kegiatan' => $id_kegiatan,
-                        'id_sumber_dana' => $d
-                    ];
+            if ($this->input->post('jenis_revisi') != 5) {
+                // insert dana kegiatan
+                $dana = [
+                    0 => $this->input->post('dana1'),
+                    1 => $this->input->post('dana2'),
+                    2 => $this->input->post('dana3'),
+                    3 => $this->input->post('dana4'),
+                    4 => $this->input->post('dana5')
+                ];
+                $data_dana = [];
+                foreach ($dana as $d) {
+                    if ($d != 0) {
+                        $data_dana[$d] = [
+                            'id_kegiatan' => $id_kegiatan,
+                            'id_sumber_dana' => $d
+                        ];
+                    }
+                }
+                $this->db->delete('kegiatan_sumber_dana', ['id_kegiatan' => $id_kegiatan]);
+                $this->kegiatan->insertDanaKegiatan($data_dana);
+
+                // insert anggota kegiatan
+                $jumlahAnggota = $this->input->post('jumlahAnggota');
+                $data_anggota = [];
+                if ($jumlahAnggota) {
+                    for ($i = 1; $i <= $jumlahAnggota; $i++) {
+                        $data_anggota[$i] = [
+                            'nim' => $this->input->post('nim_' . $i),
+                            'id_kegiatan' => $id_kegiatan,
+                            'keaktifan' => 0,
+                            'id_prestasi' => $this->input->post('prestasi_' . $i)
+                        ];
+                    }
+                    $this->db->delete('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan]);
+                    $this->kegiatan->insertAnggotaKegiatan($data_anggota);
                 }
             }
-            $this->db->delete('kegiatan_sumber_dana', ['id_kegiatan' => $id_kegiatan]);
-            $this->kegiatan->insertDanaKegiatan($data_dana);
-
-            // insert anggota kegiatan
-            $jumlahAnggota = $this->input->post('jumlahAnggota');
-            $data_anggota = [];
-            if ($jumlahAnggota) {
-                for ($i = 1; $i <= $jumlahAnggota; $i++) {
-                    $data_anggota[$i] = [
-                        'nim' => $this->input->post('nim_' . $i),
-                        'id_kegiatan' => $id_kegiatan,
-                        'keaktifan' => 0,
-                        'id_prestasi' => $this->input->post('prestasi_' . $i)
-                    ];
-                }
-                $this->db->delete('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan]);
-                $this->kegiatan->insertAnggotaKegiatan($data_anggota);
-            }
-
-
             // insert validasi 
             $data_validasi = [];
             $i = 0;
@@ -666,7 +675,7 @@ class Kegiatan extends CI_Controller
             $gambar = [];
             $lpj = [
                 'status_selesai_lpj' => 1,
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_lpj' => $this->input->post('danaKegiatanDiterima'),
                 'tgl_pengajuan_lpj' => date("Y-m-d"),
             ];
 
@@ -782,6 +791,8 @@ class Kegiatan extends CI_Controller
         $data['tingkat'] = $this->kegiatan->getInfoTingkat($id_kegiatan);
         $data['prestasi'] = $this->poinskp->getPrestasi($data['tingkat'][0]['id_semua_tingkatan']);
         $data['dokumentasi'] = $this->kegiatan->getDokumentasi($id_kegiatan);
+        $data['jenis_revisi'] = $this->input->post('jenis_revisi');
+
 
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
@@ -790,14 +801,14 @@ class Kegiatan extends CI_Controller
             $this->load->view("template/header", $data);
             $this->load->view("template/navbar");
             $this->load->view("template/sidebar", $data);
-            $this->load->view("mahasiswa/form_edit_lpj");
+            $this->load->view("lembaga/form_edit_lpj");
             $this->load->view("template/footer");
         } else {
 
             $gambar = [];
             $lpj = [
                 'status_selesai_lpj' => 1,
-                'dana_cair' => $this->input->post('danaKegiatanDiterima'),
+                'dana_lpj' => $this->input->post('danaKegiatanDiterima'),
             ];
 
             // upload file proposal
@@ -820,7 +831,7 @@ class Kegiatan extends CI_Controller
                         </div>
                       </div>');
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                    redirect("Kegiatan/pengajuanLpj");
                 }
             }
 
@@ -846,7 +857,7 @@ class Kegiatan extends CI_Controller
                         </div>
                       </div>');
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                    redirect("Kegiatan/pengajuanLpj");
                 }
             }
             // upload gambar kegiatan
@@ -872,7 +883,7 @@ class Kegiatan extends CI_Controller
                         </div>
                       </div>');
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                    redirect("Kegiatan/pengajuanLpj");
                 }
             }
             if ($lpj) {
@@ -883,18 +894,22 @@ class Kegiatan extends CI_Controller
                 $this->kegiatan->updateDokumentasiKegiatan($gambar, $id_kegiatan);
             }
 
-            //insert anggota kegiatan
-            $anggota = $this->db->get_where('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan])->result_array();
-            $data_anggota = [];
-            $i = 0;
-            foreach ($anggota as $a) {
-                $data_anggota[$i++] = [
-                    'id_anggota_kegiatan' => $a['id_anggota_kegiatan'],
-                    'keaktifan' => $this->input->post('aktif_' . $a['id_anggota_kegiatan']),
-                    'id_prestasi' => $this->input->post('prestasi_' . $a['id_anggota_kegiatan'])
-                ];
+            if ($data['jenis_revisi'] == 0 || $data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
+                var_dump($data['jenis_revisi']);
+                die;
+                //insert anggota kegiatan
+                $anggota = $this->db->get_where('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan])->result_array();
+                $data_anggota = [];
+                $i = 0;
+                foreach ($anggota as $a) {
+                    $data_anggota[$i++] = [
+                        'id_anggota_kegiatan' => $a['id_anggota_kegiatan'],
+                        'keaktifan' => $this->input->post('aktif_' . $a['id_anggota_kegiatan']),
+                        'id_prestasi' => $this->input->post('prestasi_' . $a['id_anggota_kegiatan'])
+                    ];
+                }
+                $this->kegiatan->updateAnggotaKegiatan($data_anggota);
             }
-            $this->kegiatan->updateAnggotaKegiatan($data_anggota);
 
             // insert validasi 
             $validasi = $this->db->get_where('validasi_kegiatan', ['id_kegiatan' => $id_kegiatan, 'kategori' => 'lpj'])->result_array();
@@ -909,7 +924,6 @@ class Kegiatan extends CI_Controller
                 }
             }
             $this->kegiatan->updateValidasiKegiatan($data_validasi);
-
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
                 <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
                 <div class="alert-body">
@@ -917,7 +931,7 @@ class Kegiatan extends CI_Controller
                   Data lpj berhasil perbaharui !
                 </div>
               </div>');
-            redirect("Mahasiswa/pengajuanLpj");
+            redirect("Kegiatan/pengajuanLpj");
         }
     }
 
@@ -931,6 +945,7 @@ class Kegiatan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("lembaga/daftar_validasi_proposal");
+        $this->load->view('modal/modal');
         $this->load->view("template/footer");
     }
 
@@ -944,6 +959,7 @@ class Kegiatan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("lembaga/daftar_validasi_lpj");
+        $this->load->view('modal/modal');
         $this->load->view("template/footer");
     }
     public function validasiProposal($id_kegiatan)
@@ -1010,5 +1026,18 @@ class Kegiatan extends CI_Controller
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'lpj');
         }
         redirect('kegiatan/daftarLpj');
+    }
+
+    // melakukan pengecekan data revisi
+    private function _cekDataRevisi()
+    {
+        $data = [];
+        $data = [
+            'nama_kegiatan' => $this->input->post('namaKegiatan'),
+            'status_selesai_proposal' => 1,
+            'no_whatsup' => $this->input->post('noTlpn'),
+
+        ];
+        return $data;
     }
 }

@@ -31,6 +31,7 @@ class Keuangan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("keuangan/daftar_validasi_proposal");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
 
@@ -44,6 +45,7 @@ class Keuangan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("keuangan/daftar_validasi_lpj");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
 

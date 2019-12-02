@@ -214,4 +214,18 @@ class Model_kegiatan extends CI_Model
     {
         $this->db->update_batch('kegiatan_sumber_dana', $data, 'id_kegiatan_sumber');
     }
+
+    public function getDataFilterRancangan()
+    {
+        $this->db->select('tahun_pengajuan');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('tahun_pengajuan');
+        $data['tahun'] = $this->db->get()->result_array();
+
+        $this->db->select('status_rancangan');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('status_rancangan');
+        $data['status'] = $this->db->get()->result_array();
+        return $data;
+    }
 }

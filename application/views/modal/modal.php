@@ -88,10 +88,9 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="danaKegiatanDiterima">Anggran Diterima</label>
-                                    <input type="text" class="form-control" id="danaKegiatanDiterima" name="danaKegiatanDiterima" value="" readonly>
+                                    <input type="text" class="form-control k-dana-cair" id="danaKegiatanDiterima" name="danaKegiatanDiterima" value="" readonly>
                                     <small id="anggaranHelp" class="form-text text-muted">Dana
-                                        anggaran yang akan diterima 70% dari besar anggaran
-                                        pengajuan</small>
+                                        anggaran yang akan diterima</small>
                                 </div>
                                 <div class="sumber-dana-chekboxes mb-3">
                                     <h6>Sumber Dana</h6>
@@ -161,17 +160,17 @@
                             <div class=" bagian-upload mt-5">
                                 <h5>Informasi Upload</h5>
                                 <div class="form-group">
-                                    <label for="fileProposal"> File Proposal - <a class="btn btn-primary k-proposal" href="">Lihat</a></label>
+                                    <label for="fileProposal"> File Proposal - <a target="_blank" class="btn btn-primary k-proposal" href="">Lihat</a></label>
                                 </div>
                                 <div class="form-group">
                                     <label for="beritaProposal"> Berita Kegiatan
-                                        Proposal - <a class="btn btn-primary k-berita-p" href="">Lihat</a></label>
+                                        Proposal - <a class="btn btn-primary k-berita-p" target="_blank" href="">Lihat</a></label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="gambarKegiatanProposal1"> Gambar Kegiatan 1 / Acara Pendukung - <a class="btn btn-primary k-gmbr-1" href="">Lihat</a></label>
+                                    <label for="gambarKegiatanProposal1"> Gambar Kegiatan 1 / Acara Pendukung - <a class="btn btn-primary k-gmbr-1" href="" target="_blank">Lihat</a></label>
                                 </div>
                                 <div class="form-group">
-                                    <label for="gambarKegiatanProposal2"> Gambar Kegiatan 2 / Acara Pendukung - <a class="btn btn-primary k-gmbr-2">Lihat</a></label>
+                                    <label for="gambarKegiatanProposal2"> Gambar Kegiatan 2 / Acara Pendukung - <a target="_blank" class="btn btn-primary k-gmbr-2">Lihat</a></label>
                                 </div>
                             </div>
 
