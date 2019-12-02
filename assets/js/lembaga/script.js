@@ -5,9 +5,24 @@ $('.t-anggaran').val(totalAnggaran)
 var url = $(location).attr("href");
 var segments = url.split("/");
 
+$('.d-valid').on("click", function () {
+	let id_kegiatan = $(this).data('kegiatan');
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kegiatan/validasiProposal/' + id_kegiatan)
+	$('.jenis_validasi').val(2)
+})
+
+$('.d-valid-rev').on("click", function () {
+	let id_kegiatan = $(this).data('kegiatan');
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kegiatan/validasiLpj/' + id_kegiatan)
+	$('.jenis_validasi').val(2)
+})
+
+
 
 let nominal = $('#danaKegiatan').val() * 0.7
+let nominalLpj = $('#danaKegiatanLpj').val() * 0.3
 $('#danaKegiatanDiterima').val(nominal)
+$('#danaKegiatanDiterimaLpj').val(nominalLpj)
 $.ajax({
 	url: segments[0] + '/skpapps/API_skp/bidangKegiatan',
 	method: 'get',

@@ -62,3 +62,24 @@ $('.d-valid-lpj').on("click", function () {
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kemahasiswaan/validasiLpj/' + id_kegiatan)
 	$('.jenis_validasi').val(4)
 })
+
+$('.tambahAnggaran').on('click', function () {
+	$('.d-lembaga').remove()
+	$.ajax({
+		url: segments[0] + '/skpapps/API_Skp/dataLembaga/',
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+
+			for (var i in data)[
+				$('.data-lembaga').append(`
+				<tr class="d-lembaga">
+					<td></td>
+					<td>` + data[i].nama_lembaga + `</td>
+					<td><input type="number" class="form-control" name="lembaga_` + data[i].id_lembaga + `" required></td>
+				</tr>
+				`)
+			]
+		}
+	})
+})

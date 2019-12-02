@@ -1,6 +1,7 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
+
 $(window).on('load', function () {
 	$.ajax({
 		url: segments[0] + '/siruas-api/api/ruangan',
@@ -24,7 +25,7 @@ $('.detail-kegiatan-info').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
+			// console.log(data);
 			var link_image = window.location.origin + '/skpapps/assets/qrcode/kuliah_tamu_' + data['kode_qr'] + '.png';
 			$('.kode_qr').attr('src', link_image);
 			$('.judul_kegiatan').html(data['nama_event']);

@@ -31,11 +31,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($kegiatan as $k) : ?>
+                                    <?php $i = 1;
+                                    foreach ($kegiatan as $k) : ?>
                                         <tr>
-                                            <th scope="row">1</th>
+                                            <th scope="row"><?= $i++; ?></th>
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
-                                            <td><a href=""><?= $k['nama_kegiatan'] ?></a>
+                                            <td><a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_lpj'] == 0) : ?>
@@ -55,6 +56,7 @@
                                                             <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 2) : ?>
                                                             <div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id="<?= $v['id'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                            <?php $jenis_revisi = $v['jenis_validasi']; ?>
                                                         <?php elseif ($v['status_validasi'] == 0) : ?>
                                                             <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 4) : ?>
@@ -69,7 +71,10 @@
                                                 <?php if ($k['status_selesai_lpj'] == 0) : ?>
                                                     <a href="<?= base_url('Kegiatan/tambahLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-outline-success"><i class="fas fa-edit"></i>Lpj</a>
                                                 <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
-                                                    <a href="<?= base_url('Kegiatan/editLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= base_url('Kegiatan/editLpj/') . $k['id_kegiatan'] ?>" method="post">
+                                                        <input type="hidden" name="jenis_revisi" value="<?= $jenis_revisi ?>">
+                                                        <button type="submit" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></button>
+                                                    </form>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

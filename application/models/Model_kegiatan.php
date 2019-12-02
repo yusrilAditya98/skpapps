@@ -1,16 +1,12 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 class Model_kegiatan extends CI_Model
 {
-
     public function insertKegiatan($dataKegiatan)
     {
         $this->db->set($dataKegiatan);
         $this->db->insert('kegiatan');
     }
-
     public function getIdKegiatan($penanggung_jawab = null, $nama_kegiatan = null, $waktu_pengajaun = null)
     {
         $this->db->select('id_kegiatan');
@@ -22,7 +18,6 @@ class Model_kegiatan extends CI_Model
         }
         return $this->db->get()->row_array();
     }
-
     public function getDataKegiatan($penanggung_jawab = null, $status_proposal = null)
     {
         $this->db->select('k.*,l.nama_lembaga');
@@ -36,7 +31,6 @@ class Model_kegiatan extends CI_Model
         }
         return $this->db->get()->result_array();
     }
-
     public function getInfoKegiatan($id_kegiatan, $penanggung_jawab = null)
     {
         $this->db->select('*');
@@ -65,7 +59,6 @@ class Model_kegiatan extends CI_Model
         $this->db->where('ak.id_kegiatan', $id_kegiatan);
         return $this->db->get()->result_array();
     }
-
     public function getDokumentasi($id_kegiatan)
     {
         $this->db->select('*');
@@ -73,7 +66,6 @@ class Model_kegiatan extends CI_Model
         $this->db->where('id_kegiatan', $id_kegiatan);
         return $this->db->get()->row_array();
     }
-
     public function getInfoTingkat($id_kegiatan)
     {
         $this->db->select('m.nama,ak.*,sp.*,p.*,bk.*,jk.*,t.*');
@@ -88,7 +80,6 @@ class Model_kegiatan extends CI_Model
         $this->db->where('ak.id_kegiatan', $id_kegiatan);
         return $this->db->get()->result_array();
     }
-
     public function getInfoValidasi($id)
     {
         $this->db->select('u.nama,vk.*');
@@ -97,24 +88,19 @@ class Model_kegiatan extends CI_Model
         $this->db->where('vk.id', $id);
         return $this->db->get()->result_array();
     }
-
     // untuk mendapatkan dana lain - checkbox
     public function getSumberDanaLain($id_kegiatan)
     {
-
         $this->db->select('*');
         $this->db->from('kegiatan_sumber_dana as sd');
         $this->db->where('id_kegiatan', $id_kegiatan);
         $data_dana = $this->db->get_compiled_select();
-
         $this->db->select('sd.*');
         $this->db->from('sumber_dana as sd');
         $this->db->join('(' . $data_dana . ') as d', 'sd.id_sumber_dana=d.id_sumber_dana', 'left');
         $this->db->where('d.id_sumber_dana', null);
         return $this->db->get()->result_array();
     }
-
-
     public function getDataValidasi($id_kegiatan = null, $jenis_validasi = null, $jenis_pengajuan = null)
     {
         $this->db->select('vk.*');
@@ -130,7 +116,6 @@ class Model_kegiatan extends CI_Model
         }
         return $this->db->get()->result_array();
     }
-
     public function updateValidasi($data, $jenis_validasi, $id_kegiatan, $kategori)
     {
         $this->db->where('jenis_validasi', $jenis_validasi);
@@ -138,26 +123,22 @@ class Model_kegiatan extends CI_Model
         $this->db->where('kategori', $kategori);
         $this->db->update('validasi_kegiatan', $data);
     }
-
     public function updateStatusProposal($id_kegiatan, $status)
     {
         $this->db->set('status_selesai_proposal', $status);
         $this->db->where('id_kegiatan', $id_kegiatan);
         $this->db->update('kegiatan');
     }
-
     public function updateStatusLpj($id_kegiatan, $status)
     {
         $this->db->set('status_selesai_lpj', $status);
         $this->db->where('id_kegiatan', $id_kegiatan);
         $this->db->update('kegiatan');
     }
-
     public function insertDataValidasi($datavalidasi)
     {
         $this->db->insert_batch('validasi_kegiatan', $datavalidasi);
     }
-
     public function insertDanaKegiatan($dataDana)
     {
         $this->db->insert_batch('kegiatan_sumber_dana', $dataDana);
@@ -166,21 +147,17 @@ class Model_kegiatan extends CI_Model
     {
         $this->db->insert_batch('anggota_kegiatan', $dataAnggota);
     }
-
     public function insertDokumentasiKegiatan($dataDokumentasi)
     {
         $this->db->set($dataDokumentasi);
         $this->db->insert('dokumentasi_kegiatan');
     }
-
     public function hapusKegiatan($id_kegiatan)
     {
         $tables = array('validasi_kegiatan', 'dokumentasi_kegiatan', 'anggota_kegiatan', 'kegiatan_sumber_dana', 'kegiatan');
         $this->db->where('id_kegiatan', $id_kegiatan);
         $this->db->delete($tables);
     }
-
-
     public function cekJenisProposal($jenis_validasi, $id_kegiatan)
     {
         $this->db->select('status_validasi');
@@ -189,7 +166,6 @@ class Model_kegiatan extends CI_Model
         $this->db->where('jenis_validasi', $jenis_validasi);
         return $this->db->get()->row_array();
     }
-
     public function updateKegiatan($data, $id_kegiatan)
     {
         $this->db->where('id_kegiatan', $id_kegiatan);
@@ -203,15 +179,25 @@ class Model_kegiatan extends CI_Model
     {
         $this->db->update_batch('validasi_kegiatan', $data, 'id');
     }
-
     public function updateDokumentasiKegiatan($data, $id_kegiatan)
     {
         $this->db->where('id_kegiatan', $id_kegiatan);
         $this->db->update('dokumentasi_kegiatan', $data);
     }
-
     public function updateDanaKegiatan($data)
     {
         $this->db->update_batch('kegiatan_sumber_dana', $data, 'id_kegiatan_sumber');
+    }
+    public function getDataFilterRancangan()
+    {
+        $this->db->select('tahun_pengajuan');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('tahun_pengajuan');
+        $data['tahun'] = $this->db->get()->result_array();
+        $this->db->select('status_rancangan');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('status_rancangan');
+        $data['status'] = $this->db->get()->result_array();
+        return $data;
     }
 }

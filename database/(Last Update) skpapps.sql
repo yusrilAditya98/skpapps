@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 26, 2019 at 06:16 AM
+-- Generation Time: Dec 02, 2019 at 07:10 AM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -48,7 +48,9 @@ INSERT INTO `anggota_kegiatan` (`id_anggota_kegiatan`, `nim`, `id_kegiatan`, `ke
 (83, '165150201111230', 23, 1, 2),
 (84, '195020100111001', 23, 1, 5),
 (89, '165150201111230', 25, 0, 1),
-(90, '195020100111001', 25, 0, 1);
+(90, '195020100111001', 25, 0, 1),
+(113, '165150201111230', 33, 0, 17),
+(114, '165150201111230', 34, 1, 44);
 
 -- --------------------------------------------------------
 
@@ -99,16 +101,21 @@ CREATE TABLE `daftar_rancangan_kegiatan` (
   `anggaran_kegiatan` int(11) NOT NULL,
   `id_lembaga` int(11) NOT NULL,
   `status_rancangan` int(1) NOT NULL,
-  `tahun_kegiatan` int(11) NOT NULL
+  `tahun_kegiatan` int(11) NOT NULL,
+  `catatan_revisi` varchar(500) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `daftar_rancangan_kegiatan`
 --
 
-INSERT INTO `daftar_rancangan_kegiatan` (`id_daftar_rancangan`, `nama_proker`, `tanggal_mulai_pelaksanaan`, `tanggal_selesai_pelaksanaan`, `anggaran_kegiatan`, `id_lembaga`, `status_rancangan`, `tahun_kegiatan`) VALUES
-(8, 'hahah', '2019-11-24', '2019-11-24', 2000000, 100, 1, 2019),
-(10, 'kegiatan 3', '2019-11-29', '2019-11-30', 5000000, 100, 4, 2019);
+INSERT INTO `daftar_rancangan_kegiatan` (`id_daftar_rancangan`, `nama_proker`, `tanggal_mulai_pelaksanaan`, `tanggal_selesai_pelaksanaan`, `anggaran_kegiatan`, `id_lembaga`, `status_rancangan`, `tahun_kegiatan`, `catatan_revisi`) VALUES
+(8, 'hahah', '2019-11-24', '2019-11-24', 2000000, 100, 1, 2019, ''),
+(10, 'kegiatan 3', '2019-11-29', '2019-11-30', 5000000, 100, 4, 2019, ''),
+(18, 'Rapat Anggota', '2020-01-08', '2020-01-08', 250000, 100, 1, 2020, ''),
+(20, 'Diklat Anggota', '2020-01-31', '2020-02-01', 250000, 100, 1, 2020, ''),
+(21, 'Rapat Koordinasi', '2020-01-11', '2020-01-12', 300000, 109, 4, 2020, ''),
+(22, 'Rapat Permantapan', '2020-01-04', '2020-01-05', 200000, 109, 4, 2020, '');
 
 -- --------------------------------------------------------
 
@@ -183,7 +190,9 @@ INSERT INTO `dokumentasi_kegiatan` (`id_dokumentasi_kegiatan`, `id_kegiatan`, `d
 (9, 21, 'checker.jpg', 'checker2.jpg', 'checker2.jpg', 'checker.jpg'),
 (10, 22, 'd1.jpg', 'b1.jpg', 'd1.jpg', 'b1.jpg'),
 (11, 23, 'b1.jpg', 'd1.jpg', 'd1.jpg', 'b1.jpg'),
-(13, 25, 'gambar_1.jpg', 'gambar_2.jpg', '', '');
+(13, 25, 'gambar_1.jpg', 'gambar_2.jpg', '', ''),
+(21, 33, 'gambar_1.jpg', 'gambar_2.jpg', '', ''),
+(22, 34, 'gambar_1.jpg', 'gambar_2.jpg', 'gambar_1.jpg', 'gambar_2.jpg');
 
 -- --------------------------------------------------------
 
@@ -299,7 +308,8 @@ CREATE TABLE `kegiatan` (
   `berita_proposal` varchar(200) NOT NULL,
   `berita_pelaporan` varchar(200) NOT NULL,
   `dana_kegiatan` double NOT NULL,
-  `dana_cair` double NOT NULL,
+  `dana_lpj` double NOT NULL,
+  `dana_proposal` double NOT NULL,
   `id_lembaga` int(10) NOT NULL,
   `tanggal_kegiatan` date NOT NULL,
   `lokasi_kegiatan` varchar(50) NOT NULL,
@@ -314,6 +324,7 @@ CREATE TABLE `kegiatan` (
   `tgl_pengajuan_proposal` date NOT NULL,
   `tgl_pengajuan_lpj` date NOT NULL,
   `id_penanggung_jawab` varchar(50) NOT NULL,
+  `nama_penanggung_jawab` varchar(50) NOT NULL,
   `id_tingkatan` int(10) NOT NULL,
   `no_whatsup` varchar(50) NOT NULL,
   `waktu_pengajuan` varchar(50) NOT NULL
@@ -323,11 +334,13 @@ CREATE TABLE `kegiatan` (
 -- Dumping data for table `kegiatan`
 --
 
-INSERT INTO `kegiatan` (`id_kegiatan`, `nama_kegiatan`, `status_selesai_proposal`, `status_selesai_lpj`, `berita_proposal`, `berita_pelaporan`, `dana_kegiatan`, `dana_cair`, `id_lembaga`, `tanggal_kegiatan`, `lokasi_kegiatan`, `proposal_kegiatan`, `lpj_kegiatan`, `bukti_berita_proposal`, `bukti_berita_lpj`, `periode`, `ceklist_rekapitulasi`, `acc_rancangan`, `deskripsi_kegiatan`, `tgl_pengajuan_proposal`, `tgl_pengajuan_lpj`, `id_penanggung_jawab`, `id_tingkatan`, `no_whatsup`, `waktu_pengajuan`) VALUES
-(21, 'Lomba Indonesian Idol', 3, 3, 'cek2.pdf', '1574145253_cek2.pdf', 5000000, 1500000, 0, '2019-11-15', 'Jakarta', '603-951-1-SM.pdf', '1574145253_603-951-1-SM.pdf', '', '', 0, 0, 1, 'Acara berlangsung       ', '2019-11-15', '2019-11-19', '165150201111230', 3, '0123', '1573791979'),
-(22, 'Lomba Memanah 2', 3, 3, 'a2.pdf', '1574316868_a2.pdf', 4000000, 1200000, 0, '2019-11-21', 'Palembang', 'a1.pdf', 'berita1.pdf', '', '', 0, 0, 1, 'ini adalah lomba memanah', '2019-11-21', '2019-11-21', '165150201111230', 2, '083129097727', '1574312671'),
-(23, 'Gemastik 12', 3, 1, 'a2.pdf', '1574501983_a2.pdf', 500000, 350000, 0, '2019-11-23', 'Universitas Gajah Mada', 'a1.pdf', '1574501983_a1.pdf', '', '', 0, 0, 1, 'lomba di bidang it', '2019-11-23', '2019-11-23', '165150201111230', 2, '08112345678', '1574497836'),
-(25, 'kegiatan 3', 3, 0, 'kegiatan_2.pdf', '', 5000000, 3500000, 100, '2019-11-25', '123', 'kegiatan_1.pdf', '', '', '', 2019, 0, 1, '123', '2019-11-25', '0000-00-00', '100', 1, '124', '1574662478');
+INSERT INTO `kegiatan` (`id_kegiatan`, `nama_kegiatan`, `status_selesai_proposal`, `status_selesai_lpj`, `berita_proposal`, `berita_pelaporan`, `dana_kegiatan`, `dana_lpj`, `dana_proposal`, `id_lembaga`, `tanggal_kegiatan`, `lokasi_kegiatan`, `proposal_kegiatan`, `lpj_kegiatan`, `bukti_berita_proposal`, `bukti_berita_lpj`, `periode`, `ceklist_rekapitulasi`, `acc_rancangan`, `deskripsi_kegiatan`, `tgl_pengajuan_proposal`, `tgl_pengajuan_lpj`, `id_penanggung_jawab`, `nama_penanggung_jawab`, `id_tingkatan`, `no_whatsup`, `waktu_pengajuan`) VALUES
+(21, 'Lomba Indonesian Idol', 3, 3, 'cek2.pdf', '1574145253_cek2.pdf', 5000000, 0, 1500000, 0, '2019-11-15', 'Jakarta', '603-951-1-SM.pdf', '1574145253_603-951-1-SM.pdf', '', '', 0, 0, 1, 'Acara berlangsung       ', '2019-11-15', '2019-11-19', '165150201111230', '', 3, '0123', '1573791979'),
+(22, 'Lomba Memanah 2', 3, 3, 'a2.pdf', '1574316868_a2.pdf', 4000000, 0, 1200000, 0, '2019-11-21', 'Palembang', 'a1.pdf', 'berita1.pdf', '', '', 0, 0, 1, 'ini adalah lomba memanah', '2019-11-21', '2019-11-21', '165150201111230', '', 2, '083129097727', '1574312671'),
+(23, 'Gemastik 12', 3, 1, 'a2.pdf', '1574501983_a2.pdf', 500000, 0, 350000, 0, '2019-11-23', 'Universitas Gajah Mada', 'a1.pdf', '1574501983_a1.pdf', '', '', 0, 0, 1, 'lomba di bidang it', '2019-11-23', '2019-11-23', '165150201111230', '', 2, '08112345678', '1574497836'),
+(25, 'kegiatan 3', 3, 0, 'kegiatan_2.pdf', '', 5000000, 0, 3500000, 100, '2019-11-25', '123', 'kegiatan_1.pdf', '', '', '', 2019, 0, 1, '123', '2019-11-25', '0000-00-00', '100', '', 1, '124', '1574662478'),
+(33, 'Rapat Koordinasi', 1, 0, 'kegiatan_2.pdf', '', 300000, 90000, 210000, 109, '2019-12-02', 'FEB UB', 'kegiatan_1.pdf', '', '', '', 2020, 0, 1, 'ini adalah rapat kegiatan', '2019-12-02', '0000-00-00', '109', 'DPM', 5, '081234567890', '1575256074'),
+(34, 'Rapat Permantapan', 3, 3, 'kegiatan_2.pdf', '1575260233_kegiatan_2.pdf', 200000, 60000, 140000, 109, '2019-12-02', 'Jakarta', 'kegiatan_1.pdf', '1575260233_kegiatan_1.pdf', '', '', 2020, 0, 1, 'ini adalah rapat', '2019-12-02', '2019-12-02', '109', 'DPM', 9, '8123456787', '1575259450');
 
 -- --------------------------------------------------------
 
@@ -355,7 +368,10 @@ INSERT INTO `kegiatan_sumber_dana` (`id_kegiatan_sumber`, `id_kegiatan`, `id_sum
 (112, 22, 5),
 (123, 23, 1),
 (124, 23, 5),
-(127, 25, 1);
+(127, 25, 1),
+(158, 33, 2),
+(159, 33, 4),
+(162, 34, 1);
 
 -- --------------------------------------------------------
 
@@ -385,8 +401,7 @@ CREATE TABLE `kuliah_tamu` (
 INSERT INTO `kuliah_tamu` (`id_kuliah_tamu`, `kode_qr`, `nama_event`, `tanggal_event`, `deskripsi`, `id_prestasi`, `lokasi`, `waktu_mulai`, `waktu_selesai`, `poster`, `pemateri`, `status_terlaksana`) VALUES
 (2, 'ua5d2', 'Economic Foundation', '2019-11-13', 'abc', 115, 'UB', '10:00:00', '11:00:00', '', 'Johny Kurniawan', 1),
 (3, 'V8eeb', 'Be The Pro Economics', '2019-11-18', 'DDDDD', 115, 'UB', '10:00:00', '11:00:00', '', 'Mr. Johny', 1),
-(6, 'defco', 'Seminar Nasional Akuntansi', '2019-11-14', 'AAAAA', 115, 'UB', '10:00:00', '11:00:00', '', 'Kurniawan', 0),
-(11, 'Wt1jQ', 'Seminar Hasil', '2019-11-20', 'AGAGAGAGA', 115, 'UB', '11:00:00', '00:00:00', '', 'Budi', 0);
+(12, 'Ny8N2', 'Kuliah Tamu', '2019-11-29', 'BBBBB', 115, 'D.2.3', '10:00:00', '11:00:00', '', 'Dr. Suriman', 0);
 
 -- --------------------------------------------------------
 
@@ -412,7 +427,8 @@ CREATE TABLE `lembaga` (
 
 INSERT INTO `lembaga` (`id_lembaga`, `nama_lembaga`, `jenis_lembaga`, `jumlah_anggota`, `nama_ketua`, `no_hp_lembaga`, `foto_lembaga`, `status_rencana_kegiatan`, `tahun_rancangan`) VALUES
 (0, 'delegasi', '0', 0, '0', '0', '0', 0, 0),
-(100, 'HMJ', 'Semi Otonom', 42, 'Aditya Yusril', '0812345678', 'hmj.jpg', 0, 2019);
+(100, 'HMJ', 'Semi Otonom', 42, 'Aditya Yusril', '0812345678', 'hmj.jpg', 0, 2019),
+(109, 'DPM', '', 10, 'Kharis', '123456', 'dpm.jpg', 0, 2020);
 
 -- --------------------------------------------------------
 
@@ -503,7 +519,8 @@ INSERT INTO `poin_skp` (`id_poin_skp`, `nim`, `nama_kegiatan`, `validasi_prestas
 (15, '165150201111230', 'Lomba Indonesian Idol', 1, '2019-11-19', '2019-11-15', 'lpj/1574145253_603-951-1-SM.pdf', 'Jakarta', '-', 152),
 (16, '165150201111230', 'Lomba Memanah 2', 1, '2019-11-21', '2019-11-21', 'lpj/berita1.pdf', 'Palembang', '-', 2),
 (17, '165150201111231', 'Lomba Memanah 2', 1, '2019-11-21', '2019-11-21', 'lpj/berita1.pdf', 'Palembang', '-', 2),
-(18, '195020100111001', 'Lomba Memanah 2', 1, '2019-11-21', '2019-11-21', 'lpj/berita1.pdf', 'Palembang', '-', 2);
+(18, '195020100111001', 'Lomba Memanah 2', 1, '2019-11-21', '2019-11-21', 'lpj/berita1.pdf', 'Palembang', '-', 2),
+(21, '165150201111230', 'Rapat Permantapan', 1, '2019-12-02', '2019-12-02', 'lpj/1575260233_kegiatan_1.pdf', 'Jakarta', '-', 44);
 
 -- --------------------------------------------------------
 
@@ -596,16 +613,19 @@ CREATE TABLE `rekapan_kegiatan_lembaga` (
   `id_rancangan` int(11) NOT NULL,
   `id_lembaga` int(11) NOT NULL,
   `tahun_pengajuan` int(11) NOT NULL,
-  `total_anggaran` int(11) NOT NULL,
-  `status_rancangan` int(11) NOT NULL
+  `anggaran_lembaga` int(11) NOT NULL,
+  `status_rancangan` int(11) NOT NULL,
+  `anggaran_kemahasiswaan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rekapan_kegiatan_lembaga`
 --
 
-INSERT INTO `rekapan_kegiatan_lembaga` (`id_rancangan`, `id_lembaga`, `tahun_pengajuan`, `total_anggaran`, `status_rancangan`) VALUES
-(1, 100, 2019, 7000000, 1);
+INSERT INTO `rekapan_kegiatan_lembaga` (`id_rancangan`, `id_lembaga`, `tahun_pengajuan`, `anggaran_lembaga`, `status_rancangan`, `anggaran_kemahasiswaan`) VALUES
+(1, 100, 2019, 7000000, 1, 0),
+(5, 100, 2020, 500000, 1, 500000),
+(6, 109, 2020, 500000, 1, 500000);
 
 -- --------------------------------------------------------
 
@@ -1007,7 +1027,8 @@ INSERT INTO `user` (`id_user`, `nama`, `username`, `password`, `user_profil_kode
 (5, 'Pujo', '104', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 6, 1),
 (6, 'Ini Akademik', '105', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 8, 1),
 (7, 'agus', '106', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 7, 1),
-(8, 'admin', '107', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 9, 1);
+(8, 'admin', '107', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 9, 1),
+(9, 'DPM', '109', '$2y$10$qkdbRXHXAgZowdnYHGYLweZykhyH2.wY1y0dvVL/qcO92oOYgy7aS', 2, 1);
 
 -- --------------------------------------------------------
 
@@ -1231,7 +1252,22 @@ INSERT INTO `validasi_kegiatan` (`id`, `kategori`, `jenis_validasi`, `status_val
 (72, 'lpj', 3, 0, '0000-00-00', 8, 25, ''),
 (73, 'lpj', 4, 0, '0000-00-00', 8, 25, ''),
 (74, 'lpj', 5, 0, '0000-00-00', 8, 25, ''),
-(75, 'lpj', 6, 0, '0000-00-00', 8, 25, '');
+(75, 'lpj', 6, 0, '0000-00-00', 8, 25, ''),
+(131, 'proposal', 2, 1, '2019-12-02', 2, 33, '-'),
+(132, 'proposal', 3, 4, '2019-12-02', 8, 33, 'ini ada yang salah boi'),
+(133, 'proposal', 4, 0, '0000-00-00', 8, 33, ''),
+(134, 'proposal', 5, 0, '0000-00-00', 8, 33, ''),
+(135, 'proposal', 6, 0, '0000-00-00', 8, 33, ''),
+(136, 'proposal', 2, 1, '2019-12-02', 2, 34, '-'),
+(137, 'proposal', 3, 1, '2019-12-02', 3, 34, '-'),
+(138, 'proposal', 4, 1, '2019-12-02', 3, 34, '-'),
+(139, 'proposal', 5, 1, '2019-12-02', 7, 34, '-'),
+(140, 'proposal', 6, 1, '2019-12-02', 5, 34, '-'),
+(141, 'lpj', 2, 1, '2019-12-02', 2, 34, '-'),
+(142, 'lpj', 3, 1, '2019-12-02', 3, 34, '-'),
+(143, 'lpj', 4, 1, '2019-12-02', 3, 34, '-'),
+(144, 'lpj', 5, 1, '2019-12-02', 7, 34, '-'),
+(145, 'lpj', 6, 1, '2019-12-02', 5, 34, '-');
 
 --
 -- Indexes for dumped tables
@@ -1479,7 +1515,7 @@ ALTER TABLE `validasi_kegiatan`
 -- AUTO_INCREMENT for table `anggota_kegiatan`
 --
 ALTER TABLE `anggota_kegiatan`
-  MODIFY `id_anggota_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=91;
+  MODIFY `id_anggota_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=115;
 
 --
 -- AUTO_INCREMENT for table `beasiswa`
@@ -1491,13 +1527,13 @@ ALTER TABLE `beasiswa`
 -- AUTO_INCREMENT for table `bidang_kegiatan`
 --
 ALTER TABLE `bidang_kegiatan`
-  MODIFY `id_bidang` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id_bidang` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `daftar_rancangan_kegiatan`
 --
 ALTER TABLE `daftar_rancangan_kegiatan`
-  MODIFY `id_daftar_rancangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_daftar_rancangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `dana_pagu_lembaga`
@@ -1515,13 +1551,13 @@ ALTER TABLE `dasar_penilaian`
 -- AUTO_INCREMENT for table `dokumentasi_kegiatan`
 --
 ALTER TABLE `dokumentasi_kegiatan`
-  MODIFY `id_dokumentasi_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id_dokumentasi_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `jenis_kegiatan`
 --
 ALTER TABLE `jenis_kegiatan`
-  MODIFY `id_jenis_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id_jenis_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `jurusan`
@@ -1533,37 +1569,37 @@ ALTER TABLE `jurusan`
 -- AUTO_INCREMENT for table `kegiatan`
 --
 ALTER TABLE `kegiatan`
-  MODIFY `id_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `kegiatan_sumber_dana`
 --
 ALTER TABLE `kegiatan_sumber_dana`
-  MODIFY `id_kegiatan_sumber` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=128;
+  MODIFY `id_kegiatan_sumber` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=163;
 
 --
 -- AUTO_INCREMENT for table `kuliah_tamu`
 --
 ALTER TABLE `kuliah_tamu`
-  MODIFY `id_kuliah_tamu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_kuliah_tamu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `lembaga`
 --
 ALTER TABLE `lembaga`
-  MODIFY `id_lembaga` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
+  MODIFY `id_lembaga` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT for table `peserta_kuliah_tamu`
 --
 ALTER TABLE `peserta_kuliah_tamu`
-  MODIFY `id_peserta_kuliah_tamu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id_peserta_kuliah_tamu` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=117;
 
 --
 -- AUTO_INCREMENT for table `poin_skp`
 --
 ALTER TABLE `poin_skp`
-  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `poin_skp_sumber_dana`
@@ -1575,7 +1611,7 @@ ALTER TABLE `poin_skp_sumber_dana`
 -- AUTO_INCREMENT for table `prestasi`
 --
 ALTER TABLE `prestasi`
-  MODIFY `id_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `prodi`
@@ -1587,7 +1623,7 @@ ALTER TABLE `prodi`
 -- AUTO_INCREMENT for table `rekapan_kegiatan_lembaga`
 --
 ALTER TABLE `rekapan_kegiatan_lembaga`
-  MODIFY `id_rancangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_rancangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `semua_prestasi`
@@ -1611,13 +1647,13 @@ ALTER TABLE `sumber_dana`
 -- AUTO_INCREMENT for table `tingkatan`
 --
 ALTER TABLE `tingkatan`
-  MODIFY `id_tingkatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_tingkatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_user` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `user_access_menu`
@@ -1647,7 +1683,7 @@ ALTER TABLE `user_sub_menu`
 -- AUTO_INCREMENT for table `validasi_kegiatan`
 --
 ALTER TABLE `validasi_kegiatan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=146;
 
 --
 -- Constraints for dumped tables

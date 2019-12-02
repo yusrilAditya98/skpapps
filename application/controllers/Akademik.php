@@ -192,7 +192,7 @@ class Akademik extends CI_Controller
 
             $image_name = 'kuliah_tamu_' . $data_kuliah_tamu['kode_qr'] . '.png'; //buat name dari qr code sesuai dengan nim
 
-            $params['data'] = "http://localhost/skpapps/mahasiswa/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
+            $params['data'] = "http://localhost/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
@@ -245,6 +245,21 @@ class Akademik extends CI_Controller
 
     public function hapusKegiatan($id_kegiatan)
     {
+
+        // Hapus QR
+        $kuliah_tamu = $this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => $id_kegiatan])->row_array();
+        $kode_qr = $kuliah_tamu['kode_qr'];
+        define('EXT', '.' . pathinfo(__FILE__, PATHINFO_EXTENSION));
+        define('PUBPATH', str_replace(SELF, '', FCPATH)); // added
+        $image_location = PUBPATH . 'assets/qrcode/kuliah_tamu_' . $kode_qr . '.png';
+
+        unlink($image_location);
+        // var_dump($image_location);
+        // die;
+
+        $this->db->where('id_kuliah_tamu', intval($id_kegiatan));
+        $this->db->delete('peserta_kuliah_tamu');
+
         $this->db->where('id_kuliah_tamu', intval($id_kegiatan));
         $this->db->delete('kuliah_tamu');
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kegiatan berhasil dihapus</div>');
@@ -272,7 +287,7 @@ class Akademik extends CI_Controller
 
             $image_name = 'kuliah_tamu_' . $data_kuliah_tamu[$i]['kode_qr'] . '.png'; //buat name dari qr code sesuai dengan nim
 
-            $params['data'] = "http://localhost/skpapps/mahasiswa/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
+            $params['data'] = "http://localhost/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/

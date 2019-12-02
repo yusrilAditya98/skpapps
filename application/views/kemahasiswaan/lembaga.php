@@ -17,37 +17,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <div class="table-responsive">
-                            <div class="alert alert-warning " role="alert" style="opacity: 1; color:black; background-color:rgba(35, 182, 246, 0.4)">
-                                <div class="row">
-                                    <div class="col-12 col-lg-8">
-                                        <span class="font-weight-bold">Perhatian!</span> Pastikan anda memeriksa
-                                        kembali rencana kegiatan yang akan dibuat
-                                    </div>
-                                    <div class="col-12 col-lg-4">
-                                        <form action="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan') ?>" method="post" class="needs-validation" novalidate="">
-                                            <div class="form-group">
-                                                <div class="input-group">
-                                                    <select class="custom-select" id="tahun" name="tahun_rancangan" required>
-                                                        <option value="">Choose...</option>
-                                                        <option value="2019">2019</option>
-                                                        <option value="2020">2020</option>
-                                                        <option value="2021">2021</option>
-                                                        <option value="2022">2022</option>
-                                                        <option value="2023">2023</option>
-                                                        <option value="2024">2024</option>
-                                                        <option value="2025">2025</option>
-                                                    </select>
-                                                    <div class="input-group-append">
-                                                        <button type="submit" class=" float-right btn btn-primary">Aktifkan</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
                             <table class="table table-striped" id="table-1">
                                 <thead>
                                     <tr>
@@ -58,6 +28,7 @@
                                         <th>Kegiatan Terlaksana</th>
                                         <th>Kegiatan Belum Terlaksana</th>
                                         <th>Status Pengajuan Rancangan</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -76,6 +47,9 @@
                                                 <?php else : ?>
                                                     <span class="badge badge-success">enable</span>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-success" href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] ?>"><i class="fas fa-check"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

@@ -48,10 +48,10 @@
                                 <input type="time" class="form-control" id="waktu_kegiatan_selesai" name="waktu_kegiatan_selesai">
                             </div>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             <label for="File">Poster</label>
                             <input type="file" class="form-control-file" id="File" name="File">
-                        </div>
+                        </div> -->
                         <button type="submit" class="btn btn-primary">Tambah Kegiatan</button>
                         </form>
                     </div>

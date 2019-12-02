@@ -38,7 +38,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="danaKegiatan">Dana Anggaran</label>
+                                <label for="danaKegiatan">Dana Anggaran Rp.</label>
                                 <input type="number" class="form-control" id="danaKegiatan" name="danaKegiatan" required value="<?= $rancangan['anggaran_kegiatan'] ?>">
                                 <div class="invalid-feedback">
                                     Dana kegiatan harap diisi

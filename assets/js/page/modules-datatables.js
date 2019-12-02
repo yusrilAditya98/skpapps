@@ -32,11 +32,19 @@ $("#table-1").DataTable({
 	"columnDefs": [{
 		"sortable": false,
 		"targets": [2, 3]
-	}]
+	}],
 });
 $("#table-2").DataTable({
 	"columnDefs": [{
 		"sortable": false,
 		"targets": [0, 2, 3]
 	}]
+});
+
+$(".table-kategori").DataTable({
+	"pageLength": 5
+});
+
+$(".table-kegiatan").DataTable({
+	"pageLength": 5
 });

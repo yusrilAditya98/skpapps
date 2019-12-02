@@ -1,10 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 class Publikasi extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -12,7 +9,6 @@ class Publikasi extends CI_Controller
             redirect('auth/blocked');
         }
     }
-
     public function index()
     {
         $data['title'] = 'Dashboard';
@@ -22,7 +18,6 @@ class Publikasi extends CI_Controller
         $this->load->view("dashboard/dashboard_kmhsn");
         $this->load->view("template/footer");
     }
-
     public function daftarProposal()
     {
         $data['title'] = 'Validasi';
@@ -33,19 +28,20 @@ class Publikasi extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("Publikasi/daftar_validasi_proposal");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
-
     public function daftarLpj()
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("Publikasi/daftar_validasi_lpj");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
     public function validasiProposal($id_kegiatan)
@@ -85,7 +81,6 @@ class Publikasi extends CI_Controller
             redirect('Lembaga/daftarProposal');
         }
     }
-
     public function validasiLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');

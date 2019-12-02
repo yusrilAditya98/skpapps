@@ -13,9 +13,6 @@
 
                     </div>
                     <div class="card-body">
-                        <a href="#" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</a>
-                    </div>
-                    <div class="card-body">
 
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-2">
@@ -41,19 +38,19 @@
 
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($kegiatan as $k) : ?>
+                                    <?php $j = 1;
+                                    foreach ($kegiatan as $k) : ?>
                                         <tr>
                                             <td>
                                                 <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
-                                                    <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
-                                                    1
+
+                                                    <?= $j++ ?>
                                                 </div>
                                             </td>
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
                                             <td><?= $k['nama_lembaga'] ?></td>
                                             <td>
-                                                <a href="#" data-toggle="modal" data-target="#detailKegiatan"><?= $k['nama_kegiatan'] ?></a>
+                                                <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="proposal"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>
@@ -72,7 +69,7 @@
                                                         <?php if ($v['status_validasi'] == 1) :  ?>
                                                             <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 2) : ?>
-                                                            <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id=""><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                            <div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id="<?= $v['id'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                         <?php elseif ($v['status_validasi'] == 4) : ?>
                                                             <i class="fa fa-circle text-primary" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 0) : ?>

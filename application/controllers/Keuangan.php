@@ -1,10 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 class Keuangan extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -19,21 +16,19 @@ class Keuangan extends CI_Controller
         $this->load->view("dashboard/dashboard_kmhsn");
         $this->load->view("template/footer");
     }
-
     public function daftarPengajuanKeuangan()
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
-
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("keuangan/daftar_validasi_proposal");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
-
     public function daftarPengajuanLpj()
     {
         $data['title'] = 'Validasi';
@@ -44,9 +39,9 @@ class Keuangan extends CI_Controller
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("keuangan/daftar_validasi_lpj");
+        $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
-
     public function validasiProposal($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
@@ -67,7 +62,6 @@ class Keuangan extends CI_Controller
         }
         $this->kegiatan->updateStatusProposal($id_kegiatan, $status_proposal);
         $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'proposal');
-
         // update validasi
         if ($this->input->get('valid') == 1) {
             $cek_jenis_Proposal = $this->kegiatan->cekJenisProposal(2, $id_kegiatan);
@@ -108,7 +102,6 @@ class Keuangan extends CI_Controller
         }
         redirect('Keuangan/daftarPengajuanKeuangan');
     }
-
     public function validasiLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
@@ -136,7 +129,6 @@ class Keuangan extends CI_Controller
         }
         $this->kegiatan->updateStatusLpj($id_kegiatan, $status_lpj);
         $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'lpj');
-
         // update validasi
         if ($this->input->get('valid') == 1) {
             $this->_tambahPoinSkpAnggota($id_kegiatan);
@@ -150,7 +142,6 @@ class Keuangan extends CI_Controller
         }
         redirect('Keuangan/daftarPengajuanLpj');
     }
-
     private function _update($nim)
     {
         $this->load->model('Model_poinskp', 'poinskp');
@@ -159,7 +150,6 @@ class Keuangan extends CI_Controller
         $this->db->where('nim', $nim);
         $this->db->update('mahasiswa');
     }
-
     private function _tambahPoinSkpAnggota($id_kegiatan)
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
@@ -180,7 +170,6 @@ class Keuangan extends CI_Controller
             ];
         }
         $this->kemahasiswaan->insertPoinSkp($this->dataskp);
-
         foreach ($anggota as $a) {
             $this->_update($a['nim']);
         }

@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-1">
+                            <table class="table table-striped text-wrap table-kategori">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
@@ -56,7 +56,7 @@
                                                 <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>
                                                 <?php if ($k['status_terlaksana'] == 0) {
                                                         echo '<button class="btn btn-success edit-kegiatan" data-toggle="modal" data-target=".modalEditKegiatan" data-id="' . $k['id_kuliah_tamu'] . '">Edit</button>
-                                                              <button class="btn btn-danger hapus-kegiatan" value="' . $k['id_kuliah_tamu'] . '">Hapus</button>';
+                                                              <button class="btn btn-danger hapus-kegiatan" data-id="' . $k['id_kuliah_tamu'] . '">Hapus</button>';
                                                     }
                                                     ?>
                                             </td>
@@ -74,7 +74,7 @@
     </section>
 </div>
 
-<!-- Awal Modal Detail Profil -->
+<!-- Awal Modal Detail Kegiatan -->
 <div class="modal fade bd-example-modal-lg modalDetailKegiatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -110,9 +110,9 @@
         </div>
     </div>
 </div>
-<!-- Akhir Modeal Detail Profil -->
+<!-- Akhir Modeal Detail Kegiatan -->
 
-<!-- Awal Modal Edit Profil -->
+<!-- Awal Modal Edit Kegiatan -->
 <div class="modal fade bd-example-modal-lg modalEditKegiatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-lg">
         <div class="modal-content">
@@ -146,8 +146,8 @@
                                 <label for="ruangan" class="col-form-label">Ruangan</label>
                                 <select class="form-control" id="ruangan" name="ruangan" placeholder="Ruangan">
                                     <option value="0" disabled selected hidden>Pilih Ruangan</option>
-                                    <option value="UB">UB</option>
-                                    <option value="Luar UB">Luar UB</option>
+                                    <!-- <option value="UB">UB</option>
+                                    <option value="Luar UB">Luar UB</option> -->
                                 </select>
                             </div>
                             <div class="form-group">
@@ -165,10 +165,10 @@
                                     <input type="time" class="form-control" id="waktu_kegiatan_selesai" name="waktu_kegiatan_selesai">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="File">Poster</label>
                                 <input type="file" class="form-control-file" id="File" name="File">
-                            </div>
+                            </div> -->
                             <button type="submit" class="btn btn-primary float-right">Edit Kegiatan</button>
                             </form>
                         </div>
@@ -178,4 +178,4 @@
         </div>
     </div>
 </div>
-<!-- Akhir Modeal Edit Profil -->
+<!-- Akhir Modeal Edit Kegiatan -->

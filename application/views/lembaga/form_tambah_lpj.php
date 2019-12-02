@@ -36,14 +36,14 @@
                                             <h5>Informasi Dana</h5>
                                             <div class="form-group">
                                                 <label for="danaKegiatan">Besar Anggaran</label>
-                                                <input type="number" class="form-control" id="danaKegiatan" name="danaKegiatan" value="<?= $kegiatan['dana_kegiatan'] ?>" required readonly>
+                                                <input type="number" class="form-control" id="danaKegiatanLpj" name="danaKegiatan" value="<?= $kegiatan['dana_kegiatan'] ?>" required readonly>
                                                 <div class="invalid-feedback">
                                                     Besar anggaran harap diisi
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="danaKegiatanDiterima">Anggran Diterima</label>
-                                                <input type="text" class="form-control" id="danaKegiatanDiterima" name="danaKegiatanDiterima" value="<?= ($kegiatan['dana_kegiatan'] - $kegiatan['dana_cair']) ?>" readonly>
+                                                <input type="text" class="form-control" id="danaKegiatanDiterimaLpj" name="danaKegiatanDiterima" value="<?= ($kegiatan['dana_kegiatan'] - $kegiatan['dana_proposal']) ?>" readonly>
                                                 <small id=" anggaranHelp" class="form-text text-muted">Dana
                                                     anggaran yang akan diterima 30% dari besar anggaran
                                                     pengajuan</small>
@@ -138,12 +138,22 @@
                                                                 <td><?= $a['nama'] ?></td>
                                                                 <td>
                                                                     <select class="custom-select partisipasiKegiatan" name="prestasi_<?= $a['id_anggota_kegiatan'] ?>" id="partisipasiKegiatan" required>
-                                                                        <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
+                                                                        <?php foreach ($prestasi as $p) : ?>
+                                                                            <?php if ($p['id_semua_prestasi'] == $a['id_semua_prestasi']) : ?>
+                                                                                <option selected value="<?= $p['id_semua_prestasi'] ?>"><?= $p['nama_prestasi'] ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $p['id_semua_prestasi'] ?>"><?= $p['nama_prestasi'] ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
                                                                     </select>
                                                                 </td>
                                                                 <td>
                                                                     <input type="hidden" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="0">
-                                                                    <input type="checkbox" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="1">
+                                                                    <?php if ($a['keaktifan'] == 1) : ?>
+                                                                        <input checked type="checkbox" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="1">
+                                                                    <?php else : ?>
+                                                                        <input type="checkbox" name="aktif_<?= $a['id_anggota_kegiatan'] ?>" value="1">
+                                                                    <?php endif; ?>
                                                                 </td>
                                                             </tr>
                                                         <?php endforeach; ?>

@@ -4,8 +4,9 @@
 		<div class="section-header">
 			<h1>Pengajuan Rancangan</h1>
 		</div>
+		<?= $this->session->flashdata('message'); ?>
 		<div class="row">
-			<div class="col-12 col-md-6 col-lg-4">
+			<div class="col-12 col-md-4 col-lg-4">
 				<div class="card">
 					<div class="card-header">
 						<h4>Tambah Rancangan Kegiatan</h4>
@@ -20,7 +21,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="col-12 col-md-6 col-lg-5">
+			<div class="col-12 col-md-4 col-lg-4">
 				<div class="card">
 					<div class="card-header">
 						<h4>Panduan Pengajuan Rancangan Kegiatan</h4>
@@ -28,6 +29,18 @@
 					<div class="card-body text-center">
 						<a href="form_tambah_proposal.html" class="btn btn-icon btn-primary mb-3">
 							Download Panduan <i class="fas fa-download pl-2"></i></a>
+					</div>
+				</div>
+			</div>
+			<div class="col-12 col-md-4 col-lg-4">
+				<div class="card">
+					<div class="card-header">
+						<h4>Dana Pagu Lembaga / Periode <?= $lembaga['tahun_rancangan'] ?></h4>
+					</div>
+					<div class="card-body text-center">
+						<h2>Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
+						</h2>
+						<span>Sisa dana : Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?></span>
 					</div>
 				</div>
 			</div>
@@ -59,28 +72,59 @@
 								</div>
 							</div>
 						<?php endif ?>
+						<div class="float-right">
+							<form action="<?= base_url('Kegiatan/pengajuanRancangan') ?>" method="get">
+								<div class="form-group">
+									<div class="input-group">
+
+										<select name="tahun" class="custom-select" id="inputGroupSelect04">
+											<option value="" selected="">Tahun...</option>
+											<?php foreach ($tahun as $t) : ?>
+												<option value="<?= $t['tahun_kegiatan'] ?>"><?= $t['tahun_kegiatan'] ?></option>
+											<?php endforeach; ?>
+										</select>
+										<div class="input-group-append">
+											<button class="btn btn-outline-primary" type="submit">cari</button>
+										</div>
+
+									</div>
+								</div>
+							</form>
+						</div>
+
 						<div class="table-responsive">
 							<table class="table table-bordered">
 								<thead class="text-center">
 									<tr>
 										<th scope="col">No</th>
 										<th scope="col">Tahun Periode</th>
+										<th scope="col">Tanggal Pelaksanaan</th>
 										<th scope="col">Nama Lembaga</th>
-										<th scope="col">Jumlah Kegiatan</th>
+										<th scope="col">Anggaran Kegiatan</th>
 										<th scope="col">Kegiatan tervalidasi</th>
 										<th scope="col">Action</th>
 									</tr>
 								</thead>
-								<tbody>
+								<tbody class="text-center">
+
 									<?php $temp = 0;
+									$i = 1;
 									foreach ($rancangan as $r) : ?>
-										<tr class="text-center">
-											<th scope="row">1</th>
-											<td><?= $r['tahun_rancangan'] ?></td>
-											<td><a href=""><?= $r['nama_proker'] ?></a>
+
+										<tr>
+											<th scope="row"><?= $i++ ?></th>
+											<td><?= $r['tahun_kegiatan'] ?>
+											<td>
+												<?php $date = date_create($r['tanggal_mulai_pelaksanaan']);
+													echo date_format($date, "d M Y"); ?>
+												-
+												<?php $date = date_create($r['tanggal_selesai_pelaksanaan']);
+													echo date_format($date, "d M Y"); ?>
 											</td>
+											</td>
+											<td><?= $r['nama_proker'] ?></td>
 											<?php $temp += $r['anggaran_kegiatan']; ?>
-											<td>Rp.<?= $r['anggaran_kegiatan'] ?> ,-</td>
+											<td>Rp.<?= number_format($r['anggaran_kegiatan'], 2, ',', '.') ?> ,-</td>
 											<td>
 												<?php if ($r['status_rancangan'] == 1) :  ?>
 													<i class="fa fa-check text-success" aria-hidden="true"></i>
@@ -106,7 +150,7 @@
 															<a href="<?= base_url('Kegiatan/tambahProposal/') . $r['id_daftar_rancangan'] ?>" class="badge btn btn-outline-success">Ajukan Proposal</a>
 														</div>
 													<?php elseif ($r['status_rancangan'] == 3) : ?>
-														<div class="col-lg-6">
+														<div class="col-lg-12">
 															<span class="text-primary">Proses</span>
 														</div>
 													<?php elseif ($r['status_rancangan'] == 4) : ?>
@@ -120,7 +164,7 @@
 									<?php endforeach; ?>
 									<tr class="text-center">
 										<td scope="col" colspan="3">Total Anggaran</td>
-										<td scope="col">Rp.<span class="total-anggaran"> <?= $temp ?></span></td>
+										<td scope="col">Rp.<span class="total-anggaran"> <?= number_format($temp, 2, ',', '.') ?> </span></td>
 									</tr>
 								</tbody>
 							</table>

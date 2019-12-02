@@ -17,8 +17,8 @@
                                         <div class="bagian-personality">
                                             <h5>Informasi Personality</h5>
                                             <div class="form-group">
-                                                <label for="namaMahasiswa">Nama Lembaga</label>
-                                                <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa" value="<?= $this->session->userdata('nama') ?>" readonly>
+                                                <label for="namaLembaga">Nama Lembaga</label>
+                                                <input type="text" class="form-control" id="namaLembaga" name="namaLembaga" value="<?= $this->session->userdata('nama') ?>" readonly>
                                             </div>
                                             <div class="form-group">
                                                 <label for="nim">Id Lembaga</label>
