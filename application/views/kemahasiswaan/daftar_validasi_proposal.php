@@ -11,7 +11,7 @@
                         <h4>Permintaan Pengajuan Rancangan Kegiatan</h4>
 
                     </div>
-                    <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post">
+                    <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
                         <div class="card-body">
                             <button type="submit" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</button>
                         </div>

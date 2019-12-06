@@ -394,6 +394,9 @@ class Kemahasiswaan extends CI_Controller
         redirect('Kemahasiswaan/anggaran');
     }
 
+
+
+
     public function cetakPengajuanProposal()
     {
         $data['kegiatan'] = [];
@@ -403,12 +406,32 @@ class Kemahasiswaan extends CI_Controller
             if ($this->input->post('cek_' . $k['id_kegiatan'])) {
                 $data['kegiatan'][$index] = [
                     'nama_kegiatan' => $k['nama_kegiatan'],
-                    'nama_kegiatan' => $k['nama_kegiatan']
+                    'tanggal_kegiatan' => $k['tanggal_kegiatan'],
+                    'deskripsi_kegiatan' => $k['deskripsi_kegiatan'],
+                    'dana_kegiatan' => $k['dana_kegiatan']
                 ];
             }
             $index++;
         }
-        $this->load->view('kemahasiswaan/tampilan1', $data);
+        $this->load->view('kemahasiswaan/tampilan2', $data);
+    }
+    public function cetakPengajuanLpj()
+    {
+        $data['kegiatan'] = [];
+        $kegiatan = $this->db->get('kegiatan')->result_array();
+        $index = 0;
+        foreach ($kegiatan as $k) {
+            if ($this->input->post('cek_' . $k['id_kegiatan'])) {
+                $data['kegiatan'][$index] = [
+                    'nama_kegiatan' => $k['nama_kegiatan'],
+                    'tanggal_kegiatan' => $k['tanggal_kegiatan'],
+                    'deskripsi_kegiatan' => $k['deskripsi_kegiatan'],
+                    'dana_kegiatan' => $k['dana_kegiatan']
+                ];
+            }
+            $index++;
+        }
+        $this->load->view('kemahasiswaan/tampilan2', $data);
     }
 
     // menampilkan daftar poin skp keseluruhan mahasiswa

@@ -40,13 +40,15 @@
 
                                 </thead>
                                 <tbody>
+                                    <?php $i = 1; ?>
                                     <?php foreach ($kegiatan as $k) : ?>
                                         <tr>
                                             <td>
                                                 <div class="custom-checkbox custom-control">
-                                                    <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
-                                                    <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
-                                                    1
+                                                    <input type="hidden" name="checkbox-<?= $k['id_kegiatan'] ?>" value="1">
+                                                    <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-<?= $k['id_kegiatan'] ?>" name="cek_<?= $k['id_kegiatan'] ?>" value="1">
+                                                    <label for="checkbox-<?= $k['id_kegiatan'] ?>" class="custom-control-label">&nbsp;</label>
+                                                    <?= $i++ ?>
                                                 </div>
                                             </td>
                                             <td><?= $k['tgl_pengajuan_lpj'] ?></td>

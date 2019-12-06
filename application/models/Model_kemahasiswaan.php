@@ -50,9 +50,16 @@ class Model_kemahasiswaan extends CI_Model
 
     public function getRekapRancangan($tahun = null, $lembaga = null, $status = null)
     {
-        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*');
+        // jumlah kegiatan
+        $this->db->select('count(drk.id_daftar_rancangan) as jumlah_kegiatan,drk.id_lembaga as lbg3,drk.tahun_kegiatan');
+        $this->db->from('daftar_rancangan_kegiatan as drk');
+        $this->db->group_by('drk.id_lembaga,drk.tahun_kegiatan');
+        $from_clause3 = $this->db->get_compiled_select();
+
+        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*,jk.jumlah_kegiatan');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
         $this->db->join('lembaga as l', 'l.id_lembaga=rkl.id_lembaga', 'left');
+        $this->db->join('(' . $from_clause3 . ') as jk', 'jk.lbg3 =rkl.id_lembaga and jk.tahun_kegiatan =rkl.tahun_pengajuan', 'left');
         if ($tahun != null) {
             $this->db->where('rkl.tahun_pengajuan', $tahun);
         }

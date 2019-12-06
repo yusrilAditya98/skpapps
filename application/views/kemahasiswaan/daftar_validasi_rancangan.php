@@ -75,7 +75,7 @@
                                             <td><?= $i++; ?></td>
                                             <td><?= $r['tahun_pengajuan'] ?></td>
                                             <td><?= $r['nama_lembaga'] ?></td>
-                                            <td>15</td>
+                                            <td><?= $r['jumlah_kegiatan'] ?></td>
                                             <td><?= $r['anggaran_kemahasiswaan'] ?></td>
                                             <td><?= $r['anggaran_lembaga'] ?></td>
                                             <td>

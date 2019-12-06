@@ -10,12 +10,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
+    <style type="text/css" media="print">
+        @page {
+            size: landscape;
+        }
+    </style>
 </head>
 
 <body>
     <?php
-    header("Content-type: application/vnd.ms-excel");
-    header("Content-Disposition: attachment; filename=Report.xls");
+    // header("Content-type: application/vnd.ms-excel");
+    // header("Content-Disposition: attachment; filename=Report.xls");
     ?>
     <div id="app">
         <div class="main-wrapper">
@@ -48,13 +53,14 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php $index = 1; ?>
                                                 <?php foreach ($kegiatan as $k) : ?>
                                                     <tr>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td><?= $index++ ?></td>
+                                                        <td><?= $k['tanggal_kegiatan'] ?></td>
                                                         <td><?= $k['nama_kegiatan'] ?></td>
-                                                        <td></td>
-                                                        <td></td>
+                                                        <td><?= $k['deskripsi_kegiatan'] ?></td>
+                                                        <td>Rp.<?= number_format($k['dana_kegiatan'], 2, ',', '.') ?> ,-</td>
                                                         <td></td>
                                                         <td></td>
                                                         <td></td>
@@ -73,6 +79,10 @@
             </div>
         </div>
     </div>
+
+    <script>
+        window.print();
+    </script>
 
     <!-- General JS Scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
