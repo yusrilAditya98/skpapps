@@ -83,3 +83,20 @@ $('.tambahAnggaran').on('click', function () {
 		}
 	})
 })
+
+$('.edit-anggaran').on('click', function () {
+	let id_lembaga = $(this).data('id');
+	let tahun = $(this).data('tahun');
+	$.ajax({
+		url: segments[0] + '/skpapps/API_Skp/dataAnggaran/' + id_lembaga + '?tahun=' + tahun,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('.nama-lembaga').val(data[0]['nama_lembaga']);
+			$('.tahun-anggaran').val(data[0]['tahun_kegiatan']);
+			$('.nominal-anggaran').val(data[0]['anggaran_kemahasiswaan']);
+			$('.id-lembaga').val(data[0]['id_lembaga']);
+
+		}
+	})
+})

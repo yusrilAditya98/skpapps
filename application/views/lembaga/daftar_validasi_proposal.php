@@ -90,6 +90,7 @@
                                                         <?php elseif ($validasi[$i]['status_validasi'] == 0 || $validasi[$i]['status_validasi'] == 2 || $validasi[$i]['status_validasi'] == 4) : ?>
                                                             <a href="<?= base_url('Kegiatan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=2" class="btn btn-icon btn-success"><i class="fas fa-check"> </i></a>
                                                             <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid   " data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i></a>
+
                                                         <?php else : ?>
                                                             <span>Selesai</span>
                                                         <?php endif; ?>

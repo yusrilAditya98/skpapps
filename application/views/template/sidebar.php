@@ -78,17 +78,43 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                                                     </a>
                                                 </div>
                                                 <div class="col-lg-4 float-right">
-                                                    <!-- notif rancangan -->
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 6 && $notif['notif_bem_proposal'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_bem_proposal'] ?></span>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 7 && $notif['notif_bem_lpj'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_bem_lpj'] ?></span>
+                                                    <?php endif; ?>
+
+                                                    <!-- notif rancangan kemahasiswaan-->
                                                     <?php if ($ssb['id_sub_sub_menu'] == 8 && $notif['notif_kmhs_rancangan'] != 0) : ?>
                                                         <span class="badge badge-warning"><?= $notif['notif_kmhs_rancangan'] ?></span>
                                                     <?php endif; ?>
-                                                    <!-- notif proposal -->
+                                                    <!-- notif proposal kemahasiswaan-->
                                                     <?php if ($ssb['id_sub_sub_menu'] == 9 && $notif['notif_kmhs_proposal'] != 0) : ?>
                                                         <span class="badge badge-warning"><?= $notif['notif_kmhs_proposal'] ?></span>
                                                     <?php endif; ?>
-                                                    <!-- notif lpj -->
+                                                    <!-- notif lpj kemahasiswaan-->
                                                     <?php if ($ssb['id_sub_sub_menu'] == 10 && $notif['notif_kmhs_lpj'] != 0) : ?>
                                                         <span class="badge badge-warning"><?= $notif['notif_kmhs_lpj'] ?></span>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 12 && $notif['notif_psik_proposal'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_psik_proposal'] ?></span>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 13 && $notif['notif_psik_lpj'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_psik_lpj'] ?></span>
+                                                    <?php endif; ?>
+
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 14 && $notif['notif_keuangan_proposal'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_keuangan_proposal'] ?></span>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 15 && $notif['notif_keuangan_lpj'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_keuangan_lpj'] ?></span>
                                                     <?php endif; ?>
                                                 </div>
                                             </div>

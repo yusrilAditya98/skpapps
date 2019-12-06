@@ -10,9 +10,18 @@ class Keuangan extends CI_Controller
         parent::__construct();
         is_logged_in();
     }
+
+    private function _notif()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_keuangan_lpj'] = count($this->kemahasiswaan->getNotifValidasi(6, 'lpj'));
+        $this->notif['notif_keuangan_proposal'] = count($this->kemahasiswaan->getNotifValidasi(6, 'proposal'));
+        return $this->notif;
+    }
     public function index()
     {
         $data['title'] = 'Dashboard';
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -23,6 +32,7 @@ class Keuangan extends CI_Controller
     public function daftarPengajuanKeuangan()
     {
         $data['title'] = 'Validasi';
+        $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
@@ -41,6 +51,7 @@ class Keuangan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);

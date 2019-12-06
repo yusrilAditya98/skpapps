@@ -187,7 +187,7 @@
                                                 <h5>Informasi Upload</h5>
 
                                                 <div class="form-group">
-                                                    <label for="fileProposal">Upload File Proposal - <a class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/') . $kegiatan['proposal_kegiatan'] ?>">Lihat</a></label>
+                                                    <label for="fileProposal">Upload File Proposal - <a target="_blank" class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/') . $kegiatan['proposal_kegiatan'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" id="fileProposal" name="fileProposal">
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                         Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
@@ -199,7 +199,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="beritaProposal">Upload Berita Kegiatan
-                                                        Proposal - <a class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/') . $kegiatan['berita_proposal'] ?>">Lihat</a></label>
+                                                        Proposal - <a target="_blank" class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/') . $kegiatan['berita_proposal'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="beritaProposal" id="beritaProposal">
 
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
@@ -212,14 +212,14 @@
                                                         <span><a href="#">Disini</a></span></small>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="gambarKegiatanProposal1">Upload Gambar Kegiatan 1 / Acara Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_1'] ?>">Lihat</a></label>
+                                                    <label for="gambarKegiatanProposal1">Upload Gambar Kegiatan 1 / Acara Pendukung - <a target="_blank" class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_1'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanProposal1" id="gambarKegiatanProposal1">
                                                     <small class="form-text text-muted">
                                                         Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
                                                     </small>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="gambarKegiatanProposal2">Upload Gambar Kegiatan 2 / Acara Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_2'] ?>">Lihat</a></label>
+                                                    <label for="gambarKegiatanProposal2">Upload Gambar Kegiatan 2 / Acara Pendukung - <a target="_blank" class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_2'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2">
                                                     <small class="form-text text-muted">
                                                         Format Gambar JPG/JPEG Ukuran Maksimal 2 mega

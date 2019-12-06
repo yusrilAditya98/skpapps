@@ -13,9 +13,18 @@ class Publikasi extends CI_Controller
         }
     }
 
+    private function _notif()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_psik_lpj'] = count($this->kemahasiswaan->getNotifValidasi(5, 'lpj'));
+        $this->notif['notif_psik_proposal'] = count($this->kemahasiswaan->getNotifValidasi(5, 'proposal'));
+        return $this->notif;
+    }
+
     public function index()
     {
         $data['title'] = 'Dashboard';
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -26,6 +35,7 @@ class Publikasi extends CI_Controller
     public function daftarProposal()
     {
         $data['title'] = 'Validasi';
+        $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
@@ -41,6 +51,7 @@ class Publikasi extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['notif'] = $this->_notif();
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);

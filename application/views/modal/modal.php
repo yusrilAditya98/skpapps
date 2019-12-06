@@ -181,7 +181,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer bg-whitesmoke br">
+                <div class="modal-footer bg-whitesmoke br t-validasi">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>

@@ -14,23 +14,21 @@
                         <a href="<?= base_url('Mahasiswa/tambahProposal') ?>" style="float:right" class="btn btn-icon btn-success mb-3">
                             Pengajuan Proposal <i class="fas fa-plus pl-2"></i></a>
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="table-2">
                                 <thead class="text-center">
                                     <tr>
-                                        <th scope="col" rowspan="2">No</th>
-                                        <th scope="col" rowspan="2">Tanggal Pengajuan</th>
-                                        <th scope="col" rowspan="2">Nama Kegiatan</th>
-                                        <th scope="col" rowspan="2">Status Proposal</th>
-                                        <th scope="col" colspan="5" class="text-center">Validasi</th>
-                                        <th scope="col" rowspan="2">Action</th>
+                                        <th scope="col">No</th>
+                                        <th scope="col">Tanggal Pengajuan</th>
+                                        <th scope="col">Nama Kegiatan</th>
+                                        <th scope="col">Status Proposal</th>
+                                        <th scope="col">BEM</th>
+                                        <th scope="col">Kmhs</th>
+                                        <th scope="col">WD3</th>
+                                        <th scope="col">PSIK</th>
+                                        <th scope="col">Keuangan</th>
+                                        <th scope="col">Action</th>
                                     </tr>
-                                    <tr>
-                                        <th>BEM</th>
-                                        <th>Kmhs</th>
-                                        <th>WD3</th>
-                                        <th>PSIK</th>
-                                        <th>Keuangan</th>
-                                    </tr>
+
                                 </thead>
                                 <tbody>
                                     <?php $index = 1; ?>

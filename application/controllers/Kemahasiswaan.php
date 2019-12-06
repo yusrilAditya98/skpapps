@@ -10,8 +10,11 @@ class Kemahasiswaan extends CI_Controller
     private $totalPoinSKp;
     private $proposalKegiatan = [];
     private $lembaga = [];
-    private  $rancangan = [];
+    private $rancangan = [];
     private $notif = [];
+    private $id_lembaga;
+    private $tahun;
+    private $anggaran;
 
     public function __construct()
     {
@@ -48,10 +51,17 @@ class Kemahasiswaan extends CI_Controller
         $index = 0;
         $this->lembaga[$index++] = [
             'id_lembaga' => $id_lembaga,
-            'status_rencana_kegiatan' => 0,
+            'status_rencana_kegiatan' => $this->input->get('status'),
         ];
         $this->kemahasiswaan->updateStatusRencanaKegiatan($this->lembaga);
-        redirect('Kemahasiswaan/lembaga');
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+            <div class="alert-icon"><i class="far fa-times"></i></div>
+            <div class="alert-body">
+            <div class="alert-title">Rancangan kegiatan berhasil di perbaharui ! </div>
+            Update !
+            </div>
+        </div>');
+        redirect('Kemahasiswaan/anggaran');
     }
 
     // Berfungsi untuk melakukan validasi rancangan kegiatan mahasiswa
@@ -319,15 +329,37 @@ class Kemahasiswaan extends CI_Controller
 
     public function anggaran()
     {
+        $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Anggaran';;
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['lembaga'] = $this->kemahasiswaan->getRekapRancangan();
+        $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran(2020);
+
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("kemahasiswaan/daftar_anggaran");
         $this->load->view("template/footer");
     }
+
+    public function editAnggaranRancangan()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->anggaran = $this->input->post('nominal');
+        $this->tahun = $this->input->post('tahun');
+        $this->id_lembaga = $this->input->post('id_lembaga');
+
+        $this->kemahasiswaan->updateRekapKegiatan($this->id_lembaga, $this->tahun, null, $this->anggaran);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+            <div class="alert-icon"><i class="far fa-times"></i></div>
+            <div class="alert-body">
+            <div class="alert-title">Dana kegiatan berhasil di perbaharui ! </div>
+            Update !
+            </div>
+        </div>');
+        redirect('Kemahasiswaan/anggaran');
+    }
+
 
     public function tambahAnggaranKegiatan()
     {
@@ -377,5 +409,19 @@ class Kemahasiswaan extends CI_Controller
             $index++;
         }
         $this->load->view('kemahasiswaan/tampilan1', $data);
+    }
+
+    // menampilkan daftar poin skp keseluruhan mahasiswa
+    public function skpMahasiswa()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['mahasiswa'] = $this->kemahasiswaan->getDataMahasiswa();
+        $data['notif'] = $this->_notifKmhs();
+        $data['title'] = 'Poin Skp';
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/poin_skp_mhs");
+        $this->load->view("template/footer");
     }
 }

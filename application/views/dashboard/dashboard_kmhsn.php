@@ -15,7 +15,7 @@
                             <h4>Validasi Rancangan</h4>
                         </div>
                         <div class="card-body">
-                            10
+                            <?= $notif['notif_kmhs_rancangan'] ?>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                             <h4>Validasi Proposal</h4>
                         </div>
                         <div class="card-body">
-                            42
+                            <?= $notif['notif_kmhs_proposal'] ?>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                             <h4>Validasi LPJ</h4>
                         </div>
                         <div class="card-body">
-                            1,201
+                            <?= $notif['notif_kmhs_lpj'] ?>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                             <h4>Validasi Poin Skp</h4>
                         </div>
                         <div class="card-body">
-                            47
+                            <?= $notif['notif_kmhs_skp'] ?>
                         </div>
                     </div>
                 </div>

@@ -52,6 +52,7 @@
 						<h4>Tambah Rancangan Kegiatan</h4>
 					</div>
 					<div class="card-body">
+						<!-- jika status rancangan diberikan hak akses untuk mengajukan -->
 						<?php if ($lembaga['status_rencana_kegiatan'] == 1) : ?>
 							<div class="alert alert-warning mb-3" role="alert" style="opacity: 1; color:black; background-color:rgba(35, 182, 246, 0.4)">
 								<div class="row">

@@ -23,12 +23,15 @@ $('.detail-revisi').on('click', function () {
 
 })
 
-$('.detail-kegiatan').on('click', function () {
+$('.detail-kegiatan').on('click', function (e) {
 	let id = $(this).data('id');
 	let jenis = $(this).data('jenis')
 	let dana = '';
+
 	$('.s-dana').remove()
 	$('.k-anggota').remove()
+	$('.temp-class').remove()
+
 	$.ajax({
 		url: segments[0] + '/skpapps/API_skp/infoKegiatan/' + id,
 		method: 'get',
@@ -79,9 +82,12 @@ $('.detail-kegiatan').on('click', function () {
 			}
 		}
 	})
+	copyDiv(e)
+
+
 })
 
-$(document).ready(function () {
+$(document).ready(function (e) {
 	$('#dataTabelProposal').DataTable({
 		initComplete: function () {
 			this.api().columns([2, 4]).every(function () {
@@ -102,6 +108,26 @@ $(document).ready(function () {
 			});
 		}
 	});
+
 });
+
+function copyDiv(e) {
+
+	let tombol = e.target
+	let valid = (tombol.parentElement.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling.nextElementSibling)
+
+	let clnValid = valid.cloneNode(true);
+	let cldrnvalid = clnValid.children;
+	let tombolValid = cldrnvalid[0];
+
+
+	if (tombolValid.textContent != 'Selesai' && tombolValid.textContent != 'Tidak bisa validasi' && tombolValid.textContent != 'Belum bisa validasi') {
+
+		for (var i = 0; i < cldrnvalid.length; i++) {
+			cldrnvalid[i].classList.add('temp-class')
+			$('.t-validasi').append(cldrnvalid[0], cldrnvalid[1])
+		}
+	}
+}
 
 "use strict";
