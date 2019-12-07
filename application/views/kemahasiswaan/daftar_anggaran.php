@@ -14,11 +14,14 @@
                     <div class="card-body">
                         <a href="#" data-toggle="modal" data-target="#tambahAnggaran" data-id="" class="btn btn-icon icon-left btn-success float-right tambahAnggaran"><i class="fas fa-plus"></i>Tambah Anggaran Lembaga</a>
                         <div class="col-2 float-right">
-                            <form action="<?= base_url('Kegiatan/pengajuanRancangan') ?>" method="get">
+                            <form action="<?= base_url('Kemahasiswaan/anggaran') ?>" method="get">
                                 <div class="form-group">
                                     <div class="input-group">
                                         <select name="tahun" class="custom-select" id="inputGroupSelect04">
                                             <option value="" selected="">Tahun...</option>
+                                            <?php foreach ($tahun as $t) : ?>
+                                                <option value="<?= $t['tahun_kegiatan'] ?>"><?= $t['tahun_kegiatan'] ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                         <div class="input-group-append">
                                             <button class="btn btn-outline-primary" type="submit">cari</button>
@@ -37,7 +40,7 @@
                                         <th>Tahun Periode</th>
                                         <th>Nama Lembaga</th>
                                         <th>Dana Pagu</th>
-                                        <th>Sisa Dana</th>
+                                        <th>Dana Digunakan</th>
                                         <th>Jumlah Kegiatan</th>
                                         <th>Kegiatan Terlaksana</th>
                                         <th>Kegiatan Belum Terlaksana</th>
@@ -53,24 +56,30 @@
                                             <td><?= $l['tahun_kegiatan'] ?></td>
                                             <td><?= $l['nama_lembaga'] ?></td>
                                             <td><?= $l['anggaran_kemahasiswaan'] ?></td>
-                                            <td><?= $l['dana_kegiatan'] ?></td>
+                                            <td>
+                                                <?php if ($l['dana_kegiatan']) : ?>
+                                                    <?= $l['dana_kegiatan'] ?>
+                                                <?php else : ?>
+                                                    0
+                                                <?php endif; ?>
+                                            </td>
                                             <td>
                                                 <?php if ($l['jumlah_kegiatan']) : ?>
-                                                    <a href=""><?= $l['jumlah_kegiatan'] ?></a>
+                                                    <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah Kegiatan" data-kondisi="jmlh" href=""><?= $l['jumlah_kegiatan'] ?></a>
                                                 <?php else : ?>
                                                     0
                                                 <?php endif; ?>
                                             </td>
                                             <td>
                                                 <?php if ($l['terlaksana']) : ?>
-                                                    <a href=""> <?= $l['terlaksana'] ?></a>
+                                                    <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah  Kegiatan Terlaksana" data-kondisi="terlaksana" href=""> <?= $l['terlaksana'] ?></a>
                                                 <?php else : ?>
                                                     0
                                                 <?php endif; ?>
                                             </td>
                                             <td>
                                                 <?php if ($l['blm_terlaksana']) : ?>
-                                                    <a href=""> <?= $l['blm_terlaksana'] ?></a>
+                                                    <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah  Kegiatan Belum Terlaksana" data-kondisi="blmTerlaksana" href=""> <?= $l['blm_terlaksana'] ?></a>
                                                 <?php else : ?>
                                                     0
                                                 <?php endif; ?>
@@ -88,7 +97,7 @@
                                                         <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=1' ?>" class="btn btn-success"><i class="fas fa-check"></i> </a>
                                                     </div>
                                                     <div class="col-lg-3">
-                                                        <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=1' ?>" class="btn btn-danger"><i class="fas fa-times"></i> </a>
+                                                        <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=0' ?>" class="btn btn-danger"><i class="fas fa-times"></i> </a>
                                                     </div>
                                                     <div class="col-lg-3">
                                                         <a href="#" class="btn btn-primary edit-anggaran" data-toggle="modal" data-target="#editAnggaran" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>"><i class="fas fa-edit"></i> </a>
@@ -202,3 +211,40 @@
         </div>
     </div>
 </div>
+<!-- modal -->
+
+
+<!-- edit anggaran -->
+<div class="modal fade" tabindex="-1" role="dialog" id="daftarKegiatan">
+    <div class="modal-dialog modal-lg" role=" document">
+        <div class="modal-content ">
+            <div class="modal-header">
+                <h5 class="modal-title">Daftar </h5> <span class="judul"></span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <table class="table table-striped" id="table-2">
+                        <thead>
+                            <tr>
+                                <th class="text"> No</th>
+                                <th>Nama Proker</th>
+                                <th>Dana Pagu </th>
+                            </tr>
+                        </thead>
+                        <tbody class="anggaran-lembaga">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- modal -->

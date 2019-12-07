@@ -17,7 +17,7 @@
                     <div class="card-body">
 
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-2">
+                            <table class="table table-striped" id="dataTabelProposal">
                                 <thead>
 
                                     <th class="text">
@@ -56,17 +56,23 @@
                                             <td>
                                                 <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
-                                            <td>
-                                                <?php if ($k['status_selesai_lpj'] == 0) : ?>
-                                                    <span><i class="fa fa-dot-circle mr-2 text-primary"></i>Belum diproses</span>
-                                                <?php elseif ($k['status_selesai_lpj'] == 1) : ?>
-                                                    <span>Sedang Berlangsung</span>
-                                                <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
-                                                    <span><i class="fa fa-dot-circle mr-2 text-warning"></i>Revisi</span>
-                                                <?php elseif ($k['status_selesai_lpj'] == 3) : ?>
-                                                    <span><i class="fa fa-dot-circle mr-2 text-success"></i>Selesai</span>
-                                                <?php endif; ?>
-                                            </td>
+                                            <?php if ($k['status_selesai_lpj'] == 0) : ?>
+                                                <td class="text-secondary">
+                                                    Belum diproses
+                                                </td>
+                                            <?php elseif ($k['status_selesai_lpj'] == 1) : ?>
+                                                <td class="text-primary">
+                                                    Sedang Berlangsung
+                                                </td>
+                                            <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
+                                                <td class="text-warning">
+                                                    Revisi
+                                                </td>
+                                            <?php elseif ($k['status_selesai_lpj'] == 3) : ?>
+                                                <td class="text-success">
+                                                    Selesai
+                                                </td>
+                                            <?php endif; ?>
                                             <?php foreach ($validasi as $v) : ?>
                                                 <?php if ($v['id_kegiatan'] == $k['id_kegiatan']) : ?>
                                                     <td class="text-center">
@@ -105,8 +111,21 @@
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-
                                 </tbody>
+                                <tfoot>
+                                    <th class="text">
+                                    </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                    <th class="text-center"></th>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

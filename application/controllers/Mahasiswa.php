@@ -163,7 +163,6 @@ class Mahasiswa extends CI_Controller
         $this->load->view("template/footer");
     }
 
-
     // Pengajuan tambah proposal kegiatan
     public function tambahProposal()
     {

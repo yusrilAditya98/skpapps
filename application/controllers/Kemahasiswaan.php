@@ -333,7 +333,15 @@ class Kemahasiswaan extends CI_Controller
         $data['title'] = 'Anggaran';;
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['lembaga'] = $this->kemahasiswaan->getRekapRancangan();
-        $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran(2020);
+        $data['tahun'] = $this->kemahasiswaan->getTahunRancangan();
+
+        if ($this->input->get('tahun') != null) {
+            $tahun = $this->input->get('tahun');
+            $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($tahun);
+        } else {
+            $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($data['tahun'][0]['tahun_kegiatan']);
+        }
+
 
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -393,9 +401,6 @@ class Kemahasiswaan extends CI_Controller
       </div>');
         redirect('Kemahasiswaan/anggaran');
     }
-
-
-
 
     public function cetakPengajuanProposal()
     {

@@ -153,6 +153,7 @@ class Keuangan extends CI_Controller
         // update validasi
         if ($this->input->get('valid') == 1) {
             $this->_tambahPoinSkpAnggota($id_kegiatan);
+            $this->_updateStatusRancangan($id_kegiatan);
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
             <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
             <div class="alert-body">
@@ -196,6 +197,17 @@ class Keuangan extends CI_Controller
 
         foreach ($anggota as $a) {
             $this->_update($a['nim']);
+        }
+    }
+
+    private function _updateStatusRancangan($id_kegiatan)
+    {
+        $this->load->model('Model_kegiatan', 'kegiatan');
+        $data = $this->kegiatan->getInfoKegiatan($id_kegiatan);
+        if ($data['id_lembaga'] != 0) {
+            $this->db->set('status_rancangan', 5);
+            $this->db->where('id_daftar_rancangan', $data['acc_rancangan']);
+            $this->db->update('daftar_rancangan_kegiatan');
         }
     }
 }

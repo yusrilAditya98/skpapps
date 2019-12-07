@@ -5,6 +5,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class API_skp extends CI_Controller
 {
 
+    private $kondisi;
+    private $tahun;
+    private $id_lembaga;
     public function __construct()
     {
         parent::__construct();
@@ -88,5 +91,18 @@ class API_skp extends CI_Controller
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($this->input->get('tahun'), $id_lembaga);
         echo json_encode($data['anggaran']);
+    }
+
+    public function dataJumlahKegiatan($id_lembaga)
+    {
+        if ($this->session->userdata('user_profil_kode') != 4) {
+            redirect('Auth/blocked');
+        }
+        $this->load->model("Model_kemahasiswaan", 'kemahasiswaan');
+        $this->kondisi = $this->input->get('kondisi');
+        $this->tahun = $this->input->get('tahun');
+        $this->id_lembaga = $id_lembaga;
+        $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
+        echo json_encode($data);
     }
 }

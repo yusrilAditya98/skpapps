@@ -100,3 +100,28 @@ $('.edit-anggaran').on('click', function () {
 		}
 	})
 })
+
+$('a.d-anggaran').on('click', function () {
+	let id_lembaga = $(this).data('id')
+	let tahun = $(this).data('tahun')
+	let kondisi = $(this).data('kondisi')
+	$('.temp-anggaran').remove()
+	$.ajax({
+		url: segments[0] + '/skpapps/API_Skp/dataJumlahKegiatan/' + id_lembaga + '?kondisi=' + kondisi + '&tahun=' + tahun,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+
+			for (var i in data) {
+				$('.anggaran-lembaga').append(`
+					<tr class="temp-anggaran">
+						<td></td>
+						<td>` + data[i].nama_proker + `</td>
+						<td>` + data[i].anggaran_kegiatan + `</td>
+					</tr>
+				
+				`)
+			}
+		}
+	})
+})

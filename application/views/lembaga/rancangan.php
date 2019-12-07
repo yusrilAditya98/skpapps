@@ -139,6 +139,7 @@
 											</td>
 											<td>
 												<div class="row">
+													<!-- 5 kegiatan telah selesai -->
 													<?php if ($r['status_rancangan'] == 0 || $r['status_rancangan'] == 2) : ?>
 														<div class="col-lg-6">
 															<a href="<?= base_url('Kegiatan/editRancanganKegiatan/') . $r['id_daftar_rancangan'] ?>" class="btn btn-icon btn-info"> <i class="fas fa-edit"></i></a>
@@ -156,7 +157,11 @@
 														</div>
 													<?php elseif ($r['status_rancangan'] == 4) : ?>
 														<div class="col-lg-12">
-															<span class="text-primary">Sudah Mengajukan</span>
+															<span class="text-warning">Belum Selesai</span>
+														</div>
+													<?php elseif ($r['status_rancangan'] == 5) : ?>
+														<div class="col-lg-12">
+															<span class="text-success">Telah Terlaksana</span>
 														</div>
 													<?php endif; ?>
 												</div>

@@ -5,6 +5,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Model_kemahasiswaan extends CI_Model
 {
 
+    public function getTahunRancangan()
+    {
+        $this->db->select('tahun_kegiatan');
+        $this->db->from('daftar_rancangan_kegiatan');
+        $this->db->group_by('tahun_kegiatan');
+        $this->db->order_by('tahun_kegiatan DESC');
+        return $this->db->get()->result_array();
+    }
     public function insertPoinSkp($data)
     {
         $this->db->insert_batch('poin_skp', $data);
@@ -69,6 +77,7 @@ class Model_kemahasiswaan extends CI_Model
         if ($status != null) {
             $this->db->where('rkl.status_rancangan', $status);
         }
+        $this->db->order_by('rkl.status_rancangan ASC');
         return $this->db->get()->result_array();
     }
 
@@ -116,19 +125,19 @@ class Model_kemahasiswaan extends CI_Model
     {
 
         //jumlah kegiatan terlaksana
-        $this->db->select('count(k1.id_lembaga) as terlaksana,k1.id_lembaga as lbg1,k1.acc_rancangan');
-        $this->db->from('kegiatan as k1');
-        $this->db->where('k1.status_selesai_lpj', 3);
-        $this->db->where('k1.periode', $periode);
-        $this->db->group_by('k1.id_lembaga');
+        $this->db->select('count(drk.id_daftar_rancangan) as terlaksana,drk.id_lembaga as lbg1,');
+        $this->db->from('daftar_rancangan_kegiatan as drk');
+        $this->db->where('drk.status_rancangan', 5);
+        $this->db->where('drk.tahun_kegiatan', $periode);
+        $this->db->group_by('drk.id_lembaga');
         $from_clause1 = $this->db->get_compiled_select();
 
         // // jumlah kegiatan belum terlaksana terlaksana
-        $this->db->select('count(k2.id_lembaga) as blm_terlaksana,k2.id_lembaga as lbg2');
-        $this->db->from('kegiatan as k2');
-        $this->db->where_not_in('k2.status_selesai_lpj', 3);
-        $this->db->where('k2.periode', $periode);
-        $this->db->group_by('k2.id_lembaga');
+        $this->db->select('count(drk.id_daftar_rancangan) as blm_terlaksana,drk.id_lembaga as lbg2,');
+        $this->db->from('daftar_rancangan_kegiatan as drk');
+        $this->db->where('drk.status_rancangan !=', 5);
+        $this->db->where('drk.tahun_kegiatan', $periode);
+        $this->db->group_by('drk.id_lembaga');
         $from_clause2 = $this->db->get_compiled_select();
 
         // // // jumlah kegiatan
@@ -170,6 +179,24 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->from('mahasiswa as m');
         $this->db->join('prodi as p', 'm.kode_prodi=p.kode_prodi', 'left');
         $this->db->join('jurusan as j', 'j.kode_jurusan=p.kode_jurusan', 'left');
+        return $this->db->get()->result_array();
+    }
+
+    public function getDetailAnggaranLembaga($id_lembaga, $periode, $kondisi)
+    {
+
+
+        // // jumlah kegiatan belum terlaksana terlaksana
+        $this->db->select('drk.*,l.nama_lembaga');
+        $this->db->from('daftar_rancangan_kegiatan as drk');
+        $this->db->join('lembaga as l', 'l.id_lembaga=drk.id_lembaga', 'left');
+        if ($kondisi == 'blmTerlaksana') {
+            $this->db->where('drk.status_rancangan !=', 5);
+        } elseif ($kondisi == 'terlaksana') {
+            $this->db->where('drk.status_rancangan', 5);
+        }
+        $this->db->where('drk.tahun_kegiatan', $periode);
+        $this->db->where('drk.id_lembaga', $id_lembaga);
         return $this->db->get()->result_array();
     }
 }
