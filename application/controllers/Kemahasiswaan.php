@@ -452,4 +452,34 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("kemahasiswaan/poin_skp_mhs");
         $this->load->view("template/footer");
     }
+
+    // menampilkan beasiswa
+    public function beasiswa()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        $data['notif'] = $this->_notifKmhs();
+        $data['title'] = 'Beasiswa';
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_beasiswa");
+        $this->load->view("template/footer");
+    }
+
+    // validasi beasiswa
+    public function validasiBeasiswa($id_penerima)
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $status = $this->input->get('status');
+        $this->kemahasiswaan->updateStatusBeasiswa($id_penerima, $status);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+            <div class="alert-icon"><i class="far fa-times"></i></div>
+            <div class="alert-body">
+            <div class="alert-title">Status Beasiswa berhasil di perbaharui ! </div>
+            Update !
+            </div>
+        </div>');
+        redirect('Kemahasiswaan/beasiswa');
+    }
 }

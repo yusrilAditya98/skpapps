@@ -105,4 +105,9 @@ class API_skp extends CI_Controller
         $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
         echo json_encode($data);
     }
+    public function beasiswa($id_beasiswa)
+    {
+        $data = $this->db->get_where('beasiswa', ['id' => $id_beasiswa])->row_array();
+        echo json_encode($data);
+    }
 }

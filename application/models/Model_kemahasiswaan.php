@@ -184,8 +184,6 @@ class Model_kemahasiswaan extends CI_Model
 
     public function getDetailAnggaranLembaga($id_lembaga, $periode, $kondisi)
     {
-
-
         // // jumlah kegiatan belum terlaksana terlaksana
         $this->db->select('drk.*,l.nama_lembaga');
         $this->db->from('daftar_rancangan_kegiatan as drk');
@@ -198,5 +196,22 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.tahun_kegiatan', $periode);
         $this->db->where('drk.id_lembaga', $id_lembaga);
         return $this->db->get()->result_array();
+    }
+
+    public function getBeasiswa()
+    {
+        $this->db->select('b.*,p.*,m.nama');
+        $this->db->from('penerima_beasiswa as p');
+        $this->db->join('beasiswa as b', 'b.id=p.id_beasiswa', 'left');
+        $this->db->join('mahasiswa as m', 'm.nim=p.nim', 'left');
+        $this->db->order_by('validasi_beasiswa ASC');
+        return $this->db->get()->result_array();
+    }
+
+    public function updateStatusBeasiswa($id_penerima, $status)
+    {
+        $this->db->set('validasi_beasiswa', $status);
+        $this->db->where('id_penerima', $id_penerima);
+        $this->db->update('penerima_beasiswa');
     }
 }

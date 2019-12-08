@@ -25,7 +25,7 @@ class Keuangan extends CI_Controller
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("dashboard/dashboard_kmhsn");
+        $this->load->view("dashboard/dashboard_keuangan");
         $this->load->view("template/footer");
     }
 

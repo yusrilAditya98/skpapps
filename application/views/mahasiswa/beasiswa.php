@@ -4,7 +4,43 @@
 		<div class="section-header">
 			<h1>Form Penerima Beasiswa</h1>
 		</div>
+		<?= $this->session->flashdata('message'); ?>
 		<div class="row">
+			<div class="col-12 col-md-6 col-lg-12">
+				<div class="card">
+					<div class="card-header">
+						<h4>Daftar Pengajuan Beasiswa</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+							<div class="col-12 col-md-12 col-lg-12">
+								<div class="card-body">
+									<ul class="list-unstyled">
+										<?php foreach ($penerima_beasiswa as $p) : ?>
+											<li class="media">
+												<img class="mr-3" src=" <?= base_url() ?>/assets/img/medal.png" style="width: 40px" class="rounded-circle profile-widget-picture" alt=" Generic placeholder image">
+												<div class="media-body">
+													<h5 class="mt-0 mb-1"><?= $p['jenis_beasiswa']; ?> -
+														<?php if ($p['validasi_beasiswa'] == 0) : ?>
+															<div class="badge badge-primary">Menunggung Proses Validasi</div>
+														<?php elseif ($p['validasi_beasiswa'] == 1) : ?>
+															<i class="fa fa-check text-success" aria-hidden="true"></i>
+														<?php elseif ($p['validasi_beasiswa'] == 2) : ?>
+															<div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+														<?php endif; ?>
+													</h5>
+													<p>Beasiswa <span><?= $p['jenis_beasiswa'] ?></span> diterima pada tanggal <span><?= $p['tahun_menerima'] ?></span> dan berakhir pada tanggal <span><?= $p['lama_menerima'] ?></span></p>
+												</div>
+											</li>
+										<?php endforeach; ?>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
 			<div class="col-12 col-md-6 col-lg-12">
 				<div class="card">
 					<div class="card-header">
@@ -31,40 +67,17 @@
 													Nim harap di Isi
 												</div>
 											</div>
-											<div class="form-group">
-												<label for="tlpnMahasiswa">No Telepon / Whatsapp</label>
-												<input type="text" name="tlpnMahasiswa" class="form-control" id="tlpnMahasiswa" required>
-												<div class="invalid-feedback">
-													No telpon harap di Isi
-												</div>
-											</div>
-											<div class="form-group">
-												<label for="alamatKos">Alamat Kos</label>
-												<input type="text" name="alamatKos" required class="form-control" id="alamatKos">
-												<div class="invalid-feedback">
-													Alamat kod harap di Isi
-												</div>
-											</div>
-											<div class="form-group">
-												<label for="alamatRumah">Alamat Rumah</label>
-												<textarea style="height:100px" required name="alamatRumah" class="form-control" id="alamatRumaha"></textarea>
-												<div class="invalid-feedback">
-													Alamat rumah harap di Isi
-												</div>
-											</div>
-											<div class="form-group">
-												<label for="emailMahasiswa">Email</label>
-												<input type="email" required class="form-control" id="emailMahasiswa">
-												<div class="invalid-feedback">
-													Email harap di Isi
-												</div>
-											</div>
 										</div>
 										<div class="bagian-beasiswa mt-5">
 											<h5>Informasi Beasiswa</h5>
 											<div class="form-group">
 												<label for="jenisBeasiswa">Jenis Beasiswa</label>
-												<input type="text" required class="form-control" id="jenisBeasiswa">
+												<select name="jenisBeasiswa" class="form-control" id="id-beasiswa">
+													<option value="">-- Pilih Jenis Beasiswa --</option>
+													<?php foreach ($beasiswa as $b) : ?>
+														<option value="<?= $b['id'] ?>"><?= $b['jenis_beasiswa'] ?></option>
+													<?php endforeach; ?>
+												</select>
 												<div class="invalid-feedback">
 													Jenis beasiswa harap di Isi
 												</div>
@@ -72,16 +85,23 @@
 											<div class="form-group">
 												<label for="namaInstansi">Nama Instansi Pemberi
 													Beasiswa</label>
-												<input type="text" required class="form-control" name="namaInstansi" id="namaInstansi">
+												<input type="text" required class="form-control" name="namaInstansi" id="namaInstansi" readonly>
 												<div class="invalid-feedback">
 													Nama instansi harap di Isi
 												</div>
 											</div>
 											<div class="form-group">
-												<label for="tahunMeneriam">Tahun Menerima Beasiswa</label>
-												<input type="text" class="form-control" name="tahunMenerima" id="tahunMeneriam" required>
+												<label for="tahunMenerima">Tahun Menerima Beasiswa</label>
+												<input type="date" class="form-control" name="tahunMenerima" id="tahunMenerima" required>
 												<div class="invalid-feedback">
 													Tahun meneriam beasiswa harap di Isi
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="lamaMenerima">Lama Menerima Beasiswa</label>
+												<input type="date" class="form-control" name="lamaMenerima" id="lamaMenerima" required>
+												<div class="invalid-feedback">
+													Lama meneriam beasiswa harap di Isi
 												</div>
 											</div>
 											<div class="form-group">
@@ -94,7 +114,6 @@
 										</div>
 										<div class="bagian-upload mt-5">
 											<h5>Informasi Upload</h5>
-
 											<div class="form-group">
 												<label for="lampiran">Lampiran</label>
 												<input type="file" name="lampiran" class="form-control-file btn" id="lampiran" required>
@@ -121,16 +140,17 @@
 										<div class="action-button">
 											<button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
 												Kirim <i class="fab fa-telegram-plane"></i></button>
-											<a href="dashboard.html" style="float:right" class="btn btn-icon btn-secondary">
-												Kembali <i class="fas fa-arrow-left"></i></a>
+
 										</div>
 									</form>
 								</div>
 							</div>
 						</div>
 					</div>
+
 				</div>
 			</div>
+
 		</div>
 	</section>
 </div>

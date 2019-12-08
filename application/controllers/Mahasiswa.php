@@ -900,9 +900,11 @@ class Mahasiswa extends CI_Controller
     // form pengajuan beasiswa 
     public function beasiswa()
     {
-
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
+        $data['penerima_beasiswa'] = $this->mahasiswa->getBeasiswa($this->session->userdata('username'));
         // set rules form validation
-        $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
+        $this->form_validation->set_rules('namaMahasiswa', 'Nama Mahasiswa', 'required');
         if ($this->form_validation->run() == false) {
             $data['title'] = "Pengajuan";
             $this->load->view("template/header", $data);
@@ -910,7 +912,60 @@ class Mahasiswa extends CI_Controller
             $this->load->view("template/sidebar", $data);
             $this->load->view("mahasiswa/beasiswa");
             $this->load->view("template/footer");
-        } else { }
+        } else {
+            $beasiswa = [
+                "id_beasiswa" => $this->input->post('jenisBeasiswa'),
+                "nim" => $this->input->post('nimMahasiswa'),
+                "tahun_menerima" => $this->input->post('tahunMenerima'),
+                "lama_menerima" => $this->input->post('lamaMenerima'),
+                "nominal" => $this->input->post('nominalBeasiswa'),
+                "validasi_beasiswa" => 0
+            ];
+
+
+            // upload file proposal
+            if ($_FILES['lampiran']['name']) {
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/beasiswa/';
+                $config['file_name'] = time() . '_' . $_FILES['lampiran']['name'];
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('lampiran')) {
+                    $beasiswa['lampiran'] = $this->upload->data('file_name');
+                } else {
+                    echo 'data gagal ditambah';
+                    echo $this->upload->display_errors();
+                    redirect("Mahasiswa/beasiswa");
+                }
+            }
+            // upload file proposal
+            if ($_FILES['uploadBukti']['name']) {
+                $config2['allowed_types'] = 'pdf';
+                $config2['max_size']     = '2048'; //kb
+                $config2['upload_path'] = './file_bukti/beasiswa/';
+                $config2['file_name'] = time() . '_' . $_FILES['uploadBukti']['name'];
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('uploadBukti')) {
+                    $beasiswa['bukti'] = $this->upload->data('file_name');
+                } else {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .  $beasiswa['lampiran']);
+                    echo 'data gagal ditambah';
+                    echo $this->upload->display_errors();
+                    redirect("Mahasiswa/beasiswa");
+                }
+            }
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-body">
+                <div class="alert-title">Beasiswa berhasil ditambah !</div>
+                Berhasil !
+                </div>
+            </div>');
+            $this->mahasiswa->insertBeasiswa($beasiswa);
+            redirect('Mahasiswa/beasiswa');
+        }
     }
 
 
