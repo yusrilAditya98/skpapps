@@ -11,7 +11,7 @@
                         <h4>Permintaan Pengajuan Rancangan Kegiatan</h4>
 
                     </div>
-                    <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post">
+                    <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
                         <div class="card-body">
                             <button type="submit" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</button>
                         </div>
@@ -154,9 +154,7 @@
             <div class="modal-body">
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card profile-widget">
-
                         <div class="profile-widget-description">
-
                             <div class="bagian-personality">
                                 <h5>Informasi Personality</h5>
                                 <div class="form-group">
@@ -193,11 +191,8 @@
                                 </div>
                                 <div class="sumber-dana-chekboxes mb-3">
                                     <h6>Sumber Dana</h6>
-
                                     <div class="form-check py-1">
-
                                     </div>
-
                                 </div>
                             </div>
                             <div class="bagian-acara mt-5">
@@ -259,7 +254,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="bagian-acara mt-5">
                                 <h5>Anggota Kegiatan</h5>
                                 <div class="row">
@@ -281,19 +275,15 @@
                                             </tr>
                                         </thead>
                                         <tbody class="daftar-mhs">
-
-
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class=" bagian-upload mt-5">
                                 <h5>Informasi Upload</h5>
-
                                 <div class="form-group">
                                     <label for="fileProposal"> File Proposal</label>
                                     <canvas id="file_proposal"></canvas>
-
                                 </div>
                                 <div class="form-group">
                                     <label for="beritaProposal">Upload Berita Kegiatan
@@ -332,7 +322,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -342,7 +331,6 @@
         </div>
     </div>
 </div>
-
 <!-- modal revisi -->
 <div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
     <div class="modal-dialog modal-lg" role=" document">
@@ -358,7 +346,6 @@
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="card profile-widget">
                             <div class="profile-widget-description">
-
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Catatan Revisi</label>
                                     <div class="col-sm-9">

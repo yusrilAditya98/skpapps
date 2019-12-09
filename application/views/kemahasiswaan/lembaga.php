@@ -22,12 +22,8 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>Tahun Periode</th>
                                         <th>Nama Lembaga</th>
-                                        <th>Jumlah Kegiatan</th>
-                                        <th>Kegiatan Terlaksana</th>
-                                        <th>Kegiatan Belum Terlaksana</th>
-                                        <th>Status Pengajuan Rancangan</th>
+                                        <th>Nama Ketua Lembaga</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -36,20 +32,10 @@
                                     foreach ($lembaga as $l) : ?>
                                         <tr>
                                             <td><?= $i++;  ?></td>
-                                            <td>2019</td>
                                             <td><?= $l['nama_lembaga'] ?></td>
-                                            <td>10</td>
-                                            <td>8</td>
-                                            <td>2</td>
+                                            <td><?= $l['nama_ketua'] ?></td>
                                             <td>
-                                                <?php if ($l['status_rencana_kegiatan'] == 0) : ?>
-                                                    <span class="badge badge-secondary">disable</span>
-                                                <?php else : ?>
-                                                    <span class="badge badge-success">enable</span>
-                                                <?php endif; ?>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-success" href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] ?>"><i class="fas fa-check"></i></a>
+                                                <a class="btn btn-info" href=""><i class="fas fa-info"></i></a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

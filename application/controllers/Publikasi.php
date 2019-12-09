@@ -9,25 +9,34 @@ class Publikasi extends CI_Controller
             redirect('auth/blocked');
         }
     }
+    private function _notif()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_psik_lpj'] = count($this->kemahasiswaan->getNotifValidasi(5, 'lpj'));
+        $this->notif['notif_psik_proposal'] = count($this->kemahasiswaan->getNotifValidasi(5, 'proposal'));
+        return $this->notif;
+    }
     public function index()
     {
         $data['title'] = 'Dashboard';
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("dashboard/dashboard_kmhsn");
+        $this->load->view("dashboard/dashboard_publikasi");
         $this->load->view("template/footer");
     }
     public function daftarProposal()
     {
         $data['title'] = 'Validasi';
+        $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("publikasi/daftar_validasi_proposal");
+        $this->load->view("Publikasi/daftar_validasi_proposal");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
@@ -35,12 +44,13 @@ class Publikasi extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['notif'] = $this->_notif();
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("publikasi/daftar_validasi_lpj");
+        $this->load->view("Publikasi/daftar_validasi_lpj");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }

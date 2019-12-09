@@ -104,3 +104,58 @@ $('.table-kategori').on('click', '.hapus-prestasi', function () {
 		}
 	})
 });
+
+$('.table-kategori').on('click', '.hapus-detail-tingkatan', function () {
+	var id_semua_tingkatan = $(this).data('id');
+	console.log(id_semua_tingkatan);
+	Swal.fire({
+		title: 'Anda yakin?',
+		text: "Detail tingkatan akan dihapus",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#d33',
+		cancelButtonColor: '#868e96',
+		confirmButtonText: 'Hapus'
+	}).then(function (result) {
+		if (result.value) {
+			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusDetailTingkatan/" + id_semua_tingkatan;
+		}
+	})
+});
+
+$('.table-kategori').on('click', '.hapus-detail-prestasi', function () {
+	$('.modalDetailTingkatan').modal('hide');
+	var id_semua_prestasi = $(this).data('id');
+	console.log(id_semua_prestasi);
+	Swal.fire({
+		title: 'Anda yakin?',
+		text: "Detail prestasi akan dihapus",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#d33',
+		cancelButtonColor: '#868e96',
+		confirmButtonText: 'Hapus'
+	}).then(function (result) {
+		if (result.value) {
+			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusDetailPrestasi/" + id_semua_prestasi;
+		}
+	})
+});
+
+$('.table-kategori').on('click', '.hapus-dasar-penilaian', function () {
+	var id_dasar_penilaian = $(this).data('id');
+	console.log(id_dasar_penilaian);
+	Swal.fire({
+		title: 'Anda yakin?',
+		text: "Dasar penilaian akan dihapus",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#d33',
+		cancelButtonColor: '#868e96',
+		confirmButtonText: 'Hapus'
+	}).then(function (result) {
+		if (result.value) {
+			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusDasarPenilaian/" + id_dasar_penilaian;
+		}
+	})
+});

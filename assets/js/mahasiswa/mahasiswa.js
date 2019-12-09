@@ -261,25 +261,15 @@ $('#danaKegiatan').keyup(function () {
 })
 
 
-// let tingkatKegiatanLpj = $('.tingkatKegiatan').val()
-
-// if (tingkatKegiatanLpj) {
-// 	let id_kegiatan = $('.id_kegiatan').val();
-// 	$.ajax({
-// 		url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatanLpj,
-// 		method: 'get',
-// 		dataType: 'json',
-// 		success: function (data) {
-// 			let partisipasi = '';
-// 			for (var i in data) {
-// 				console.log(i)
-// 				if ($('.t-prestasi_' + i).val() == data[i].id_semua_prestasi) {
-// 					partisipasi += `<option selected class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
-// 				} else {
-// 					partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
-// 				}
-// 			}
-// 			$('.partisipasiKegiatan').append(partisipasi)
-// 		}
-// 	})
-// }
+$('#id-beasiswa').on('change', function () {
+	let beasiswa = $('#id-beasiswa').val()
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/beasiswa/' + beasiswa,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+			$('#namaInstansi').val(data.nama_instansi);
+		}
+	})
+})

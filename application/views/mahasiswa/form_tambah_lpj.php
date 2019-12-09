@@ -43,7 +43,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="danaKegiatanDiterima">Anggran Diterima</label>
-                                                <input type="text" class="form-control" id="danaKegiatanDiterima" name="danaKegiatanDiterima" value="<?= ($kegiatan['dana_kegiatan'] - $kegiatan['dana_lpj']) ?>" readonly>
+                                                <input type="text" class="form-control" id="danaKegiatanDiterima" name="danaKegiatanDiterima" value="<?= ($kegiatan['dana_kegiatan'] - $kegiatan['dana_proposal']) ?>" readonly>
                                                 <small id=" anggaranHelp" class="form-text text-muted">Dana
                                                     anggaran yang akan diterima 30% dari besar anggaran
                                                     pengajuan</small>

@@ -26,9 +26,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    <?php $index = 1; ?>
                                     <?php foreach ($poinskp as $p) : ?>
                                         <tr>
-                                            <td>1</td>
+                                            <td><?= $index++; ?></td>
                                             <td><?= $p['tgl_pengajuan'] ?></td>
                                             <td><?= $p['nim'] ?></td>
                                             <td><?= $p['nama'] ?> </td>
@@ -61,7 +62,6 @@
         </div>
     </section>
 </div>
-
                                     <!-- modal detail skp -->
 <div class=" modal fade" tabindex="-1" role="dialog" id="detailKegiatan">
                                                             <div class="modal-dialog modal-lg"" role=" document">

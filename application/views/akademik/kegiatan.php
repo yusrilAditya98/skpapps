@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped text-wrap table-kategori">
+                            <table class="table table-striped text-wrap table-kategori" id="tabel-kegiatan">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
@@ -32,6 +32,7 @@
                                         <th>Nama Pemateri</th>
                                         <th>Ruangan</th>
                                         <th>Status</th>
+                                        <th>Validasi</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -47,8 +48,19 @@
                                                 <?php
                                                     if ($k['status_terlaksana'] == 0) {
                                                         echo '<p class="text-danger">Belum Terlaksana</p>';
-                                                    } else {
+                                                    } else if ($k['status_terlaksana'] == 1) {
                                                         echo '<p class="text-success">Sudah Terlaksana</p>';
+                                                    } else {
+                                                        echo '<p class="text-info">Sedang Berlangsung</p>';
+                                                    }
+                                                    ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    if ($k['status_terlaksana'] == 2) {
+                                                        echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
+                                                    } else {
+                                                        echo '';
                                                     }
                                                     ?>
                                             </td>
@@ -172,6 +184,52 @@
                             <button type="submit" class="btn btn-primary float-right">Edit Kegiatan</button>
                             </form>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modeal Edit Kegiatan -->
+
+<!-- Awal Modal Edit Kegiatan -->
+<div class="modal fade bd-example-modal-lg modalValidasiKegiatanAkademik" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white ml-4" id="exampleModalLabel">Validasi Kegiatan Akademik</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-4">
+                    <div class="row no-gutters">
+                        <div class="col-lg-4">
+                            <img src="" class="card-img kode_qr_validasi">
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="card-body">
+                                <h4 class="card-title judul_kegiatan_validasi"></h4>
+                                <p class="card-text pemateri_validasi"></p>
+                                <p class="card-text deskripsi_validasi"></p>
+                                <p class="card-text lokasi_validasi"></p>
+                                <div class="row">
+                                    <p class="col-lg-5"><small class="text-muted tanggal_event_validasi"></small></p>
+                                    <p class="col-lg-7"><small class="text-muted waktu_kegiatan_validasi"></small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <div class="col-lg-12">
+                            <button class="btn btn-info mb-3" onclick="eventCheckBox()">Hadir Semua</button>
+                        </div>
+                        <form action="<?= base_url('akademik/validasiKegiatan/'); ?>" method="post">
+                            <div class="col-lg-12 tabel-peserta_validasi">
+                            </div>
+                            <button type="submit" class="btn btn-success float-right">Validasi</button>
+                        </form>
                     </div>
                 </div>
             </div>

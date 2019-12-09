@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class API_skp extends CI_Controller
 {
+    private $kondisi;
+    private $tahun;
+    private $id_lembaga;
     public function __construct()
     {
         parent::__construct();
@@ -22,6 +25,7 @@ class API_skp extends CI_Controller
                 'nim' => $this->session->userdata('username'),
                 'id_kuliah_tamu' => intval($id_kegiatan)
             ];
+            $data = $this->db->get_where('peserta_kuliah_tamu', ['nim' => $data_peserta_kuliah_tamu['nim'], 'id_kuliah_tamu' => $data_peserta_kuliah_tamu['id_kuliah_tamu']])->result_array();
             $this->db->insert('peserta_kuliah_tamu', $data_peserta_kuliah_tamu);
             $this->session->unset_userdata('id_kegiatan');
             $this->session->set_flashdata('message', 'Pendaftaran kuliah tamu berhasil');
@@ -90,6 +94,43 @@ class API_skp extends CI_Controller
         $data = $this->db->get_where('tingkatan', ['id_tingkatan' => $id])->row_array();
         echo json_encode($data);
     }
+    public function getDetailTingkatan($id)
+    {
+        $this->db->select('id_semua_tingkatan, id_tingkatan, jenis_kegiatan.id_jenis_kegiatan, bidang_kegiatan.id_bidang');
+        $this->db->where('semua_tingkatan.id_semua_tingkatan', $id);
+        $this->db->from('semua_tingkatan');
+        $this->db->join('jenis_kegiatan', 'semua_tingkatan.id_jenis_kegiatan = jenis_kegiatan.id_jenis_kegiatan');
+        $this->db->join('bidang_kegiatan', 'jenis_kegiatan.id_bidang = bidang_kegiatan.id_bidang');
+        $data['real'] = $this->db->get()->row_array();
+        $data['list_bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['list_jenis'] = $this->db->get_where('jenis_kegiatan', ['id_bidang' => $data['real']['id_bidang']])->result_array();
+        $data['list_tingkatan'] = $this->db->get('tingkatan')->result_array();
+
+        echo json_encode($data);
+    }
+    public function getDetailPrestasi($id)
+    {
+
+        $this->db->where('id_semua_prestasi', intval($id));
+        $this->db->from('semua_prestasi');
+        $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
+        $this->db->join('dasar_penilaian', 'semua_prestasi.id_dasar_penilaian = dasar_penilaian.id_dasar_penilaian');
+        $this->db->join('semua_tingkatan', 'semua_prestasi.id_semua_tingkatan = semua_tingkatan.id_semua_tingkatan');
+        $this->db->join('tingkatan', 'semua_tingkatan.id_tingkatan = tingkatan.id_tingkatan');
+        $this->db->join('jenis_kegiatan', 'semua_tingkatan.id_jenis_kegiatan = jenis_kegiatan.id_jenis_kegiatan');
+        $this->db->join('bidang_kegiatan', 'jenis_kegiatan.id_bidang = bidang_kegiatan.id_bidang');
+
+        $data['real'] = $this->db->get()->row_array();
+        $data['list_bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['list_jenis'] = $this->db->get_where('jenis_kegiatan', ['id_bidang' => $data['real']['id_bidang']])->result_array();
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->semuaTingkatanKegiatan = $this->poinskp->getSemuaTingkatanJenis($data['real']['id_jenis_kegiatan']);
+        $data['list_tingkatan'] = $this->semuaTingkatanKegiatan;
+        $data['list_prestasi'] = $this->db->get('prestasi')->result_array();
+        $data['list_dasar'] = $this->db->get('dasar_penilaian')->result_array();
+        header('Content-type: application/json');
+        echo json_encode($data);
+    }
     public function getTingkat()
     {
         $data = $this->db->get('tingkatan')->result_array();
@@ -125,6 +166,11 @@ class API_skp extends CI_Controller
     public function getPrestasi($id)
     {
         $data = $this->db->get_where('prestasi', ['id_prestasi' => $id])->row_array();
+        echo json_encode($data);
+    }
+    public function getDasarPenilaian($id)
+    {
+        $data = $this->db->get_where('dasar_penilaian', ['id_dasar_penilaian' => $id])->row_array();
         echo json_encode($data);
     }
     public function partisipasiKegiatan($id_sm_tingkat)
@@ -165,5 +211,28 @@ class API_skp extends CI_Controller
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga();
         echo json_encode($data['lembaga']);
+    }
+    public function dataAnggaran($id_lembaga)
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($this->input->get('tahun'), $id_lembaga);
+        echo json_encode($data['anggaran']);
+    }
+    public function dataJumlahKegiatan($id_lembaga)
+    {
+        if ($this->session->userdata('user_profil_kode') != 4) {
+            redirect('Auth/blocked');
+        }
+        $this->load->model("Model_kemahasiswaan", 'kemahasiswaan');
+        $this->kondisi = $this->input->get('kondisi');
+        $this->tahun = $this->input->get('tahun');
+        $this->id_lembaga = $id_lembaga;
+        $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
+        echo json_encode($data);
+    }
+    public function beasiswa($id_beasiswa)
+    {
+        $data = $this->db->get_where('beasiswa', ['id' => $id_beasiswa])->row_array();
+        echo json_encode($data);
     }
 }

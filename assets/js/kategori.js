@@ -1,103 +1,10 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-$('.detail-tingkatan').on('click', function () {
-	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/getSemuaTingkatanKegiatan',
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			// console.log(data);
-			$('.tabel-semua-tingkatan').html('');
-			$('.tabel-semua-tingkatan').html(`<div class="table-responsive">
-				<table class="table table-striped table-tingkatan">
-					<thead>
-						<tr class="text-center">
-							<th>No</th>
-							<th>Tingkatan</th>
-							<th>Jenis Kegiatan</th>
-							<th>Bidang Kegiatan</th>
-							<th>Aksi</th>
-						</tr>
-					</thead>
-					<tbody class="body-tabel">
-					</tbody>
-				</table>
-			</div>`);
-			var i = 0;
-			data.forEach(function (dataA) {
-				$('.body-tabel').append(`<tr>
-					<td class="text-center">` + (++i) + `</td>
-					<td>` + dataA['nama_tingkatan'] + `</td>
-					<td>` + dataA['jenis_kegiatan'] + `</td>
-					<td>` + dataA['nama_bidang'] + `</td>
-					<td class="text-center">
-                        <button class="btn btn-success edit-detail-tingkatan text-wrap" data-toggle="modal" data-target=".modalEditDetailTingkatan" data-id="` + dataA['id_semua_tingkatan'] + `">Edit</button>
-                        <button class="btn btn-danger hapus-detail-tingkatan text-wrap" data-id="` + dataA['id_semua_tingkatan'] + `">Hapus</button>
-                    </td>
-				</tr>`)
-			})
-
-			$(".table-tingkatan").DataTable({
-				"pageLength": 5
-			});
-		}
-	});
-})
-$('.detail-prestasi').on('click', function () {
-	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/getSemuaPrestasiKegiatan',
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			console.log(data);
-			$('.tabel-semua-prestasi').html('');
-			$('.tabel-semua-prestasi').html(`<div class="table-responsive">
-				<table class="table table-striped table-prestasi">
-					<thead>
-						<tr>
-							<th class="text-center">No</th>
-							<th>Bidang</th>
-							<th>Jenis</th>
-							<th>Tingkatan</th>
-							<th>Prestasi</th>
-							<th>Bobot</th>
-							<th>Dasar Penilaian</th>
-							<th>Aksi</th>
-						</tr>
-					</thead>
-					<tbody class="body-tabel">
-					</tbody>
-				</table>
-			</div>`);
-			var i = 0;
-			data.forEach(function (dataA) {
-				$('.body-tabel').append(`<tr>
-					<td class="text-center">` + (++i) + `</td>
-					<td>` + dataA['nama_bidang'] + `</td>
-					<td>` + dataA['jenis_kegiatan'] + `</td>
-					<td>` + dataA['nama_tingkatan'] + `</td>
-					<td>` + dataA['nama_prestasi'] + `</td>
-					<td>` + dataA['bobot'] + `</td>
-					<td>` + dataA['nama_dasar_penilaian'] + `</td>
-					<td class="text-center">
-                        <button class="btn btn-success edit-detail-prestasi text-wrap" data-toggle="modal" data-target=".modalEditDetailPrestasi" data-id="` + dataA['id_semua_prestasi'] + `">Edit</button>
-                        <button class="btn btn-danger hapus-detail-prestasi text-wrap" data-id="` + dataA['id_semua_prestasi'] + `">Hapus</button>
-                    </td>
-				</tr>`)
-			})
-			$(".table-prestasi").DataTable({
-				"pageLength": 5
-			});
-		}
-	});
-})
-
 $('.tambahBidang').on('click', function () {
 	var link_a = window.location.origin + '/skpapps/kemahasiswaan/tambahBidang/';
 	$('form').attr('action', link_a);
 })
-
 
 $('.tambahJenis').on('click', function () {
 	$.ajax({
@@ -124,6 +31,12 @@ $('.tambahPrestasi').on('click', function () {
 	var link_a = window.location.origin + '/skpapps/kemahasiswaan/tambahPrestasi/';
 	$('form').attr('action', link_a);
 })
+
+$('.tambah-dasar-penilaian').on('click', function () {
+	var link_a = window.location.origin + '/skpapps/kemahasiswaan/tambahDasarPenilaian/';
+	$('form').attr('action', link_a);
+})
+
 
 $('.tambah-detail-tingkatan').on('click', function () {
 	$.ajax({
@@ -246,10 +159,10 @@ $('.tingkatan_tambah_prestasi').on('change', function () {
 		success: function (data) {
 			console.log(data);
 			data['prestasi'].forEach(function (prestasi) {
-				$('.prestasi_tambah_prestasi').append(`<option value="` + prestasi['id_semua_prestasi'] + `">` + prestasi['nama_prestasi'] + `</option>`)
+				$('.prestasi_tambah_prestasi').append(`<option value="` + prestasi['id_prestasi'] + `">` + prestasi['nama_prestasi'] + `</option>`)
 			});
 			data['dasar_penilaian'].forEach(function (dasar) {
-				$('.dasar_tambah_prestasi').append(`<option value="` + dasar['id_dasar_penilaiana'] + `">` + dasar['nama_dasar_penilaian'] + `</option>`)
+				$('.dasar_tambah_prestasi').append(`<option value="` + dasar['id_dasar_penilaian'] + `">` + dasar['nama_dasar_penilaian'] + `</option>`)
 			});
 		}
 	});
@@ -275,12 +188,13 @@ $('.table-kategori').on('click', '.edit-bidang', function () {
 $('.table-kategori').on('click', '.edit-jenis', function () {
 	let id = $(this).data('id');
 	// console.log(id);
+	$('#bidang_kegiatan_jenis').html(``);
 	$.ajax({
 		url: segments[0] + '/skpapps/API_skp/getJenisKegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
+			// console.log(data);
 			var link_a = window.location.origin + '/skpapps/kemahasiswaan/editJenis/' + id;
 			$('form').attr('action', link_a);
 			$('#jenis_kegiatan_edit').val(data['jenisKegiatan']['jenis_kegiatan']);
@@ -303,10 +217,10 @@ $('.table-kategori').on('click', '.edit-tingkatan', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
+			// console.log(data);
 			var link_a = window.location.origin + '/skpapps/kemahasiswaan/editTingkatan/' + id;
 			$('form').attr('action', link_a);
-			$('#tingkatan_edit').val(data['nama_tingkatan']);
+			$('#tingkatan_kegiatan_edit').val(data['nama_tingkatan']);
 		}
 	});
 })
@@ -319,10 +233,198 @@ $('.table-kategori').on('click', '.edit-prestasi', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
+			// console.log(data);
 			var link_a = window.location.origin + '/skpapps/kemahasiswaan/editPrestasi/' + id;
 			$('form').attr('action', link_a);
-			$('#prestasi_edit').val(data['nama_prestasi']);
+			$('#prestasi_kegiatan_edit').val(data['nama_prestasi']);
+		}
+	});
+})
+
+$('.table-kategori').on('click', '.edit-dasar-penilaian', function () {
+	let id = $(this).data('id');
+	// console.log(id);
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/getDasarPenilaian/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			// console.log(data);
+			var link_a = window.location.origin + '/skpapps/kemahasiswaan/editDasarPenilaian/' + id;
+			$('form').attr('action', link_a);
+			$('#dasar_penilaian_edit').val(data['nama_dasar_penilaian']);
+		}
+	});
+})
+
+$('.table-kategori').on('click', '.edit-detail-tingkatan', function () {
+	let id = $(this).data('id');
+	// console.log(id);
+	$('#bidang_detailT_edit').html(``);
+	$('#jenis_detailT_edit').html(``);
+	$('#tingkatan_detailT_edit').html(``);
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/getDetailTingkatan/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			console.log(data);
+			var link_a = window.location.origin + '/skpapps/kemahasiswaan/editDetailTingkatan/' + id;
+			$('form').attr('action', link_a);
+			data['list_bidang'].forEach(function (bidang) {
+				if (bidang['id_bidang'] == data['real']['id_bidang']) {
+					$('#bidang_detailT_edit').append(`<option value="` + bidang['id_bidang'] + `" selected>` + bidang['nama_bidang'] + `</option>`)
+				} else {
+					$('#bidang_detailT_edit').append(`<option value="` + bidang['id_bidang'] + `">` + bidang['nama_bidang'] + `</option>`)
+				}
+			})
+			data['list_jenis'].forEach(function (jenis) {
+				if (jenis['id_jenis_kegiatan'] == data['real']['id_jenis_kegiatan']) {
+					$('#jenis_detailT_edit').append(`<option value="` + jenis['id_jenis_kegiatan'] + `" selected>` + jenis['jenis_kegiatan'] + `</option>`)
+				} else {
+					$('#jenis_detailT_edit').append(`<option value="` + jenis['id_jenis_kegiatan'] + `">` + jenis['jenis_kegiatan'] + `</option>`)
+				}
+			})
+			data['list_tingkatan'].forEach(function (tingkatan) {
+				if (tingkatan['id_tingkatan'] == data['real']['id_tingkatan']) {
+					$('#tingkatan_detailT_edit').append(`<option value="` + tingkatan['id_tingkatan'] + `" selected>` + tingkatan['nama_tingkatan'] + `</option>`)
+				} else {
+					$('#tingkatan_detailT_edit').append(`<option value="` + tingkatan['id_tingkatan'] + `">` + tingkatan['nama_tingkatan'] + `</option>`)
+				}
+			})
+		}
+	});
+})
+$('.bidang_detailT_edit').on('change', function () {
+	$('.jenis_detailT_edit').html('<option value="0" disabled selected hidden>Pilih Jenis Kegiatan</option>');
+	var a = $('.bidang_detailT_edit').val();
+	console.log(a);
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/jenisKegiatan/' + a,
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+			console.log(data);
+			data.forEach(function (jenis) {
+				$('.jenis_detailT_edit').append(`<option value="` + jenis['id_jenis_kegiatan'] + `">` + jenis['jenis_kegiatan'] + `</option>`)
+			});
+		}
+	});
+})
+$('.jenis_detailT_edit').on('change', function () {
+	// $('.tingkatan_detailT_edit').html('<option value="0" disabled selected hidden>Pilih Tingkatan Kegiatan</option>');
+	var a = $('.jenis_detailT_edit').val();
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/getTingkat/',
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+			// console.log(data);
+			data.forEach(function (tingkatan) {
+				$('.tingkatan_detailT_edit').append(`<option value="` + tingkatan['id_tingkatan'] + `">` + tingkatan['nama_tingkatan'] + `</option>`)
+			});
+		}
+	});
+})
+
+$('.table-kategori').on('click', '.edit-detail-prestasi', function () {
+	let id = $(this).data('id');
+	// console.log(id);
+	$('#bidang_detailP_edit').html(``);
+	$('#jenis_detailP_edit').html(``);
+	$('#tingkatan_detailP_edit').html(``);
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/getDetailPrestasi/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			console.log(data);
+			var link_a = window.location.origin + '/skpapps/kemahasiswaan/editDetailPrestasi/' + id;
+			$('form').attr('action', link_a);
+			data['list_bidang'].forEach(function (bidang) {
+				if (bidang['id_bidang'] == data['real']['id_bidang']) {
+					$('#bidang_detailP_edit').append(`<option value="` + bidang['id_bidang'] + `" selected>` + bidang['nama_bidang'] + `</option>`)
+				} else {
+					$('#bidang_detailP_edit').append(`<option value="` + bidang['id_bidang'] + `">` + bidang['nama_bidang'] + `</option>`)
+				}
+			})
+			data['list_jenis'].forEach(function (jenis) {
+				if (jenis['id_jenis_kegiatan'] == data['real']['id_jenis_kegiatan']) {
+					$('#jenis_detailP_edit').append(`<option value="` + jenis['id_jenis_kegiatan'] + `" selected>` + jenis['jenis_kegiatan'] + `</option>`)
+				} else {
+					$('#jenis_detailP_edit').append(`<option value="` + jenis['id_jenis_kegiatan'] + `">` + jenis['jenis_kegiatan'] + `</option>`)
+				}
+			})
+			data['list_tingkatan'].forEach(function (tingkatan) {
+				if (tingkatan['id_semua_tingkatan'] == data['real']['id_semua_tingkatan']) {
+					$('#tingkatan_detailP_edit').append(`<option value="` + tingkatan['id_semua_tingkatan'] + `" selected>` + tingkatan['nama_tingkatan'] + `</option>`)
+				} else {
+					$('#tingkatan_detailP_edit').append(`<option value="` + tingkatan['id_semua_tingkatan'] + `">` + tingkatan['nama_tingkatan'] + `</option>`)
+				}
+			})
+			data['list_prestasi'].forEach(function (prestasi) {
+				if (prestasi['id_prestasi'] == data['real']['id_prestasi']) {
+					$('#prestasi_detailP_edit').append(`<option value="` + prestasi['id_prestasi'] + `" selected>` + prestasi['nama_prestasi'] + `</option>`)
+				} else {
+					$('#prestasi_detailP_edit').append(`<option value="` + prestasi['id_prestasi'] + `">` + prestasi['nama_prestasi'] + `</option>`)
+				}
+			})
+			data['list_dasar'].forEach(function (dasar) {
+				if (dasar['id_dasar_penilaian'] == data['real']['id_dasar_penilaian']) {
+					$('#dasar_detailP_edit').append(`<option value="` + dasar['id_dasar_penilaian'] + `" selected>` + dasar['nama_dasar_penilaian'] + `</option>`)
+				} else {
+					$('#dasar_detailP_edit').append(`<option value="` + dasar['id_dasar_penilaian'] + `">` + dasar['nama_dasar_penilaian'] + `</option>`)
+				}
+			})
+			$('#bobot_detailP_edit').val(data['real']['bobot']);
+		}
+	});
+})
+$('.bidang_detailP_edit').on('change', function () {
+	$('.jenis_detailP_edit').html('<option value="0" disabled selected hidden>Pilih Jenis Kegiatan</option>');
+	$('.tingkatan_detailP_edit').html('<option value="0" disabled selected hidden>Pilih Tingkatan Kegiatan</option>');
+	var a = $('.bidang_detailP_edit').val();
+	console.log(a);
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/jenisKegiatan/' + a,
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+			console.log(data);
+			data.forEach(function (jenis) {
+				$('.jenis_detailP_edit').append(`<option value="` + jenis['id_jenis_kegiatan'] + `">` + jenis['jenis_kegiatan'] + `</option>`)
+			});
+		}
+	});
+})
+$('.jenis_detailP_edit').on('change', function () {
+	$('.tingkatan_detailP_edit').html('<option value="0" disabled selected hidden>Pilih Tingkatan Kegiatan</option>');
+	var a = $('.jenis_detailP_edit').val();
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/getSemuaTingkatanJenis/' + a,
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+			// console.log(data);
+			data.forEach(function (tingkatan) {
+				$('.tingkatan_detailP_edit').append(`<option value="` + tingkatan['id_semua_tingkatan'] + `">` + tingkatan['nama_tingkatan'] + `</option>`)
+			});
+		}
+	});
+})
+$('.tingkatan_detailP_edit').on('change', function () {
+	$.ajax({
+		url: segments[0] + '/skpapps/API_skp/getPres/',
+		dataType: 'json',
+		type: 'get',
+		success: function (data) {
+			console.log(data);
+			data['prestasi'].forEach(function (prestasi) {
+				$('.prestasi_detailP_edit').append(`<option value="` + prestasi['id_prestasi'] + `">` + prestasi['nama_prestasi'] + `</option>`)
+			});
+			data['dasar_penilaian'].forEach(function (dasar) {
+				$('.dasar_detailP_edit').append(`<option value="` + dasar['id_dasar_penilaian'] + `">` + dasar['nama_dasar_penilaian'] + `</option>`)
+			});
 		}
 	});
 })

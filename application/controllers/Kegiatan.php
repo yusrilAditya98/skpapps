@@ -9,9 +9,18 @@ class Kegiatan extends CI_Controller
         parent::__construct();
         is_logged_in();
     }
+    // metod mememberikan notif pada sidebar
+    private function _notif()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_bem_lpj'] = count($this->kemahasiswaan->getNotifValidasi(2, 'lpj'));
+        $this->notif['notif_bem_proposal'] = count($this->kemahasiswaan->getNotifValidasi(2, 'proposal'));
+        return $this->notif;
+    }
     public function index()
     {
         $data['title'] = 'Dashboard';
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -26,6 +35,7 @@ class Kegiatan extends CI_Controller
     public function pengajuanRancangan()
     {
         $data['title'] = 'Pengajuan';
+        $data['notif'] = $this->_notif();
         $this->load->model("Model_lembaga", 'lembaga');
         $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
         $data['tahun'] = $this->lembaga->getTahunRancangan();
@@ -47,6 +57,7 @@ class Kegiatan extends CI_Controller
     public function tambahRancanganKegiatan()
     {
         $data['title'] = 'Pengajuan';
+        $data['notif'] = $this->_notif();
         $this->load->model("Model_lembaga", 'lembaga');
         $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
         $dana = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
@@ -98,6 +109,7 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = 'Pengajuan';
         $this->load->model("Model_lembaga", 'lembaga');
+        $data['notif'] = $this->_notif();
         $data['rancangan'] = $this->lembaga->getDataRancangan($id_rancangan);
         $data['lembaga'] = $this->lembaga->getDataLembaga($this->session->userdata('username'));
         $dana = $this->lembaga->getDanaPagu($this->session->userdata('username'), $data['lembaga']['tahun_rancangan']);
@@ -198,10 +210,11 @@ class Kegiatan extends CI_Controller
         $this->lembaga->updateStatusRancanganByPeriode(3, $this->session->userdata('username'), $this->input->post('tahunPengajuan'));
         redirect('Kegiatan/pengajuanRancangan');
     }
-    // daftar pengajuan proposal kegiatan
+    // melihat daftar pengajuan proposal kegiatan
     public function daftarPengajuanProposal()
     {
         $data['title'] = "Pengajuan";
+        $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
@@ -212,11 +225,13 @@ class Kegiatan extends CI_Controller
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
+    // metod untuk melakukan pengajuan proposal
     public function tambahProposal($id_proker)
     {
         $this->load->model('Model_lembaga', 'lembaga');
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['notif'] = $this->_notif();
         $data['proker'] = $this->lembaga->getDataRancangan($id_proker);
         $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();;
         $data['dana'] = $this->db->get('sumber_dana')->result_array();
@@ -243,8 +258,8 @@ class Kegiatan extends CI_Controller
                 'id_lembaga' => $this->session->userdata('username'),
                 'tanggal_kegiatan' => $this->input->post('tglPelaksanaan'),
                 'lokasi_kegiatan' => $this->input->post('tempatPelaksanaan'),
-                'periode' => date("Y"),
-                'acc_rancangan' => 1,
+                'periode' => $this->input->post('tahun_kegiatan'),
+                'acc_rancangan' => $this->input->post('id_rancangan'),
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
                 'tgl_pengajuan_proposal' => date("Y-m-d"),
                 'id_penanggung_jawab' => $this->input->post('nim'),
@@ -258,10 +273,11 @@ class Kegiatan extends CI_Controller
                 $config['allowed_types'] = 'pdf';
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/proposal/';
+                $config['file_name'] = $proposal['waktu_pengajuan'] . '_proposal_' . $this->session->userdata('username') . '.pdf';
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('fileProposal')) {
-                    $proposal['proposal_kegiatan'] = $_FILES['fileProposal']['name'];
+                    $proposal['proposal_kegiatan'] = $this->upload->data('file_name');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
                         <div class="alert-icon"><i class="far fa-times"></i></div>
@@ -279,12 +295,13 @@ class Kegiatan extends CI_Controller
                 $config2['allowed_types'] = 'pdf';
                 $config2['max_size']     = '2048'; //kb
                 $config2['upload_path'] = './file_bukti/berita_proposal/';
+                $config2['file_name'] = $proposal['waktu_pengajuan'] . '_berita_proposal_' . $this->session->userdata('username') . '.pdf';
                 $this->load->library('upload', $config2);
                 $this->upload->initialize($config2);
                 if ($this->upload->do_upload('beritaProposal')) {
-                    $proposal['berita_proposal'] = $_FILES['beritaProposal']['name'];
+                    $proposal['berita_proposal'] = $this->upload->data('file_name');
                 } else {
-                    unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
+                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['waktu_pengajuan'] . '_proposal_' . $this->session->userdata('username') . '.pdf');
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
                         <div class="alert-icon"><i class="far fa-times"></i></div>
                         <div class="alert-body">
@@ -307,8 +324,8 @@ class Kegiatan extends CI_Controller
                     $gambar['d_proposal_1'] = $_FILES['gambarKegiatanProposal1']['name'];
                     $gambar['d_proposal_2'] = $_FILES['gambarKegiatanProposal2']['name'];
                 } else {
-                    unlink(FCPATH . "file_bukti/berita_proposal/" . $_FILES['beritaProposal']['name']);
-                    unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
+                    unlink(FCPATH . "file_bukti/berita_proposal/" .  $proposal['waktu_pengajuan'] . '_berita_proposal_' . $this->session->userdata('username') . '.pdf');
+                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['waktu_pengajuan'] . '_proposal_' . $this->session->userdata('username') . '.pdf');
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
                         <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
                         <div class="alert-body">
@@ -398,6 +415,7 @@ class Kegiatan extends CI_Controller
         // $id_kegiatan = $this->input->post('id_kegiatan');
         $this->load->model('Model_mahasiswa', 'mahasiswa');
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['notif'] = $this->_notif();
         $data['kegiatan'] = $this->kegiatan->getInfoKegiatan($id_kegiatan, $this->session->userdata('username'));
         $data['tingkat'] = $this->kegiatan->getInfoTingkat($id_kegiatan);
         $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();
@@ -431,10 +449,8 @@ class Kegiatan extends CI_Controller
                 'tanggal_kegiatan' => $this->input->post('tglPelaksanaan'),
                 'lokasi_kegiatan' => $this->input->post('tempatPelaksanaan'),
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
-                'tgl_pengajuan_proposal' => date("Y-m-d"),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
-                'waktu_pengajuan' => time()
             ];
             if ($this->input->post('jenis_revisi') == 0) {
                 $proposal['status_selesai_proposal'] = 0;
@@ -446,11 +462,12 @@ class Kegiatan extends CI_Controller
                 $config['allowed_types'] = 'pdf';
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/proposal/';
+                $config['file_name'] =  $data['kegiatan']['proposal_kegiatan'];
                 $this->load->library('upload', $config);
                 unlink(FCPATH . "file_bukti/proposal/" . $data['kegiatan']['proposal_kegiatan']);
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('fileProposal')) {
-                    $proposal['proposal_kegiatan'] = $_FILES['fileProposal']['name'];
+                    $proposal['proposal_kegiatan'] = $this->upload->data('file_name');
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
                         <div class="alert-icon"><i class="far fa-times"></i></div>
@@ -468,13 +485,14 @@ class Kegiatan extends CI_Controller
                 $config2['allowed_types'] = 'pdf';
                 $config2['max_size']     = '2048'; //kb
                 $config2['upload_path'] = './file_bukti/berita_proposal/';
+                $config2['file_name'] =  $data['kegiatan']['berita_proposal'];
                 $this->load->library('upload', $config2);
                 unlink(FCPATH . "file_bukti/berita_proposal/" . $data['kegiatan']['berita_proposal']);
                 $this->upload->initialize($config2);
                 if ($this->upload->do_upload('beritaProposal')) {
-                    $proposal['berita_proposal'] = $_FILES['beritaProposal']['name'];
+                    $proposal['berita_proposal'] = $this->data->upload('file_name');;
                 } else {
-                    unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
+                    unlink(FCPATH . "file_bukti/proposal/" . $data['kegiatan']['proposal_kegiatan']);
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
                         <div class="alert-icon"><i class="far fa-times"></i></div>
                         <div class="alert-body">
@@ -584,6 +602,7 @@ class Kegiatan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -591,11 +610,13 @@ class Kegiatan extends CI_Controller
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
+    // metod untuk mengajuan lpj
     public function tambahLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_poinskp', 'poinskp');
         $data['title'] = "Pengajuan";
+        $data['notif'] = $this->_notif();
         $data['kegiatan'] = $this->kegiatan->getInfoKegiatan($id_kegiatan, $this->session->userdata('username'));
         $data['dana'] = $this->kegiatan->getInfoDana($id_kegiatan);
         $data['anggota'] = $this->kegiatan->getInfoAnggota($id_kegiatan);
@@ -714,11 +735,13 @@ class Kegiatan extends CI_Controller
             redirect("Kegiatan/pengajuanLpj");
         }
     }
+    // metod untuk edit lpj
     public function editLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_poinskp', 'poinskp');
         $data['title'] = "Pengajuan";
+        $data['notif'] = $this->_notif();
         $data['kegiatan'] = $this->kegiatan->getInfoKegiatan($id_kegiatan);
         $data['dana'] = $this->kegiatan->getInfoDana($id_kegiatan);
         $data['anggota'] = $this->kegiatan->getInfoAnggota($id_kegiatan);
@@ -860,12 +883,14 @@ class Kegiatan extends CI_Controller
             redirect("Kegiatan/pengajuanLpj");
         }
     }
+    // menampilkan permintaan daftar proposal
     public function daftarProposal()
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -873,12 +898,14 @@ class Kegiatan extends CI_Controller
         $this->load->view('modal/modal');
         $this->load->view("template/footer");
     }
+    // menampilkan permintaan daftar lpj
     public function daftarLpj()
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
+        $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -886,6 +913,7 @@ class Kegiatan extends CI_Controller
         $this->load->view('modal/modal');
         $this->load->view("template/footer");
     }
+    // metod bem melakukan validasi proposal
     public function validasiProposal($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
@@ -917,6 +945,7 @@ class Kegiatan extends CI_Controller
         }
         redirect('kegiatan/daftarProposal');
     }
+    // metode bem melakukan validasi lpj
     public function validasiLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');

@@ -22,6 +22,10 @@ class Mahasiswa extends CI_Controller
         if ($this->session->userdata('id_kegiatan')) {
             redirect('API_skp/gabungKegiatan');
         }
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['poinskp'] = $this->poinskp->getPoinSkp($this->session->userdata('username'), null, 5);
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($this->session->userdata('username'));
         $data['title'] = "Dashboard";
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -51,7 +55,6 @@ class Mahasiswa extends CI_Controller
     {
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
-
         if ($this->form_validation->run() == false) {
             $data['title'] = "Tambah Poin Skp";
             $this->load->view("template/header", $data);
@@ -76,7 +79,6 @@ class Mahasiswa extends CI_Controller
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/poinskp/';
                 $this->load->library('upload', $config);
-
                 if ($this->upload->do_upload('uploadBukti')) {
                     $this->poinskp->insertPoinSkp($this->dataPoinSkp);
                 } else {
@@ -104,10 +106,8 @@ class Mahasiswa extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $this->dataPoinSkp = $this->poinskp->getPoinSkp($this->session->userdata('username'), $id_kegiatan);
-
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
-
         if ($this->form_validation->run() == false) {
             $data['title'] = "Edit Poin Skp";
             $this->load->view("template/header", $data);
@@ -126,12 +126,10 @@ class Mahasiswa extends CI_Controller
                 'tgl_pengajuan' => date("Y-m-d")
             ];
             if ($_FILES['uploadBukti']['name']) {
-
                 $config['allowed_types'] = 'pdf';
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/poinskp/';
                 $this->load->library('upload', $config);
-
                 unlink(FCPATH . "file_bukti/poinskp/" . $this->dataPoinSkp[0]['file_bukti']);
                 if ($this->upload->do_upload('uploadBukti')) {
                     $data['file_bukti'] = $_FILES['uploadBukti']['name'];
@@ -202,8 +200,6 @@ class Mahasiswa extends CI_Controller
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
                 'waktu_pengajuan' => time()
             ];
-            var_dump($proposal);
-            die;
             // upload file proposal
             if ($_FILES['fileProposal']['name']) {
                 $config['allowed_types'] = 'pdf';
@@ -215,12 +211,12 @@ class Mahasiswa extends CI_Controller
                     $proposal['proposal_kegiatan'] = $_FILES['fileProposal']['name'];
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                            <div class="alert-icon"><i class="far fa-times"></i></div>
-                            <div class="alert-body">
-                            <div class="alert-title">File proposal tidak sesuai format (.pdf/2mb)</div>
-                            Data proposal gagal ditambah !
-                            </div>
-                        </div>');
+                        <div class="alert-icon"><i class="far fa-times"></i></div>
+                        <div class="alert-body">
+                        <div class="alert-title">File proposal tidak sesuai format (.pdf/2mb)</div>
+                        Data proposal gagal ditambah !
+                        </div>
+                    </div>');
                     echo $this->upload->display_errors();
                     redirect("Mahasiswa/pengajuanProposal");
                 }
@@ -237,12 +233,12 @@ class Mahasiswa extends CI_Controller
                 } else {
                     unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                            <div class="alert-icon"><i class="far fa-times"></i></div>
-                            <div class="alert-body">
-                            <div class="alert-title">File berita proposal tidak sesuai format (.pdf/2mb)</div>
-                            Data proposal gagal ditambah !
-                            </div>
-                        </div>');
+                        <div class="alert-icon"><i class="far fa-times"></i></div>
+                        <div class="alert-body">
+                        <div class="alert-title">File berita proposal tidak sesuai format (.pdf/2mb)</div>
+                        Data proposal gagal ditambah !
+                        </div>
+                    </div>');
                     echo $this->upload->display_errors();
                     redirect("Mahasiswa/pengajuanProposal");
                 }
@@ -261,12 +257,12 @@ class Mahasiswa extends CI_Controller
                     unlink(FCPATH . "file_bukti/berita_proposal/" . $_FILES['beritaProposal']['name']);
                     unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                            <div class="alert-body">
-                            <div class="alert-title">File gambar tidak sesuai format (.jpg/2mb)</div>
-                            Data proposal gagal ditambah !
-                            </div>
-                        </div>');
+                        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                        <div class="alert-body">
+                        <div class="alert-title">File gambar tidak sesuai format (.jpg/2mb)</div>
+                        Data proposal gagal ditambah !
+                        </div>
+                    </div>');
                     echo $this->upload->display_errors();
                     redirect("Mahasiswa/pengajuanProposal");
                 }
@@ -337,12 +333,12 @@ class Mahasiswa extends CI_Controller
             }
             $this->kegiatan->insertDataValidasi($data_validasi);
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
-                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                <div class="alert-body">
-                  <div class="alert-title">Success</div>
-                  Data proposal berhasil ditambah !
-                </div>
-              </div>');
+            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+            <div class="alert-body">
+              <div class="alert-title">Success</div>
+              Data proposal berhasil ditambah !
+            </div>
+          </div>');
             redirect("Mahasiswa/pengajuanProposal");
         }
     }
@@ -444,12 +440,12 @@ class Mahasiswa extends CI_Controller
                     $proposal['proposal_kegiatan'] = $_FILES['fileProposal']['name'];
                 } else {
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                            <div class="alert-icon"><i class="far fa-times"></i></div>
-                            <div class="alert-body">
-                            <div class="alert-title">File proposal tidak sesuai format (.pdf/2mb)</div>
-                            Data proposal gagal ditambah !
-                            </div>
-                        </div>');
+                        <div class="alert-icon"><i class="far fa-times"></i></div>
+                        <div class="alert-body">
+                        <div class="alert-title">File proposal tidak sesuai format (.pdf/2mb)</div>
+                        Data proposal gagal ditambah !
+                        </div>
+                    </div>');
                     echo $this->upload->display_errors();
                     redirect("Mahasiswa/pengajuanProposal");
                 }
@@ -467,12 +463,12 @@ class Mahasiswa extends CI_Controller
                 } else {
                     unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                            <div class="alert-icon"><i class="far fa-times"></i></div>
-                            <div class="alert-body">
-                            <div class="alert-title">File berita proposal tidak sesuai format (.pdf/2mb)</div>
-                            Data proposal gagal ditambah !
-                            </div>
-                        </div>');
+                        <div class="alert-icon"><i class="far fa-times"></i></div>
+                        <div class="alert-body">
+                        <div class="alert-title">File berita proposal tidak sesuai format (.pdf/2mb)</div>
+                        Data proposal gagal ditambah !
+                        </div>
+                    </div>');
                     echo $this->upload->display_errors();
                     redirect("Mahasiswa/pengajuanProposal");
                 }
@@ -493,12 +489,12 @@ class Mahasiswa extends CI_Controller
                     unlink(FCPATH . "file_bukti/berita_proposal/" . $_FILES['beritaProposal']['name']);
                     unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
                     $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                            <div class="alert-body">
-                            <div class="alert-title">File gambar tidak sesuai format (.jpg/2mb)</div>
-                            Data proposal gagal ditambah !
-                            </div>
-                        </div>');
+                        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                        <div class="alert-body">
+                        <div class="alert-title">File gambar tidak sesuai format (.jpg/2mb)</div>
+                        Data proposal gagal ditambah !
+                        </div>
+                    </div>');
                     echo $this->upload->display_errors();
                     redirect("Mahasiswa/pengajuanProposal");
                 }
@@ -557,12 +553,12 @@ class Mahasiswa extends CI_Controller
                 $this->kegiatan->updateValidasiKegiatan($data_validasi);
             }
             $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
-                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                <div class="alert-body">
-                  <div class="alert-title">Success</div>
-                  Data proposal berhasil diperbaharui !
-                </div>
-              </div>');
+            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+            <div class="alert-body">
+              <div class="alert-title">Success</div>
+              Data proposal berhasil diperbaharui !
+            </div>
+          </div>');
             redirect("Mahasiswa/pengajuanProposal");
         }
     }
@@ -853,6 +849,74 @@ class Mahasiswa extends CI_Controller
         }
     }
 
+    // form pengajuan beasiswa 
+    public function beasiswa()
+    {
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
+        $data['penerima_beasiswa'] = $this->mahasiswa->getBeasiswa($this->session->userdata('username'));
+        // set rules form validation
+        $this->form_validation->set_rules('namaMahasiswa', 'Nama Mahasiswa', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Pengajuan";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("mahasiswa/beasiswa");
+            $this->load->view("template/footer");
+        } else {
+            $beasiswa = [
+                "id_beasiswa" => $this->input->post('jenisBeasiswa'),
+                "nim" => $this->input->post('nimMahasiswa'),
+                "tahun_menerima" => $this->input->post('tahunMenerima'),
+                "lama_menerima" => $this->input->post('lamaMenerima'),
+                "nominal" => $this->input->post('nominalBeasiswa'),
+                "validasi_beasiswa" => 0
+            ];
+            // upload file proposal
+            if ($_FILES['lampiran']['name']) {
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/beasiswa/';
+                $config['file_name'] = time() . '_' . $_FILES['lampiran']['name'];
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('lampiran')) {
+                    $beasiswa['lampiran'] = $this->upload->data('file_name');
+                } else {
+                    echo 'data gagal ditambah';
+                    echo $this->upload->display_errors();
+                    redirect("Mahasiswa/beasiswa");
+                }
+            }
+            // upload file proposal
+            if ($_FILES['uploadBukti']['name']) {
+                $config2['allowed_types'] = 'pdf';
+                $config2['max_size']     = '2048'; //kb
+                $config2['upload_path'] = './file_bukti/beasiswa/';
+                $config2['file_name'] = time() . '_' . $_FILES['uploadBukti']['name'];
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('uploadBukti')) {
+                    $beasiswa['bukti'] = $this->upload->data('file_name');
+                } else {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .  $beasiswa['lampiran']);
+                    echo 'data gagal ditambah';
+                    echo $this->upload->display_errors();
+                    redirect("Mahasiswa/beasiswa");
+                }
+            }
+            $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+                    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                    <div class="alert-body">
+                    <div class="alert-title">Beasiswa berhasil ditambah !</div>
+                    Berhasil !
+                    </div>
+                </div>');
+            $this->mahasiswa->insertBeasiswa($beasiswa);
+            redirect('Mahasiswa/beasiswa');
+        }
+    }
 
     public function daftarMahasiswa()
     {

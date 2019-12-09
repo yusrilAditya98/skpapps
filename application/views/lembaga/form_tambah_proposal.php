@@ -23,6 +23,7 @@
                                             <div class="form-group">
                                                 <label for="nim">Id Lembaga</label>
                                                 <input type="text" class="form-control" id="nim" name="nim" value="<?= $this->session->userdata('username') ?>" readonly>
+                                                <input type="hidden" name="id_rancangan" value="<?= $proker['id_daftar_rancangan'] ?>">
                                             </div>
                                             <div class="form-group">
                                                 <label for="noTlpm">No Telepon / Whatsapp</label>
@@ -52,7 +53,6 @@
                                                 <h6>Sumber Dana</h6>
 
                                                 <?php foreach ($dana as $d) : ?>
-
                                                     <div class="form-check py-1">
                                                         <input class="form-check-input" type="hidden" value="0" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
                                                         <input class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
@@ -70,14 +70,19 @@
                                                 <label for="namaKegiatan">Judul Acara / Kegiatan</label>
                                                 <input type="text" class="form-control" id="namaKegiatan" name="namaKegiatan" value="<?= $proker['nama_proker'] ?>" readonly required>
                                                 <div class="invalid-feedback">
-                                                    Nama Kegiatan harap diisi
+                                                    Nama kegiatan harap diisi
                                                 </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tahun_kegiatan">Periode Pengajuan</label>
+                                                <input type="text" class="form-control" id="tahun_kegiatan" name="tahun_kegiatan" value="<?= $proker['tahun_kegiatan'] ?>" readonly required>
+
                                             </div>
                                             <div class="form-group">
                                                 <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
                                                 <textarea class="form-control" id="deskripsiKegiatan" name="deskripsiKegiatan" style="height: 100px;" required></textarea>
                                                 <div class="invalid-feedback">
-                                                    Nama Kegiatan harap diisi
+                                                    Deskripsi kegiatan harap diisi
                                                 </div>
                                             </div>
                                             <div class=" form-group">

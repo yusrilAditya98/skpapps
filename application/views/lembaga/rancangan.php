@@ -52,6 +52,7 @@
 						<h4>Tambah Rancangan Kegiatan</h4>
 					</div>
 					<div class="card-body">
+						<!-- jika status rancangan diberikan hak akses untuk mengajukan -->
 						<?php if ($lembaga['status_rencana_kegiatan'] == 1) : ?>
 							<div class="alert alert-warning mb-3" role="alert" style="opacity: 1; color:black; background-color:rgba(35, 182, 246, 0.4)">
 								<div class="row">
@@ -138,6 +139,7 @@
 											</td>
 											<td>
 												<div class="row">
+													<!-- 5 kegiatan telah selesai -->
 													<?php if ($r['status_rancangan'] == 0 || $r['status_rancangan'] == 2) : ?>
 														<div class="col-lg-6">
 															<a href="<?= base_url('Kegiatan/editRancanganKegiatan/') . $r['id_daftar_rancangan'] ?>" class="btn btn-icon btn-info"> <i class="fas fa-edit"></i></a>
@@ -155,7 +157,11 @@
 														</div>
 													<?php elseif ($r['status_rancangan'] == 4) : ?>
 														<div class="col-lg-12">
-															<span class="text-primary">Sudah Mengajukan</span>
+															<span class="text-warning">Belum Selesai</span>
+														</div>
+													<?php elseif ($r['status_rancangan'] == 5) : ?>
+														<div class="col-lg-12">
+															<span class="text-success">Telah Terlaksana</span>
 														</div>
 													<?php endif; ?>
 												</div>

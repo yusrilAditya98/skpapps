@@ -7,8 +7,11 @@ class Kemahasiswaan extends CI_Controller
     private $totalPoinSKp;
     private $proposalKegiatan = [];
     private $lembaga = [];
-    private  $rancangan = [];
+    private $rancangan = [];
     private $notif = [];
+    private $id_lembaga;
+    private $tahun;
+    private $anggaran;
 
     public function __construct()
     {
@@ -47,9 +50,20 @@ class Kemahasiswaan extends CI_Controller
         $data['jenis'] = $this->db->get()->result_array();
         $data['tingkatan'] = $this->db->get('tingkatan')->result_array();
         $data['prestasi'] = $this->db->get('prestasi')->result_array();
+        $data['dasar_penilaian'] = $this->db->get('dasar_penilaian')->result_array();
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->semuaTingkatanKegiatan = $this->poinskp->getSemuaTingkatan();
+        $data['semua_tingkatan'] = $this->semuaTingkatanKegiatan;
+        $this->semuaPrestasiKegiatan = $this->poinskp->getSemuaPrestasi();
+        $data['semua_prestasi'] = $this->semuaPrestasiKegiatan;
+        // header('Content-type: application/json');
+        // echo json_encode($data['semua_tingkatan']);
+        // die;
+
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -174,25 +188,7 @@ class Kemahasiswaan extends CI_Controller
             redirect('kemahasiswaan/kategori');
         }
     }
-    public function tambahDetailTingkatan()
-    {
-        $bidang = $this->input->post('bidang');
-        $tingkatan = $this->input->post('tingkatan');
-        $jenis = $this->input->post('jenis');
-        $data_semua_tingkatan = [
-            'id_tingkatan' => intval($tingkatan),
-            'id_jenis_kegiatan' => intval($jenis)
-        ];
-        $temp = $this->db->get_where('semua_tingkatan', ['id_tingkatan' => $tingkatan, 'id_jenis_kegiatan' => $jenis])->result_array();
-        if (count($temp) == 0) {
-            $this->db->insert('semua_tingkatan', $data_semua_tingkatan);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Tingkatan berhasil ditambahkan</div>');
-            redirect('kemahasiswaan/kategori');
-        } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Detail Tingkatan sudah ada</div>');
-            redirect('kemahasiswaan/kategori');
-        }
-    }
+
     public function editTingkatan($id)
     {
         $tingkatan = $this->input->post('tingkatan');
@@ -221,6 +217,54 @@ class Kemahasiswaan extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Tingkatan berhasil dihapus</div>');
         redirect('kemahasiswaan/kategori');
     }
+
+    public function tambahDetailTingkatan()
+    {
+        $bidang = $this->input->post('bidang');
+        $tingkatan = $this->input->post('tingkatan');
+        $jenis = $this->input->post('jenis');
+        $data_semua_tingkatan = [
+            'id_tingkatan' => intval($tingkatan),
+            'id_jenis_kegiatan' => intval($jenis)
+        ];
+        $temp = $this->db->get_where('semua_tingkatan', ['id_tingkatan' => $tingkatan, 'id_jenis_kegiatan' => $jenis])->result_array();
+        if (count($temp) == 0) {
+            $this->db->insert('semua_tingkatan', $data_semua_tingkatan);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Tingkatan berhasil ditambahkan</div>');
+            redirect('kemahasiswaan/kategori');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Detail Tingkatan sudah ada</div>');
+            redirect('kemahasiswaan/kategori');
+        }
+    }
+    public function editDetailTingkatan($id)
+    {
+        $bidang = $this->input->post('bidang');
+        $tingkatan = $this->input->post('tingkatan');
+        $jenis = $this->input->post('jenis');
+        $data_semua_tingkatan = [
+            'id_tingkatan' => intval($tingkatan),
+            'id_jenis_kegiatan' => intval($jenis)
+        ];
+        $this->db->set($data_semua_tingkatan);
+        $this->db->where('id_semua_tingkatan', $id);
+        $this->db->update('semua_tingkatan');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Tingkatan berhasil diperbarui</div>');
+        redirect('kemahasiswaan/kategori');
+    }
+    public function hapusDetailTingkatan($id)
+    {
+
+        $this->db->where('id_semua_tingkatan', intval($id));
+        $this->db->delete('semua_prestasi');
+
+        $this->db->where('id_semua_tingkatan', intval($id));
+        $this->db->delete('semua_tingkatan');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Tingkatan berhasil dihapus</div>');
+        redirect('kemahasiswaan/kategori');
+    }
+
     public function tambahPrestasi()
     {
         $prestasi = $this->input->post('prestasi');
@@ -237,30 +281,7 @@ class Kemahasiswaan extends CI_Controller
             redirect('kemahasiswaan/kategori');
         }
     }
-    public function tambahDetailPrestasi()
-    {
-        $bidang = $this->input->post('bidang');
-        $tingkatan = $this->input->post('tingkatan');
-        $jenis = $this->input->post('jenis');
-        $prestasi = $this->input->post('prestasi');
-        $dasar = $this->input->post('dasar');
-        $bobot = $this->input->post('bobot');
-        $data_semua_prestasi = [
-            'bobot' => intval($bobot),
-            'id_semua_tingkatan' => intval($tingkatan),
-            'id_prestasi' => intval($prestasi),
-            'id_dasar_penilaian' => intval($dasar),
-        ];
-        $temp = $this->db->get_where('semua_tingkatan', ['id_semua_tingkatan' => $tingkatan, 'id_prestasi' => $prestasi])->result_array();
-        if (count($temp) == 0) {
-            $this->db->insert('semua_prestasi', $data_semua_prestasi);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Tingkatan berhasil ditambahkan</div>');
-            redirect('kemahasiswaan/kategori');
-        } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Detail Tingkatan sudah ada</div>');
-            redirect('kemahasiswaan/kategori');
-        }
-    }
+
     public function editPrestasi($id)
     {
         $prestasi = $this->input->post('prestasi');
@@ -283,6 +304,105 @@ class Kemahasiswaan extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Prestasi berhasil dihapus</div>');
         redirect('kemahasiswaan/kategori');
     }
+
+    public function tambahDetailPrestasi()
+    {
+        $bidang = $this->input->post('bidang');
+        $tingkatan = $this->input->post('tingkatan');
+        $jenis = $this->input->post('jenis');
+        $prestasi = $this->input->post('prestasi');
+        $dasar = $this->input->post('dasar');
+        $bobot = $this->input->post('bobot');
+        $data_semua_prestasi = [
+            'bobot' => intval($bobot),
+            'id_semua_tingkatan' => intval($tingkatan),
+            'id_prestasi' => intval($prestasi),
+            'id_dasar_penilaian' => intval($dasar),
+        ];
+        $temp = $this->db->get_where('semua_prestasi', ['id_semua_tingkatan' => $tingkatan, 'id_prestasi' => $prestasi])->result_array();
+        if (count($temp) == 0) {
+            $this->db->insert('semua_prestasi', $data_semua_prestasi);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Prestasi berhasil ditambahkan</div>');
+            redirect('kemahasiswaan/kategori');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Detail Tingkatan sudah ada</div>');
+            redirect('kemahasiswaan/kategori');
+        }
+    }
+
+    public function editDetailPrestasi($id)
+    {
+        $bidang = $this->input->post('bidang');
+        $tingkatan = $this->input->post('tingkatan');
+        $jenis = $this->input->post('jenis');
+        $prestasi = $this->input->post('prestasi');
+        $dasar = $this->input->post('dasar');
+        $bobot = $this->input->post('bobot');
+        $data_semua_prestasi = [
+            'bobot' => intval($bobot),
+            'id_semua_tingkatan' => intval($tingkatan),
+            'id_prestasi' => intval($prestasi),
+            'id_dasar_penilaian' => intval($dasar),
+        ];
+        // header('Content-type: application/json');
+        // echo json_encode($data_semua_prestasi);
+        // die;
+        $this->db->set($data_semua_prestasi);
+        $this->db->where('id_semua_prestasi', $id);
+        $this->db->update('semua_prestasi');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Prestasi berhasil diperbarui</div>');
+        redirect('kemahasiswaan/kategori');
+    }
+    public function hapusDetailPrestasi($id)
+    {
+        $this->db->where('id_semua_prestasi', intval($id));
+        $this->db->delete('semua_prestasi');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Detail Prestasi berhasil dihapus</div>');
+        redirect('kemahasiswaan/kategori');
+    }
+
+    public function tambahDasarPenilaian()
+    {
+        $dasar = $this->input->post('dasar_penilaian');
+        $data_dasar = [
+            'nama_dasar_penilaian' => $dasar
+        ];
+        $temp = $this->db->get_where('dasar_penilaian', ['nama_dasar_penilaian' => $dasar])->result_array();
+        if (count($temp) == 0) {
+            $this->db->insert('dasar_penilaian', $data_dasar);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Dasar penilaian berhasil ditambahkan</div>');
+            redirect('kemahasiswaan/kategori');
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Dasar penilaian sudah ada</div>');
+            redirect('kemahasiswaan/kategori');
+        }
+    }
+    public function editDasarPenilaian($id)
+    {
+        $dasar = $this->input->post('dasar_penilaian');
+        $data_dasar = [
+            'nama_dasar_penilaian' => $dasar
+        ];
+        $this->db->set($data_dasar);
+        $this->db->where('id_dasar_penilaian', $id);
+        $this->db->update('dasar_penilaian');
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Dasar penilaian berhasil diperbarui</div>');
+        redirect('kemahasiswaan/kategori');
+    }
+
+    public function hapusDasarPenilaian($id)
+    {
+        $this->db->where('id_dasar_penilaian', intval($id));
+        $this->db->delete('semua_prestasi');
+
+        $this->db->where('id_dasar_penilaian', intval($id));
+        $this->db->delete('dasar_penilaian');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Dasar penilaian berhasil dihapus</div>');
+        redirect('kemahasiswaan/kategori');
+    }
+
     // update pebukaan rancangan kegiatan lembaga
     public function pembukaanRancanganKegiatan($id_lembaga)
     {
@@ -293,6 +413,13 @@ class Kemahasiswaan extends CI_Controller
             'status_rencana_kegiatan' => 0,
         ];
         $this->kemahasiswaan->updateStatusRencanaKegiatan($this->lembaga);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+            <div class="alert-icon"><i class="far fa-times"></i></div>
+            <div class="alert-body">
+            <div class="alert-title">Rancangan kegiatan berhasil di perbaharui ! </div>
+            Update !
+            </div>
+        </div>');
         redirect('Kemahasiswaan/lembaga');
     }
 
@@ -539,14 +666,38 @@ class Kemahasiswaan extends CI_Controller
     }
     public function anggaran()
     {
+        $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Anggaran';;
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['lembaga'] = $this->kemahasiswaan->getRekapRancangan();
+        $data['tahun'] = $this->kemahasiswaan->getTahunRancangan();
+        if ($this->input->get('tahun') != null) {
+            $tahun = $this->input->get('tahun');
+            $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($tahun);
+        } else {
+            $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($data['tahun'][0]['tahun_kegiatan']);
+        }
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
         $this->load->view("kemahasiswaan/daftar_anggaran");
         $this->load->view("template/footer");
+    }
+    public function editAnggaranRancangan()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->anggaran = $this->input->post('nominal');
+        $this->tahun = $this->input->post('tahun');
+        $this->id_lembaga = $this->input->post('id_lembaga');
+        $this->kemahasiswaan->updateRekapKegiatan($this->id_lembaga, $this->tahun, null, $this->anggaran);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+            <div class="alert-icon"><i class="far fa-times"></i></div>
+            <div class="alert-body">
+            <div class="alert-title">Dana kegiatan berhasil di perbaharui ! </div>
+            Update !
+            </div>
+        </div>');
+        redirect('Kemahasiswaan/anggaran');
     }
     public function tambahAnggaranKegiatan()
     {
@@ -587,11 +738,72 @@ class Kemahasiswaan extends CI_Controller
             if ($this->input->post('cek_' . $k['id_kegiatan'])) {
                 $data['kegiatan'][$index] = [
                     'nama_kegiatan' => $k['nama_kegiatan'],
-                    'nama_kegiatan' => $k['nama_kegiatan']
+                    'tanggal_kegiatan' => $k['tanggal_kegiatan'],
+                    'deskripsi_kegiatan' => $k['deskripsi_kegiatan'],
+                    'dana_kegiatan' => $k['dana_kegiatan']
                 ];
             }
             $index++;
         }
-        $this->load->view('kemahasiswaan/tampilan1', $data);
+        $this->load->view('kemahasiswaan/tampilan2', $data);
+    }
+    public function cetakPengajuanLpj()
+    {
+        $data['kegiatan'] = [];
+        $kegiatan = $this->db->get('kegiatan')->result_array();
+        $index = 0;
+        foreach ($kegiatan as $k) {
+            if ($this->input->post('cek_' . $k['id_kegiatan'])) {
+                $data['kegiatan'][$index] = [
+                    'nama_kegiatan' => $k['nama_kegiatan'],
+                    'tanggal_kegiatan' => $k['tanggal_kegiatan'],
+                    'deskripsi_kegiatan' => $k['deskripsi_kegiatan'],
+                    'dana_kegiatan' => $k['dana_kegiatan']
+                ];
+            }
+            $index++;
+        }
+        $this->load->view('kemahasiswaan/tampilan2', $data);
+    }
+    // menampilkan daftar poin skp keseluruhan mahasiswa
+    public function skpMahasiswa()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['mahasiswa'] = $this->kemahasiswaan->getDataMahasiswa();
+        $data['notif'] = $this->_notifKmhs();
+        $data['title'] = 'Poin Skp';
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/poin_skp_mhs");
+        $this->load->view("template/footer");
+    }
+    // menampilkan beasiswa
+    public function beasiswa()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        $data['notif'] = $this->_notifKmhs();
+        $data['title'] = 'Beasiswa';
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_beasiswa");
+        $this->load->view("template/footer");
+    }
+    // validasi beasiswa
+    public function validasiBeasiswa($id_penerima)
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $status = $this->input->get('status');
+        $this->kemahasiswaan->updateStatusBeasiswa($id_penerima, $status);
+        $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
+            <div class="alert-icon"><i class="far fa-times"></i></div>
+            <div class="alert-body">
+            <div class="alert-title">Status Beasiswa berhasil di perbaharui ! </div>
+            Update !
+            </div>
+        </div>');
+        redirect('Kemahasiswaan/beasiswa');
     }
 }

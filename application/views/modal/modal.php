@@ -42,7 +42,6 @@
         </div>
     </div>
 </div>
-
 <!-- modal detail kegiatan -->
 <div class="modal fade" tabindex="-1" role="dialog" id="i-kegiatan">
     <div class="modal-dialog modal-xl" role=" document">
@@ -57,7 +56,6 @@
                 <div class="modal-body">
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="form-tambah-skp">
-
                             <input type="hidden" name="id_kegiatan" value="">
                             <div class="bagian-personality">
                                 <h5>Informasi Personality</h5>
@@ -104,23 +102,18 @@
                                 <div class="form-group">
                                     <label for="namaKegiatan">Judul Acara / Kegiatan</label>
                                     <input type="text" class="form-control k-nama_kegiatan" id="namaKegiatan" name="namaKegiatan" value="" readonly>
-
                                 </div>
                                 <div class="form-group">
                                     <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
                                     <textarea class="form-control k-deskripsi_kegiatan" id="deskripsiKegiatan" name="deskripsiKegiatan" style="height: 100px;" readonly></textarea>
-
                                 </div>
                                 <div class=" form-group">
                                     <label for="bidangKegiatan">Bidang Kegiatan</label>
                                     <input type="text" class="form-control k-bidang_kegiatan" value="" readonly>
-
                                 </div>
                                 <div class="form-group">
                                     <label for="jenisKegiatan">Jenis Kegiatan</label>
                                     <input type="text" class="form-control k-jenis_kegiatan" value="" readonly>
-
-
                                 </div>
                                 <div class="form-group">
                                     <label for="tingkatKegiatan">Tingkat Kegiatan</label>
@@ -129,15 +122,12 @@
                                 <div class="form-group">
                                     <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
                                     <input type="date" class="form-control k-tgl_kegiatan" id="tglPelaksanaan" name="tglPelaksanaan" value="" readonly>
-
                                 </div>
                                 <div class="form-group">
                                     <label for="tempatPelaksanaan">Tempat Pelaksanaan</label>
                                     <input type="text" class="form-control k-tempat" id="tempatPelaksanaan" name="tempatPelaksanaan" value="" readonly>
-
                                 </div>
                             </div>
-
                             <div class="bagian-acara mt-5">
                                 <h5>Anggota Kegiatan</h5>
                                 <div class="table-responsive">
@@ -151,12 +141,10 @@
                                             </tr>
                                         </thead>
                                         <tbody class="daftar-mhs">
-
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-
                             <div class=" bagian-upload mt-5">
                                 <h5>Informasi Upload</h5>
                                 <div class="form-group">
@@ -173,15 +161,12 @@
                                     <label for="gambarKegiatanProposal2"> Gambar Kegiatan 2 / Acara Pendukung - <a target="_blank" class="btn btn-primary k-gmbr-2">Lihat</a></label>
                                 </div>
                             </div>
-
                             <div class="action-button">
-
                             </div>
-
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer bg-whitesmoke br">
+                <div class="modal-footer bg-whitesmoke br t-validasi">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
             </form>

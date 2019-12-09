@@ -34,6 +34,7 @@
 <script src="<?= base_url() ?>assets/js/kegiatan.js"></script>
 <script src="<?= base_url() ?>assets/js/kategori.js"></script>
 <script src="<?= base_url() ?>assets/js/skp.js"></script>
+<script src="<?= base_url() ?>assets/js/manajemenUser.js"></script>
 
 <!-- Sweet alert custom -->
 <script src="<?= base_url('assets/') ?>js/sweet-alert.js"></script>

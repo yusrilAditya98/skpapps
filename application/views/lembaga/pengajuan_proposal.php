@@ -69,9 +69,7 @@
                                                 <?php endif; ?>
                                             <?php endforeach; ?>
                                             <td>
-                                                <?php if ($k['status_selesai_proposal'] == 0) : ?>
-                                                    <a href="<?= base_url('Kegiatan/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
-                                                <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
+                                                <?php if ($k['status_selesai_proposal'] == 2 || $k['status_selesai_proposal'] == 0) : ?>
                                                     <form action="<?= base_url('Kegiatan/editProposal/') . $k['id_kegiatan'] ?>" method="post">
                                                         <input type="hidden" name="jenis_revisi" value="<?= $jenis_revisi ?>">
                                                         <button type="submit" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></button>

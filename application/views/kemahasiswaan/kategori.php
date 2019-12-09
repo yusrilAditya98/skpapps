@@ -42,8 +42,8 @@
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $b['nama_bidang'] ?></td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-bidang text-wrap" data-toggle="modal" data-target=".modalEditBidang" data-id="<?= $b['id_bidang'] ?>">Edit</button>
-                                                    <button class="btn btn-danger hapus-bidang text-wrap" data-id="<?= $b['id_bidang'] ?>">Hapus</button>
+                                                    <button class="btn btn-success edit-bidang text-wrap" data-toggle="modal" data-target=".modalEditBidang" data-id="<?= $b['id_bidang'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-bidang text-wrap" data-id="<?= $b['id_bidang'] ?>"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -86,8 +86,8 @@
                                                 <td><?= $j['jenis_kegiatan'] ?></td>
                                                 <td><?= $j['nama_bidang'] ?></td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-jenis" data-toggle="modal" data-target=".modalEditJenis" data-id="<?= $j['id_jenis_kegiatan'] ?>">Edit</button>
-                                                    <button class="btn btn-danger hapus-jenis" data-id="<?= $j['id_jenis_kegiatan'] ?>">Hapus</button>
+                                                    <button class="btn btn-success edit-jenis" data-toggle="modal" data-target=".modalEditJenis" data-id="<?= $j['id_jenis_kegiatan'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-jenis" data-id="<?= $j['id_jenis_kegiatan'] ?>"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -114,7 +114,6 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <button class="float-right btn btn-warning mb-2 ml-2 tambah-detail-tingkatan" data-toggle="modal" data-target=".modalTambahDetailTingkatan">Tambah Detail Tingkatan</button>
                                     <button class="float-right btn btn-success mb-2 ml-2 detail-tingkatan" data-toggle="modal" data-target=".modalDetailTingkatan">Detail Tingkatan</button>
                                     <button class="float-right btn btn-primary mb-2 tambahTingkatan" data-toggle="modal" data-target=".modalTambahTingkatan">Tambah Tingkatan</button>
                                 </div>
@@ -135,8 +134,8 @@
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $t['nama_tingkatan'] ?></td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-tingkatan" data-toggle="modal" data-target=".modalEditTingkatan" data-id="<?= $t['id_tingkatan'] ?>">Edit</button>
-                                                    <button class="btn btn-danger hapus-tingkatan" data-id="<?= $t['id_tingkatan'] ?>">Hapus</button>
+                                                    <button class="btn btn-success edit-tingkatan" data-toggle="modal" data-target=".modalEditTingkatan" data-id="<?= $t['id_tingkatan'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-tingkatan" data-id="<?= $t['id_tingkatan'] ?>"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -160,7 +159,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    <button class="float-right btn btn-warning mb-2 ml-2 tambah-detail-prestasi" data-toggle="modal" data-target=".modalTambahDetailPrestasi">Tambah Detail Prestasi</button>
+                                    <button class="float-right btn btn-info mb-2 ml-2 tambah-dasar" data-toggle="modal" data-target=".modalDasarPenilaian">Dasar Penilaian</button>
                                     <button class="float-right btn btn-success mb-2 ml-2 detail-prestasi" data-toggle="modal" data-target=".modalDetailPrestasi">Detail Prestasi</button>
                                     <button class="float-right btn btn-primary mb-2 tambahPrestasi" data-toggle="modal" data-target=".modalTambahPrestasi">Tambah Prestasi</button>
                                 </div>
@@ -182,8 +181,8 @@
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $p['nama_prestasi'] ?></td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-prestasi" data-toggle="modal" data-target=".modalEditPrestasi" data-id="<?= $p['id_prestasi'] ?>">Edit</button>
-                                                    <button class="btn btn-danger hapus-prestasi" data-id="<?= $p['id_prestasi'] ?>">Hapus</button>
+                                                    <button class="btn btn-success edit-prestasi" data-toggle="modal" data-target=".modalEditPrestasi" data-id="<?= $p['id_prestasi'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-prestasi" data-id="<?= $p['id_prestasi'] ?>"><i class="fas fa-trash"></i></button>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -202,6 +201,121 @@
 </div>
 
 
+<!-- Awal Modal Detail Penilaian -->
+<div class="modal fade bd-example-modal-lg modalDasarPenilaian" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white ml-4" id="exampleModalLabel">Dasar Penilaian</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="float-right btn btn-info mb-2 ml-2 tambah-dasar-penilaian" data-toggle="modal" data-target=".modalTambahDasarPenilaian">Tambah Dasar Penilaian</button>
+                        </div>
+                    </div>
+                    <div class="row no-gutters">
+                        <div class="col-lg-12 tabel-semua-tingkatan">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-kategori">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>No</th>
+                                            <th>Dasar Penilaian</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="body-tabel">
+                                        <?php $i = 1;
+                                        foreach ($dasar_penilaian as $dp) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $i; ?></td>
+                                                <td><?= $dp['nama_dasar_penilaian'] ?></td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-success edit-dasar-penilaian text-wrap" data-toggle="modal" data-target=".modalEditDasarPenilaian" data-id="<?= $dp['id_dasar_penilaian'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-dasar-penilaian text-wrap" data-id="<?= $dp['id_dasar_penilaian'] ?>"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        <?php $i++;
+                                        endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modeal Detail Penilaian -->
+
+<!-- Awal Modal Tambah Dasar Penilaian -->
+<div class="modal fade bd-example-modal-lg modalTambahDasarPenilaian" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white" id="exampleModalLabel">Tambah Dasar Penilaian Kegiatan</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-4">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12">
+                            <form action="<?= base_url('kemahasiswaan/tambahDasarPenilaian') ?>" method="post">
+                                <div class="form-group">
+                                    <label for="dasar_penilaian">Dasar Penilaian</label>
+                                    <input type="text" class="form-control" id="dasar_penilaian" name="dasar_penilaian" placeholder="Masukkan nama dasar penilaian">
+                                    <?= form_error('dasar_penilaian', '<small class="text-danger">', '</small>'); ?>
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Tambah Dasar Penilaian</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modal Tambah Dasar Penilaian -->
+
+<!-- Awal Modal Edit Dasar Penilaian -->
+<div class="modal fade bd-example-modal-lg modalEditDasarPenilaian" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white" id="exampleModalLabel">Edit Dasar Penilaian Kegiatan</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-4">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12">
+                            <form action="<?= base_url('kemahasiswaan/editDasarPenilaian') ?>" method="post">
+                                <div class="form-group">
+                                    <label for="dasar_penilaian_edit">Dasar Penilaian</label>
+                                    <input type="text" class="form-control" id="dasar_penilaian_edit" name="dasar_penilaian" placeholder="Masukkan nama dasar penilaian">
+                                    <?= form_error('dasar_penilaian_edit', '<small class="text-danger">', '</small>'); ?>
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Edit Dasar Penilaian</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modal Edit Dasar Penilaian -->
+
 <!-- Awal Modal Detail Tingkatan -->
 <div class="modal fade bd-example-modal-lg modalDetailTingkatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-xl">
@@ -214,8 +328,42 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <button class="float-right btn btn-warning mb-2 ml-2 tambah-detail-tingkatan" data-toggle="modal" data-target=".modalTambahDetailTingkatan">Tambah Detail Tingkatan</button>
+                        </div>
+                    </div>
                     <div class="row no-gutters">
                         <div class="col-lg-12 tabel-semua-tingkatan">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-kategori">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th>No</th>
+                                            <th>Tingkatan</th>
+                                            <th>Jenis Kegiatan</th>
+                                            <th>Bidang Kegiatan</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="body-tabel">
+                                        <?php $i = 1;
+                                        foreach ($semua_tingkatan as $st) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $i; ?></td>
+                                                <td><?= $st['nama_tingkatan'] ?></td>
+                                                <td><?= $st['jenis_kegiatan'] ?></td>
+                                                <td><?= $st['nama_bidang'] ?></td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-success edit-detail-tingkatan text-wrap" data-toggle="modal" data-target=".modalEditDetailTingkatan" data-id="<?= $st['id_semua_tingkatan'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-detail-tingkatan text-wrap" data-id="<?= $st['id_semua_tingkatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        <?php $i++;
+                                        endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -224,6 +372,50 @@
     </div>
 </div>
 <!-- Akhir Modeal Detail Tingkatan -->
+
+<!-- Awal Modal Edit Detail Tingkatan -->
+<div class="modal fade bd-example-modal-lg modalEditDetailTingkatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white" id="exampleModalLabel">Edit Detail Tingkatan Kegiatan</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-4">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12">
+                            <form action="<?= base_url('kemahasiswaan/editDetailTingkatan') ?>" method="post">
+                                <div class="form-group">
+                                    <label for="bidang_detailT_edit" class="col-form-label">Bidang Kegiatan</label>
+                                    <select class="form-control bidang_detailT_edit" id="bidang_detailT_edit" name="bidang">
+                                        <option value="0" disabled selected hidden>Pilih Bidang Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jenis_detailT_edit" class="col-form-label">Jenis Kegiatan</label>
+                                    <select class="form-control jenis_detailT_edit" id="jenis_detailT_edit" name="jenis">
+                                        <option value="0" disabled selected hidden>Pilih Jenis Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tingkatan_detailT_edit" class="col-form-label">Tingkatan Kegiatan</label>
+                                    <select class="form-control tingkatan_detailT_edit" id="tingkatan_detailT_edit" name="tingkatan">
+                                        <option value="0" disabled selected hidden>Pilih Tingkatan Kegiatan</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Edit Detail Tingkatan</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modal Edit Detail Tingkatan -->
 
 <!-- Awal Modal Tambah Detail Tingkatan -->
 <div class="modal fade bd-example-modal-lg modalTambahDetailTingkatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -281,8 +473,49 @@
             </div>
             <div class="modal-body">
                 <div class="card mb-4">
+                    <div class="row">
+                        <div class="col-lg-12">
+
+                            <button class="float-right btn btn-warning mb-2 ml-2 tambah-detail-prestasi" data-toggle="modal" data-target=".modalTambahDetailPrestasi">Tambah Detail Prestasi</button>
+                        </div>
+                    </div>
                     <div class="row no-gutters">
                         <div class="col-lg-12 tabel-semua-prestasi">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-kategori">
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center">No</th>
+                                            <th>Bidang</th>
+                                            <th>Jenis</th>
+                                            <th>Tingkatan</th>
+                                            <th>Prestasi</th>
+                                            <th>Bobot</th>
+                                            <th>Dasar Penilaian</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="body-tabel">
+                                        <?php $i = 1;
+                                        foreach ($semua_prestasi as $sp) : ?>
+                                            <tr>
+                                                <td class="text-center"><?= $i; ?></td>
+                                                <td><?= $sp['nama_bidang'] ?></td>
+                                                <td><?= $sp['jenis_kegiatan'] ?></td>
+                                                <td><?= $sp['nama_tingkatan'] ?></td>
+                                                <td><?= $sp['nama_prestasi'] ?></td>
+                                                <td><?= $sp['bobot'] ?></td>
+                                                <td><?= $sp['nama_dasar_penilaian'] ?></td>
+                                                <td class="text-center">
+                                                    <button class="btn btn-success edit-detail-prestasi text-wrap" data-toggle="modal" data-target=".modalEditDetailPrestasi" data-id="<?= $sp['id_semua_prestasi'] ?>"><i class="fas fa-edit"></i></button>
+                                                    <button class="btn btn-danger hapus-detail-prestasi text-wrap" data-id="<?= $sp['id_semua_prestasi'] ?>"><i class="fas fa-trash"></i></button>
+                                                </td>
+                                            </tr>
+                                        <?php $i++;
+                                        endforeach; ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -291,6 +524,66 @@
     </div>
 </div>
 <!-- Akhir Modeal Detail Prestasi -->
+
+<!-- Awal Modal Edit Detail Prestasi -->
+<div class="modal fade bd-example-modal-lg modalEditDetailPrestasi" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white" id="exampleModalLabel">Edit Detail Prestasi Kegiatan</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card mb-4">
+                    <div class="row no-gutters">
+                        <div class="col-lg-12">
+                            <form action="<?= base_url('kemahasiswaan/editDetailPrestasi') ?>" method="post">
+                                <div class="form-group">
+                                    <label for="bidang_detailP_edit" class="col-form-label">Bidang Kegiatan</label>
+                                    <select class="form-control bidang_detailP_edit" id="bidang_detailP_edit" name="bidang">
+                                        <option value="0" disabled selected hidden>Pilih Bidang Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="jenis_detailP_edit" class="col-form-label">Jenis Kegiatan</label>
+                                    <select class="form-control jenis_detailP_edit" id="jenis_detailP_edit" name="jenis">
+                                        <option value="0" disabled selected hidden>Pilih Jenis Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="tingkatan_detailP_edit" class="col-form-label">Tingkatan Kegiatan</label>
+                                    <select class="form-control tingkatan_detailP_edit" id="tingkatan_detailP_edit" name="tingkatan">
+                                        <option value="0" disabled selected hidden>Pilih Tingkatan Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="prestasi_detailP_edit" class="col-form-label">Prestasi</label>
+                                    <select class="form-control prestasi_detailP_edit" id="prestasi_detailP_edit" name="prestasi">
+                                        <option value="0" disabled selected hidden>Pilih Prestasi Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="dasar_detailP_edit" class="col-form-label">Dasar Penilaian</label>
+                                    <select class="form-control dasar_detailP_edit" id="dasar_detailP_edit" name="dasar">
+                                        <option value="0" disabled selected hidden>Pilih Dasar Penilaian Kegiatan</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="bobot_detailP_edit" class="col-form-label">Bobot</label>
+                                    <input type="number" class="form-control bobot_detailP_edit" id="bobot_detailP_edit" name="bobot">
+                                </div>
+                                <button type="submit" class="btn btn-primary float-right">Edit Detail Prestasi</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modal Edit Detail Prestasi -->
 
 <!-- Awal Modal Tambah Detail Prestasi -->
 <div class="modal fade bd-example-modal-lg modalTambahDetailPrestasi" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -567,9 +860,9 @@
                         <div class="col-lg-12">
                             <form action="<?= base_url('kemahasiswaan/editTingkatan') ?>" method="post">
                                 <div class="form-group">
-                                    <label for="tingkatan_edit">Tingkatan Kegiatan</label>
-                                    <input type="text" class="form-control" id="tingkatan_edit" name="tingkatan" placeholder="Masukkan tingkatan kegiatan">
-                                    <?= form_error('tingkatan_edit', '<small class="text-danger">', '</small>'); ?>
+                                    <label for="tingkatan_kegiatan_edit">Tingkatan Kegiatan</label>
+                                    <input type="text" class="form-control" id="tingkatan_kegiatan_edit" name="tingkatan" placeholder="Masukkan tingkatan kegiatan">
+                                    <?= form_error('tingkatan_kegiatan_edit', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                                 <button type="submit" class="btn btn-primary float-right">Edit Tingkatan</button>
                             </form>
@@ -638,9 +931,9 @@
                         <div class="col-lg-12">
                             <form action="<?= base_url('kemahasiswaan/editPrestasi') ?>" method="post">
                                 <div class="form-group">
-                                    <label for="prestasi_edit">Prestasi Kegiatan</label>
-                                    <input type="text" class="form-control" id="prestasi_edit" name="prestasi" placeholder="Masukkan nama Prestasi kegiatan">
-                                    <?= form_error('prestasi_edit', '<small class="text-danger">', '</small>'); ?>
+                                    <label for="prestasi_kegiatan_edit">Prestasi Kegiatan</label>
+                                    <input type="text" class="form-control" id="prestasi_kegiatan_edit" name="prestasi" placeholder="Masukkan nama Prestasi kegiatan">
+                                    <?= form_error('prestasi_kegiatan_edit', '<small class="text-danger">', '</small>'); ?>
                                 </div>
                                 <button type="submit" class="btn btn-primary float-right">Edit Prestasi</button>
                             </form>

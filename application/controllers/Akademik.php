@@ -30,7 +30,7 @@ class Akademik extends CI_Controller
         for ($i = 0; $i < count($data['kuliah_tamu']); $i++) {
             if ($data['kuliah_tamu'][$i]['tanggal_event'] == $tanggal_sekarang) {
                 $this->db->where('id_kuliah_tamu', $data['kuliah_tamu'][$i]['id_kuliah_tamu']);
-                $this->db->set('status_terlaksana', 1);
+                $this->db->set('status_terlaksana', 2);
                 $this->db->update('kuliah_tamu');
             }
             $awal  = date_create($data['kuliah_tamu'][$i]['tanggal_event']);
@@ -67,6 +67,17 @@ class Akademik extends CI_Controller
     public function kegiatan()
     {
         $data['title'] = 'Kegiatan';
+        $data['kuliah_tamu'] = $this->db->get('kuliah_tamu')->result_array();
+        //Update kegiatan terlaksana hari ini
+        //Perhitungan H- Kegiatan (dalam hari)
+        $tanggal_sekarang = date('Y-m-d');
+        for ($i = 0; $i < count($data['kuliah_tamu']); $i++) {
+            if ($data['kuliah_tamu'][$i]['tanggal_event'] == $tanggal_sekarang) {
+                $this->db->where('id_kuliah_tamu', $data['kuliah_tamu'][$i]['id_kuliah_tamu']);
+                $this->db->set('status_terlaksana', 2);
+                $this->db->update('kuliah_tamu');
+            }
+        }
         $this->db->order_by('tanggal_event', 'ASC');
         $data['kegiatan'] = $this->db->get('kuliah_tamu')->result_array();
         $this->template($data);
@@ -192,7 +203,7 @@ class Akademik extends CI_Controller
 
             $image_name = 'kuliah_tamu_' . $data_kuliah_tamu['kode_qr'] . '.png'; //buat name dari qr code sesuai dengan nim
 
-            $params['data'] = "http://localhost/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
+            $params['data'] = "http://192.168.42.114/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
@@ -218,24 +229,6 @@ class Akademik extends CI_Controller
             'pemateri' => $this->input->post('pemateri')
         ];
 
-        //cek jika ada gambar
-        // $upload_image = $_FILES['image']['name'];
-        // if ($upload_image) {
-        //     $config['allowed_types'] = 'gif|jpg|png';
-        //     $config['max_size']     = '2048';
-        //     $config['upload_path'] = './assets/img/profile';
-        //     $this->load->library('upload', $config);
-        //     if ($this->upload->do_upload('image')) {
-        //         $old_images = $data['user']['image'];
-        //         if ($old_images != 'default.jpg') {
-        //             unlink(FCPATH . 'assets/img/profile/' . $old_images);
-        //         }
-        //         $new_image = $this->upload->data('file_name');
-        //         $this->db->set('image', $new_image);
-        //     } else {
-        //         echo $this->upload->display_errors();
-        //     }
-        // }
         $this->db->set($data_kuliah_tamu);
         $this->db->where('id_kuliah_tamu', $id_kegiatan);
         $this->db->update('kuliah_tamu');
@@ -287,12 +280,43 @@ class Akademik extends CI_Controller
 
             $image_name = 'kuliah_tamu_' . $data_kuliah_tamu[$i]['kode_qr'] . '.png'; //buat name dari qr code sesuai dengan nim
 
-            $params['data'] = "http://localhost/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
+            $params['data'] = "http://192.168.42.114/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
             $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
 
+        }
+    }
+    public function validasiKegiatan()
+    {
+        $data = $this->input->post('validasi');
+        if ($data == null) {
+            echo "HAHA";
+        } else {
+            // echo json_encode($data[1]);
+            // die;
+            for ($i = 0; $i < count($data); $i++) {
+                $this->db->set('kehadiran', 1);
+                $this->db->where('id_peserta_kuliah_tamu', intval($data[$i]));
+                $this->db->update('peserta_kuliah_tamu');
+
+                $mahasiswa = $this->db->get_where('peserta_kuliah_tamu', ['id_peserta_kuliah_tamu' => intval($data[$i])])->row_array();
+                $data_poin_skp = [
+                    'nim' => $mahasiswa['nim'],
+                    'nama_kegiatan' => $this->input->post('nama_kegiatan'),
+                    'validasi_prestasi' => 1,
+                    'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
+                    'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
+                    'id_prestasi' => 115
+                ];
+                // header('Content-type: application/json');
+                // echo json_encode($data_poin_skp);
+                // die;
+                $this->db->insert('poin_skp', $data_poin_skp);
+            }
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
+            redirect('akademik/kegiatan');
         }
     }
 }

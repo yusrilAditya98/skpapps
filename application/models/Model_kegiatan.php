@@ -29,6 +29,7 @@ class Model_kegiatan extends CI_Model
         if ($status_proposal != null) {
             $this->db->where('k.status_selesai_proposal', $status_proposal);
         }
+        $this->db->order_by('k.status_selesai_proposal ASC, k.status_selesai_lpj ASC');
         return $this->db->get()->result_array();
     }
     public function getInfoKegiatan($id_kegiatan, $penanggung_jawab = null)

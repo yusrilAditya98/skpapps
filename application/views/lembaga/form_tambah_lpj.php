@@ -17,12 +17,13 @@
                                         <div class="bagian-personality">
                                             <h5>Informasi Personality</h5>
                                             <div class="form-group">
-                                                <label for="namaMahasiswa">Nama Mahasiswa</label>
+                                                <label for="namaMahasiswa">Nama Lembaga</label>
                                                 <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa" value="<?= $this->session->userdata('nama') ?>" readonly>
                                             </div>
                                             <div class="form-group">
-                                                <label for="nim">NIM</label>
+                                                <label for="nim">Id Lembaga</label>
                                                 <input type="text" class="form-control" id="nim" name="nim" value="<?= $this->session->userdata('username') ?>" readonly>
+
                                             </div>
                                             <div class="form-group">
                                                 <label for="noTlpm">No Telepon / Whatsapp</label>
