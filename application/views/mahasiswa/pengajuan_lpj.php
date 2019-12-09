@@ -12,22 +12,19 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
-                                        <th scope="col" rowspan="2">No</th>
-                                        <th scope="col" rowspan="2">Tanggal Pengajuan</th>
-                                        <th scope="col" rowspan="2">Nama Kegiatan</th>
-                                        <th scope="col" rowspan="2">Status Proposal</th>
-                                        <th scope="col" colspan="5" class="text-center">Validasi</th>
-                                        <th scope="col" rowspan="2">Action</th>
-                                    </tr>
-                                    <tr>
+                                        <th>No</th>
+                                        <th>Tanggal Pengajuan</th>
+                                        <th>Nama Kegiatan</th>
+                                        <th>Status Proposal</th>
                                         <th>BEM</th>
                                         <th>Kmhs</th>
                                         <th>WD3</th>
                                         <th>PSIK</th>
                                         <th>Keuangan</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -38,17 +35,23 @@
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
                                             <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
-                                            <td>
-                                                <?php if ($k['status_selesai_lpj'] == 0) : ?>
-                                                    <span><i class="fa fa-dot-circle mr-2 text-primary"></i>Belum diproses</span>
-                                                <?php elseif ($k['status_selesai_lpj'] == 1) : ?>
-                                                    <span>Sedang Berlangsung</span>
-                                                <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
-                                                    <span><i class="fa fa-dot-circle mr-2 text-warning"></i>Revisi</span>
-                                                <?php elseif ($k['status_selesai_lpj'] == 3) : ?>
-                                                    <span><i class="fa fa-dot-circle mr-2 text-success"></i>Selesai</span>
-                                                <?php endif; ?>
-                                            </td>
+                                            <?php if ($k['status_selesai_proposal'] == 0) : ?>
+                                                <td class="text-secondary">
+                                                    Belum diproses
+                                                </td>
+                                            <?php elseif ($k['status_selesai_proposal'] == 1) : ?>
+                                                <td class="text-primary">
+                                                    Sedang Berlangsung
+                                                </td>
+                                            <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
+                                                <td class="text-warning">
+                                                    Revisi
+                                                </td>
+                                            <?php elseif ($k['status_selesai_proposal'] == 3) : ?>
+                                                <td class="text-success">
+                                                    Selesai
+                                                </td>
+                                            <?php endif; ?>
                                             <?php foreach ($validasi as $v) : ?>
                                                 <?php if ($v['id_kegiatan'] == $k['id_kegiatan']) : ?>
                                                     <td class="text-center">
@@ -71,12 +74,29 @@
                                                     <a href="<?= base_url('Mahasiswa/tambahLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-outline-success"><i class="fas fa-edit"></i>Lpj</a>
                                                 <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
                                                     <a href="<?= base_url('Mahasiswa/editLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
+                                                <?php else : ?>
+                                                    <span>selesai</span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col">Status Proposal</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+
+                                </tfoot>
                             </table>
                         </div>
                     </div>

@@ -27,6 +27,7 @@
 <script src="<?= base_url() ?>assets/modules/datepicker/daterangepicker.js"></script>
 <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery-ui.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/jquery-ui/jquery.mask.js"></script>
+<script src="<?= base_url() ?>assets/modules/select/jquery.selectric.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/ionicons/modules-ion-icons.js"></script>
 
 

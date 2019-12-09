@@ -110,6 +110,7 @@
                                                             <?php endif; ?>
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
+                                                    <a target="_blank" href="<?= base_url('Kemahasiswaan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=proposal" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a>
                                                 </td>
                                             </tr>
                                         <?php endforeach; ?>

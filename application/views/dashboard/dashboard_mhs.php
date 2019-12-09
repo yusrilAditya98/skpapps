@@ -46,10 +46,8 @@
             <h4>Poin Satuan Kredit Prestasi</h4>
           </div>
           <div class="card-body text-center mb-2" style="margin-top:-1rem;">
-            <h1 class="display-3 mb-4" style="color: black;"><?= $mahasiswa[0]['total_poin_skp'] ?><span style="font-size: 1rem; margin-left: -1rem;">points</span>
+            <h1 class="display-3 mb-4" style="color: black;"><?= $mahasiswa[0]['total_poin_skp'] ?><span style="font-size: 1rem; margin-left: 0.5rem;">points</span>
             </h1>
-            <a href="#" class="btn btn-icon btn-success" style="width:100%">
-              Tambah Point SKP <i class="fas fa-plus pl-2"></i></a>
           </div>
         </div>
       </div>
@@ -80,7 +78,7 @@
                 </li>
               <?php endforeach; ?>
             </ul>
-            <a class="float-right" href="">Lihat Selengkapnya</a>
+            <a class="float-right" href="<?= base_url('Mahasiswa/poinSkp') ?>">Lihat Selengkapnya</a>
           </div>
         </div>
       </div>

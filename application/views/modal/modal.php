@@ -66,7 +66,7 @@
                                     <input type="text" class="form-control k-pengaju" id="namaMahasiswa" name="namaMahasiswa" value="" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nim">NIM</label>
+                                    <label for="nim">Id Pengaju</label>
                                     <input type="text" class="form-control k-nim" id="nim" name="nim" value="" readonly>
                                 </div>
                                 <div class="form-group">
