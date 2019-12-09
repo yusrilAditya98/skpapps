@@ -28,7 +28,7 @@ class Akademik extends CI_Controller
         //Perhitungan H- Kegiatan (dalam hari)
         $tanggal_sekarang = date('Y-m-d');
         for ($i = 0; $i < count($data['kuliah_tamu']); $i++) {
-            if ($data['kuliah_tamu'][$i]['tanggal_event'] == $tanggal_sekarang) {
+            if ($data['kuliah_tamu'][$i]['tanggal_event'] == $tanggal_sekarang && $data['kuliah_tamu'][$i]['status_terlaksana'] != 1) {
                 $this->db->where('id_kuliah_tamu', $data['kuliah_tamu'][$i]['id_kuliah_tamu']);
                 $this->db->set('status_terlaksana', 2);
                 $this->db->update('kuliah_tamu');
@@ -54,10 +54,15 @@ class Akademik extends CI_Controller
             }
         }
 
-        $kegiatan_terdekat['tanggal_event'] = $this->tgl_indo($kegiatan_terdekat['tanggal_event']);
-        $data['kegiatan_terdekat'] = $kegiatan_terdekat;
-
-        $data['jumlah_peserta_kuliah_tamu_terdekat'] = count($this->db->get_where('peserta_kuliah_tamu', ['id_kuliah_tamu' => $data['kegiatan_terdekat']['id_kuliah_tamu']])->result_array());
+        if ($kegiatan_terdekat == "") {
+            $data['kegiatan_terdekat']['tanggal_event'] = "Tidak Ada";
+            $data['kegiatan_terdekat']['pemateri'] = "Tidak Ada";
+            $data['jumlah_peserta_kuliah_tamu_terdekat'] = "Tidak Ada";
+        } else {
+            $kegiatan_terdekat['tanggal_event'] = $this->tgl_indo($kegiatan_terdekat['tanggal_event']);
+            $data['kegiatan_terdekat'] = $kegiatan_terdekat;
+            $data['jumlah_peserta_kuliah_tamu_terdekat'] = count($this->db->get_where('peserta_kuliah_tamu', ['id_kuliah_tamu' => $data['kegiatan_terdekat']['id_kuliah_tamu']])->result_array());
+        }
 
 
         $this->template($data);
@@ -72,7 +77,7 @@ class Akademik extends CI_Controller
         //Perhitungan H- Kegiatan (dalam hari)
         $tanggal_sekarang = date('Y-m-d');
         for ($i = 0; $i < count($data['kuliah_tamu']); $i++) {
-            if ($data['kuliah_tamu'][$i]['tanggal_event'] == $tanggal_sekarang) {
+            if ($data['kuliah_tamu'][$i]['tanggal_event'] == $tanggal_sekarang && $data['kuliah_tamu'][$i]['status_terlaksana'] != 1) {
                 $this->db->where('id_kuliah_tamu', $data['kuliah_tamu'][$i]['id_kuliah_tamu']);
                 $this->db->set('status_terlaksana', 2);
                 $this->db->update('kuliah_tamu');
@@ -97,6 +102,14 @@ class Akademik extends CI_Controller
         $this->db->join('mahasiswa', 'peserta_kuliah_tamu.nim = mahasiswa.nim');
         $this->db->join('prodi', 'mahasiswa.kode_prodi = prodi.kode_prodi');
         $kegiatan['peserta_kegiatan'] = $this->db->get()->result_array();
+        for ($i = 0; $i < count($kegiatan['peserta_kegiatan']); $i++) {
+            if ($kegiatan['peserta_kegiatan'][$i]['kehadiran'] == "0") {
+                $kegiatan['peserta_kegiatan'][$i]['kehadiran_teks'] = "<p class='text-danger'>Tidak Hadir</p>";
+            } else {
+                $kegiatan['peserta_kegiatan'][$i]['kehadiran_teks'] = "<p class='text-success'>Hadir</p>";
+            }
+        }
+        Header('Content-type: application/json');
         echo json_encode($kegiatan);
     }
     function generate_string($input = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', $strength = 5)
@@ -292,10 +305,14 @@ class Akademik extends CI_Controller
     {
         $data = $this->input->post('validasi');
         if ($data == null) {
-            echo "HAHA";
+            // echo "HAHA";
         } else {
-            // echo json_encode($data[1]);
+            $this->db->set('status_terlaksana', 1);
+            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
+            $this->db->update('kuliah_tamu');
+            // echo json_encode($this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => intval($this->input->post('id_kuliah_tamu'))])->row_array());
             // die;
+
             for ($i = 0; $i < count($data); $i++) {
                 $this->db->set('kehadiran', 1);
                 $this->db->where('id_peserta_kuliah_tamu', intval($data[$i]));
@@ -313,10 +330,20 @@ class Akademik extends CI_Controller
                 // header('Content-type: application/json');
                 // echo json_encode($data_poin_skp);
                 // die;
-                $this->db->insert('poin_skp', $data_poin_skp);
+                // $this->db->insert('poin_skp', $data_poin_skp);
             }
+            // $this->db->set('status_terlaksana', 1);
+            // $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
+            // $this->db->update('kuliah_tamu');
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
             redirect('akademik/kegiatan');
         }
+    }
+    public function hei()
+    {
+        // echo json_encode($this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => 14])->row_array());
+        // $this->db->set('status_terlaksana', 1);
+        // $this->db->where('id_kuliah_tamu', 14);
+        // $this->db->update('kuliah_tamu');
     }
 }

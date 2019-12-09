@@ -90,7 +90,7 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12 col-md-12 col-lg-12">
-                                <a href="#" class="btn btn-icon btn-warning mb-3" style="float:right">
+                                <a href="<?= base_url('Mahasiswa/cetakSkp/') ?>" target="_blank" class="btn btn-icon btn-warning mb-3" style="float:right">
                                     Cetak SKP <i class="fas fa-print pl-2"></i></a>
                             </div>
                         </div>
@@ -208,11 +208,10 @@
                             <div class="form-group row">
                                 <label class="col-sm-3 col-form-label">File Bukti</label>
                                 <div class="col-sm-9">
-                                    <a href="" class="d-file btn btn-primary">lihat</a>
+                                    <a target="_blank" href="" class="d-file btn btn-primary">lihat</a>
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -222,7 +221,6 @@
         </div>
     </div>
 </div>
-
 <!-- modal revisi -->
 <div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
     <div class="modal-dialog modal-lg" role=" document">

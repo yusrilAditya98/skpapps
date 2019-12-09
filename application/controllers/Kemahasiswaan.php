@@ -765,6 +765,17 @@ class Kemahasiswaan extends CI_Controller
         }
         $this->load->view('kemahasiswaan/tampilan2', $data);
     }
+    public function cetakPengajuanDana($id_kegiatan)
+    {
+        $status = $this->input->get('status');
+        if ($status == 'lpj') {
+            $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_lpj as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
+        } else {
+            $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_proposal as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
+        }
+        $this->load->view('kemahasiswaan/bukti_pengajuan', $data);
+    }
+
     // menampilkan daftar poin skp keseluruhan mahasiswa
     public function skpMahasiswa()
     {
@@ -778,6 +789,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("kemahasiswaan/poin_skp_mhs");
         $this->load->view("template/footer");
     }
+
     // menampilkan beasiswa
     public function beasiswa()
     {

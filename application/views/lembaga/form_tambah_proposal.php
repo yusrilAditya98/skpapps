@@ -26,6 +26,13 @@
                                                 <input type="hidden" name="id_rancangan" value="<?= $proker['id_daftar_rancangan'] ?>">
                                             </div>
                                             <div class="form-group">
+                                                <label for="penanggungJawab">Nama Penanggung Jawab</label>
+                                                <input type="text" class="form-control" id="penanggungJawab" name="penanggungJawab" required>
+                                                <div class="invalid-feedback">
+                                                    Nama penanggung jawab harap diisi!
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="noTlpm">No Telepon / Whatsapp</label>
                                                 <input type="number" class="form-control" id="noTlpm" name="noTlpn" required>
                                                 <div class="invalid-feedback">

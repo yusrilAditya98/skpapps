@@ -65,50 +65,38 @@ $('.detail-kegiatan-info').on('click', function () {
 			$('.lokasi').html('Lokasi : ' + data['lokasi']);
 			$('.waktu_kegiatan').html('Waktu Pelaksanaan : ' + data['waktu_mulai'] + " - " + data['waktu_selesai']);
 
+			$('.tabel-peserta').html('');
+			$('.tabel-peserta').html(`<div class="table-responsive">
+			<table class="table table-striped" id="table-1">
+				<thead>
+					<tr>
+						<th class="text-center">No</th>
+						<th>Nama Peserta</th>
+						<th>NIM</th>
+						<th>Prodi</th>
+						<th>Kehadiran</th>
+					</tr>
+				</thead>
+				<tbody class="body-tabel">
+				</tbody>
+			</table>
+		</div>`);
 			if (data['peserta_kegiatan'].length != 0) {
-				$('.tabel-peserta').html('');
-				$('.tabel-peserta').html(`<div class="table-responsive">
-				<table class="table table-striped" id="table-1">
-					<thead>
-						<tr>
-							<th class="text-center">No</th>
-							<th>Nama Peserta</th>
-							<th>NIM</th>
-							<th>Prodi</th>
-						</tr>
-					</thead>
-					<tbody class="body-tabel">
-					</tbody>
-				</table>
-			</div>`);
 				var i = 0;
 				data['peserta_kegiatan'].forEach(function (dataA) {
 					$('.body-tabel').append(`<tr>
 					<td class="text-center">` + (++i) + `</td>
 					<td>` + dataA['nama'] + `</td>
 					<td>` + dataA['nim'] + `</td>
-					<td>T` + dataA['nama_prodi'] + `</td>
+					<td>` + dataA['nama_prodi'] + `</td>
+					<td>` + dataA['kehadiran_teks'] + `</td>
 				</tr>`)
 				})
 			} else {
-				$('.tabel-peserta').html('');
-				$('.tabel-peserta').html(`<div class="table-responsive">
-				<table class="table table-striped" id="table-1">
-					<thead>
-						<tr>
-							<th class="text-center">No</th>
-							<th>Nama Peserta</th>
-							<th>NIM</th>
-							<th>Prodi</th>
-						</tr>
-					</thead>
-					<tbody class="body-tabel">
-						<tr>
-							<td colspan="4"><h3 class="text-center">Belum ada peserta</h3></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>`);
+				$('.body-tabel').append(`
+					<tr>
+						<td colspan="5"><h3 class="text-center">Belum ada peserta</h3></td>
+					</tr>`)
 			}
 		}
 	});
@@ -180,6 +168,7 @@ $('.table-kategori').on('click', '.validasi-kegiatan-akademik', function () {
 					<td>` + dataA['nim'] + `</td>
 					<td>` + dataA['nama_prodi'] + `</td>
 					<td><input type="checkbox" name="validasi[]" value="` + dataA['id_peserta_kuliah_tamu'] + `"></td>
+					<input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu" value="` + data['id_kuliah_tamu'] + `">
 					<input type="hidden" id="nama_kegiatan" name="nama_kegiatan" value="` + data['nama_event'] + `">
 					<input type="hidden" id="tgl_pelaksanaan" name="tgl_pelaksanaan" value="` + data['tanggal_format'] + `">
 					<input type="hidden" id="tempat_pelaksanaan" name="tempat_pelaksanaan" value="` + data['lokasi'] + `">

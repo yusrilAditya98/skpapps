@@ -26,6 +26,11 @@
                                                 <input type="text" class="form-control" id="nim" name="nim" value="<?= $this->session->userdata('username') ?>" readonly>
                                             </div>
                                             <div class="form-group">
+                                                <label for="penanggungJawab">Nama Penanggung Jawab</label>
+                                                <input type="text" class="form-control" id="penanggungJawab" name="penanggungJawab" value="<?= $kegiatan['nama_penanggung_jawab'] ?>" required>
+
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="noTlpm">No Telepon / Whatsapp</label>
                                                 <input type="number" class="form-control" id="noTlpm" name="noTlpn" value="<?= $kegiatan['no_whatsup'] ?>" required>
                                                 <div class="invalid-feedback">

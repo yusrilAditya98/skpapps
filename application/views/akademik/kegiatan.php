@@ -88,7 +88,7 @@
 
 <!-- Awal Modal Detail Kegiatan -->
 <div class="modal fade bd-example-modal-lg modalDetailKegiatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
         <div class="modal-content">
             <div class="modal-header bg-blue">
                 <h5 class="modal-title clr-white ml-4" id="exampleModalLabel">Detail Kegiatan</span></h5>

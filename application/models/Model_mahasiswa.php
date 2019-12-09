@@ -1,13 +1,13 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 class Model_mahasiswa extends CI_Model
 {
     public function getDataMahasiswa($nim = null)
     {
         $this->db->select('*');
         $this->db->from('mahasiswa as m');
+        $this->db->join('prodi as p', 'p.kode_prodi = m.kode_prodi', 'left');
+        $this->db->join('jurusan as j', 'p.kode_jurusan = j.kode_jurusan', 'left');
         if ($nim != null) {
             $this->db->where('m.nim', $nim);
         }

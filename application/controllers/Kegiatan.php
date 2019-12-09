@@ -263,7 +263,7 @@ class Kegiatan extends CI_Controller
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
                 'tgl_pengajuan_proposal' => date("Y-m-d"),
                 'id_penanggung_jawab' => $this->input->post('nim'),
-                'nama_penanggung_jawab' => $this->input->post('namaLembaga'),
+                'nama_penanggung_jawab' => $this->input->post('penanggungJawab'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
                 'waktu_pengajuan' => time()
@@ -426,7 +426,7 @@ class Kegiatan extends CI_Controller
         $data['jenis_revisi'] = $this->input->post('jenis_revisi');
         $gambar = [];
         if ($data['kegiatan'] == null || $data['kegiatan']['status_selesai_proposal'] == 3) {
-            redirect('lembaga/pengajuanProposal');
+            redirect('kegiatan/daftarPengajuanProposal');
         }
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
@@ -451,6 +451,7 @@ class Kegiatan extends CI_Controller
                 'deskripsi_kegiatan' => $this->input->post('deskripsiKegiatan'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
+                'nama_penanggung_jawab' => $this->input->post('penanggungJawab')
             ];
             if ($this->input->post('jenis_revisi') == 0) {
                 $proposal['status_selesai_proposal'] = 0;
