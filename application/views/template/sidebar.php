@@ -9,14 +9,12 @@ $queryMenu = "SELECT `user_menu`.`id`, `menu`
                 ORDER BY `user_access_menu`.`menu_id` ASC
                 ";
 $menu = $this->db->query($queryMenu)->result_array();
-
 $menuId = [];
 $temp = [];
 $i = 0;
 foreach ($menu as $m) {
     $menuId[$i++] = $m['id'];
 }
-
 $j = 0;
 foreach ($menuId as $m) {
     $querySubMenu = "SELECT user_sub_menu.* FROM `user_sub_menu` JOIN `user_menu` 
@@ -31,14 +29,9 @@ foreach ($temp as $t) {
         $subMenu[$k++] = $ts;
     }
 }
-
-
-
 $querySubSubMenu = "SELECT * FROM `user_sub_sub_menu` 
 ";
-
 $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
-
 ?>
 
 <div class="main-sidebar">
@@ -128,10 +121,5 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                     <?php endforeach; ?>
                 <?php endforeach; ?>
 
-                <div class="mt-4 mb-4 p-3 hide-sidebar-mini">
-                    <a href="https://getstisla.com/docs" class="btn btn-primary btn-lg btn-block btn-icon-split">
-                        <i class="fas fa-rocket"></i> Documentation
-                    </a>
-                </div>
     </aside>
 </div>

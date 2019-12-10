@@ -1,7 +1,5 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 class Model_mahasiswa extends CI_Model
 {
     public function getDataMahasiswa($nim = null)
@@ -15,7 +13,6 @@ class Model_mahasiswa extends CI_Model
         }
         return $this->db->get()->result_array();
     }
-
     public function insertBeasiswa($data)
     {
         $this->db->insert('penerima_beasiswa', $data);

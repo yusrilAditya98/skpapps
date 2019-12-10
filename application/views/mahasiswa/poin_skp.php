@@ -212,7 +212,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -222,7 +221,6 @@
         </div>
     </div>
 </div>
-
 <!-- modal revisi -->
 <div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
     <div class="modal-dialog modal-lg" role=" document">

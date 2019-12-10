@@ -62,7 +62,6 @@
         </div>
     </section>
 </div>
-
                                     <!-- modal detail skp -->
 <div class=" modal fade" tabindex="-1" role="dialog" id="detailKegiatan">
                                                             <div class="modal-dialog modal-lg"" role=" document">

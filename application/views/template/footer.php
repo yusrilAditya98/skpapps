@@ -2,9 +2,6 @@
     <div class="footer-left">
         Copyright &copy; 2019 <div class="bullet"></div> Kemahasiswaan FEB UB
     </div>
-    <div class="footer-right">
-        2.3.0
-    </div>
 </footer>
 </div>
 </div>
@@ -18,7 +15,6 @@
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2/build/pdf.min.js"></script>
 <script src="<?= base_url() ?>assets/js/stisla.js"></script>
 
-
 <!-- JS Libraies -->
 <script src="<?= base_url() ?>assets/modules/datatables/datatables.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/datatables/dataTables.bootstrap4.min.js"></script>
@@ -30,13 +26,19 @@
 <script src="<?= base_url() ?>assets/modules/select/jquery.selectric.min.js"></script>
 <script src="<?= base_url() ?>assets/modules/ionicons/modules-ion-icons.js"></script>
 
-
 <!-- Page Specific JS File -->
 <script src="<?= base_url() ?>assets/js/page/modules-datatables.js"></script>
 
 <!-- Template JS File -->
 <script src="<?= base_url() ?>assets/js/scripts.js"></script>
 <script src="<?= base_url() ?>assets/js/custom.js"></script>
+<script src="<?= base_url() ?>assets/js/kegiatan.js"></script>
+<script src="<?= base_url() ?>assets/js/kategori.js"></script>
+<script src="<?= base_url() ?>assets/js/skp.js"></script>
+<script src="<?= base_url() ?>assets/js/manajemenUser.js"></script>
+
+<!-- Sweet alert custom -->
+<script src="<?= base_url('assets/') ?>js/sweet-alert.js"></script>
 
 <?php if ($this->session->userdata('user_profil_kode') == 1) : ?>
     <script src="<?= base_url() ?>assets/js/mahasiswa/mahasiswa.js"></script>

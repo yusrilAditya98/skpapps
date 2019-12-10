@@ -41,6 +41,7 @@
                                         <th>Nama Lembaga</th>
                                         <th>Dana Pagu</th>
                                         <th>Dana Digunakan</th>
+                                        <th>Sisa Dana</th>
                                         <th>Jumlah Kegiatan</th>
                                         <th>Kegiatan Terlaksana</th>
                                         <th>Kegiatan Belum Terlaksana</th>
@@ -55,13 +56,17 @@
                                             <td><?= $index++ ?></td>
                                             <td><?= $l['tahun_kegiatan'] ?></td>
                                             <td><?= $l['nama_lembaga'] ?></td>
-                                            <td><?= $l['anggaran_kemahasiswaan'] ?></td>
+                                            <td>Rp.<?= number_format($l['anggaran_kemahasiswaan'], 2, ',', '.'); ?></td>
                                             <td>
                                                 <?php if ($l['dana_kegiatan']) : ?>
-                                                    <?= $l['dana_kegiatan'] ?>
+                                                    Rp.<?= number_format($l['dana_kegiatan'], 2, ',', '.'); ?>
                                                 <?php else : ?>
                                                     0
                                                 <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?= number_format($l['dana_kegiatan'], 2, ',', '.');
+                                                    $l['anggaran_kemahasiswaan'] - $l['dana_kegiatan'] ?>
                                             </td>
                                             <td>
                                                 <?php if ($l['jumlah_kegiatan']) : ?>

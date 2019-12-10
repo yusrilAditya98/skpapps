@@ -12,7 +12,6 @@
 
     <style type="text/css" media="print">
         /* @page {size:landscape}  */
-
         @page {
             size: A4 landscape;
         }

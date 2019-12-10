@@ -1,10 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
-
 class Publikasi extends CI_Controller
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -12,7 +9,6 @@ class Publikasi extends CI_Controller
             redirect('auth/blocked');
         }
     }
-
     private function _notif()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
@@ -20,7 +16,6 @@ class Publikasi extends CI_Controller
         $this->notif['notif_psik_proposal'] = count($this->kemahasiswaan->getNotifValidasi(5, 'proposal'));
         return $this->notif;
     }
-
     public function index()
     {
         $data['title'] = 'Dashboard';
@@ -31,7 +26,6 @@ class Publikasi extends CI_Controller
         $this->load->view("dashboard/dashboard_publikasi");
         $this->load->view("template/footer");
     }
-
     public function daftarProposal()
     {
         $data['title'] = 'Validasi';
@@ -46,7 +40,6 @@ class Publikasi extends CI_Controller
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
-
     public function daftarLpj()
     {
         $data['title'] = 'Validasi';
@@ -98,7 +91,6 @@ class Publikasi extends CI_Controller
             redirect('Lembaga/daftarProposal');
         }
     }
-
     public function validasiLpj($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');

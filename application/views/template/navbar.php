@@ -18,7 +18,7 @@
                             <i class="far fa-user"></i> Profile
                         </a>
                         <div class="dropdown-divider"></div>
-                        <a href="<?= base_url('Auth') ?>/logout" class="dropdown-item has-icon text-danger">
+                        <a href="#" class="dropdown-item has-icon text-danger logout">
                             <i class="fas fa-sign-out-alt"></i> Logout
                         </a>
                     </div>

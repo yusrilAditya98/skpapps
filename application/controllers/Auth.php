@@ -15,8 +15,12 @@ class Auth extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
     }
+
     public function index()
     {
+        if ($this->session->userdata('user_profil_kode')) {
+            redirect(link_dashboard($this->session->userdata('user_profil_kode')));
+        }
 
         $this->form_validation->set_rules('username', 'Username', 'required|trim');
         $this->form_validation->set_rules('password', 'Password', 'required|trim');
@@ -42,7 +46,7 @@ class Auth extends CI_Controller
         ];
         // memanggil method auth dari objek yang telah dibuat dengan method GET
         $result = $auth->auth($data);
-        if ($result['msg']) {
+        if ($result['msg'] == "true") {
             $data = [
                 "username" => $result['data']['nim'],
                 "nama" => $result['data']['nama'],
@@ -54,8 +58,6 @@ class Auth extends CI_Controller
 
             $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
             if ($user != null) {
-
-
                 if ($user['is_active'] == 1) {
                     // cek password
                     if (password_verify($this->password, $user['password'])) {
@@ -64,6 +66,7 @@ class Auth extends CI_Controller
                             "nama" => $user['nama'],
                             'user_profil_kode' => $user['user_profil_kode']
                         ];
+
                         $this->session->set_userdata($data);
                         if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
                             redirect('Kegiatan');

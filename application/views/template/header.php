@@ -18,12 +18,13 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/datepicker/daterangepicker.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/ionicons/ionicons.min.css">
 
-
-
-
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/components.css">
+
+    <!-- Sweet alert js -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
 <body>
