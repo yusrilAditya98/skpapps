@@ -7,7 +7,7 @@ use Araditama\AuthSIAM\AuthSIAM;
 
 class Auth extends CI_Controller
 {
-    private $username = "cek";
+    private $username;
     private $password;
 
     public function __construct()

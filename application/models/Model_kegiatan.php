@@ -34,11 +34,12 @@ class Model_kegiatan extends CI_Model
     }
     public function getInfoKegiatan($id_kegiatan, $penanggung_jawab = null)
     {
-        $this->db->select('*');
-        $this->db->from('kegiatan');
-        $this->db->where('id_kegiatan', $id_kegiatan);
+        $this->db->select('k.*,l.nama_lembaga');
+        $this->db->from('kegiatan as k');
+        $this->db->join('lembaga as l', 'l.id_lembaga = k.id_lembaga', 'left');
+        $this->db->where('k.id_kegiatan', $id_kegiatan);
         if ($penanggung_jawab != null) {
-            $this->db->where('id_penanggung_jawab', $penanggung_jawab);
+            $this->db->where('k.id_penanggung_jawab', $penanggung_jawab);
         }
         return $this->db->get()->row_array();
     }

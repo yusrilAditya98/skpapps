@@ -51,14 +51,9 @@
                                                     <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                 <?php endif; ?></th>
                                             <td>
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success"><i class="fas fa-check"></i></a>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger"><i class="fas fa-times"></i></a>
-                                                    </div>
-                                                </div>
+                                                <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success"><i class="fas fa-check"></i></a>
+                                                <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger"><i class="fas fa-times"></i></a>
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

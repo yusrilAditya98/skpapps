@@ -674,17 +674,21 @@ class Kemahasiswaan extends CI_Controller
         $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Anggaran';;
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['lembaga'] = $this->kemahasiswaan->getRekapRancangan();
+        $data['lembaga'] = $this->db->get('lembaga')->result_array();
         $data['tahun'] = $this->kemahasiswaan->getTahunRancangan();
 
         if ($this->input->get('tahun') != null) {
             $tahun = $this->input->get('tahun');
             $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($tahun);
+            $data['dana_pagu'] = $this->kemahasiswaan->getRekapanKegiatanLembaga($tahun);
         } elseif ($data['tahun'] != null) {
             $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($data['tahun'][0]['tahun_kegiatan']);
+            $data['dana_pagu'] = $this->kemahasiswaan->getRekapanKegiatanLembaga($data['tahun'][0]['tahun_kegiatan']);
         } else {
             $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran(2019);
+            $data['dana_pagu'] = $this->kemahasiswaan->getRekapanKegiatanLembaga(2019);
         }
+
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -764,7 +768,7 @@ class Kemahasiswaan extends CI_Controller
             }
             $index++;
         }
-        $this->load->view('kemahasiswaan/tampilan2', $data);
+        $this->load->view('kemahasiswaan/tampilan_table', $data);
     }
     public function cetakPengajuanLpj()
     {
@@ -782,7 +786,7 @@ class Kemahasiswaan extends CI_Controller
             }
             $index++;
         }
-        $this->load->view('kemahasiswaan/tampilan2', $data);
+        $this->load->view('kemahasiswaan/tampilan_table', $data);
     }
     public function cetakPengajuanDana($id_kegiatan)
     {

@@ -64,7 +64,7 @@
                                     <input type="text" class="form-control k-pengaju" id="namaMahasiswa" name="namaMahasiswa" value="" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="nim">Id Pengaju</label>
+                                    <label for="nim">Jenis Pengajuan</label>
                                     <input type="text" class="form-control k-nim" id="nim" name="nim" value="" readonly>
                                 </div>
                                 <div class="form-group">

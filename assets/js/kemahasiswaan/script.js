@@ -125,3 +125,45 @@ $('a.d-anggaran').on('click', function () {
 		}
 	})
 })
+
+
+// DASHBOARD
+// For a pie chart
+$(document).ready(function () {
+	var data = {
+		datasets: [{
+			data: [10, 20, 30, 20, 100],
+			backgroundColor: [
+				"#fc544b",
+				"#f9ca24",
+				"#2d98da",
+				"#20bf6b",
+				"#e056fd",
+			],
+
+		}],
+
+		// These labels appear in the legend and in the tooltips when hovering different arcs
+		labels: [
+			'Kurang',
+			'Cukup',
+			'Baik',
+			'Sangat Baik',
+			'Dengan Pujian'
+		],
+
+	};
+
+	const canvas = document.querySelector("#sebaran-skp");
+	const ctx = canvas.getContext("2d");
+	new Chart(ctx, {
+		type: 'doughnut',
+		data: data,
+
+	});
+
+
+})
+
+
+// akhir Dashboard

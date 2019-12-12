@@ -57,7 +57,8 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->from('daftar_rancangan_kegiatan as drk');
         $this->db->group_by('drk.id_lembaga,drk.tahun_kegiatan');
         $from_clause3 = $this->db->get_compiled_select();
-        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*,jk.jumlah_kegiatan');
+
+        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*,jk.jumlah_kegiatan,l.tahun_rancangan');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
         $this->db->join('lembaga as l', 'l.id_lembaga=rkl.id_lembaga', 'left');
         $this->db->join('(' . $from_clause3 . ') as jk', 'jk.lbg3 =rkl.id_lembaga and jk.tahun_kegiatan =rkl.tahun_pengajuan', 'left');
@@ -92,7 +93,7 @@ class Model_kemahasiswaan extends CI_Model
             $this->db->set('status_rancangan', $status);
         }
         if ($anggaran != null) {
-            $this->db->set('anggaran_', $anggaran);
+            $this->db->set('anggaran_kemahasiswaan', $anggaran);
         }
         $this->db->where('id_lembaga', $id_lembaga);
         $this->db->where('tahun_pengajuan', $tahun);
@@ -116,6 +117,7 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.tahun_kegiatan', $periode);
         $this->db->group_by('drk.id_lembaga');
         $from_clause1 = $this->db->get_compiled_select();
+
         // // jumlah kegiatan belum terlaksana terlaksana
         $this->db->select('count(drk.id_daftar_rancangan) as blm_terlaksana,drk.id_lembaga as lbg2,');
         $this->db->from('daftar_rancangan_kegiatan as drk');
@@ -190,5 +192,14 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->set('validasi_beasiswa', $status);
         $this->db->where('id_penerima', $id_penerima);
         $this->db->update('penerima_beasiswa');
+    }
+
+    public function getRekapanKegiatanLembaga($tahun)
+    {
+        $this->db->select('rkl.*,l.nama_lembaga');
+        $this->db->from('rekapan_kegiatan_lembaga as rkl');
+        $this->db->join('lembaga as l', 'l.id_lembaga = rkl.id_lembaga', 'left');
+        $this->db->where('rkl.tahun_pengajuan', $tahun);
+        return $this->db->get()->result_array();
     }
 }

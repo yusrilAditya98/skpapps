@@ -10,10 +10,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h4>Permintaan Pengajuan Lpj Kegiatan</h4>
-                    </div>
-                    <div class="card-body">
-                        <a href="#" data-toggle="modal" data-target="#tambahAnggaran" data-id="" class="btn btn-icon icon-left btn-success float-right tambahAnggaran"><i class="fas fa-plus"></i>Tambah Anggaran Lembaga</a>
-                        <div class="col-2 float-right">
+                        <div class="card-header-action">
                             <form action="<?= base_url('Kemahasiswaan/anggaran') ?>" method="get">
                                 <div class="form-group">
                                     <div class="input-group">
@@ -45,8 +42,6 @@
                                         <th>Jumlah Kegiatan</th>
                                         <th>Kegiatan Terlaksana</th>
                                         <th>Kegiatan Belum Terlaksana</th>
-                                        <th>Status Rancangan</th>
-                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -89,6 +84,84 @@
                                                     0
                                                 <?php endif; ?>
                                             </td>
+
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
+
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Latest Posts</h4>
+                        <div class="card-header-action">
+                            <a href="#" data-toggle="modal" data-target="#tambahAnggaran" data-id="" class="btn btn-icon icon-left btn-success float-right tambahAnggaran"><i class="fas fa-plus"></i>Tambah Anggaran Lembaga</a>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Lembaga</th>
+                                        <th>Tahun</th>
+                                        <th>Anggaran Dana Pagu</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($dana_pagu as $d) : ?>
+                                        <tr>
+                                            <td><?= $d['nama_lembaga'] ?></td>
+                                            <td><?= $d['tahun_pengajuan'] ?></td>
+                                            <td><?= $d['anggaran_kemahasiswaan'] ?></td>
+                                            <td>
+
+                                                <a href="#" class="btn btn-primary edit-anggaran" data-toggle="modal" data-target="#editAnggaran" data-id="<?= $d['id_lembaga'] ?>" data-tahun="<?= $d['tahun_pengajuan'] ?>"><i class="fas fa-edit"></i> </a>
+
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-6 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Permintaan Pengajuan Lpj Kegiatan</h4>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped" id="table-2">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Tahun Periode</th>
+                                        <th>Nama Lembaga</th>
+
+                                        <th>Status Rancangan</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $index = 1;
+                                    foreach ($lembaga as $l) : ?>
+                                        <tr>
+                                            <td><?= $index++ ?></td>
+                                            <td><?= $l['tahun_rancangan']
+                                                    ?></td>
+                                            <td><?= $l['nama_lembaga'] ?></td>
                                             <td>
                                                 <?php if ($l['status_rencana_kegiatan'] == 1) : ?>
                                                     <span class="badge badge-success">open</span>
@@ -98,15 +171,13 @@
                                             </td>
                                             <td>
                                                 <div class="row">
-                                                    <div class="col-lg-3">
+                                                    <div class="col-lg-6">
                                                         <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=1' ?>" class="btn btn-success"><i class="fas fa-check"></i> </a>
                                                     </div>
-                                                    <div class="col-lg-3">
+                                                    <div class="col-lg-6">
                                                         <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=0' ?>" class="btn btn-danger"><i class="fas fa-times"></i> </a>
                                                     </div>
-                                                    <div class="col-lg-3">
-                                                        <a href="#" class="btn btn-primary edit-anggaran" data-toggle="modal" data-target="#editAnggaran" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>"><i class="fas fa-edit"></i> </a>
-                                                    </div>
+
                                                 </div>
                                             </td>
                                         </tr>

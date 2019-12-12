@@ -16,10 +16,9 @@
                         <form action="<?= base_url('Keuangan/laporanSerapan') ?>" method="post">
                             <div class="form-group ">
                                 <div class="input-group">
-                                    <select class="custom-select" name="tahun" id="inputGroupSelect04">
-                                        <option value="" selected="">Pilih tahun...</option>
+                                    <select class="custom-select" name="tahun" id="tahun_anggran">
                                         <?php foreach ($tahun as $t) : ?>
-                                            <option value="<?= $t['tahun'] ?>"><?= $t['tahun'] ?></option>
+                                            <option selected value="<?= $t['tahun'] ?>"><?= $t['tahun'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="input-group-append">
@@ -92,6 +91,28 @@
                                     </tr>
                                 </tfoot>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Grafik Laporan Serapan Kegiatan</h4>
+
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-lg-12">
+                                <div class="card-body chart">
+                                    <canvas id="laporan-serapan" style="width: 100%; height: 30rem;"></canvas>
+                                </div>
+                                <div class="col-md-12 mr-2">
+
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

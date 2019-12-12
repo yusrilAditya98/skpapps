@@ -39,7 +39,7 @@ $('.detail-kegiatan').on('click', function (e) {
 		success: function (data) {
 			console.log(jenis)
 			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
-			$('.k-nim').val(data.kegiatan['id_penanggung_jawab'])
+			$('.k-nim').val(data.kegiatan['nama_lembaga'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
 			$('.k-dana').val(data.kegiatan['dana_kegiatan'])
 			if (jenis == 'proposal') {
