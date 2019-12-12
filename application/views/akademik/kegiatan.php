@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped text-wrap table-kategori" id="tabel-kegiatan">
+                            <table class="table table-striped text-wrap" id="table-kegiatan">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
@@ -44,17 +44,15 @@
                                             <td><?= $k['tanggal_event'] ?></td>
                                             <td><?= $k['pemateri'] ?></td>
                                             <td><?= $k['lokasi'] ?></td>
-                                            <td>
-                                                <?php
-                                                    if ($k['status_terlaksana'] == 0) {
-                                                        echo '<p class="text-danger">Belum Terlaksana</p>';
-                                                    } else if ($k['status_terlaksana'] == 1) {
-                                                        echo '<p class="text-success">Sudah Terlaksana</p>';
-                                                    } else {
-                                                        echo '<p class="text-info">Sedang Berlangsung</p>';
-                                                    }
-                                                    ?>
-                                            </td>
+                                            <?php
+                                                if ($k['status_terlaksana'] == 0) {
+                                                    echo '<td class="text-danger">Belum Terlaksana</td>';
+                                                } else if ($k['status_terlaksana'] == 1) {
+                                                    echo '<td class="text-success">Sudah Terlaksana</td>';
+                                                } else {
+                                                    echo '<td class="text-info">Sedang Berlangsung</td>';
+                                                }
+                                                ?>
                                             <td>
                                                 <?php
                                                     if ($k['status_terlaksana'] == 2) {

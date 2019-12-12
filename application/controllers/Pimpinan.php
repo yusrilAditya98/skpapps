@@ -87,4 +87,71 @@ class Pimpinan extends CI_Controller
         header('Content-type: application/json');
         echo json_encode($detail_skp);
     }
+
+    public function rekapitulasiSKP()
+    {
+        $data['title'] = 'Rekapitulasi SKP';
+        // $this->db->where('id_prestasi', 7);
+        // $this->db->or_where('id_prestasi', 8);
+        // $this->db->or_where('id_prestasi', 9);
+        $data['prestasi'] = $this->db->get('prestasi')->result_array();
+        for ($i = 0; $i < count($data['prestasi']); $i++) {
+            $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
+            $count = 0;
+            $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
+            for ($j = 0; $j < count($semua_prestasi); $j++) {
+                $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
+                $mahasiswa = $this->db->get_where('poin_skp', ['id_prestasi' => $id_semua_prestasi])->result_array();
+                $count += count($mahasiswa);
+            }
+            $data['prestasi'][$i]['jumlah'] = $count;
+        }
+
+        $this->template($data);
+        $this->load->view("pimpinan/rekapitulasi_skp", $data);
+        $this->load->view("template/footer");
+    }
+
+    public function rekapitulasiSKPApi()
+    {
+        $this->db->where('id_prestasi', 7);
+        $this->db->or_where('id_prestasi', 8);
+        $this->db->or_where('id_prestasi', 9);
+        $data['prestasi'] = $this->db->get('prestasi')->result_array();
+        for ($i = 0; $i < count($data['prestasi']); $i++) {
+            $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
+            $count = 0;
+            $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
+            for ($j = 0; $j < count($semua_prestasi); $j++) {
+                $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
+                $mahasiswa = $this->db->get_where('poin_skp', ['id_prestasi' => $id_semua_prestasi])->result_array();
+                $count += count($mahasiswa);
+            }
+            $data['prestasi'][$i]['jumlah'] = $count;
+        }
+        header('Content-type: application/json');
+        echo json_encode($data['prestasi']);
+    }
+
+    public function getRekapitulasiSKP($id_prestasi)
+    {
+        $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => intval($id_prestasi)])->result_array();
+        $data['prestasi'] = $this->db->get_where('prestasi', ['id_prestasi' => intval($id_prestasi)])->row_array();
+        $id_semua_prestasi_arr = [];
+        for ($j = 0; $j < count($semua_prestasi); $j++) {
+            $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
+            array_push($id_semua_prestasi_arr, $id_semua_prestasi);
+        }
+        $this->db->where_in('id_prestasi', $id_semua_prestasi_arr);
+        $this->db->from('poin_skp');
+        $this->db->join('mahasiswa', 'poin_skp.nim = mahasiswa.nim');
+        $this->db->join('prodi', 'mahasiswa.kode_prodi = prodi.kode_prodi');
+        $data['mahasiswa'] = $this->db->get()->result_array();
+        // array_push($data['prestasi'], $mahasiswa);
+
+        header('Content-type: application/json');
+        // echo json_encode($id_semua_prestasi_arr);
+        echo json_encode($data);
+        // die;
+    }
 }

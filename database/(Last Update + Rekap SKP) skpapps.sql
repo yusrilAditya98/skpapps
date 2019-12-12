@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Dec 09, 2019 at 03:05 AM
+-- Generation Time: Dec 12, 2019 at 03:39 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -425,8 +425,8 @@ CREATE TABLE `kuliah_tamu` (
 INSERT INTO `kuliah_tamu` (`id_kuliah_tamu`, `kode_qr`, `nama_event`, `tanggal_event`, `deskripsi`, `id_prestasi`, `lokasi`, `waktu_mulai`, `waktu_selesai`, `poster`, `pemateri`, `status_terlaksana`) VALUES
 (2, 'ua5d2', 'Economic Foundation', '2019-11-13', 'abc', 115, 'UB', '10:00:00', '11:00:00', '', 'Johny Kurniawan', 1),
 (3, 'V8eeb', 'Be The Pro Economics', '2019-11-18', 'DDDDD', 115, 'UB', '10:00:00', '11:00:00', '', 'Mr. Johny', 1),
-(14, 'tIb87', 'Simposium Nasional Jurusan Akuntansi', '2019-12-03', 'Mengundang wakil rektor bidang keuangan dan kepegawaian', 115, 'AULA GEDUNG F', '10:00:00', '11:00:00', '', 'Prof. Gugus Irianto', 0),
-(16, 'LuFs0', 'AA', '2019-12-08', 'aa', 115, 'D.2.2', '10:00:00', '11:00:00', '', 'aa', 2);
+(14, 'tIb87', 'Simposium Nasional Jurusan Akuntansi', '2019-12-09', 'Mengundang wakil rektor bidang keuangan dan kepegawaian', 115, 'AULA GEDUNG F', '10:00:00', '11:00:00', '', 'Prof. Gugus Irianto', 1),
+(16, 'LuFs0', 'AA', '2019-12-11', 'aa', 115, 'D.2.2', '10:00:00', '11:00:00', '', 'aa', 0);
 
 -- --------------------------------------------------------
 
@@ -527,8 +527,8 @@ CREATE TABLE `peserta_kuliah_tamu` (
 --
 
 INSERT INTO `peserta_kuliah_tamu` (`id_peserta_kuliah_tamu`, `nim`, `id_kuliah_tamu`, `kehadiran`) VALUES
-(120, '165150201111021', 14, 0),
-(121, '165150201111230', 14, 0),
+(120, '165150201111021', 14, 1),
+(121, '165150201111230', 14, 1),
 (122, '165150201111231', 14, 1);
 
 -- --------------------------------------------------------
@@ -567,7 +567,9 @@ INSERT INTO `poin_skp` (`id_poin_skp`, `nim`, `nama_kegiatan`, `validasi_prestas
 (22, '165150201111230', 'Lomba Membaca Puis', 1, '2019-12-02', '2019-12-02', 'lpj/1575266654_kegiatan_1.pdf', 'Universitas Gajah Mada', '-', 152),
 (23, '165150201111230', 'Diklat Kegiatan', 1, '2019-12-02', '2019-12-02', 'lpj/1575274486_kegiatan_1.pdf', 'FEB UB', '-', 44),
 (24, '195020100111001', 'Diklat Kegiatan', 1, '2019-12-02', '2019-12-02', 'lpj/1575274486_kegiatan_1.pdf', 'FEB UB', '-', 44),
-(25, '165150201111230', 'cek', 1, '2019-12-02', '2019-12-02', 'poinskp/kegiatan_1.pdf', 'Malang', '-', 1);
+(25, '165150201111230', 'cek', 1, '2019-12-02', '2019-12-02', 'poinskp/kegiatan_1.pdf', 'Malang', '-', 1),
+(27, '165150201111231', '', 1, '2019-12-11', '2019-12-12', '', '', '', 48),
+(28, '165150201111231', '', 1, '2019-12-12', '2019-12-13', '', '', '', 52);
 
 -- --------------------------------------------------------
 
@@ -1207,7 +1209,8 @@ INSERT INTO `user_sub_menu` (`id`, `judul`, `url`, `ikon`, `menu_id`, `has_sub`)
 (23, 'Kegiatan', 'Akademik/kegiatan', 'fas fa-rocket', 8, 0),
 (24, 'Dashboard', '', 'fas fa-rocket', 9, 0),
 (25, 'Manegement User', 'Admin/ManagementUser', 'fas fa-rocket', 9, 0),
-(26, 'Kategori', 'Kemahasiswaan/kategori', 'fas fa-rocket', 4, 0);
+(26, 'Kategori', 'Kemahasiswaan/kategori', 'fas fa-rocket', 4, 0),
+(27, 'Rekapitulasi SKP', 'Pimpinan/rekapitulasiSKP', 'fas fa-rocket', 5, 0);
 
 -- --------------------------------------------------------
 
@@ -1681,7 +1684,7 @@ ALTER TABLE `peserta_kuliah_tamu`
 -- AUTO_INCREMENT for table `poin_skp`
 --
 ALTER TABLE `poin_skp`
-  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `poin_skp_sumber_dana`
@@ -1759,7 +1762,7 @@ ALTER TABLE `user_profil`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `validasi_kegiatan`

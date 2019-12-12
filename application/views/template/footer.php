@@ -36,6 +36,8 @@
 <script src="<?= base_url() ?>assets/js/kategori.js"></script>
 <script src="<?= base_url() ?>assets/js/skp.js"></script>
 <script src="<?= base_url() ?>assets/js/manajemenUser.js"></script>
+<script src="<?= base_url() ?>assets/js/chartjs-plugin-annotation.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 <!-- Sweet alert custom -->
 <script src="<?= base_url('assets/') ?>js/sweet-alert.js"></script>

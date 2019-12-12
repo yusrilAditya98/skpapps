@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped text-wrap table-kategori text-center" id="tabel-user">
+                            <table class="table table-striped text-wrap text-center" id="table-user">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>

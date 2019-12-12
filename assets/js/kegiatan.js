@@ -14,40 +14,10 @@ if (segments[4] == "Akademik") {
 				})
 			}
 		});
-		$('.dataTables_filter').prepend(`
-		<select class="custom-select col-lg-4 mr-2 filter-status" id="filter-status" onchange="myFunctionKegiatan()">
-			<option value="">Pilih Status</option>
-			<option>Belum Terlaksana</option>
-			<option>Sudah Terlaksana</option>
-			<option>Sedang Berlangsung</option>
-		</select>`);
 	})
 }
 
-function myFunctionKegiatan() {
-	// Declare variables
-	var input, filter, table, tr, td, i, txtValue;
-	input = document.getElementById("filter-status");
-	filter = input.value.toUpperCase();
-	// console.log(filter);
-	table = document.getElementById("tabel-kegiatan");
-	tr = table.getElementsByTagName("tr");
-
-	// Loop through all table rows, and hide those who don't match the search query
-	for (i = 0; i < tr.length; i++) {
-		td = tr[i].getElementsByTagName("td")[4];
-		if (td) {
-			txtValue = td.textContent || td.innerText;
-			if (txtValue.toUpperCase().indexOf(filter) > -1) {
-				tr[i].style.display = "";
-			} else {
-				tr[i].style.display = "none";
-			}
-		}
-	}
-}
-
-$('.detail-kegiatan-info').on('click', function () {
+$('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 	let id = $(this).data('id');
 	// console.log(id);
 	$.ajax({
@@ -102,7 +72,7 @@ $('.detail-kegiatan-info').on('click', function () {
 	});
 })
 
-$('.table-kategori').on('click', '.edit-kegiatan', function () {
+$('#table-kegiatan').on('click', '.edit-kegiatan', function () {
 	let id = $(this).data('id');
 	// console.log(id);
 	$.ajax({
@@ -125,7 +95,25 @@ $('.table-kategori').on('click', '.edit-kegiatan', function () {
 	});
 })
 
-$('.table-kategori').on('click', '.validasi-kegiatan-akademik', function () {
+$('#table-kegiatan').on('click', '.hapus-kegiatan', function () {
+	let id_kuliah_tamu = $(this).data('id');
+	// console.log(id_kuliah_tamu);
+	Swal.fire({
+		title: 'Anda yakin?',
+		text: "Kegiatan akan dihapus",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#d33',
+		cancelButtonColor: '#868e96',
+		confirmButtonText: 'Hapus'
+	}).then(function (result) {
+		if (result.value) {
+			window.location = window.location.origin + "/skpapps/akademik/hapusKegiatan/" + id_kuliah_tamu;
+		}
+	})
+});
+
+$('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 	let id = $(this).data('id');
 	console.log(id);
 	$.ajax({
@@ -198,6 +186,8 @@ $('.table-kategori').on('click', '.validasi-kegiatan-akademik', function () {
 		}
 	});
 })
+
+
 
 function eventCheckBox() {
 	let checkboxs = document.getElementsByTagName("input");

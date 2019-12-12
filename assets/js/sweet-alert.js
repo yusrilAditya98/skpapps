@@ -14,24 +14,6 @@ $('.logout').on('click', function () {
 	})
 });
 
-$('.table-kategori').on('click', '.hapus-kegiatan', function () {
-	let id_kuliah_tamu = $(this).data('id');
-	// console.log(id_kuliah_tamu);
-	Swal.fire({
-		title: 'Anda yakin?',
-		text: "Kegiatan akan dihapus",
-		type: 'warning',
-		showCancelButton: true,
-		confirmButtonColor: '#d33',
-		cancelButtonColor: '#868e96',
-		confirmButtonText: 'Hapus'
-	}).then(function (result) {
-		if (result.value) {
-			window.location = window.location.origin + "/skpapps/akademik/hapusKegiatan/" + id_kuliah_tamu;
-		}
-	})
-});
-
 $('.table-kategori').on('click', '.hapus-bidang', function () {
 	var id_bidang = $(this).data('id');
 	// console.log(a);
