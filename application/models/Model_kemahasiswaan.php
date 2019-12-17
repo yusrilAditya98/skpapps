@@ -2,6 +2,11 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_kemahasiswaan extends CI_Model
 {
+    private $id_kegiatan;
+    private $jenis_validasi;
+    private $kategori;
+    private $data;
+
     public function getTahunRancangan()
     {
         $this->db->select('tahun_kegiatan');
@@ -83,6 +88,7 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.tahun_kegiatan', $tahun);
         return $this->db->get()->result_array();
     }
+    // update rancangan
     public function updateStatusProker($data)
     {
         $this->db->update_batch('daftar_rancangan_kegiatan', $data);

@@ -15,6 +15,8 @@ class Mahasiswa extends CI_Controller
     private $bobotKegiatan = [];
     private $dataPoinSkp = [];
     private $proposal = [];
+    private $id_kegiatan;
+
 
     // tampilan dashboard
     public function index()
@@ -35,6 +37,7 @@ class Mahasiswa extends CI_Controller
         $this->load->view("template/footer");
     }
 
+
     // untuk lihat halaman poin skp mahasiswa
     public function poinSkp()
     {
@@ -50,10 +53,11 @@ class Mahasiswa extends CI_Controller
         $this->load->view("template/footer");
     }
 
-
+    
     // menunjukan ke halaman tambah poin skp dan proses tambah poin skp
     public function tambahPoinSkp()
     {
+        $this->load->model('Model_poinskp', 'poinskp');
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
         if ($this->form_validation->run() == false) {
@@ -64,7 +68,6 @@ class Mahasiswa extends CI_Controller
             $this->load->view("mahasiswa/form_tambah_skp");
             $this->load->view("template/footer");
         } else {
-            $this->load->model('Model_poinskp', 'poinskp');
             $this->dataPoinSkp = [
                 'nim' => $this->session->userdata('username'),
                 'nama_kegiatan' => $this->input->post('namaKegiatan'),
@@ -143,7 +146,7 @@ class Mahasiswa extends CI_Controller
             redirect("Mahasiswa/poinSkp");
         }
     }
-
+  
     // Pengajuan Proposal kegiatan
     public function pengajuanProposal()
     {

@@ -3,6 +3,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Kegiatan extends CI_Controller
 {
     private $rancangan = [];
+    private $id_rancangan;
+    private $id_kegiatan;
+    private $proposal = [];
     public function __construct()
     {
         // 1,4,5,6,7

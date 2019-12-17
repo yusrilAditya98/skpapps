@@ -40,6 +40,10 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("dashboard/dashboard_kmhsn");
         $this->load->view("template/footer");
     }
+
+
+    /** Methode Kharis */
+
     public function kategori()
     {
         $data['title'] = 'Kategori Kegiatan';
@@ -70,7 +74,6 @@ class Kemahasiswaan extends CI_Controller
         $this->load->view("kemahasiswaan/kategori");
         $this->load->view("template/footer");
     }
-
     public function tambahBidang()
     {
         $bidang = $this->input->post('bidang_kegiatan');
@@ -402,6 +405,11 @@ class Kemahasiswaan extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Dasar penilaian berhasil dihapus</div>');
         redirect('kemahasiswaan/kategori');
     }
+    /**Akhir method kahris */
+
+
+
+
 
     // update pebukaan rancangan kegiatan lembaga
     public function pembukaanRancanganKegiatan($id_lembaga)
@@ -490,8 +498,6 @@ class Kemahasiswaan extends CI_Controller
         redirect('Kemahasiswaan/daftarRancangan');
     }
 
-
-
     // Berfungsi untuk melakukan validasi Proposal kegiatan mahasiswa dan lembaga
     public function daftarProposal()
     {
@@ -554,7 +560,6 @@ class Kemahasiswaan extends CI_Controller
         $this->_update($mahasiswa['nim']);
         redirect('Kemahasiswaan/daftarPoinSkp');
     }
-
 
     // Validasi proposal kegiatan
     public function validasiProposal($id_kegiatan)

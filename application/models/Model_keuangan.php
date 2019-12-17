@@ -2,6 +2,10 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_keuangan extends CI_Model
 {
+
+    private $periode;
+
+
     public function getLaporanSerapanProposal($periode)
     {
         $this->db->select('MONTH(k.tgl_pengajuan_proposal) as bulan, SUM(k.dana_proposal) as dana, l.id_lembaga,l.nama_lembaga');

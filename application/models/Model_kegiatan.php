@@ -2,6 +2,12 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_kegiatan extends CI_Model
 {
+
+    private $id_kegiatan;
+    private $jenis_validasi;
+    private $dataKegiatan;
+    private $status;
+
     public function insertKegiatan($dataKegiatan)
     {
         $this->db->set($dataKegiatan);

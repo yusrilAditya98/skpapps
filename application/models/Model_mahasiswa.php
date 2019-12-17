@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_mahasiswa extends CI_Model
 {
+    private $nim;
+    private $dataMahasiswa;
+
     public function getDataMahasiswa($nim = null)
     {
         $this->db->select('*');
@@ -13,10 +16,12 @@ class Model_mahasiswa extends CI_Model
         }
         return $this->db->get()->result_array();
     }
+
     public function insertBeasiswa($data)
     {
         $this->db->insert('penerima_beasiswa', $data);
     }
+
     public function getBeasiswa($nim)
     {
         $this->db->select('b.*,p.*');

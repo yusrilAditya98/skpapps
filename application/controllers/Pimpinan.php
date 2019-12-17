@@ -3,6 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pimpinan extends CI_Controller
 {
+    private $tahun;
+    private $lpj;
+    private $proposal;
+    private $data;
+    private $nim;
 
     public function __construct()
     {
@@ -68,7 +73,6 @@ class Pimpinan extends CI_Controller
         echo json_encode($detail_mahasiswa);
     }
 
-
     public function get_detail_skp($nim)
     {
         $this->db->where('poin_skp.nim', $nim);
@@ -86,5 +90,135 @@ class Pimpinan extends CI_Controller
         $detail_skp = $this->db->get()->result_array();
         header('Content-type: application/json');
         echo json_encode($detail_skp);
+    }
+
+    public function laporanSerapan()
+    {
+        $this->load->model('Model_keuangan', 'keuangan');
+        $data['title'] = 'Dashboard';
+        $data['notif'] = $this->_notif();
+        $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal(2019);
+        $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj(2019);
+        $data['lembaga'] = $this->db->get('lembaga')->result_array();
+
+        $data['tahun'] = $this->keuangan->getTahun();
+        $tahun = $data['tahun'][0]['tahun'];
+        if ($this->input->post('tahun')) {
+            $tahun = $this->input->post('tahun');
+            $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+        } else {
+            $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+        }
+        $data['total'] = $this->_totalDana($data['laporan']);
+        //       var_dump($serapan);
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("keuangan/laporan_serapan", $data);
+        $this->load->view("template/footer");
+    }
+
+    private function _serapan($proposal, $lpj, $tahun)
+    {
+
+        $lembaga = $this->db->get('lembaga')->result_array();
+
+        if ($proposal == null) {
+            foreach ($lembaga as $l) {
+                $proposal[$l['id_lembaga']] = [
+                    'bulan' => 0,
+                    'dana' => 0,
+                    'id_lembaga' => $l['id_lembaga'],
+                    'nama_lembaga' => $l['nama_lembaga']
+                ];
+            }
+        }
+        if ($lpj == null) {
+            foreach ($lembaga as $l) {
+                $lpj[$l['id_lembaga']] = [
+                    'bulan' => 0,
+                    'dana' => 0,
+                    'id_lembaga' => $l['id_lembaga'],
+                    'nama_lembaga' => $l['nama_lembaga']
+                ];
+            }
+        }
+
+        $data = [];
+        foreach ($lembaga as $l) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$l['id_lembaga']][$j] = 0;
+            }
+            $data[$l['id_lembaga']]['nama_lembaga'] = $l['nama_lembaga'];
+            $dana = $this->db->select('anggaran_kemahasiswaan')->get_where('rekapan_kegiatan_lembaga', ['id_lembaga' => $l['id_lembaga'], 'tahun_pengajuan' => $tahun])->row_array();
+
+            if ($dana['anggaran_kemahasiswaan'] == null) {
+                $data[$l['id_lembaga']]['dana_pagu'] = 0;
+            } else {
+                $data[$l['id_lembaga']]['dana_pagu']  = $dana['anggaran_kemahasiswaan'];
+            }
+            $data[$l['id_lembaga']]['dana_terserap'] = 0;
+        }
+
+        foreach ($proposal as $p) {
+            foreach ($lpj as $l) {
+                for ($i = 1; $i < 13; $i++) {
+                    if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
+                        if ($l['bulan'] == $p['bulan']) {
+                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['bulan'];
+                        } else {
+                            $data[$p['id_lembaga']][$i] = $p['dana'];
+                        }
+                    }
+                    if ($p['id_lembaga'] == $l['id_lembaga'] && $l['bulan'] == $i) {
+                        if ($l['bulan'] == $p['bulan']) {
+                            $data[$l['id_lembaga']][$i] = $p['dana'] + $l['dana'];
+                        } else {
+                            $data[$l['id_lembaga']][$i] = $l['dana'];
+                        }
+                    }
+                }
+            }
+        }
+        foreach ($lembaga as $l) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
+            }
+
+            if ($data[$l['id_lembaga']]['dana_terserap'] == 0) {
+                $data[$l['id_lembaga']]['terserap_persen'] =  '-';
+            } else {
+                $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
+            }
+
+            $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
+
+
+            if ($data[$l['id_lembaga']]['dana_sisa'] == 0) {
+                $data[$l['id_lembaga']]['sisa_terserap'] = '-';
+            } else {
+                $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
+            }
+        }
+        return $data;
+    }
+    private function _totalDana($laporan)
+    {
+
+        $lembaga = $this->db->get('lembaga')->result_array();
+        $data['total']['dana_sisa'] = 0;
+        $data['total']['dana_terserap'] = 0;
+        $data['total']['dana_pagu'] = 0;
+        $data['total']['persen_terserap'] = 0;
+        $data['total']['persen_sisa'] = 0;
+        foreach ($lembaga as $l) {
+            $data['total']['dana_sisa'] += $laporan[$l['id_lembaga']]['dana_sisa'];
+            $data['total']['dana_terserap'] += $laporan[$l['id_lembaga']]['dana_terserap'];
+            $data['total']['dana_pagu'] += $laporan[$l['id_lembaga']]['dana_pagu'];
+        }
+        $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
+        $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+
+        return $data;
     }
 }

@@ -5,6 +5,8 @@ class API_skp extends CI_Controller
     private $kondisi;
     private $tahun;
     private $id_lembaga;
+    private $nim;
+    private $id_kegiatan;
     public function __construct()
     {
         parent::__construct();
@@ -33,12 +35,14 @@ class API_skp extends CI_Controller
         }
     }
 
+    //  mmenampilkan data validasi
     public function validasiKegiatan($id)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['validasi'] = $this->kegiatan->getInfoValidasi($id);
         echo json_encode($data['validasi']);
     }
+    // menampilkan daftar mahasiswa keseluruhan
     public function daftarMahasiswa()
     {
         $this->load->model('Model_mahasiswa', 'mahasiswa');
@@ -57,21 +61,27 @@ class API_skp extends CI_Controller
         echo json_encode($data);
     }
 
+    // menampilkan bidang kegiatan
     public function bidangKegiatan()
     {
         $this->bidangKegiatan = $this->db->get('bidang_kegiatan')->result_array();
         echo json_encode($this->bidangKegiatan);
     }
+
+    // menampilkan bidang kegiatan secara spesifik
     public function getBidangKegiatan($id)
     {
         $this->bidangKegiatan = $this->db->get_where('bidang_kegiatan', ['id_bidang' => $id])->row_array();
         echo json_encode($this->bidangKegiatan);
     }
+
+    // menampilkan jenis kegiatan
     public function jenisKegiatan($id_bidang)
     {
         $this->jenisKegiatan = $this->db->get_where('jenis_kegiatan', ['id_bidang' => $id_bidang])->result_array();
         echo json_encode($this->jenisKegiatan);
     }
+    // menampilkan jenis kegiatan secara spesifik
     public function getJenisKegiatan($id)
     {
         $this->db->where('id_jenis_kegiatan', $id);
@@ -83,12 +93,14 @@ class API_skp extends CI_Controller
         header('Content-type: application/json');
         echo json_encode($data);
     }
+    // menampilkan  tingkat kegiatan keseluruahn
     public function tingkatKegiatan($id_jenis)
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $this->tingkatKegiatan = $this->poinskp->getTingkatSkp($id_jenis);
         echo json_encode($this->tingkatKegiatan);
     }
+
     public function getTingkatan($id)
     {
         $data = $this->db->get_where('tingkatan', ['id_tingkatan' => $id])->row_array();
@@ -173,28 +185,36 @@ class API_skp extends CI_Controller
         $data = $this->db->get_where('dasar_penilaian', ['id_dasar_penilaian' => $id])->row_array();
         echo json_encode($data);
     }
+
+    // menampilkan partisipasi kegiatan berdasarkan semua tingkat
     public function partisipasiKegiatan($id_sm_tingkat)
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $this->partisipasiKegiatan = $this->poinskp->getPrestasi($id_sm_tingkat);
         echo json_encode($this->partisipasiKegiatan);
     }
+
+    // menampilkan bobot kegiatan
     public function bobotKegiatan($id_sm_prestasi)
     {
         $this->bobotKegiatan = $this->db->get_where('semua_prestasi', ['id_semua_prestasi' => $id_sm_prestasi])->result_array();
         echo json_encode($this->bobotKegiatan);
     }
+    // menampilkan detail kegiatan
     public function detailKegiatan($id_kegiatan = null)
     {
         $this->load->model('Model_poinskp', 'poinskp');
         echo json_encode($this->poinskp->getPoinSkp($this->session->userdata('username'), $id_kegiatan));
     }
+
+    // menampilkan tingkat anggota
     public function getTingkatAnggota($id_kegiatan)
     {
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data = $this->kegiatan->getInfoTingkat($id_kegiatan);
         echo json_encode($data);
     }
+    // menampilkan info anggota
     public function infoKegiatan($id_kegiatan)
     {
         $this->load->model('Model_poinskp', 'poinskp');
@@ -206,18 +226,23 @@ class API_skp extends CI_Controller
         $data['dokumentasi'] = $this->kegiatan->getDokumentasi($id_kegiatan);
         echo json_encode($data);
     }
+    // menampilkan data lembaga
     public function dataLembaga()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga('lembaga');
         echo json_encode($data['lembaga']);
     }
+
+    // menampilkan data anggaran
     public function dataAnggaran($id_lembaga)
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($this->input->get('tahun'), $id_lembaga);
         echo json_encode($data['anggaran']);
     }
+
+    // menampilkan jumlah kegiatan
     public function dataJumlahKegiatan($id_lembaga)
     {
         if ($this->session->userdata('user_profil_kode') != 4) {
@@ -230,12 +255,15 @@ class API_skp extends CI_Controller
         $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
         echo json_encode($data);
     }
+
+
     public function beasiswa($id_beasiswa)
     {
         $data = $this->db->get_where('beasiswa', ['id' => $id_beasiswa])->row_array();
         echo json_encode($data);
     }
 
+    // menampilkan laporan serapan kegiatan
     public function laporanSerapan($tahun)
     {
         $this->load->model('Model_keuangan', 'keuangan');
@@ -253,6 +281,7 @@ class API_skp extends CI_Controller
         echo json_encode($data['laporan']);
     }
 
+    // mengolah data serapan anggaran
     private function _serapan($proposal, $lpj, $tahun)
     {
 
@@ -337,6 +366,8 @@ class API_skp extends CI_Controller
         }
         return $data;
     }
+
+    // mengolah total dana serapan laporan
     private function _totalDana($laporan)
     {
 

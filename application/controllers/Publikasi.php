@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Publikasi extends CI_Controller
 {
+    private $id_kegiatan;
+    private $proposal;
+    private $lpj;
     public function __construct()
     {
         parent::__construct();
