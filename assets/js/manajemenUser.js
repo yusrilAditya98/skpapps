@@ -7,7 +7,7 @@ if (segments[4] == "Admin") {
 		<select class="custom-select col-lg-4 mr-2 filter-status" id="filter-status">
 		</select>`);
 		// $.ajax({
-		// 	url: segments[0] + '/skpapps/Admin/getProfilUser',
+		// 	url: segments[0] + '/' + segments[3] + '/Admin/getProfilUser',
 		// 	dataType: 'json',
 		// 	type: 'get',
 		// 	success: function (profil) {
@@ -23,12 +23,12 @@ if (segments[4] == "Admin") {
 
 $('.tambah-user').on('click', function () {
 	$.ajax({
-		url: segments[0] + '/skpapps/Admin/getStatusUser/',
+		url: segments[0] + '/' + segments[3] + '/Admin/getStatusUser/',
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/skpapps/admin/tambahUser';
+			var link_a = window.location.origin + '/' + segments[3] + '/admin/tambahUser';
 			$('form').attr('action', link_a);
 			data.forEach(function (status) {
 				$('#status_user').append(`<option value="` + status['user_profil_kode'] + `">` + status['jenis_user'] + `</option>`)
@@ -41,7 +41,7 @@ $('#status_user').on('change', function () {
 	console.log($('#status_user').val());
 	if ($('#status_user').val() == "1") {
 		$.ajax({
-			url: segments[0] + '/skpapps/Admin/getProdi',
+			url: segments[0] + '/' + segments[3] + '/Admin/getProdi',
 			method: 'get',
 			dataType: 'json',
 			success: function (data) {
@@ -67,12 +67,12 @@ $('.table-kategori').on('click', '.edit-user', function () {
 	let id = $(this).data('id');
 	console.log(id);
 	$.ajax({
-		url: segments[0] + '/skpapps/Admin/getUser/' + id,
+		url: segments[0] + '/' + segments[3] + '/Admin/getUser/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
 			console.log(data['status_user']);
-			var link_a = window.location.origin + '/skpapps/admin/editUser/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/admin/editUser/' + id;
 			$('form').attr('action', link_a);
 			$('#username_edit').val(data['user']['username']);
 			$('#nama_edit').val(data['user']['nama']);
@@ -111,7 +111,7 @@ $('.table-kategori').on('click', '.hapus-user', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/admin/hapusUser/" + id_user;
+			window.location = window.location.origin + "/' + segments[3] + '/admin/hapusUser/" + id_user;
 		}
 	})
 });

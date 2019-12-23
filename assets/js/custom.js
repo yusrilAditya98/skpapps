@@ -5,13 +5,15 @@
  *
  */
 // cek detai revisian
+var url = $(location).attr("href");
+var segments = url.split("/");
 $('.uang').mask('000.000.000', {
 	reverse: true
 });
 $('.detail-revisi').on('click', function () {
 	let id = $(this).data('id');
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/validasiKegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/API_skp/validasiKegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -33,27 +35,26 @@ $('.detail-kegiatan').on('click', function (e) {
 	$('.temp-class').remove()
 
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/infoKegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/API_skp/infoKegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(jenis)
 			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
 			$('.k-nim').val(data.kegiatan['nama_lembaga'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
 			$('.k-dana').val(data.kegiatan['dana_kegiatan'])
 			if (jenis == 'proposal') {
 				$('.k-dana-cair').val(data.kegiatan['dana_proposal'])
-				$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
-				$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
-				$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
-				$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
+				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
+				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
+				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
+				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
 			} else if (jenis == 'lpj') {
 				$('.k-dana-cair').val(data.kegiatan['dana_lpj'])
-				$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
-				$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
-				$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
-				$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_2'])
+				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
+				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
+				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
+				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_2'])
 			}
 
 			for (var i in data.dana) {
@@ -148,7 +149,9 @@ function copyDiv(e) {
 	if (tombolValid.textContent != 'Selesai' && tombolValid.textContent != 'Tidak bisa validasi' && tombolValid.textContent != 'Belum bisa validasi') {
 
 		for (var i = 0; i < cldrnvalid.length; i++) {
-			cldrnvalid[i].classList.add('temp-class')
+			cldrnvalid[0].classList.add('temp-class')
+			cldrnvalid[1].classList.add('temp-class')
+			cldrnvalid[1].classList.add('cek-validasi')
 			$('.t-validasi').append(cldrnvalid[0], cldrnvalid[1])
 		}
 	}

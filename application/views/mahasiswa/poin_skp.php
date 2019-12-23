@@ -4,6 +4,8 @@
         <div class="section-header">
             <h1>Point Satuan Kredit Mahasiswa</h1>
         </div>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
             <div class="col-lg-8 col-md-6 col-sm-6 col-12">
                 <div class="card">
@@ -135,7 +137,7 @@
                                                             <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-icon btn-info"><i class="fas fa-edit"></i></a>
                                                         </div>
                                                         <div class="col-6">
-                                                            <a href="<?= base_url('Mahasiswa/hapusPoinSkp/') . $p['id_poin_skp'] ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a>
+                                                            <a href="<?= base_url('Mahasiswa/hapusPoinSkp/') . $p['id_poin_skp'] ?>" class="btn btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>

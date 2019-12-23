@@ -4,6 +4,7 @@
         <div class="section-header">
             <h1>Validasi Pengajuan Proposal Kegiatan</h1>
         </div>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -12,7 +13,7 @@
 
                     </div>
                     <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
-                        <div class="card-body">
+                        <div class="card-body mb-2">
                             <button type="submit" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</button>
                         </div>
                         <div class="card-body">
@@ -36,6 +37,7 @@
                                         <th class="text-center">PSIK</th>
                                         <th class="text-center">Keuangan</th>
                                         <th class="text-center">Action</th>
+                                        <th></th>
 
                                     </thead>
 
@@ -96,22 +98,23 @@
                                                     <?php foreach ($validasi as $v) : ?>
                                                         <?php if ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 3)) : ?>
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                                <a href="<?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-icon btn-success"><i class="fas fa-check"> </i>kmhsn</a>
-
-                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-km" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
-
+                                                                <a href="<?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>kmhsn</a>
+                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid-km" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
+                                                            <?php elseif ($v['status_validasi'] == 0) : ?>
+                                                                Belum bisa validasi
                                                             <?php endif; ?>
                                                         <?php elseif ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 4)) : ?>
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                                <a href=" <?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn btn-icon btn-success"><i class="fas fa-check"> </i>wd 3</a>
-                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd 3</a>
+                                                                <a href=" <?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn  btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>wd3</a>
+                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd3</a>
                                                             <?php elseif ($v['status_validasi'] == 1) : ?>
                                                                 Selesai
                                                             <?php endif; ?>
                                                         <?php endif; ?>
                                                     <?php endforeach; ?>
-                                                    <a target="_blank" href="<?= base_url('Kemahasiswaan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=proposal" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a>
+
                                                 </td>
+                                                <td> <a target="_blank" href="<?= base_url('Kemahasiswaan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=proposal" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a></td>
                                             </tr>
                                         <?php endforeach; ?>
 
@@ -132,8 +135,6 @@
                                     </tfoot>
                                 </table>
                             </div>
-
-
                         </div>
                     </form>
                 </div>

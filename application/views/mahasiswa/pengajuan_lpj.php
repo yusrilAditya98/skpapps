@@ -3,7 +3,8 @@
         <div class="section-header">
             <h1>Pengajuan LPJ</h1>
         </div>
-        <?= $this->session->flashdata('message'); ?>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-12">
                 <div class="card">
@@ -35,19 +36,19 @@
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
                                             <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
-                                            <?php if ($k['status_selesai_proposal'] == 0) : ?>
+                                            <?php if ($k['status_selesai_lpj'] == 0) : ?>
                                                 <td class="text-secondary">
                                                     Belum diproses
                                                 </td>
-                                            <?php elseif ($k['status_selesai_proposal'] == 1) : ?>
+                                            <?php elseif ($k['status_selesai_lpj'] == 1) : ?>
                                                 <td class="text-primary">
                                                     Sedang Berlangsung
                                                 </td>
-                                            <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
+                                            <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
                                                 <td class="text-warning">
                                                     Revisi
                                                 </td>
-                                            <?php elseif ($k['status_selesai_proposal'] == 3) : ?>
+                                            <?php elseif ($k['status_selesai_lpj'] == 3) : ?>
                                                 <td class="text-success">
                                                     Selesai
                                                 </td>
@@ -74,8 +75,6 @@
                                                     <a href="<?= base_url('Mahasiswa/tambahLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-outline-success"><i class="fas fa-edit"></i>Lpj</a>
                                                 <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
                                                     <a href="<?= base_url('Mahasiswa/editLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
-                                                <?php else : ?>
-                                                    <span>selesai</span>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>
@@ -104,35 +103,4 @@
             </div>
         </div>
     </section>
-</div>
-
-<!-- Info revisi -->
-<div class="modal fade" tabindex="-1" role="dialog" id="infoRevisi">
-    <div class="modal-dialog modal-lg" role=" document">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <h5 class="modal-title">Catatan Revisi</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="col-12 col-md-12 col-lg-12">
-                    <div class="card profile-widget">
-                        <div class="profile-widget-description">
-                            <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Catatan Revisi</label>
-                                <div class="col-sm-9">
-                                    <textarea class="form-control d-catatan" style="height:200px" readonly></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer bg-whitesmoke br">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
-        </div>
-    </div>
 </div>

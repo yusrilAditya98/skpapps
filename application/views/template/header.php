@@ -20,6 +20,7 @@
 
     <!-- Template CSS -->
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/mystyle.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/components.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/owl.theme.default.min.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/owl.carousel.min.css">
@@ -29,4 +30,4 @@
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 
-<body class="sidebar-mini">
+<body>

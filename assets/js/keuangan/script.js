@@ -2,28 +2,41 @@ var url = $(location).attr("href");
 var segments = url.split("/");
 $('.d-valid').on("click", function () {
 	let id_kegiatan = $(this).data('kegiatan');
-	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Keuangan/validasiProposal/' + id_kegiatan)
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Keuangan/validasiProposal/' + id_kegiatan)
 	$('.jenis_validasi').val(6)
 })
 
 $('.d-valid-rev').on("click", function () {
 	let id_kegiatan = $(this).data('kegiatan');
-	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Keuangan/validasiLpj/' + id_kegiatan)
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Keuangan/validasiLpj/' + id_kegiatan)
 	$('.jenis_validasi').val(6)
+})
+
+$('.detail-kegiatan').on('click', function () {
+	let tipe_kegiatan = $(this).data('jenis');
+	let id_kegiatan = $(this).data('id');
+	if (tipe_kegiatan == 'proposal') {
+		$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Keuangan/validasiProposal/' + id_kegiatan)
+		$('.jenis_validasi').val(6)
+	} else {
+		$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Keuangan/validasiLpj/' + id_kegiatan)
+		$('.jenis_validasi').val(6)
+	}
 })
 
 
 let nama_lembaga = [];
 let dana_pagu = [];
 let dana_terserap = [];
+let dana_sisa = [];
 let data_lembaga = [];
 let data_serapan = [];
 let setDataSerapan = [];
-let nama_label = ['Dana Pagu', 'Dana Sisa'];
+let nama_label = ['Dana Pagu', 'Dana Terserap', 'Dana Sisa'];
 $(document).ready(function () {
 	let tahun = $('#tahun_anggran').val()
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/laporanSerapan/' + tahun,
+		url: segments[0] + '/' + segments[3] + '/API_skp/laporanSerapan/' + tahun,
 		method: "get",
 		dataType: "json",
 		startTime: performance.now(),
@@ -31,22 +44,32 @@ $(document).ready(function () {
 
 		},
 		success: function (data) {
-			console.log(data);
+
 			let temp_pagu = [];
 			let temp_sisa = [];
+
 			for (var i in data) {
 				nama_lembaga.push(data[i].nama_lembaga);
 				dana_pagu.push(data[i].dana_pagu);
+
 			}
 			data_serapan[0] = dana_pagu;
 
 			let anggaran = []
 			for (var i in data) {
 				dana_terserap.push(data[i].dana_terserap);
+
 			}
 			data_serapan[1] = dana_terserap;
-			console.log(nama_lembaga);
-			let color = ["#2d98da", "#20bf6b"];
+
+			for (var i in data) {
+				dana_sisa.push(data[i].dana_sisa);
+
+			}
+			data_serapan[2] = dana_sisa;
+
+
+			let color = ["#2d98da", "#20bf6b", "#fd9644"];
 			let count = 0;
 
 			for (var i in nama_label) {
@@ -58,7 +81,7 @@ $(document).ready(function () {
 				})
 
 			}
-			console.log(setDataSerapan);
+
 			const canvasAnggaran = document.querySelector("#laporan-serapan");
 			const grafikAnggaran = canvasAnggaran.getContext("2d");
 			new Chart(grafikAnggaran, {

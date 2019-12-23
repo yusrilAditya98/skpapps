@@ -1,3 +1,66 @@
+var url = $(location).attr("href");
+var segments = url.split("/");
+
+
+const flashData = $('.flash-data').data('flashdata');
+if (flashData) {
+	Swal.fire({
+		title: 'Berhasil',
+		text: flashData,
+		type: 'success'
+	});
+}
+const failed = $('.flash-failed').data('flashdata');
+if (failed) {
+	Swal.fire({
+		title: 'Gagal',
+		text: failed,
+		type: 'error'
+	});
+}
+
+
+// confirm-hapus
+$('.confirm-hapus').on('click', function (e) {
+	e.preventDefault();
+	const href = $(this).attr('href');
+	Swal.fire({
+		title: 'Apakah anda yakin',
+		text: "Data akan dihapus!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Hapus data!'
+	}).then((result) => {
+		if (result.value) {
+			document.location.href = href;
+		}
+	})
+});
+
+// confirm-hapus
+$('.confirm-validasi').on('click', function (e) {
+	e.preventDefault();
+	const href = $(this).attr('href');
+	Swal.fire({
+		title: 'Validasi Kegiatan',
+		text: "Data kegiatan akan divalidasi!",
+		type: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#26de81',
+		cancelButtonColor: '#d33',
+		confirmButtonText: 'Validasi!'
+	}).then((result) => {
+		if (result.value) {
+			document.location.href = href;
+		}
+	})
+});
+
+
+// confirm submit
+
 $('.logout').on('click', function () {
 	Swal.fire({
 		title: 'Anda yakin?',
@@ -9,7 +72,7 @@ $('.logout').on('click', function () {
 		confirmButtonText: 'Logout'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/auth/logout";
+			window.location = window.location.origin + "/" + segments[3] + "/auth/logout";
 		}
 	})
 });
@@ -27,7 +90,7 @@ $('.table-kategori').on('click', '.hapus-kegiatan', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/akademik/hapusKegiatan/" + id_kuliah_tamu;
+			window.location = window.location.origin + "/" + segments[3] + "/akademik/hapusKegiatan/" + id_kuliah_tamu;
 		}
 	})
 });
@@ -45,7 +108,7 @@ $('.table-kategori').on('click', '.hapus-bidang', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusBidang/" + id_bidang;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusBidang/" + id_bidang;
 		}
 	})
 });
@@ -63,7 +126,7 @@ $('.table-kategori').on('click', '.hapus-jenis', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusJenis/" + id_jenis;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusJenis/" + id_jenis;
 		}
 	})
 });
@@ -82,7 +145,7 @@ $('.table-kategori').on('click', '.hapus-tingkatan', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusTingkatan/" + id_tingkatan;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusTingkatan/" + id_tingkatan;
 		}
 	})
 });
@@ -100,7 +163,7 @@ $('.table-kategori').on('click', '.hapus-prestasi', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusPrestasi/" + id_prestasi;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusPrestasi/" + id_prestasi;
 		}
 	})
 });
@@ -118,7 +181,7 @@ $('.table-kategori').on('click', '.hapus-detail-tingkatan', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusDetailTingkatan/" + id_semua_tingkatan;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusDetailTingkatan/" + id_semua_tingkatan;
 		}
 	})
 });
@@ -137,7 +200,7 @@ $('.table-kategori').on('click', '.hapus-detail-prestasi', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusDetailPrestasi/" + id_semua_prestasi;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusDetailPrestasi/" + id_semua_prestasi;
 		}
 	})
 });
@@ -155,7 +218,7 @@ $('.table-kategori').on('click', '.hapus-dasar-penilaian', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/kemahasiswaan/hapusDasarPenilaian/" + id_dasar_penilaian;
+			window.location = window.location.origin + "/" + segments[3] + "/kemahasiswaan/hapusDasarPenilaian/" + id_dasar_penilaian;
 		}
 	})
 });

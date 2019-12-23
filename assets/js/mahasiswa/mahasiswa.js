@@ -2,7 +2,7 @@ var url = $(location).attr("href");
 var segments = url.split("/");
 
 $.ajax({
-	url: segments[0] + '/skpapps/mahasiswa/bidangKegiatan',
+	url: segments[0] + '/' + segments[3] + '/mahasiswa/bidangKegiatan',
 	method: 'get',
 	dataType: 'json',
 	success: function (data) {
@@ -22,7 +22,7 @@ $.ajax({
 		$('.jenis').remove();
 		if (bidangKegiatan) {
 			$.ajax({
-				url: segments[0] + '/skpapps/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+				url: segments[0] + '/' + segments[3] + '/mahasiswa/jenisKegiatan/' + bidangKegiatan,
 				method: 'get',
 				dataType: 'json',
 				success: function (data) {
@@ -42,7 +42,7 @@ $.ajax({
 					let jenisKegiatan = $('.jenisKegiatan').val()
 					$('.tingkat').remove();
 					$.ajax({
-						url: segments[0] + '/skpapps/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+						url: segments[0] + '/' + segments[3] + '/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
 						method: 'get',
 						dataType: 'json',
 						success: function (data) {
@@ -61,7 +61,7 @@ $.ajax({
 							let tingkatKegiatan = $('.tingkatKegiatan').val()
 							$('.partisipasi').remove();
 							$.ajax({
-								url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+								url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 								method: 'get',
 								dataType: 'json',
 								success: function (data) {
@@ -90,7 +90,7 @@ $('.bidangKegiatan').on("change", function () {
 	let bidangKegiatan = $('.bidangKegiatan').val()
 	$('.jenis').remove();
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/jenisKegiatan/' + bidangKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -112,7 +112,7 @@ $('.jenisKegiatan').on("change", function () {
 	let jenisKegiatan = $('.jenisKegiatan').val()
 	$('.tingkat').remove();
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -137,7 +137,7 @@ $('#tingkatKegiatan').on("change", function () {
 	$('.d-m').remove()
 
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -155,7 +155,7 @@ $('#partisipasiKegiatan').on("change", function () {
 	let partisipasiKegiatan = $('.partisipasiKegiatan').val()
 	$('#bobotKegiatan').val(0);
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/bobotkegiatan/' + partisipasiKegiatan,
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/bobotkegiatan/' + partisipasiKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -168,7 +168,7 @@ $('.detailSkp').on("click", function () {
 	let id_skp = $(this).data('id');
 
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -181,7 +181,7 @@ $('.detailSkp').on("click", function () {
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
-			$('.d-file').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
+			$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/poinskp/' + data[0].file_bukti)
 
 		}
 	})
@@ -190,7 +190,7 @@ $('.detailSkp').on("click", function () {
 $('.d-revisi').on('click', function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -211,7 +211,7 @@ $('.submit-mhs').on('click', function () {
 	let oMhs = []
 	let aMhs = []
 	$.ajax({
-		url: segments[0] + '/skpapps/mahasiswa/daftarMahasiswa',
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/daftarMahasiswa',
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -254,8 +254,19 @@ $('.submit-mhs').on('click', function () {
 	})
 })
 
+$('form').on('focus', 'input[type=number]', function (e) {
+	$(this).on('wheel.disableScroll', function (e) {
+		e.preventDefault()
+	})
+})
+$('form').on('blur', 'input[type=number]', function (e) {
+	$(this).off('wheel.disableScroll')
+})
+
+
 // Mengenerarat anggaran yang ditermi
-$('#danaKegiatan').keyup(function () {
+$('#danaKegiatan').keyup(function (e) {
+
 	let nominal = $('#danaKegiatan').val() * 0.7
 	$('#danaKegiatanDiterima').val(nominal)
 })
@@ -264,7 +275,7 @@ $('#danaKegiatan').keyup(function () {
 $('#id-beasiswa').on('change', function () {
 	let beasiswa = $('#id-beasiswa').val()
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/beasiswa/' + beasiswa,
+		url: segments[0] + '/' + segments[3] + '/API_skp/beasiswa/' + beasiswa,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {

@@ -92,6 +92,10 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                                                     <?php if ($ssb['id_sub_sub_menu'] == 10 && $notif['notif_kmhs_lpj'] != 0) : ?>
                                                         <span class="badge badge-warning"><?= $notif['notif_kmhs_lpj'] ?></span>
                                                     <?php endif; ?>
+                                                    <!-- notif skp -->
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 11 && $notif['notif_kmhs_skp'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_kmhs_skp'] ?></span>
+                                                    <?php endif; ?>
 
                                                     <?php if ($ssb['id_sub_sub_menu'] == 12 && $notif['notif_psik_proposal'] != 0) : ?>
                                                         <span class="badge badge-warning"><?= $notif['notif_psik_proposal'] ?></span>

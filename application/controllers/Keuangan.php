@@ -74,6 +74,7 @@ class Keuangan extends CI_Controller
             $data['catatan_revisi'] = $this->input->post('catatan');
             $jenis_validasi = $this->input->post('jenis_validasi');
             $status_proposal = 2;
+            $this->session->set_flashdata('message', 'Data proposal kegiatan berhasil direvisi!');
         }
         $this->kegiatan->updateStatusProposal($id_kegiatan, $status_proposal);
         $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'proposal');
@@ -114,6 +115,7 @@ class Keuangan extends CI_Controller
             $this->db->set('status_selesai_proposal', 3);
             $this->db->where('id_kegiatan', $id_kegiatan);
             $this->db->update('kegiatan');
+            $this->session->set_flashdata('message', 'Data proposal kegiatan berhasil divalidasi');
         }
         redirect('Keuangan/daftarPengajuanKeuangan');
     }
@@ -134,13 +136,7 @@ class Keuangan extends CI_Controller
             $data['catatan_revisi'] = $this->input->post('catatan');
             $jenis_validasi = $this->input->post('jenis_validasi');
             $status_lpj = 2;
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
-            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-            <div class="alert-body">
-              <div class="alert-title">Success</div>
-              Lpj telah direvisi
-            </div>
-          </div>');
+            $this->session->set_flashdata('message', 'Data lpj kegiatan berhasil direvisi!');
         }
         $this->kegiatan->updateStatusLpj($id_kegiatan, $status_lpj);
         $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'lpj');
@@ -148,13 +144,7 @@ class Keuangan extends CI_Controller
         if ($this->input->get('valid') == 1) {
             $this->_tambahPoinSkpAnggota($id_kegiatan);
             $this->_updateStatusRancangan($id_kegiatan);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
-            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-            <div class="alert-body">
-              <div class="alert-title">Success</div>
-              Lpj berhasil divalidasi
-            </div>
-          </div>');
+            $this->session->set_flashdata('message', 'Data lpj kegiatan berhasil divalidasi');
         }
         redirect('Keuangan/daftarPengajuanLpj');
     }
@@ -208,7 +198,7 @@ class Keuangan extends CI_Controller
         $data['notif'] = $this->_notif();
         $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal(2019);
         $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj(2019);
-        $data['lembaga'] = $this->db->get('lembaga')->result_array();
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
 
         $data['tahun'] = $this->keuangan->getTahun();
         $tahun = $data['tahun'][0]['tahun'];
@@ -219,7 +209,7 @@ class Keuangan extends CI_Controller
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         }
         $data['total'] = $this->_totalDana($data['laporan']);
-        //       var_dump($serapan);
+
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -230,7 +220,7 @@ class Keuangan extends CI_Controller
     private function _serapan($proposal, $lpj, $tahun)
     {
 
-        $lembaga = $this->db->get('lembaga')->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
 
         if ($proposal == null) {
             foreach ($lembaga as $l) {
@@ -314,7 +304,7 @@ class Keuangan extends CI_Controller
     private function _totalDana($laporan)
     {
 
-        $lembaga = $this->db->get('lembaga')->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         $data['total']['dana_sisa'] = 0;
         $data['total']['dana_terserap'] = 0;
         $data['total']['dana_pagu'] = 0;

@@ -90,7 +90,7 @@
                                             </div>
                                             <div class=" form-group">
                                                 <label for="bidangKegiatan">Bidang Kegiatan</label>
-                                                <select class="custom-select bidangKegiatan select2" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
+                                                <select class="custom-select bidangKegiatan" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
                                                     <option value="">-- Pilih Bidang Kegiatan --</option>
                                                 </select>
                                                 <input type="hidden" class="k_bidang" name="k_bidang" value="<?= ($tingkat ? $tingkat[0]['id_bidang'] : 0) ?>">
@@ -100,7 +100,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenisKegiatan">Jenis Kegiatan</label>
-                                                <select class="custom-select jenisKegiatan select2" id="jenisKegiatan" name="jenisKegiatan" required>
+                                                <select class="custom-select jenisKegiatan" id="jenisKegiatan" name="jenisKegiatan" required>
                                                     <option value="">-- Pilih Jenis Kegiatan --</option>
                                                 </select>
                                                 <input type="hidden" class="k_jenis" name="k_jenis" value="<?= ($tingkat ? $tingkat[0]['id_jenis_kegiatan'] : 0) ?>">
@@ -110,7 +110,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="tingkatKegiatan">Tingkat Kegiatan</label>
-                                                <select class="custom-select tingkatKegiatan select2" id="tingkatKegiatan" name="tingkatKegiatan" required>
+                                                <select class="custom-select tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" required>
                                                     <option value="">-- Pilih Tingkat Kegiatan --</option>
                                                 </select>
                                                 <input type="hidden" class="k_tingkat" name="k_tingkat" value="<?= ($tingkat ? $tingkat[0]['id_semua_tingkatan'] : 0) ?>">
@@ -138,7 +138,17 @@
                                         <div class="bagian-acara mt-5">
                                             <h5>Anggota Kegiatan</h5>
                                             <div class="row">
-                                                <div class="col-12 col-md-12 col-lg-12">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group row mb-4">
+                                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jumlah Anggota</label>
+                                                        <div class="col-lg-2">
+                                                            <input type="number" class="form-control" name="jumlahAnggota" id="jumlahAnggota" value="<?= count($tingkat) ?>" required readonly>
+                                                        </div>
+                                                        <small class="text-danger"> <?php echo validation_errors(); ?></small>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-12 col-md-12 col-lg-6">
                                                     <a class="btn btn-icon btn-primary mb-3 text-white daftarMahasiswa" style="float:right" data-toggle="modal" data-target="#daftarMahasiswa">
                                                         Pilih Anggota <i class="fas fa-plus pl-2 text-white"></i></a>
                                                     <input type="hidden" value="<?= count($tingkat) ?>" name="jumlahAnggota" id="jumlahAnggota">

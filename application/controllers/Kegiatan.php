@@ -236,7 +236,7 @@ class Kegiatan extends CI_Controller
         $this->load->model('Model_mahasiswa', 'mahasiswa');
         $data['notif'] = $this->_notif();
         $data['proker'] = $this->lembaga->getDataRancangan($id_proker);
-        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();;
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();
         $data['dana'] = $this->db->get('sumber_dana')->result_array();
         $gambar = [];
         // set rules form validation
@@ -626,6 +626,8 @@ class Kegiatan extends CI_Controller
         $data['anggota'] = $this->kegiatan->getInfoAnggota($id_kegiatan);
         $data['tingkat'] = $this->kegiatan->getInfoTingkat($id_kegiatan);
         $data['prestasi'] = $this->poinskp->getPrestasi($data['tingkat'][0]['id_semua_tingkatan']);
+
+
         if ($data['kegiatan'] == null || $data['kegiatan']['status_selesai_lpj'] == 3) {
             redirect('Mahasiswa/pengajuanLpj');
         }

@@ -558,6 +558,7 @@ class Kemahasiswaan extends CI_Controller
         ];
         $this->poinskp->updatePoinSkp($id_kegiatan, $this->dataskp);
         $this->_update($mahasiswa['nim']);
+        $this->session->set_flashdata('message', 'Skp berhasil divalidasi!');
         redirect('Kemahasiswaan/daftarPoinSkp');
     }
 
@@ -584,6 +585,7 @@ class Kemahasiswaan extends CI_Controller
             ];
             $jenis_validasi = 1 + $this->input->get('jenis_validasi');
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'proposal');
+            $this->session->set_flashdata('message', 'Proposal berhasil divalidasi!');
         }
         if ($this->input->post('revisi')) {
             $data['status_validasi'] = $this->input->post('valid');
@@ -592,6 +594,7 @@ class Kemahasiswaan extends CI_Controller
             $status_proposal = 2;
             $this->kegiatan->updateStatusProposal($id_kegiatan, $status_proposal);
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'proposal');
+            $this->session->set_flashdata('message', 'Proposal berhasil direvisi!');
         }
         redirect('Kemahasiswaan/daftarProposal');
     }
@@ -619,6 +622,7 @@ class Kemahasiswaan extends CI_Controller
             ];
             $jenis_validasi = 1 + $this->input->get('jenis_validasi');
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'lpj');
+            $this->session->set_flashdata('message', 'Lpj berhasil divalidasi!');
         }
         if ($this->input->post('revisi')) {
             $data['status_validasi'] = $this->input->post('valid');
@@ -627,6 +631,7 @@ class Kemahasiswaan extends CI_Controller
             $status_lpj = 2;
             $this->kegiatan->updateStatusLpj($id_kegiatan, $status_lpj);
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'lpj');
+            $this->session->set_flashdata('message', 'Lpj berhasil direvisi!');
         }
         redirect('Kemahasiswaan/daftarLpj');
     }

@@ -6,7 +6,7 @@ $('.detail-SKP').on('click', function () {
 
 	// Data Mahasiswa
 	$.ajax({
-		url: segments[0] + '/skpapps/pimpinan/get_detail_mahasiswa/' + id,
+		url: segments[0] + '/' + segments[3] + '/pimpinan/get_detail_mahasiswa/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -19,7 +19,7 @@ $('.detail-SKP').on('click', function () {
 	// Data SKP
 	// console.log(id);
 	$.ajax({
-		url: segments[0] + '/skpapps/pimpinan/get_detail_skp/' + id,
+		url: segments[0] + '/' + segments[3] + '/pimpinan/get_detail_skp/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {

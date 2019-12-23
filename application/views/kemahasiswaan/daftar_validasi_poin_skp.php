@@ -4,6 +4,7 @@
         <div class="section-header">
             <h1>Validasi Poin Skp</h1>
         </div>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -119,7 +120,7 @@
                                                                                     <div class="form-group row">
                                                                                         <label class="col-sm-3 col-form-label">File Bukti</label>
                                                                                         <div class="col-sm-9">
-                                                                                            <a href="" class="d-file btn btn-primary">lihat</a>
+                                                                                            <a target="_blank" href="" class="d-file btn btn-primary">lihat</a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

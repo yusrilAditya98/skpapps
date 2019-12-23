@@ -285,7 +285,7 @@ class API_skp extends CI_Controller
     private function _serapan($proposal, $lpj, $tahun)
     {
 
-        $lembaga = $this->db->get('lembaga')->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga!=' => 0])->result_array();
 
         if ($proposal == null) {
             foreach ($lembaga as $l) {
@@ -371,7 +371,7 @@ class API_skp extends CI_Controller
     private function _totalDana($laporan)
     {
 
-        $lembaga = $this->db->get('lembaga')->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga!=' => 0])->result_array();
         $data['total']['dana_sisa'] = 0;
         $data['total']['dana_terserap'] = 0;
         $data['total']['dana_pagu'] = 0;

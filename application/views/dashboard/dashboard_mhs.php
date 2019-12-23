@@ -5,7 +5,7 @@
       <h1>Dashboard</h1>
     </div>
     <div class="row">
-      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+      <div class="col-lg-8 col-md-8 col-sm-8 col-12">
         <div class="card">
           <div class="card-header">
             <h4>Data Diri Mahasiswa</h4>
@@ -40,20 +40,33 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+      <div class="col-lg-4 col-md-4 col-sm-4 col-12">
         <div class="card">
           <div class="card-header">
             <h4>Poin Satuan Kredit Prestasi</h4>
           </div>
           <div class="card-body text-center mb-2" style="margin-top:-1rem;">
+            Jumlah poin skp yang anda peroleh
             <h1 class="display-3 mb-4" style="color: black;"><?= $mahasiswa[0]['total_poin_skp'] ?><span style="font-size: 1rem; margin-left: 0.5rem;">points</span>
             </h1>
+            Kategori anda:
+            <?php if ($mahasiswa[0]['total_poin_skp'] >= 100 && $mahasiswa[0]['total_poin_skp'] <= 150) : ?>
+              <span class="badge badge-warning"> Cukup</span>
+            <?php elseif ($mahasiswa[0]['total_poin_skp'] >= 151 && $mahasiswa[0]['total_poin_skp'] <= 200) : ?>
+              <span class="badge badge-primary">Baik</span>
+            <?php elseif ($mahasiswa[0]['total_poin_skp'] >= 201 && $mahasiswa[0]['total_poin_skp'] <= 300) : ?>
+              <span class="badge badge-success"> Sangat Baik</span>
+            <?php elseif ($mahasiswa[0]['total_poin_skp'] > 300) : ?>
+              <span class="badge badge-info"> Dengan Pujian</span>
+            <?php else : ?>
+              <span class="badge badge-danger"> Kurang</span>
+            <?php endif; ?>
           </div>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-12 col-md-6 col-lg-12">
+      <div class="col-12 col-md-6 col-lg-8">
         <div class="card">
           <div class="card-header">
             <h4>Riwayat Poin SKP</h4>

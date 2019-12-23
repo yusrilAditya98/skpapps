@@ -73,9 +73,9 @@
                                             <td><?= number_format($l['dana_pagu'], 2, ',', '.');
                                                     ?></td>
                                             <td><?= number_format($l['dana_terserap'], 2, ',', '.');  ?></td>
-                                            <td><?= $l['terserap_persen'] ?></td>
+                                            <td><?= round($l['terserap_persen'], 2) ?></td>
                                             <td><?= number_format($l['dana_sisa'], 2, ',', '.');  ?></td>
-                                            <td><?= $l['sisa_terserap'] ?></td>
+                                            <td><?= round($l['sisa_terserap'], 2) ?></td>
                                         </tr>
 
                                     <?php endforeach; ?>

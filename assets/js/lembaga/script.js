@@ -7,13 +7,13 @@ var segments = url.split("/");
 
 $('.d-valid').on("click", function () {
 	let id_kegiatan = $(this).data('kegiatan');
-	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kegiatan/validasiProposal/' + id_kegiatan)
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kegiatan/validasiProposal/' + id_kegiatan)
 	$('.jenis_validasi').val(2)
 })
 
 $('.d-valid-rev').on("click", function () {
 	let id_kegiatan = $(this).data('kegiatan');
-	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/skpapps/Kegiatan/validasiLpj/' + id_kegiatan)
+	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kegiatan/validasiLpj/' + id_kegiatan)
 	$('.jenis_validasi').val(2)
 })
 
@@ -24,7 +24,7 @@ let nominalLpj = $('#danaKegiatanLpj').val() * 0.3
 $('#danaKegiatanDiterima').val(nominal)
 $('#danaKegiatanDiterimaLpj').val(nominalLpj)
 $.ajax({
-	url: segments[0] + '/skpapps/API_skp/bidangKegiatan',
+	url: segments[0] + '/' + segments[3] + '/API_skp/bidangKegiatan',
 	method: 'get',
 	dataType: 'json',
 	success: function (data) {
@@ -45,7 +45,7 @@ $.ajax({
 		$('.jenis').remove();
 		if (bidangKegiatan) {
 			$.ajax({
-				url: segments[0] + '/skpapps/API_skp/jenisKegiatan/' + bidangKegiatan,
+				url: segments[0] + '/' + segments[3] + '/API_skp/jenisKegiatan/' + bidangKegiatan,
 				method: 'get',
 				dataType: 'json',
 				success: function (data) {
@@ -64,7 +64,7 @@ $.ajax({
 					let jenisKegiatan = $('.jenisKegiatan').val()
 					$('.tingkat').remove();
 					$.ajax({
-						url: segments[0] + '/skpapps/API_skp/tingkatKegiatan/' + jenisKegiatan,
+						url: segments[0] + '/' + segments[3] + '/API_skp/tingkatKegiatan/' + jenisKegiatan,
 						method: 'get',
 						dataType: 'json',
 						success: function (data) {
@@ -83,7 +83,7 @@ $.ajax({
 							let tingkatKegiatan = $('.tingkatKegiatan').val()
 							$('.partisipasi').remove();
 							$.ajax({
-								url: segments[0] + '/skpapps/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
+								url: segments[0] + '/' + segments[3] + '/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
 								method: 'get',
 								dataType: 'json',
 								success: function (data) {
@@ -112,7 +112,7 @@ $('.bidangKegiatan').on("change", function () {
 	let bidangKegiatan = $('.bidangKegiatan').val()
 	$('.jenis').remove();
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/jenisKegiatan/' + bidangKegiatan,
+		url: segments[0] + '/' + segments[3] + '/API_skp/jenisKegiatan/' + bidangKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -134,7 +134,7 @@ $('.jenisKegiatan').on("change", function () {
 	let jenisKegiatan = $('.jenisKegiatan').val()
 	$('.tingkat').remove();
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/tingkatKegiatan/' + jenisKegiatan,
+		url: segments[0] + '/' + segments[3] + '/API_skp/tingkatKegiatan/' + jenisKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -159,7 +159,7 @@ $('#tingkatKegiatan').on("change", function () {
 	$('.d-m').remove()
 
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
+		url: segments[0] + '/' + segments[3] + '/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -177,7 +177,7 @@ $('#partisipasiKegiatan').on("change", function () {
 	let partisipasiKegiatan = $('.partisipasiKegiatan').val()
 	$('#bobotKegiatan').val(0);
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/bobotkegiatan/' + partisipasiKegiatan,
+		url: segments[0] + '/' + segments[3] + '/API_skp/bobotkegiatan/' + partisipasiKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -190,7 +190,7 @@ $('#partisipasiKegiatan').on("change", function () {
 $('.d-revisi').on('click', function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/API_skp/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -211,7 +211,7 @@ $('.submit-mhs').on('click', function () {
 	let oMhs = []
 	let aMhs = []
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/daftarMahasiswa',
+		url: segments[0] + '/' + segments[3] + '/API_skp/daftarMahasiswa',
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {

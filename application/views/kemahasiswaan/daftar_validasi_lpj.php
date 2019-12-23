@@ -1,9 +1,12 @@
 <!-- Main Content -->
+
+
 <div class="main-content">
     <section class="section">
         <div class="section-header">
             <h1>Validasi Pengajuan Lpj Kegiatan</h1>
         </div>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -12,7 +15,7 @@
 
                     </div>
                     <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
-                        <div class="card-body">
+                        <div class="card-body mb-2">
                             <button type="submit" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</button>
                         </div>
                         <div class="card-body">
@@ -25,19 +28,20 @@
                                             <div class="custom-checkbox custom-control">
                                                 <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
                                                 <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
-                                                No
+
                                             </div>
                                         </th>
                                         <th>Tanggal Pengajuan</th>
                                         <th>Nama Pengaju</th>
                                         <th>Nama Kegiatan</th>
                                         <th>Status</th>
-                                        <th class="text-center">BEM</th>
-                                        <th class="text-center">Kmhsn</th>
-                                        <th class="text-center">WD 3</th>
-                                        <th class="text-center">PSIK</th>
-                                        <th class="text-center">Keuangan</th>
-                                        <th class="text-center">Action</th>
+                                        <th>BEM</th>
+                                        <th>Kmhsn</th>
+                                        <th>WD 3</th>
+                                        <th>PSIK</th>
+                                        <th>Keuangan</th>
+                                        <th>Action</th>
+                                        <th></th>
 
                                     </thead>
                                     <tbody>
@@ -54,8 +58,7 @@
                                                 </td>
                                                 <td><?= $k['tgl_pengajuan_lpj'] ?></td>
                                                 <td><?= $k['nama_lembaga'] ?></td>
-                                                <td>
-                                                    <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
+                                                <td><a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-role_id="" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
                                                 </td>
                                                 <?php if ($k['status_selesai_lpj'] == 0) : ?>
                                                     <td class="text-secondary">
@@ -96,20 +99,24 @@
                                                     <?php foreach ($validasi as $v) : ?>
                                                         <?php if ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 3)) : ?>
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                                <a href="<?= base_url('Kemahasiswaan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-icon btn-success"><i class="fas fa-check"> </i>kmhsn</a>
-                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-km-lpj" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
+                                                                <a href="<?= base_url('Kemahasiswaan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>kmhsn</a>
+                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-sm btn-primary d-valid-km-lpj" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
+                                                                <input type="hidden" class="role_id" value="3">
 
                                                             <?php endif; ?>
                                                         <?php elseif ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 4)) : ?>
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                                <a href=" <?= base_url('Kemahasiswaan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn btn-icon btn-success"><i class="fas fa-check"> </i>wd 3</a>
-                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-lpj" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd 3</a>
+                                                                <a href=" <?= base_url('Kemahasiswaan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>wd 3</a>
+                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-sm btn-primary d-valid-lpj" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd 3</a>
+                                                                <input type="hidden" class="role_id" value="4">
                                                             <?php elseif ($v['status_validasi'] == 1) : ?>
                                                                 Selesai
                                                             <?php endif; ?>
                                                         <?php endif; ?>
-
                                                     <?php endforeach; ?>
+
+                                                </td>
+                                                <td>
                                                     <a target="_blank" href="<?= base_url('Kemahasiswaan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=lpj" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a>
                                                 </td>
                                             </tr>
@@ -128,6 +135,7 @@
                                         <th class="text-center"></th>
                                         <th class="text-center"></th>
                                         <th class="text-center"></th>
+
                                     </tfoot>
                                 </table>
                             </div>

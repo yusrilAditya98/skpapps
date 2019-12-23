@@ -3,6 +3,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Model_lembaga extends CI_Model
 {
     private $dataRacangan = [];
+    private $id_lembaga;
+    private $tahun;
+    private $anggaran;
+
     public function getTahunRancangan()
     {
         $this->db->select('tahun_kegiatan');

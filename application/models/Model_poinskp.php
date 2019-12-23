@@ -105,7 +105,7 @@ class Model_poinskp extends CI_Model
     {
         $this->db->select_sum("sp.bobot");
         $this->db->from("poin_skp as ps");
-        $this->db->join('semua_prestasi as sp', 'sp.id_semua_prestasi = ps.id_prestasi', 'left');
+        $this->db->join('semua_prestasi as sp', 'sp.id_semua_prestasi = ps.prestasiid_prestasi', 'left');
         $this->db->where('ps.nim', $nim);
         $this->db->where('ps.validasi_prestasi', 1);
         return $this->db->get()->row_array();
