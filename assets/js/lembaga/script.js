@@ -88,6 +88,8 @@ $.ajax({
 								dataType: 'json',
 								success: function (data) {
 
+
+
 									let partisipasi = '';
 									let k_partisipasi = $('.k_partisipasi').val();
 									for (var i in data) {
@@ -154,6 +156,8 @@ $('.jenisKegiatan').on("change", function () {
 })
 
 $('#tingkatKegiatan').on("change", function () {
+	console.log($('.jumlahAnggota').val())
+	$('.jumlahAnggota').val(0);
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
 	$('.partisipasi').remove();
 	$('.d-m').remove()
@@ -174,6 +178,7 @@ $('#tingkatKegiatan').on("change", function () {
 })
 
 $('#partisipasiKegiatan').on("change", function () {
+
 	let partisipasiKegiatan = $('.partisipasiKegiatan').val()
 	$('#bobotKegiatan').val(0);
 	$.ajax({

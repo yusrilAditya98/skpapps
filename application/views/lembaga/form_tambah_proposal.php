@@ -138,10 +138,19 @@
                                         <div class="bagian-acara mt-5">
                                             <h5>Anggota Kegiatan</h5>
                                             <div class="row">
-                                                <div class="col-12 col-md-12 col-lg-12">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group row mb-4">
+                                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jumlah Anggota</label>
+                                                        <div class="col-lg-2">
+                                                            <input type="number" class="form-control jumlahAnggota" name="jumlahAnggota" id="jumlahAnggota" required readonly>
+                                                        </div>
+                                                        <small class="text-danger"> <?php echo validation_errors(); ?></small>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-12 col-md-12 col-lg-6">
                                                     <a class="btn btn-icon btn-primary mb-3 text-white daftarMahasiswa" style="float:right" data-toggle="modal" data-target="#daftarMahasiswa">
                                                         Pilih Anggota <i class="fas fa-plus pl-2 text-white"></i></a>
-                                                    <input type="hidden" value="0" name="jumlahAnggota" id="jumlahAnggota">
                                                 </div>
                                             </div>
                                             <div class="table-responsive">

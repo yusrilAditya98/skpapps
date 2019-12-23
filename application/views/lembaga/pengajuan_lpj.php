@@ -3,7 +3,8 @@
         <div class="section-header">
             <h1>Pengajuan LPJ</h1>
         </div>
-        <?= $this->session->flashdata('message'); ?>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-12">
                 <div class="card">
@@ -12,22 +13,19 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
-                                        <th scope="col" rowspan="2">No</th>
-                                        <th scope="col" rowspan="2">Tanggal Pengajuan</th>
-                                        <th scope="col" rowspan="2">Nama Kegiatan</th>
-                                        <th scope="col" rowspan="2">Status Proposal</th>
-                                        <th scope="col" colspan="5" class="text-center">Validasi</th>
-                                        <th scope="col" rowspan="2">Action</th>
-                                    </tr>
-                                    <tr>
+                                        <th>No</th>
+                                        <th>Tanggal Pengajuan</th>
+                                        <th>Nama Kegiatan</th>
+                                        <th>Status Proposal</th>
                                         <th>BEM</th>
                                         <th>Kmhs</th>
                                         <th>WD3</th>
                                         <th>PSIK</th>
                                         <th>Keuangan</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -81,6 +79,20 @@
                                     <?php endforeach; ?>
                                     </tr>
                                 </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>

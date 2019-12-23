@@ -35,12 +35,16 @@
 			<div class="col-12 col-md-4 col-lg-4">
 				<div class="card">
 					<div class="card-header">
-						<h4>Dana Pagu Lembaga / Periode <?= $lembaga['tahun_rancangan'] ?></h4>
+						<?php if ($this->input->get('tahun')) : ?>
+							<h4>Dana Pagu Lembaga / Periode <?= $this->input->get('tahun') ?></h4>
+						<?php else : ?>
+							<h4>Dana Pagu Lembaga / Periode <?= $lembaga['tahun_rancangan'] ?></h4>
+						<?php endif; ?>
 					</div>
 					<div class="card-body text-center">
 						<h2>Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
 						</h2>
-						<span>Sisa dana : Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?></span>
+						<h4>Sisa dana : Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?></h4>
 					</div>
 				</div>
 			</div>
@@ -81,7 +85,7 @@
 										<select name="tahun" class="custom-select" id="inputGroupSelect04">
 											<option value="" selected="">Tahun...</option>
 											<?php foreach ($tahun as $t) : ?>
-												<option value="<?= $t['tahun_kegiatan'] ?>"><?= $t['tahun_kegiatan'] ?></option>
+												<option value="<?= $t['tahun_pengajuan'] ?>"><?= $t['tahun_pengajuan'] ?></option>
 											<?php endforeach; ?>
 										</select>
 										<div class="input-group-append">
@@ -157,7 +161,7 @@
 														</div>
 													<?php elseif ($r['status_rancangan'] == 4) : ?>
 														<div class="col-lg-12">
-															<span class="text-warning">Belum Selesai</span>
+															<span class="text-warning">Sedang Berlangsung</span>
 														</div>
 													<?php elseif ($r['status_rancangan'] == 5) : ?>
 														<div class="col-lg-12">
@@ -169,7 +173,7 @@
 										</tr>
 									<?php endforeach; ?>
 									<tr class="text-center">
-										<td scope="col" colspan="3">Total Anggaran</td>
+										<td scope="col" colspan="4">Total Anggaran</td>
 										<td scope="col">Rp.<span class="total-anggaran"> <?= number_format($temp, 2, ',', '.') ?> </span></td>
 									</tr>
 								</tbody>

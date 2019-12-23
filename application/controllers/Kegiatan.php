@@ -249,6 +249,12 @@ class Kegiatan extends CI_Controller
             $this->load->view("lembaga/form_tambah_proposal");
             $this->load->view("template/footer");
         } else {
+            $jumlahAnggota = $this->input->post('jumlahAnggota');
+            if ($jumlahAnggota <= 0) {
+                $this->session->set_flashdata('failed', 'Anggota kegiatan tidak boleh kosong');
+                redirect("Kegiatan/daftarPengajuanProposal");
+            }
+
             // get id tingkatan
             $sm_id = $this->input->post('tingkatKegiatan');
             $idTingkatan = $this->db->get_where('semua_tingkatan', ['id_semua_tingkatan' => $sm_id])->row_array();
@@ -276,19 +282,13 @@ class Kegiatan extends CI_Controller
                 $config['allowed_types'] = 'pdf';
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/proposal/';
-                $config['file_name'] = $proposal['waktu_pengajuan'] . '_proposal_' . $this->session->userdata('username') . '.pdf';
+                $config['file_name'] = $proposal['waktu_pengajuan'] . 'file_proposal_' . $this->session->userdata('username');
                 $this->load->library('upload', $config);
                 $this->upload->initialize($config);
                 if ($this->upload->do_upload('fileProposal')) {
                     $proposal['proposal_kegiatan'] = $this->upload->data('file_name');
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                        <div class="alert-icon"><i class="far fa-times"></i></div>
-                        <div class="alert-body">
-                        <div class="alert-title">File proposal tidak sesuai format (.pdf/2mb)</div>
-                        Data proposal gagal ditambah !
-                        </div>
-                    </div>');
+                    $this->session->set_flashdata('failed', 'File proposal tidak sesuai format (.pdf/2mb)');
                     echo $this->upload->display_errors();
                     redirect("Kegiatan/daftarPengajuanProposal");
                 }
@@ -298,48 +298,56 @@ class Kegiatan extends CI_Controller
                 $config2['allowed_types'] = 'pdf';
                 $config2['max_size']     = '2048'; //kb
                 $config2['upload_path'] = './file_bukti/berita_proposal/';
-                $config2['file_name'] = $proposal['waktu_pengajuan'] . '_berita_proposal_' . $this->session->userdata('username') . '.pdf';
+                $config2['file_name'] = $proposal['waktu_pengajuan'] . '_berita_proposal_' . $this->session->userdata('username');
                 $this->load->library('upload', $config2);
                 $this->upload->initialize($config2);
                 if ($this->upload->do_upload('beritaProposal')) {
                     $proposal['berita_proposal'] = $this->upload->data('file_name');
                 } else {
-                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['waktu_pengajuan'] . '_proposal_' . $this->session->userdata('username') . '.pdf');
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                        <div class="alert-icon"><i class="far fa-times"></i></div>
-                        <div class="alert-body">
-                        <div class="alert-title">File berita proposal tidak sesuai format (.pdf/2mb)</div>
-                        Data proposal gagal ditambah !
-                        </div>
-                    </div>');
+                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['proposal_kegiatan']);
+                    $this->session->set_flashdata('failed', 'File berita proposal tidak sesuai format (.pdf/2mb)');
                     echo $this->upload->display_errors();
                     redirect("Kegiatan/daftarPengajuanProposal");
                 }
             }
-            // upload gambar kegiatan
-            if ($_FILES['gambarKegiatanProposal1']['name'] && ($_FILES['gambarKegiatanProposal2']['name'])) {
+            // upload gambar1 kegiatan
+            if ($_FILES['gambarKegiatanProposal1']['name']) {
                 $config3['allowed_types'] = 'jpg|jpeg';
                 $config3['max_size']     = '2048'; //kb
                 $config3['upload_path'] = './file_bukti/foto_proposal/';
+                $config3['file_name'] = $proposal['waktu_pengajuan'] . '_gambar1_proposal_' . $this->session->userdata('username');
                 $this->load->library('upload', $config3);
                 $this->upload->initialize($config3);
-                if ($this->upload->do_upload('gambarKegiatanProposal1') && $this->upload->do_upload('gambarKegiatanProposal2')) {
-                    $gambar['d_proposal_1'] = $_FILES['gambarKegiatanProposal1']['name'];
-                    $gambar['d_proposal_2'] = $_FILES['gambarKegiatanProposal2']['name'];
+                if ($this->upload->do_upload('gambarKegiatanProposal1')) {
+                    $gambar['d_proposal_1'] = $this->upload->data('file_name');
                 } else {
-                    unlink(FCPATH . "file_bukti/berita_proposal/" .  $proposal['waktu_pengajuan'] . '_berita_proposal_' . $this->session->userdata('username') . '.pdf');
-                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['waktu_pengajuan'] . '_proposal_' . $this->session->userdata('username') . '.pdf');
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                        <div class="alert-body">
-                        <div class="alert-title">File gambar tidak sesuai format (.jpg/2mb)</div>
-                        Data proposal gagal ditambah !
-                        </div>
-                    </div>');
+                    unlink(FCPATH . "file_bukti/berita_proposal/" .  $proposal['proposal_kegiatan']);
+                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['berita_proposal']);
+                    $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
                     echo $this->upload->display_errors();
                     redirect("Kegiatan/daftarPengajuanProposal");
                 }
             }
+            // upload gambar1 kegiatan
+            if ($_FILES['gambarKegiatanProposal2']['name']) {
+                $config3['allowed_types'] = 'jpg|jpeg';
+                $config3['max_size']     = '2048'; //kb
+                $config3['upload_path'] = './file_bukti/foto_proposal/';
+                $config3['file_name'] = $proposal['waktu_pengajuan'] . '_gambar2_proposal_' . $this->session->userdata('username');
+                $this->load->library('upload', $config3);
+                $this->upload->initialize($config3);
+                if ($this->upload->do_upload('gambarKegiatanProposal2')) {
+                    $gambar['d_proposal_2'] = $this->upload->data('file_name');
+                } else {
+                    unlink(FCPATH . "file_bukti/berita_proposal/" .  $proposal['proposal_kegiatan']);
+                    unlink(FCPATH . "file_bukti/proposal/" . $proposal['berita_proposal']);
+                    unlink(FCPATH . "file_bukti/foto_proposal/" . $gambar['d_proposal_1']);
+                    $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
+                    echo $this->upload->display_errors();
+                    redirect("Kegiatan/daftarPengajuanProposal");
+                }
+            }
+
             $this->kegiatan->insertKegiatan($proposal);
             $kegiatan = $this->kegiatan->getIdKegiatan($proposal['id_penanggung_jawab'], $proposal['nama_kegiatan'], $proposal['waktu_pengajuan']);
             // insert data dokumentasi
@@ -364,7 +372,7 @@ class Kegiatan extends CI_Controller
             }
             $this->kegiatan->insertDanaKegiatan($data_dana);
             // insert anggota kegiatan
-            $jumlahAnggota = $this->input->post('jumlahAnggota');
+
             $data_anggota = [];
             for ($i = 1; $i <= $jumlahAnggota; $i++) {
                 $data_anggota[$i] = [
@@ -402,13 +410,7 @@ class Kegiatan extends CI_Controller
             ];
             // update rancangan kegiatan
             $this->lembaga->updateRancanganKegiatan($lembaga, $id_proker);
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
-            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-            <div class="alert-body">
-              <div class="alert-title">Success</div>
-              Data proposal berhasil ditambah !
-            </div>
-          </div>');
+            $this->session->set_flashdata('message', 'Data proposal berhasil ditambah !');
             redirect("Kegiatan/daftarPengajuanProposal");
         }
     }
@@ -441,6 +443,11 @@ class Kegiatan extends CI_Controller
             $this->load->view("lembaga/form_edit_proposal");
             $this->load->view("template/footer");
         } else {
+            $jumlahAnggota = $this->input->post('jumlahAnggota');
+            if ($jumlahAnggota <= 0) {
+                $this->session->set_flashdata('failed', 'Anggota kegiatan tidak boleh kosong');
+                redirect("Kegiatan/daftarPengajuanProposal");
+            }
             // get id tingkatan
             $sm_id = $this->input->post('tingkatKegiatan');
             $idTingkatan = $this->db->get_where('semua_tingkatan', ['id_semua_tingkatan' => $sm_id])->row_array();
@@ -473,13 +480,7 @@ class Kegiatan extends CI_Controller
                 if ($this->upload->do_upload('fileProposal')) {
                     $proposal['proposal_kegiatan'] = $this->upload->data('file_name');
                 } else {
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                        <div class="alert-icon"><i class="far fa-times"></i></div>
-                        <div class="alert-body">
-                        <div class="alert-title">File proposal tidak sesuai format (.pdf/2mb)</div>
-                        Data proposal gagal ditambah !
-                        </div>
-                    </div>');
+                    $this->session->set_flashdata('failed', 'File proposal tidak sesuai format (.pdf/2mb)');
                     echo $this->upload->display_errors();
                     redirect("Kegiatan/daftarPengajuanProposal");
                 }
@@ -496,44 +497,47 @@ class Kegiatan extends CI_Controller
                 if ($this->upload->do_upload('beritaProposal')) {
                     $proposal['berita_proposal'] = $this->data->upload('file_name');;
                 } else {
-                    unlink(FCPATH . "file_bukti/proposal/" . $data['kegiatan']['proposal_kegiatan']);
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                        <div class="alert-icon"><i class="far fa-times"></i></div>
-                        <div class="alert-body">
-                        <div class="alert-title">File berita proposal tidak sesuai format (.pdf/2mb)</div>
-                        Data proposal gagal ditambah !
-                        </div>
-                    </div>');
+                    $this->session->set_flashdata('failed', 'File berita proposal tidak sesuai format (.pdf/2mb)');
                     echo $this->upload->display_errors();
                     redirect("Kegiatan/daftarPengajuanProposal");
                 }
             }
-            // update gambar kegiatan
-            if ($_FILES['gambarKegiatanProposal1']['name'] && ($_FILES['gambarKegiatanProposal2']['name'])) {
+            // update gambar1 kegiatan
+            if ($_FILES['gambarKegiatanProposal1']['name']) {
                 $config3['allowed_types'] = 'jpg|jpeg';
                 $config3['max_size']     = '2048'; //kb
                 $config3['upload_path'] = './file_bukti/foto_proposal/';
+                $config3['file_name'] = $data['dokumentasi']['d_proposal_1'];
                 $this->load->library('upload', $config3);
                 unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_1']);
-                unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_2']);
                 $this->upload->initialize($config3);
-                if ($this->upload->do_upload('gambarKegiatanProposal1') && $this->upload->do_upload('gambarKegiatanProposal2')) {
-                    $gambar['d_proposal_1'] = $_FILES['gambarKegiatanProposal1']['name'];
-                    $gambar['d_proposal_2'] = $_FILES['gambarKegiatanProposal2']['name'];
+                if ($this->upload->do_upload('gambarKegiatanProposal1')) {
+                    $gambar['d_proposal_1'] = $this->upload->data('file_name');
                 } else {
-                    unlink(FCPATH . "file_bukti/berita_proposal/" . $_FILES['beritaProposal']['name']);
-                    unlink(FCPATH . "file_bukti/proposal/" . $_FILES['fileProposal']['name']);
-                    $this->session->set_flashdata('message', '<div class="alert alert-danger alert-has-icon">
-                        <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-                        <div class="alert-body">
-                        <div class="alert-title">File gambar tidak sesuai format (.jpg/2mb)</div>
-                        Data proposal gagal ditambah !
-                        </div>
-                    </div>');
+                    $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
                     echo $this->upload->display_errors();
                     redirect("Kegiatan/daftarPengajuanProposal");
                 }
             }
+
+            // update gambar1 kegiatan
+            if ($_FILES['gambarKegiatanProposal2']['name']) {
+                $config4['allowed_types'] = 'jpg|jpeg';
+                $config4['max_size']     = '2048'; //kb
+                $config4['upload_path'] = './file_bukti/foto_proposal/';
+                $config4['file_name'] = $data['dokumentasi']['d_proposal_2'];
+                $this->load->library('upload', $config4);
+                unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_2']);
+                $this->upload->initialize($config4);
+                if ($this->upload->do_upload('gambarKegiatanProposal2')) {
+                    $gambar['d_proposal_2'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
+                    echo $this->upload->display_errors();
+                    redirect("Kegiatan/daftarPengajuanProposal");
+                }
+            }
+
             $this->kegiatan->updateKegiatan($proposal, $id_kegiatan);
             if ($gambar) {
                 $this->kegiatan->updateDokumentasiKegiatan($gambar, $id_kegiatan);
@@ -559,7 +563,7 @@ class Kegiatan extends CI_Controller
                 $this->db->delete('kegiatan_sumber_dana', ['id_kegiatan' => $id_kegiatan]);
                 $this->kegiatan->insertDanaKegiatan($data_dana);
                 // insert anggota kegiatan
-                $jumlahAnggota = $this->input->post('jumlahAnggota');
+
                 $data_anggota = [];
                 if ($jumlahAnggota) {
                     for ($i = 1; $i <= $jumlahAnggota; $i++) {
@@ -589,13 +593,7 @@ class Kegiatan extends CI_Controller
             if ($data_validasi) {
                 $this->kegiatan->updateValidasiKegiatan($data_validasi);
             }
-            $this->session->set_flashdata('message', '<div class="alert alert-success alert-has-icon">
-            <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
-            <div class="alert-body">
-              <div class="alert-title">Success</div>
-              Data proposal berhasil diperbaharui !
-            </div>
-          </div>');
+            $this->session->set_flashdata('message', 'Data proposal berhasil diperbaharui !');
             redirect("Kegiatan/daftarPengajuanProposal");
         }
     }

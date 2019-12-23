@@ -9,9 +9,9 @@ class Model_lembaga extends CI_Model
 
     public function getTahunRancangan()
     {
-        $this->db->select('tahun_kegiatan');
-        $this->db->from('daftar_rancangan_kegiatan');
-        $this->db->group_by('tahun_kegiatan');
+        $this->db->select('tahun_pengajuan');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('tahun_pengajuan');
         return $this->db->get()->result_array();
     }
     public function getDataLembaga($id_lembaga)
