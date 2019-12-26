@@ -91,10 +91,11 @@ $('.detail-kegiatan').on('click', function (e) {
 $(document).ready(function (e) {
 	$('#dataTabelProposal').DataTable({
 		initComplete: function () {
+			var select;
 			this.api().columns([2, 4]).every(function () {
 				var column = this;
-				var select = $('<select class="form-control-sm selectric" ><option value="">--pilih--</option></select>')
-					.appendTo($(column.footer()).empty())
+				select = $('<select class="form-control-sm selectric" ><option value="">pilih</option></select>')
+					.prependTo($('.kategori-filter'))
 					.on('change', function () {
 						var val = $.fn.dataTable.util.escapeRegex(
 							$(this).val()
@@ -106,6 +107,8 @@ $(document).ready(function (e) {
 				column.data().unique().sort().each(function (d, j) {
 					select.append('<option value="' + d + '">' + d + '</option>')
 				});
+
+
 			});
 		}
 	});

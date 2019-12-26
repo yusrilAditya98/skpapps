@@ -32,7 +32,7 @@
                                     <?php $i = 1;
                                     foreach ($kegiatan as $k) : ?>
                                         <tr>
-                                            <th scope="row"><?= $i++ ?></th>
+                                            <td scope="row"><?= $i++ ?></td>
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
                                             <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-jenis="proposal" data-toggle="modal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
@@ -83,10 +83,12 @@
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
-                                    </tr>
                                 </tbody>
                                 <tfoot>
                                     <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
                                         <td></td>
                                         <td></td>
                                         <td></td>

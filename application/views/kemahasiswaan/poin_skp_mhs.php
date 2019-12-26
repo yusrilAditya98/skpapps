@@ -30,7 +30,7 @@
                                         <tr>
                                             <td><?= $index++ ?></td>
                                             <td><?= $m['nim'] ?></td>
-                                            <td><?= $m['nim'] ?></td>
+                                            <td><?= $m['nama'] ?></td>
                                             <td><?= $m['nama_jurusan'] ?></td>
                                             <td><?= $m['nama_prodi'] ?></td>
                                             <td>

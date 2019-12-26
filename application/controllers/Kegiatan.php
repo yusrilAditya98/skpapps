@@ -892,7 +892,7 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, null, "0");
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
@@ -907,7 +907,7 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3, "0");
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
@@ -935,6 +935,7 @@ class Kegiatan extends CI_Controller
             $data['catatan_revisi'] = $this->input->post('catatan');
             $jenis_validasi = $this->input->post('jenis_validasi');
             $status_proposal = 2;
+            $this->session->set_flashdata('message', 'Proposal berhasil direvisi!');
         }
         $this->kegiatan->updateStatusProposal($id_kegiatan, $status_proposal);
         $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'proposal');
@@ -946,6 +947,7 @@ class Kegiatan extends CI_Controller
             ];
             $jenis_validasi = 1 + $this->input->get('jenis_validasi');
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'proposal');
+            $this->session->set_flashdata('message', 'Proposal berhasil divalidasi!');
         }
         redirect('kegiatan/daftarProposal');
     }
@@ -967,6 +969,7 @@ class Kegiatan extends CI_Controller
             $data['catatan_revisi'] = $this->input->post('catatan');
             $jenis_validasi = $this->input->post('jenis_validasi');
             $status_lpj = 2;
+            $this->session->set_flashdata('message', 'Lpj berhasil divalidasi!');
         }
         $this->kegiatan->updateStatusLpj($id_kegiatan, $status_lpj);
         $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'lpj');
@@ -978,6 +981,7 @@ class Kegiatan extends CI_Controller
             ];
             $jenis_validasi = 1 + $this->input->get('jenis_validasi');
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'lpj');
+            $this->session->set_flashdata('message', 'Lpj berhasil direvisi!');
         }
         redirect('kegiatan/daftarLpj');
     }
