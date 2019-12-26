@@ -4,7 +4,8 @@
 		<div class="section-header">
 			<h1>Pengajuan Rancangan</h1>
 		</div>
-		<?= $this->session->flashdata('message'); ?>
+		<div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+		<div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
 		<div class="row">
 			<div class="col-12 col-md-4 col-lg-4">
 				<div class="card">

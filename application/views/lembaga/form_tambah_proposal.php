@@ -142,9 +142,8 @@
                                                     <div class="form-group row mb-4">
                                                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jumlah Anggota</label>
                                                         <div class="col-lg-2">
-                                                            <input type="number" class="form-control jumlahAnggota" name="jumlahAnggota" id="jumlahAnggota" required readonly>
+                                                            <input type="number" class="form-control jumlahAnggota" name="jumlahAnggota" id="jumlahAnggota" readonly>
                                                         </div>
-                                                        <small class="text-danger"> <?php echo validation_errors(); ?></small>
                                                     </div>
 
                                                 </div>
@@ -218,7 +217,7 @@
                                             <div class="form-group">
                                                 <label for="gambarKegiatanProposal2">Upload Gambar Kegiatan 2 / Acara
                                                     Pendukung</label>
-                                                <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2" required>
+                                                <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2">
                                                 <small class="form-text text-muted">
                                                     Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
                                                 </small>

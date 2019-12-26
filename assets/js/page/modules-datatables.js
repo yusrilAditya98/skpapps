@@ -35,16 +35,97 @@ $("#table-1").DataTable({
 	}],
 });
 $("#table-2").DataTable({
+	"pageLength": 5,
 	"columnDefs": [{
 		"sortable": false,
 		"targets": [0, 2, 3]
-	}]
+	}],
+	initComplete: function () {
+		this.api().columns([1]).every(function () {
+			var column = this;
+			var select = $('<select class="custom-select col-lg-4 mr-2" ><option value="">Pilih Prestasi</option></select>')
+				.prependTo($('.dataTables_filter'))
+				.on('change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+
+					column
+						.search(val ? '^' + val + '$' : '', true, false)
+						.draw();
+				});
+			console.log(select);
+
+			column.data().unique().sort().each(function (d, j) {
+				select.append('<option value="' + d + '">' + d + '</option>')
+			});
+		});
+	}
+});
+$("#table-user").DataTable({
+	"pageLength": 5,
+	"columnDefs": [{
+		"sortable": false,
+		"targets": [0, 2, 3]
+	}],
+	initComplete: function () {
+		this.api().columns([3]).every(function () {
+			var column = this;
+			var select = $('<select class="custom-select col-lg-4 mr-2" ><option value="">Pilih Status User</option></select>')
+				.prependTo($('.dataTables_filter'))
+				.on('change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+
+					column
+						.search(val ? '^' + val + '$' : '', true, false)
+						.draw();
+				});
+			console.log(select);
+
+			column.data().unique().sort().each(function (d, j) {
+				select.append('<option value="' + d + '">' + d + '</option>')
+			});
+		});
+	}
 });
 
 $(".table-kategori").DataTable({
 	"pageLength": 5
 });
+$("#table-detail").DataTable({
+	"columnDefs": [{
+		"sortable": false,
+		"targets": [0, 1, 2, 3, 4]
+	}],
+});
 
-$(".table-kegiatan").DataTable({
-	"pageLength": 5
+$("#table-kegiatan").DataTable({
+	"pageLength": 5,
+	"columnDefs": [{
+		"sortable": false,
+		"targets": [0, 1, 2, 3]
+	}],
+	initComplete: function () {
+		this.api().columns([4]).every(function () {
+			var column = this;
+			var select = $('<select class="custom-select col-lg-4 mr-2" ><option value="">Pilih Status Kegiatan</option></select>')
+				.prependTo($('.dataTables_filter'))
+				.on('change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+
+					column
+						.search(val ? '^' + val + '$' : '', true, false)
+						.draw();
+				});
+			console.log(select);
+
+			column.data().unique().sort().each(function (d, j) {
+				select.append('<option value="' + d + '">' + d + '</option>')
+			});
+		});
+	}
 });

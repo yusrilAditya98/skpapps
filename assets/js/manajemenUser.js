@@ -3,9 +3,9 @@ var segments = url.split("/");
 
 if (segments[4] == "Admin") {
 	$(window).on('load', function () {
-		$('.dataTables_filter').prepend(`
-		<select class="custom-select col-lg-4 mr-2 filter-status" id="filter-status">
-		</select>`);
+		// $('.dataTables_filter').prepend(`
+		// <select class="custom-select col-lg-4 mr-2 filter-status" id="filter-status">
+		// </select>`);
 		// $.ajax({
 		// 	url: segments[0] + '/' + segments[3] + '/Admin/getProfilUser',
 		// 	dataType: 'json',
