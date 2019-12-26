@@ -82,20 +82,8 @@
                     <div class="row no-gutters">
                         <div class="col-lg-12">
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-striped rekap-skp" id="table-detail">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">No</th>
-                                                <th>NIM Mahasiswa</th>
-                                                <th>Nama Mahasiswa</th>
-                                                <th>Prestasi</th>
-                                                <th>Nama Kegiatan</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="body-rekap-skp">
-                                        </tbody>
-                                    </table>
+                                <div class="table-responsive" id="rekap-prestasi">
+
                                 </div>
                             </div>
                         </div>

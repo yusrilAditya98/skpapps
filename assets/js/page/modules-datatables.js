@@ -94,12 +94,7 @@ $("#table-user").DataTable({
 $(".table-kategori").DataTable({
 	"pageLength": 5
 });
-$("#table-detail").DataTable({
-	"columnDefs": [{
-		"sortable": false,
-		"targets": [0, 1, 2, 3, 4]
-	}],
-});
+
 
 $("#table-kegiatan").DataTable({
 	"pageLength": 5,

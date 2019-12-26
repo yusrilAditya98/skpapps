@@ -78,27 +78,45 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
+			$('#table-detail_wrapper').remove()
+			$('#rekap-prestasi').append(`<table class="table table-striped rekap-skp" id="table-detail">
+			</table>`)
 			if (data['mahasiswa'].length != 0) {
-				$('.body-rekap-skp').html('');
 				var i = 0;
-				data['mahasiswa'].forEach(function (dataA) {
-					$('.body-rekap-skp').append(`<tr>
-					<td class="text-center">` + (++i) + `</td>
-					<td>` + dataA['nim'] + `</td>
-					<td>` + dataA['nama'] + `</td>
-					<td>` + data['prestasi']['nama_prestasi'] + `</td>
-					<td>` + dataA['nama_kegiatan'] + `</td>
-                    </tr>`)
-				})
-			} else {
-				$('.body-rekap-skp').html('');
-				$('.body-rekap-skp').html(`
-                <tr>
-                   <td colspan="6">
-                        <h3 class="text-center my-2">Tidak Ada</h3>
-                    </td>
-                </tr>`);
+				let dataTampung = [];
+				for (var j in data['mahasiswa']) {
+					let temp = [];
+					temp.push(++i)
+					temp.push(data['mahasiswa'][j].nim)
+					temp.push(data['mahasiswa'][j].nama)
+					temp.push(data['prestasi']['nama_prestasi'])
+					temp.push(data['mahasiswa'][j].nama_kegiatan)
+					dataTampung[j] = temp;
+				}
+				$("#table-detail").DataTable({
+					data: dataTampung,
+					columns: [{
+							title: "No"
+						},
+						{
+							title: "Nim"
+						},
+						{
+							title: "Nama"
+						},
+						{
+							title: "Prestasi."
+						},
+						{
+							title: "Nama Kegiatan"
+						}
+					]
+				});
+
+			} else if (data['mahasiswa'].length == 0) {
+				$('#rekap-prestasi').append(`<h3 id="table-detail_wrapper" class="text-center my-2">Data Tidak Ada</h3>
+				`)
+
 			}
 		}
 	});
