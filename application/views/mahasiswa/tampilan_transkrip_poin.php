@@ -76,12 +76,12 @@
 					<table class="table table-sm">
 						<thead>
 							<tr>
-								<th scope="col">No</th>
-								<th scope="col">Nama Kegiatan</th>
-								<th scope="col">Jabatan</th>
-								<th scope="col">Tanggal Pelaksanaan</th>
-								<th scope="col">Tingkat</th>
-								<th scope="col">Point</th>
+								<th style="width: 5%">No</th>
+								<th style="width: 26.66%">Nama Kegiatan</th>
+								<th style="width: 16.66%">Jabatan</th>
+								<th style="width: 16.66%">Tanggal Pelaksanaan</th>
+								<th style="width: 16.66%">Tingkat</th>
+								<th style="width: 16.66%">Point</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -90,12 +90,12 @@
 								<?php if ($p['validasi_prestasi'] == 1) : ?>
 									<?php if ($p['id_bidang'] == $b['id_bidang']) : ?>
 										<tr>
-											<td><?= $index++; ?></td>
-											<td><?= $p['nama_kegiatan'] ?></td>
-											<td><?= $p['nama_prestasi'] ?></td>
-											<td><?= $p['tgl_pelaksanaan'] ?></td>
-											<td><?= $p['nama_tingkatan'] ?></td>
-											<td><?= $p['bobot'] ?></td>
+											<td style="width: 5%"><?= $index++; ?></td>
+											<td style="width: 26.66%"><?= $p['nama_kegiatan'] ?></td>
+											<td style="width: 16.66%"><?= $p['nama_prestasi'] ?></td>
+											<td style="width: 16.66%"><?= $p['tgl_pelaksanaan'] ?></td>
+											<td style="width: 16.66%"><?= $p['nama_tingkatan'] ?></td>
+											<td style="width: 16.66%"><?= $p['bobot'] ?></td>
 										</tr>
 									<?php endif; ?>
 								<?php endif; ?>

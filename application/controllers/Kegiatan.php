@@ -218,8 +218,16 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = "Pengajuan";
         $data['notif'] = $this->_notif();
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
+        if ($start_date != null && $end_date != null) {
+
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), null, null, 'proposal', $start_date, $end_date);
+        } else {
+
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
