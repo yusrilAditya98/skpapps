@@ -164,7 +164,6 @@ $(document).ready(function () {
 			],
 
 		}],
-
 		// These labels appear in the legend and in the tooltips when hovering different arcs
 		labels: [
 			'Kurang',
@@ -175,16 +174,15 @@ $(document).ready(function () {
 		],
 
 	};
-
 	const canvas = document.querySelector("#sebaran-skp");
-	const ctx = canvas.getContext("2d");
-	new Chart(ctx, {
-		type: 'doughnut',
-		data: data,
+	if (canvas) {
+		const ctx = canvas.getContext("2d");
+		new Chart(ctx, {
+			type: 'doughnut',
+			data: data,
 
-	});
-
-
+		});
+	}
 })
 
 

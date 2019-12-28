@@ -243,8 +243,8 @@ $(document).ready(function () {
 			}
 
 			const canvasAnggaran = document.querySelector("#laporan-serapan");
-			const grafikAnggaran = canvasAnggaran.getContext("2d");
 			if (canvasAnggaran) {
+				const grafikAnggaran = canvasAnggaran.getContext("2d");
 				new Chart(grafikAnggaran, {
 					type: "bar",
 					data: {
@@ -320,5 +320,46 @@ $(document).ready(function () {
 		}
 	});
 });
+
+$(document).ready(function () {
+	var data = {
+		datasets: [{
+			data: [10, 20, 30, 20, 100],
+			backgroundColor: [
+				"#fc544b",
+				"#f9ca24",
+				"#2d98da",
+				"#20bf6b",
+				"#e056fd",
+			],
+
+		}],
+		// These labels appear in the legend and in the tooltips when hovering different arcs
+		labels: [
+			'Kurang',
+			'Cukup',
+			'Baik',
+			'Sangat Baik',
+			'Dengan Pujian'
+		],
+
+	};
+	const canvas_kmhs = document.querySelector("#sebaran-skp");
+	if (canvas_kmhs) {
+		const ctx = canvas_kmhs.getContext("2d");
+		new Chart(ctx, {
+			type: 'doughnut',
+			data: data,
+			options: {
+				legend: {
+					position: "bottom",
+
+					display: true
+				},
+			}
+
+		});
+	}
+})
 
 "use strict";

@@ -2,7 +2,7 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Vaalidasi Pengajuan Anggaran Kegiatan Lpj</h1>
+            <h1>Validasi Pengajuan Anggaran Kegiatan Lpj</h1>
         </div>
         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
         <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>

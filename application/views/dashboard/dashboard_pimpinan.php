@@ -65,6 +65,38 @@
                     </div>
                 </div>
             </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Data Penyebaran Poin skp</h4>
+                        <div class="card-header-action">
+                            <a href="<?= base_url('Pimpinan/poin_skp') ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body chart mb-5 mt-5">
+                        <canvas id="sebaran-skp" style="width: 100%; height: 20rem;"></canvas>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Grafik Rekapitulasi SKP Mahasiswa</h4>
+                        <div class="card-header-action">
+                            <a href="<?= base_url('Pimpinan/rekapitulasiSKP') ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="card-body chart">
+                                <canvas id="rekap-skp-chart" style="width: 100%; height: 30rem;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </div>

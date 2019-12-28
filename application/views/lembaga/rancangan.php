@@ -17,7 +17,7 @@
 							<a href="<?= base_url('Kegiatan/tambahRancanganKegiatan') ?>" class="btn btn-icon btn-success mb-3">
 								Tambah Rancangan Kegiatan <i class="fas fa-plus pl-2"></i></a>
 						<?php else : ?>
-							Rancangan Kegiatan disable
+							<span class="badge badge-warning" style="font-size: 15px"> Sudah Mengajukan Kegiatan !</span>
 						<?php endif; ?>
 					</div>
 				</div>
@@ -42,10 +42,27 @@
 							<h4>Dana Pagu Lembaga / Periode <?= $lembaga['tahun_rancangan'] ?></h4>
 						<?php endif; ?>
 					</div>
-					<div class="card-body text-center">
-						<h2>Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
-						</h2>
-						<h4>Sisa dana : Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?></h4>
+					<div class="card-body text-left">
+						<div class="row">
+							<div class="col-lg-2">
+								<img class="icon-caret-left" style="width: 100%" src="<?= base_url('assets/img/icon/money-bag.png') ?>" alt="">
+							</div>
+							<div class="col-lg-10">
+								<span style="font-size: 18px">Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
+									(Dana Pagu)</span>
+
+							</div>
+						</div>
+						<div class="row mt-2">
+							<div class="col-lg-2">
+								<img class="icon-caret-left" style="width: 100%" src="<?= base_url('assets/img/icon/money.png') ?>" alt="">
+							</div>
+							<div class="col-lg-10">
+								<span style="font-size: 18px">Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?>
+									(Sisa Dana)
+								</span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -54,7 +71,7 @@
 			<div class="col-12 col-md-12 col-lg-12">
 				<div class="card">
 					<div class="card-header">
-						<h4>Tambah Rancangan Kegiatan</h4>
+						<h4>Daftar Rancangan Kegiatan</h4>
 					</div>
 					<div class="card-body">
 						<!-- jika status rancangan diberikan hak akses untuk mengajukan -->
@@ -132,7 +149,7 @@
 											<?php $temp += $r['anggaran_kegiatan']; ?>
 											<td>Rp.<?= number_format($r['anggaran_kegiatan'], 2, ',', '.') ?> ,-</td>
 											<td>
-												<?php if ($r['status_rancangan'] == 1) :  ?>
+												<?php if ($r['status_rancangan'] == 1 || $r['status_rancangan'] == 4) :  ?>
 													<i class="fa fa-check text-success" aria-hidden="true"></i>
 												<?php elseif ($r['status_rancangan'] == 2) : ?>
 													<div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id=""><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>

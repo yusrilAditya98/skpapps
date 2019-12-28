@@ -100,6 +100,7 @@
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
                                                                 <a href="<?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>kmhsn</a>
                                                                 <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid-km" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
+                                                                <input type="hidden" class="role_id" value="3">
                                                             <?php elseif ($v['status_validasi'] == 0) : ?>
                                                                 Belum bisa validasi
                                                             <?php endif; ?>
@@ -107,6 +108,7 @@
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
                                                                 <a href=" <?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn  btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>wd3</a>
                                                                 <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd3</a>
+                                                                <input type="hidden" class="role_id" value="4">
                                                             <?php elseif ($v['status_validasi'] == 1) : ?>
                                                                 Selesai
                                                             <?php endif; ?>

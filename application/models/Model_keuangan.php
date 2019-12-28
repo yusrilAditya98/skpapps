@@ -11,6 +11,7 @@ class Model_keuangan extends CI_Model
         $this->db->select('MONTH(k.tgl_pengajuan_proposal) as bulan, SUM(k.dana_proposal) as dana, l.id_lembaga,l.nama_lembaga');
         $this->db->from('lembaga as l');
         $this->db->join('kegiatan as k', 'k.id_lembaga=l.id_lembaga', 'left');
+        $this->db->where('k.status_selesai_proposal', 3);
         $this->db->where('l.id_lembaga !=', 0);
         $this->db->where('YEAR(k.tgl_pengajuan_proposal)', $periode);
         $this->db->group_by('MONTH(k.tgl_pengajuan_proposal), l.id_lembaga');
@@ -21,6 +22,7 @@ class Model_keuangan extends CI_Model
         $this->db->select('MONTH(k.tgl_pengajuan_lpj) as bulan, SUM(k.dana_lpj) as dana, l.id_lembaga,l.nama_lembaga');
         $this->db->from('lembaga as l');
         $this->db->join('kegiatan as k', 'k.id_lembaga=l.id_lembaga', 'left');
+        $this->db->where('k.status_selesai_lpj', 3);
         $this->db->where('l.id_lembaga !=', 0);
         $this->db->where('YEAR(k.tgl_pengajuan_lpj)', $periode);
         $this->db->group_by('MONTH(k.tgl_pengajuan_lpj),l.id_lembaga');

@@ -13,7 +13,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTabelKegiatan">
+                            <table class="table table-bordered table-hover" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
                                         <th>No</th>
