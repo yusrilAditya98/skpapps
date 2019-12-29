@@ -37,4 +37,21 @@ class Model_keuangan extends CI_Model
         $this->db->order_by('YEAR(k.tanggal_kegiatan) DESC');
         return $this->db->get()->result_array();
     }
+
+    public function getAnggaranLembagaProposal($id_lembaga)
+    {
+        $this->db->select('MONTH(k.tgl_pengajuan_proposal) as bulan_pengajuan,k.id_kegiatan,k.dana_proposal as dana');
+        $this->db->from('kegiatan as k');
+        $this->db->where('k.status_selesai_proposal', 3);
+        $this->db->where('id_penanggung_jawab', $id_lembaga);
+        return $this->db->get()->result_array();
+    }
+    public function getAnggaranLembagaLpj($id_lembaga)
+    {
+        $this->db->select('MONTH(k.tgl_pengajuan_lpj) as bulan_pengajuan,k.id_kegiatan,k.dana_lpj as dana');
+        $this->db->from('kegiatan as k');
+        $this->db->where('k.status_selesai_lpj', 3);
+        $this->db->where('id_penanggung_jawab', $id_lembaga);
+        return $this->db->get()->result_array();
+    }
 }

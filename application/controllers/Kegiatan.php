@@ -222,10 +222,8 @@ class Kegiatan extends CI_Controller
         $end_date = $this->input->post('end_date');
         $this->load->model('Model_kegiatan', 'kegiatan');
         if ($start_date != null && $end_date != null) {
-
             $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), null, null, 'proposal', $start_date, $end_date);
         } else {
-
             $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
         }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
@@ -624,7 +622,13 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = "Pengajuan";
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+        if ($start_date != null && $end_date != null) {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3, null, 'lpj', $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
@@ -1009,5 +1013,114 @@ class Kegiatan extends CI_Controller
         }
         redirect('kegiatan/daftarLpj');
     }
-    // melakukan pengecekan data revisi
+
+    public function anggaran()
+    {
+        $this->load->model('Model_keuangan', 'keuangan');
+        $data['title'] = 'Anggaran';
+        $data['notif'] = $this->_notif();
+        $data['serapan_proposal'] = $this->keuangan->getAnggaranLembagaProposal($this->session->userdata('username'));
+        $data['serapan_lpj'] = $this->keuangan->getAnggaranLembagaLpj($this->session->userdata('username'));
+        $data['tahun'] = $this->keuangan->getTahun();
+        $tahun = $data['tahun'][0]['tahun'];
+        if ($this->input->post('tahun')) {
+            $tahun = $this->input->post('tahun');
+            $data['kegiatan'] = $this->db->get_where('kegiatan', ['id_lembaga' => $this->session->userdata('username'), 'YEAR(kegiatan.tgl_pengajuan_proposal)' => $tahun])->result_array();
+        } else {
+            $data['kegiatan'] = $this->db->get_where('kegiatan', ['id_lembaga' => $this->session->userdata('username'), 'YEAR(kegiatan.tgl_pengajuan_proposal)' => $tahun])->result_array();
+        }
+        $data['tahun_anggaran'] = $tahun;
+        $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj']);
+        $data['total_anggaran'] = $this->db->get_where('rekapan_kegiatan_lembaga', ['id_lembaga' => $this->session->userdata('username'), 'tahun_pengajuan' => $tahun])->row_array();
+        $data['total'] = $this->_totalDana($data['laporan']);
+
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("lembaga/anggaran", $data);
+        $this->load->view("template/footer");
+    }
+
+    private function _serapan($proposal, $lpj)
+    {
+        $id_lembaga = $this->session->userdata('username');
+        $kegiatan = $this->db->get_where('kegiatan', ['id_lembaga' => $id_lembaga])->result_array();
+
+        if ($proposal == null) {
+            foreach ($kegiatan as $k) {
+                $proposal[$k['id_lembaga']] = [
+                    'bulan_pengajuan' => 0,
+                    'id_kegiatan' => $k['id_kegiatan'],
+                    'dana' => 0
+                ];
+            }
+        }
+
+        if ($lpj == null) {
+            foreach ($kegiatan as $k) {
+                $lpj[$k['id_kegiatan']] = [
+                    'bulan_pengajuan' => 0,
+                    'id_kegiatan' => $k['id_kegiatan'],
+                    'dana' => 0
+                ];
+            }
+        }
+
+        $data = [];
+        foreach ($kegiatan as $k) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$k['id_kegiatan']][$j] = 0;
+            }
+            $data[$k['id_kegiatan']]['anggaran_kegiatan'] = $k['dana_kegiatan'];
+            $data[$k['id_kegiatan']]['dana_terserap'] = 0;
+        }
+
+        foreach ($proposal as $p) {
+            // data lpj haruslah tidak boleh kosong
+            foreach ($lpj as $l) {
+                for ($i = 1; $i < 13; $i++) {
+                    if ($p['id_kegiatan'] == $l['id_kegiatan'] && $p['bulan_pengajuan'] == $i) {
+                        if ($l['bulan_pengajuan'] == $p['bulan_pengajuan']) {
+                            $data[$p['id_kegiatan']][$i] = $p['dana'] + $l['bulan_pengajuan'];
+                        } else {
+                            $data[$p['id_kegiatan']][$i] = $p['dana'];
+                        }
+                    }
+                    if ($p['id_kegiatan'] == $l['id_kegiatan'] && $l['bulan_pengajuan'] == $i) {
+                        if ($l['bulan_pengajuan'] == $p['bulan_pengajuan']) {
+                            $data[$l['id_kegiatan']][$i] = $p['dana'] + $l['dana'];
+                        } else {
+                            $data[$l['id_kegiatan']][$i] = $l['dana'];
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($kegiatan as $k) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$k['id_kegiatan']]['dana_terserap'] += $data[$k['id_kegiatan']][$j];
+            }
+        }
+        return $data;
+    }
+
+    private function _totalDana($laporan)
+    {
+        $id_lembaga = $this->session->userdata('username');
+        $kegiatan = $this->db->get_where('kegiatan', ['id_lembaga' => $id_lembaga])->result_array();
+        $data['total']['anggaran_kegiatan'] = 0;
+        $data['total']['dana_terserap'] = 0;
+        $data['total']['persen_terserap'] = 0;
+        foreach ($kegiatan as $k) {
+            $data['total']['dana_terserap'] += $laporan[$k['id_kegiatan']]['dana_terserap'];
+            $data['total']['anggaran_kegiatan'] += $laporan[$k['id_kegiatan']]['anggaran_kegiatan'];
+        }
+        if ($data['total']['anggaran_kegiatan'] == 0) {
+            $data['total']['persen_terserap'] = 0;
+        } else {
+            $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['anggaran_kegiatan'] * 100;
+        }
+        return $data;
+    }
 }

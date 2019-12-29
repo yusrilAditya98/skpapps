@@ -65,7 +65,7 @@
                                             <td><?= $k['tgl_pengajuan_proposal'] ?></td>
                                             <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-jenis="proposal" data-toggle="modal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
-                                            </td>
+
                                             <?php if ($k['status_selesai_proposal'] == 0) : ?>
                                                 <td class="text-secondary">
                                                     Belum diproses
