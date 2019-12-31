@@ -387,4 +387,13 @@ class API_skp extends CI_Controller
 
         return $data;
     }
+
+    public function penyebaranSkp()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $data['poin_skp'] = $this->poinskp->getJumlahKategoriSkp();
+
+
+        echo json_encode($data);
+    }
 }

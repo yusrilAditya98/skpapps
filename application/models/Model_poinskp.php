@@ -110,4 +110,38 @@ class Model_poinskp extends CI_Model
         $this->db->where('ps.validasi_prestasi', 1);
         return $this->db->get()->row_array();
     }
+
+    public function getJumlahKategoriSkp()
+    {
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp >', 300);
+        $data['dengan_pujian'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <=', 300);
+        $this->db->where('m.total_poin_skp >=', 201);
+        $data['sangat_baik'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <=', 200);
+        $this->db->where('m.total_poin_skp >=', 151);
+        $data['baik'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <=', 150);
+        $this->db->where('m.total_poin_skp >=', 100);
+        $data['cukup'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <', 100);
+        $this->db->where('m.total_poin_skp ', 0);
+
+        $data['kurang'] = $this->db->get()->result_array();
+        return $data;
+    }
 }
