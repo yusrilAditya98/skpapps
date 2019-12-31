@@ -22,11 +22,15 @@ class Kegiatan extends CI_Controller
     }
     public function index()
     {
+        $this->load->model('Model_lembaga', 'lembaga');
         $data['title'] = 'Dashboard';
         $data['notif'] = $this->_notif();
+        $data['proposal_kegiatan'] = $this->lembaga->getPengajuanProposalLembaga($this->session->userdata('username'));
+        $data['lpj_kegiatan'] = $this->lembaga->getPengajuanLpjLembaga($this->session->userdata('username'));
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
+
         if ($this->session->userdata('user_profil_kode') == 2) {
             $this->load->view("dashboard/dashboard_lembaga");
         } else {

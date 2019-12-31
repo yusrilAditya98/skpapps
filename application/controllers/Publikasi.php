@@ -21,8 +21,11 @@ class Publikasi extends CI_Controller
     }
     public function index()
     {
+        $this->load->model('Model_kegiatan', 'kegiatan');
         $data['title'] = 'Dashboard';
         $data['notif'] = $this->_notif();
+        $data['proposal_kegiatan'] = $this->kegiatan->getDaftarProposalKegiatan();
+        $data['lpj_kegiatan'] = $this->kegiatan->getDaftarLpjKegiatan();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);

@@ -222,4 +222,22 @@ class Model_kegiatan extends CI_Model
         $data['status'] = $this->db->get()->result_array();
         return $data;
     }
+    public function getDaftarProposalKegiatan()
+    {
+        $this->db->select('*');
+        $this->db->from('kegiatan');
+        $this->db->where('status_selesai_proposal !=', 3);
+        $this->db->limit(5);
+        return $this->db->get()->result_array();
+    }
+
+    public function getDaftarLpjKegiatan()
+    {
+        $this->db->select('*');
+        $this->db->from('kegiatan');
+        $this->db->where('status_selesai_proposal', 3);
+        $this->db->where('status_selesai_lpj !=', 3);
+        $this->db->limit(5);
+        return $this->db->get()->result_array();
+    }
 }

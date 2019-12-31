@@ -60,6 +60,12 @@
 <?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
     <script src="<?= base_url() ?>assets/js/akademik/script.js"></script>
 <?php elseif ($this->session->userdata('user_profil_kode') == 9) : ?>
+    <script src="<?= base_url() ?>assets/js/mahasiswa/mahasiswa.js"></script>
+    <script src="<?= base_url() ?>assets/js/lembaga/script.js"></script>
+    <script src="<?= base_url() ?>assets/js/kemahasiswaan/script.js"></script>
+    <script src="<?= base_url() ?>assets/js/pimpinana/script.js"></script>
+    <script src="<?= base_url() ?>assets/js/keuangan/script.js"></script>
+    <script src="<?= base_url() ?>assets/js/psik/script.js"></script>
     <script src="<?= base_url() ?>assets/js/admin/script.js"></script>
 <?php endif; ?>
 

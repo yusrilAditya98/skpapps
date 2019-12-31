@@ -21,8 +21,10 @@ class Keuangan extends CI_Controller
     }
     public function index()
     {
+        $this->load->model('Model_keuangan', 'keuangan');
         $data['title'] = 'Dashboard';
         $data['notif'] = $this->_notif();
+        $data['tahun'] = $this->keuangan->getTahun();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -194,7 +196,7 @@ class Keuangan extends CI_Controller
     public function laporanSerapan()
     {
         $this->load->model('Model_keuangan', 'keuangan');
-        $data['title'] = 'Dashboard';
+        $data['title'] = 'Laporan Serapan Kegiatan';
         $data['notif'] = $this->_notif();
         $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal(2019);
         $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj(2019);

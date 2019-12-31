@@ -8,7 +8,7 @@
 			<div class="col-12 col-lg-12">
 				<div class="card">
 					<div class="card-header">
-						<h4>Daftar Pengajuan Proposal Kegiatan</h4>
+						<h4>Daftar Pengeluaran Anggaran Kegiatan Lembaga</h4>
 					</div>
 					<div class="card-body">
 						<div class="row mb-3">

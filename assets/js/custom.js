@@ -195,6 +195,7 @@ let setDataSerapan = [];
 let nama_label = ['Dana Pagu', 'Dana Terserap', 'Dana Sisa'];
 $(document).ready(function () {
 	let tahun = $('#tahun_anggran').val()
+	console.log(tahun)
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/laporanSerapan/' + tahun,
 		method: "get",
