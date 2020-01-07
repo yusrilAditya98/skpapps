@@ -11,6 +11,7 @@ class API_skp extends CI_Controller
     {
         parent::__construct();
     }
+
     public function gabungKegiatan($id_kegiatan = null)
     {
         if ($id_kegiatan != null) {
@@ -272,6 +273,7 @@ class API_skp extends CI_Controller
         $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
         $data['lembaga'] = $this->db->get('lembaga')->result_array();
         $data['tahun'] = $this->keuangan->getTahun();
+        $tahun = $data['tahun'][0]['tahun'];
         if ($tahun) {
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         } else {
