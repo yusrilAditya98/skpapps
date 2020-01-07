@@ -30,6 +30,7 @@
                                 </thead>
                                 <tbody>
                                     <?php $i = 1; ?>
+                                    <?php $jenis_revisi = 0; ?>
                                     <?php foreach ($kegiatan as $k) : ?>
                                         <tr>
                                             <th scope="row"><?= $i++; ?></th>
@@ -60,6 +61,7 @@
                                                             <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 2) : ?>
                                                             <div class="btn btn-warning circle-content detail-revisi" data-toggle="modal" data-target="#i-revisi" data-id="<?= $v['id'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                            <?php $jenis_revisi = $v['jenis_validasi']; ?>
                                                         <?php elseif ($v['status_validasi'] == 0) : ?>
                                                             <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
                                                         <?php elseif ($v['status_validasi'] == 4) : ?>
@@ -72,9 +74,12 @@
                                             <?php endforeach; ?>
                                             <td>
                                                 <?php if ($k['status_selesai_lpj'] == 0) : ?>
-                                                    <a href="<?= base_url('Mahasiswa/tambahLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-outline-success"><i class="fas fa-edit"></i>Lpj</a>
+                                                    <a href="<?= base_url('Mahasiswa/tambahLpj/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-outline-success"><i class="fas fa-edit"></i>Lpj</a>
                                                 <?php elseif ($k['status_selesai_lpj'] == 2) : ?>
-                                                    <a href="<?= base_url('Mahasiswa/editLpj/') . $k['id_kegiatan'] ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= base_url('Mahasiswa/editLpj/') . $k['id_kegiatan'] ?>" method="post">
+                                                        <input type="hidden" name="jenis_revisi" value="<?= $jenis_revisi ?>">
+                                                        <button type="submit" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></button>
+                                                    </form>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

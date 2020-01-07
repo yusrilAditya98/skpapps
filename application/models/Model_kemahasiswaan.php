@@ -46,7 +46,7 @@ class Model_kemahasiswaan extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('lembaga');
-        if (!$status) {
+        if ($status != null) {
             $this->db->where_not_in('id_lembaga', 0);
         }
         return $this->db->get()->result_array();

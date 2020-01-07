@@ -166,7 +166,7 @@
                                             <h5>Informasi Upload</h5>
 
                                             <div class="form-group">
-                                                <label for="fileLpj">Upload File Lpj</label>
+                                                <label for="fileLpj">Upload File Proposal</label>
                                                 <input type="file" class="form-control-file btn" id="fileLpj" name="fileLpj" required>
                                                 <div class="invalid-feedback">
                                                     File lpj harap diisi
@@ -181,7 +181,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="beritaLpj">Upload Berita Kegiatan
-                                                    Lpj</label>
+                                                    Proposal</label>
                                                 <input type="file" class="form-control-file btn" name="beritaLpj" id="beritaLpj" required>
                                                 <div class="invalid-feedback">
                                                     Berita kegiatan harap diisi

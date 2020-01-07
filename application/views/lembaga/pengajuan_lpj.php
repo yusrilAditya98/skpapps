@@ -12,35 +12,6 @@
                         <h4>Daftar Pengajuan LPJ Kegiatan</h4>
                     </div>
                     <div class="card-body">
-                        <form action="<?= base_url('kegiatan/pengajuanLpj') ?>" method="post">
-                            <div class="row  float-right">
-                                <div class="form-group col-6">
-                                    <label>Mulai Tanggal Pengajuan</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-calendar"></i>
-                                            </div>
-                                        </div>
-                                        <input name="start_date" type="date" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="form-group col-6">
-                                    <label>Akhir Tanggal Pengajuan</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <div class="input-group-text">
-                                                <i class="fas fa-calendar"></i>
-                                            </div>
-                                        </div>
-                                        <input name="end_date" type="date" class="form-control">
-                                        <div class="input-group-prepend">
-                                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTabelKegiatan">
                                 <thead class="text-center">

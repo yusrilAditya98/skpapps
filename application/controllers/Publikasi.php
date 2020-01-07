@@ -91,13 +91,7 @@ class Publikasi extends CI_Controller
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'proposal');
             $this->session->set_flashdata('message', 'Proposal berhasil divalidasi!');
         }
-        if ($this->session->userdata('user_profil_kode') == 7) {
-            redirect('Publikasi/daftarProposal');
-        } elseif ($this->session->userdata('user_profil_kode') == 6) {
-            redirect('Keuangan/daftarPengajuanKeuangan');
-        } elseif ($this->session->userdata('user_profil_kode') == 2) {
-            redirect('Lembaga/daftarProposal');
-        }
+        redirect('Publikasi/daftarProposal');
     }
     public function validasiLpj($id_kegiatan)
     {
@@ -130,12 +124,6 @@ class Publikasi extends CI_Controller
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'lpj');
             $this->session->set_flashdata('message', 'Lpj berhasil divalidasi!');
         }
-        if ($this->session->userdata('user_profil_kode') == 7) {
-            redirect('Publikasi/daftarLpj');
-        } elseif ($this->session->userdata('user_profil_kode') == 6) {
-            redirect('Keuangan/daftarPengajuanKeuangan');
-        } elseif ($this->session->userdata('user_profil_kode') == 2) {
-            redirect('Lembaga/daftarProposal');
-        }
+        redirect('Publikasi/daftarLpj');
     }
 }

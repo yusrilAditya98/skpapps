@@ -110,7 +110,6 @@ class Model_poinskp extends CI_Model
         $this->db->where('ps.validasi_prestasi', 1);
         return $this->db->get()->row_array();
     }
-
     public function getJumlahKategoriSkp()
     {
         $this->db->select('count(m.nim) as jumlah');
@@ -139,7 +138,7 @@ class Model_poinskp extends CI_Model
         $this->db->select('count(m.nim) as jumlah');
         $this->db->from('mahasiswa as m');
         $this->db->where('m.total_poin_skp <', 100);
-        $this->db->where('m.total_poin_skp ', 0);
+        $this->db->where('m.total_poin_skp >=', 0);
 
         $data['kurang'] = $this->db->get()->result_array();
         return $data;

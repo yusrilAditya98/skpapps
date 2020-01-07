@@ -19,11 +19,9 @@
     <link rel="stylesheet" href="<?= base_url() ?>assets/modules/ionicons/ionicons.min.css">
 
     <!-- Template CSS -->
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/mystyle.css">
+    <link rel="stylesheet" href="<?= base_url() ?>assets/css/style.css">
     <link rel="stylesheet" href="<?= base_url() ?>assets/css/components.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/owl.theme.default.min.css">
-    <link rel="stylesheet" href="<?= base_url() ?>assets/css/owl.carousel.min.css">
 
     <!-- Sweet alert js -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>

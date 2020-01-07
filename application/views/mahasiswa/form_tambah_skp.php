@@ -71,7 +71,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="tanggalKegiatan">Tanggal Pelaksanaan</label>
-                                                        <input type="date" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
+                                                        <input type="text" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
                                                         <div class=" invalid-feedback">
                                                             Tanggal pelaksanaan kegiatan harap diisi
                                                         </div>
@@ -79,7 +79,10 @@
                                                     <div class="form-group">
                                                         <label for="uploadBukti">Upload Bukti</label>
                                                         <input type="file" class="form-control-file btn" id="uploadBukti" name="uploadBukti" required>
-                                                        <small>file upload berformat .pdf maksimal 2048Kb</small>
+                                                        <div class=" invalid-feedback">
+                                                            Bukti kegiatan harap diisi
+                                                        </div>
+                                                        <small>file upload berformat .pdf dengan maksimal 2048Kb</small>
                                                         <div class=" invalid-feedback">
                                                             Bukti kegiatan harap diisi
                                                         </div>

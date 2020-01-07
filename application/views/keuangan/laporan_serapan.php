@@ -9,16 +9,17 @@
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Tabel Laporan Serapan Kegiatan</h4>
-
+                        <h4>Tabel Laporan Serapan Kegiatan Tahun <?= $tahun_saat_ini ?></h4>
+                        <input type="hidden" id="tahun_anggran" value="<?= $tahun_saat_ini ?>">
                     </div>
                     <div class="card-body col-4 ">
-                        <form action="<?= base_url('Keuangan/laporanSerapan') ?>" method="post">
+                        <form action="<?= base_url($this->uri->segment(1) . '/laporanSerapan') ?>" method="post">
                             <div class="form-group ">
                                 <div class="input-group">
-                                    <select class="custom-select" name="tahun" id="tahun_anggran">
+                                    <select class="custom-select" name="tahun">
+                                        <option selected value="<?= $tahun[0]['tahun'] ?>">Pilih tahun</option>
                                         <?php foreach ($tahun as $t) : ?>
-                                            <option selected value="<?= $t['tahun'] ?>"><?= $t['tahun'] ?></option>
+                                            <option value="<?= $t['tahun'] ?>"><?= $t['tahun'] ?></option>
                                         <?php endforeach; ?>
                                     </select>
                                     <div class="input-group-append">

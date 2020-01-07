@@ -4,14 +4,14 @@
         <div class="section-header">
             <h1>Validasi Pengajuan Lpj Kegiatan</h1>
         </div>
-        <?= $this->session->flashdata('message'); ?>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Daftar Beasiswa Mahasiwa</h4>
                     </div>
-
+                    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+                    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-2">

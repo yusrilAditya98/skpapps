@@ -113,7 +113,7 @@
                                             <div class="form-group">
                                                 <label for="tingkatKegiatan">Tingkat Kegiatan</label>
                                                 <select class="custom-select tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" required>
-                                                    <option value="">-- Pilih Tingkat Kegiatan --</option>
+                                                    <option value="0">-- Pilih Tingkat Kegiatan --</option>
                                                 </select>
                                                 <div class=" invalid-feedback">
                                                     Tingkat kegiatan harap dipilih
@@ -252,37 +252,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive t-mhs">
-                    <table class="table table-striped index" id="table-1">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nim</th>
-                                <th>Nama</th>
-                                <th>Posisi</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="body-mhs">
-                            <?php $i = 1; ?>
-                            <?php foreach ($mahasiswa as $m) : ?>
-                                <tr class="t-anggota" id="id-<?= $m['nim'] ?>">
-                                    <td><?= $i++ ?></td>
-                                    <td class="t-nim"><?= $m['nim'] ?></td>
-                                    <td class="t-nama"><?= $m['nama'] ?></td>
-                                    <td class="t-prestasi">
-                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
-                                            <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
-                                        </select>
-                                    </td>
-                                    <td class="t-cek">
-                                        <input type="checkbox" class="cek" id="checkbox<?= $m['nim'] ?>">
-                                        <!--  -->
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div class="table-responsive table-mhs">
+
                 </div>
             </div>
             <div class="modal-footer bg-whitesmoke br">

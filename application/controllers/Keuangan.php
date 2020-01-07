@@ -25,6 +25,14 @@ class Keuangan extends CI_Controller
         $data['title'] = 'Dashboard';
         $data['notif'] = $this->_notif();
         $data['tahun'] = $this->keuangan->getTahun();
+        if ($data['tahun']) {
+            $tahun = $data['tahun'][0]['tahun'];
+            $data['tahun_saat_ini'] = $tahun;
+        } else {
+            $tahun = date('Y');
+            $data['tahun_saat_ini'] = $tahun;
+            $data['tahun'][0]['tahun'] = $tahun;
+        }
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -195,22 +203,33 @@ class Keuangan extends CI_Controller
 
     public function laporanSerapan()
     {
+        $data['notif'] = $this->_notif();
         $this->load->model('Model_keuangan', 'keuangan');
         $data['title'] = 'Laporan Serapan Kegiatan';
-        $data['notif'] = $this->_notif();
-        $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal(2019);
-        $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj(2019);
+        $data['tahun'] = $this->keuangan->getTahun();
+        if ($data['tahun']) {
+            $tahun = $data['tahun'][0]['tahun'];
+            $data['tahun_saat_ini'] = $tahun;
+        } else {
+            $tahun = date('Y');
+            $data['tahun_saat_ini'] = $tahun;
+            $data['tahun'][0]['tahun'] = $tahun;
+        }
         $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
 
-        $data['tahun'] = $this->keuangan->getTahun();
-        $tahun = $data['tahun'][0]['tahun'];
         if ($this->input->post('tahun')) {
             $tahun = $this->input->post('tahun');
+            $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+            $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+            $data['tahun_saat_ini'] = $this->input->post('tahun');
         } else {
+            $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+            $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         }
         $data['total'] = $this->_totalDana($data['laporan']);
+
 
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -218,7 +237,6 @@ class Keuangan extends CI_Controller
         $this->load->view("keuangan/laporan_serapan", $data);
         $this->load->view("template/footer");
     }
-
     private function _serapan($proposal, $lpj, $tahun)
     {
 
@@ -286,8 +304,8 @@ class Keuangan extends CI_Controller
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
 
-            if ($data[$l['id_lembaga']]['dana_terserap'] == 0) {
-                $data[$l['id_lembaga']]['terserap_persen'] =  '-';
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['terserap_persen'] =  0;
             } else {
                 $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
@@ -295,8 +313,8 @@ class Keuangan extends CI_Controller
             $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
 
 
-            if ($data[$l['id_lembaga']]['dana_sisa'] == 0) {
-                $data[$l['id_lembaga']]['sisa_terserap'] = '-';
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['sisa_terserap'] = 0;
             } else {
                 $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
@@ -317,8 +335,13 @@ class Keuangan extends CI_Controller
             $data['total']['dana_terserap'] += $laporan[$l['id_lembaga']]['dana_terserap'];
             $data['total']['dana_pagu'] += $laporan[$l['id_lembaga']]['dana_pagu'];
         }
-        $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
-        $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        if ($data['total']['dana_pagu'] == 0) {
+            $data['total']['persen_terserap'] = 0;
+            $data['total']['persen_sisa'] = 0;
+        } else {
+            $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
+            $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        }
 
         return $data;
     }

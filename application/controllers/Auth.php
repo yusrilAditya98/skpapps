@@ -30,10 +30,78 @@ class Auth extends CI_Controller
             $this->load->view('auth/login', $data);
         } else {
             // validasi success
-            $this->_login();
+            $this->_login_siam();
         }
     }
+    // login by non-siam accounts
     private function _login()
+    {
+        $this->username = $this->input->post('username');
+        $this->password = $this->input->post('password');
+        // contoh array dari credentials yang akan diproses
+        // memanggil method auth dari objek yang telah dibuat dengan method GET
+        $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
+        if ($user != null) {
+            if ($user['is_active'] == 1) {
+                // cek password
+                if (password_verify($this->password, $user['password'])) {
+                    $data = [
+                        'username' => $user['username'],
+                        "nama" => $user['nama'],
+                        'user_profil_kode' => $user['user_profil_kode']
+                    ];
+
+                    $this->session->set_userdata($data);
+                    if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
+                        $lembaga = $this->db->get_where('lembaga', ['id_lembaga' => $this->username])->row_array();
+                        if ($lembaga) {
+                            redirect('Kegiatan');
+                        } else {
+                            $this->session->unset_userdata('username');
+                            $this->session->unset_userdata('nama');
+                            $this->session->unset_userdata('user_profil_kode');
+                            $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data lembaga belum terdaftar !</div> ');
+                            redirect('Auth');
+                        }
+                    } elseif ($user['user_profil_kode'] == 1) {
+                        $mahasiswa = $this->db->get_where('mahasiswa', ['nim' => $this->username])->row_array();
+                        if ($mahasiswa) {
+                            redirect('Mahasiswa');
+                        } else {
+                            $this->session->unset_userdata('username');
+                            $this->session->unset_userdata('nama');
+                            $this->session->unset_userdata('user_profil_kode');
+                            $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data mahasiswa belum terdaftar !</div> ');
+                            redirect('Auth');
+                        }
+                    } elseif ($user['user_profil_kode'] == 4) {
+                        redirect('Kemahasiswaan');
+                    } elseif ($user['user_profil_kode'] == 5) {
+                        redirect('Pimpinan');
+                    } elseif ($user['user_profil_kode'] == 6) {
+                        redirect('Keuangan');
+                    } elseif ($user['user_profil_kode'] == 7) {
+                        redirect('Publikasi');
+                    } elseif ($user['user_profil_kode'] == 8) {
+                        redirect('Akademik');
+                    } elseif ($user['user_profil_kode'] == 9) {
+                        redirect('Admin');
+                    }
+                } else {
+                    $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Password salah !</div> ');
+                    redirect('Auth');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Akun belum aktif!</div> ');
+                redirect('Auth');
+            }
+        } else {
+            $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data tidak ditemukan !</div> ');
+            redirect('Auth');
+        }
+    }
+    // login by siam accounts
+    private function _login_siam()
     {
         $auth = new AuthSIAM;
 

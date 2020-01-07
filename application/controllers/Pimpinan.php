@@ -24,42 +24,38 @@ class Pimpinan extends CI_Controller
 
     public function index()
     {
+        $this->load->model('Model_keuangan', 'keuangan');
         $data['title'] = 'Dashboard';
         $data['jumlah_mahasiswa'] = count($this->db->get('mahasiswa')->result_array());
-        $data['jumlah_lembaga'] = count($this->db->get('lembaga')->result_array());
+        $data['jumlah_lembaga'] = count($this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array());
         $data['jumlah_kegiatan_mahasiswa'] = count($this->db->get_where('kegiatan', ['acc_rancangan' => 1])->result_array());
+
         $this->db->where('total_poin_skp >=', 100);
         $data_mahasiswa_cukup_skp = $this->db->get('mahasiswa')->result_array();
+        $data['tahun'] = $this->keuangan->getTahun();
+        if ($data['tahun']) {
+            $tahun = $data['tahun'][0]['tahun'];
+            $data['tahun_saat_ini'] = $tahun;
+        } else {
+            $tahun = date('Y');
+            $data['tahun_saat_ini'] = $tahun;
+            $data['tahun'][0]['tahun'] = $tahun;
+        }
+
         $data['jumlah_mahasiswa_cukup_skp'] = count($data_mahasiswa_cukup_skp);
         $this->template($data);
         $this->load->view("dashboard/dashboard_pimpinan", $data);
         $this->load->view("template/footer");
     }
-    public function poin_skp()
+    public function poinSkp()
     {
-        $data['title'] = 'Poin SKP Mahasiswa';
-        $data['mahasiswa'] = $this->db->get('mahasiswa')->result_array();
-        for ($i = 0; $i < count($data['mahasiswa']); $i++) {
-            $total_poin_skp = $data['mahasiswa'][$i]['total_poin_skp'];
-            if ($total_poin_skp > 300) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Dengan Pujian";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 4;
-            } else if ($total_poin_skp >= 201 && $total_poin_skp <= 300) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Sangat Baik";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 3;
-            } else if ($total_poin_skp >= 151 && $total_poin_skp <= 200) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Baik";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 2;
-            } else if ($total_poin_skp >= 100 && $total_poin_skp <= 150) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Cukup";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 1;
-            } else {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Kurang";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 0;
-            }
-        }
-        $this->template($data);
-        $this->load->view("pimpinan/poin_skp", $data);
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['mahasiswa'] = $this->kemahasiswaan->getDataMahasiswa();
+        $data['title'] = 'Poin Skp';
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/poin_skp_mhs");
         $this->load->view("template/footer");
     }
     public function get_detail_mahasiswa($nim)
@@ -79,7 +75,7 @@ class Pimpinan extends CI_Controller
         // $this->db->select('*');
         $this->db->select('id_poin_skp, bobot, nama_prestasi, nama_tingkatan, jenis_kegiatan, nama_bidang, tgl_pelaksanaan, nama_dasar_penilaian');
         $this->db->from('poin_skp');
-        $this->db->join('semua_prestasi', 'poin_skp.prestasiid_prestasi = semua_prestasi.id_semua_prestasi');
+        $this->db->join('semua_prestasi', 'poin_skp.id_prestasi = semua_prestasi.id_semua_prestasi');
         $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
         $this->db->join('dasar_penilaian', 'semua_prestasi.id_dasar_penilaian = dasar_penilaian.id_dasar_penilaian');
         $this->db->join('semua_tingkatan', 'semua_prestasi.id_semua_tingkatan = semua_tingkatan.id_semua_tingkatan');
@@ -95,20 +91,32 @@ class Pimpinan extends CI_Controller
     public function laporanSerapan()
     {
         $this->load->model('Model_keuangan', 'keuangan');
-        $data['title'] = 'Anggaran Pengeluaran';
-        $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal(2019);
-        $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj(2019);
-        $data['lembaga'] =   $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+        $data['title'] = 'Laporan Serapan Kegiatan';
         $data['tahun'] = $this->keuangan->getTahun();
-        $tahun = $data['tahun'][0]['tahun'];
+        if ($data['tahun']) {
+            $tahun = $data['tahun'][0]['tahun'];
+            $data['tahun_saat_ini'] = $tahun;
+        } else {
+            $tahun = date('Y');
+            $data['tahun_saat_ini'] = $tahun;
+            $data['tahun'][0]['tahun'] = $tahun;
+        }
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+
         if ($this->input->post('tahun')) {
             $tahun = $this->input->post('tahun');
+            $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+            $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+            $data['tahun_saat_ini'] = $this->input->post('tahun');
         } else {
+            $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+            $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         }
         $data['total'] = $this->_totalDana($data['laporan']);
-        //       var_dump($serapan);
+
+
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -119,7 +127,8 @@ class Pimpinan extends CI_Controller
     private function _serapan($proposal, $lpj, $tahun)
     {
 
-        $lembaga =   $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+
         if ($proposal == null) {
             foreach ($lembaga as $l) {
                 $proposal[$l['id_lembaga']] = [
@@ -182,8 +191,8 @@ class Pimpinan extends CI_Controller
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
 
-            if ($data[$l['id_lembaga']]['dana_terserap'] == 0) {
-                $data[$l['id_lembaga']]['terserap_persen'] =  '-';
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['terserap_persen'] =  0;
             } else {
                 $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
@@ -191,8 +200,8 @@ class Pimpinan extends CI_Controller
             $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
 
 
-            if ($data[$l['id_lembaga']]['dana_sisa'] == 0) {
-                $data[$l['id_lembaga']]['sisa_terserap'] = '-';
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['sisa_terserap'] = 0;
             } else {
                 $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
@@ -202,7 +211,7 @@ class Pimpinan extends CI_Controller
     private function _totalDana($laporan)
     {
 
-        $lembaga =   $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         $data['total']['dana_sisa'] = 0;
         $data['total']['dana_terserap'] = 0;
         $data['total']['dana_pagu'] = 0;
@@ -213,12 +222,16 @@ class Pimpinan extends CI_Controller
             $data['total']['dana_terserap'] += $laporan[$l['id_lembaga']]['dana_terserap'];
             $data['total']['dana_pagu'] += $laporan[$l['id_lembaga']]['dana_pagu'];
         }
-        $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
-        $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        if ($data['total']['dana_pagu'] == 0) {
+            $data['total']['persen_terserap'] = 0;
+            $data['total']['persen_sisa'] = 0;
+        } else {
+            $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
+            $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        }
 
         return $data;
     }
-
     public function rekapitulasiSKP()
     {
         $data['title'] = 'Rekapitulasi SKP';

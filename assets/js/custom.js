@@ -25,6 +25,11 @@ $('.detail-revisi').on('click', function () {
 
 })
 
+$('.detail-revisi-rancangan').on('click', function () {
+	let catatan = $(this).data('catatan')
+	$('.d-catatan').html(catatan)
+})
+
 $('.detail-kegiatan').on('click', function (e) {
 	let id = $(this).data('id');
 	let jenis = $(this).data('jenis')
@@ -112,6 +117,29 @@ $(document).ready(function (e) {
 			});
 		}
 	});
+	$('#table-user').DataTable({
+		initComplete: function () {
+			var select;
+			this.api().columns([3, 4]).every(function () {
+				var column = this;
+				select = $('<select class="form-control-sm" ><option value="">pilih</option></select>')
+					.appendTo($(column.footer()).empty())
+					.on('change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
+						column
+							.search(val ? '^' + val + '$' : '', true, false)
+							.draw();
+					});
+				column.data().unique().sort().each(function (d, j) {
+					select.append('<option value="' + d + '">' + d + '</option>')
+				});
+
+
+			});
+		}
+	});
 
 });
 
@@ -136,7 +164,6 @@ $(document).ready(function (e) {
 			});
 		}
 	});
-
 });
 
 function copyDiv(e) {
@@ -195,15 +222,12 @@ let setDataSerapan = [];
 let nama_label = ['Dana Pagu', 'Dana Terserap', 'Dana Sisa'];
 $(document).ready(function () {
 	let tahun = $('#tahun_anggran').val()
-	console.log(tahun)
+	$('.tahun-serapan').html(tahun)
+
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/laporanSerapan/' + tahun,
 		method: "get",
 		dataType: "json",
-		startTime: performance.now(),
-		beforeSend: function (data) {
-
-		},
 		success: function (data) {
 
 			let temp_pagu = [];

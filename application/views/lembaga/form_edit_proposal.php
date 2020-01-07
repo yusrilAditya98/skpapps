@@ -4,7 +4,7 @@
             <h1>Form Edit Pengajuan Proposal</h1>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-12">
+            <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h4> Edit Pengajuan Proposal</h4>
@@ -169,6 +169,7 @@
                                                                 <th>Nim</th>
                                                                 <th>Nama</th>
                                                                 <th>Posisi</th>
+                                                                <th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody class="daftar-mhs">
@@ -176,15 +177,16 @@
                                                                 <?php $index = 1;
                                                                         $id = 1;
                                                                         foreach ($tingkat as $a) : ?>
-                                                                    <tr class="d-m">
+                                                                    <tr class="d-m" id="data-<?= $a['nim'] ?>">
                                                                         <td><?= $index++ ?></td>
                                                                         <td><?= $a['nim'] ?>
-                                                                            <input type="hidden" name="nim_<?= $id ?>" value="<?= $a['nim'] ?>" id="nim_<?= $id ?>">
+                                                                            <input type="hidden" name="nim_<?= $a['nim'] ?>" value="<?= $a['nim'] ?>" id="nim_<?= $a['nim'] ?>">
                                                                         </td>
                                                                         <td><?= $a['nama'] ?></td>
                                                                         <td><?= $a['nama_prestasi'] ?>
-                                                                            <input type="hidden" name="prestasi_<?= $id ?>" value="<?= $a['id_semua_prestasi'] ?>" id="nim_<?= $id; ?>">
+                                                                            <input type="hidden" name="prestasi_<?= $a['nim'] ?>" value="<?= $a['id_semua_prestasi'] ?>" id="nim_<?= $a['nim']; ?>">
                                                                         </td>
+                                                                        <td> <button type="button" data-id="<?= $a['nim'] ?>" class="btn btn-danger hps-mhs"><i class="fas fa-trash-alt"></i></button></td>
                                                                     </tr>
                                                                 <?php $id++;
                                                                         endforeach; ?>
@@ -270,36 +272,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive t-mhs">
-                    <table class="table table-striped index" id="table-1">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nim</th>
-                                <th>Nama</th>
-                                <th>Posisi</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="body-mhs">
-                            <?php $i = 1; ?>
-                            <?php foreach ($mahasiswa as $m) : ?>
-                                <tr class="t-anggota" id="id-<?= $m['nim'] ?>">
-                                    <td><?= $i++ ?></td>
-                                    <td class="t-nim"><?= $m['nim'] ?></td>
-                                    <td class="t-nama"><?= $m['nama'] ?></td>
-                                    <td class="t-prestasi">
-                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
-                                            <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
-                                        </select>
-                                    </td>
-                                    <td class="t-cek">
-                                        <input type="checkbox" class="cek" id="checkbox<?= $m['nim'] ?>">
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div class="table-responsive table-mhs">
+
                 </div>
             </div>
             <div class="modal-footer bg-whitesmoke br">

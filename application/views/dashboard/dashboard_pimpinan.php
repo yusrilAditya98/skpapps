@@ -82,16 +82,19 @@
             </div>
             <div class="col-lg-8">
                 <div class="card">
+                    <input type="hidden" id="tahun_anggran" value="<?= $tahun_saat_ini ?>">
                     <div class="card-header">
-                        <h4>Grafik Rekapitulasi SKP Mahasiswa</h4>
-                        <div class="card-header-action">
-                            <a href="<?= base_url('Pimpinan/rekapitulasiSKP') ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
-                        </div>
+                        <h4>Grafik Laporan Serapan Kegiatan Tahun <span class="tahun-serapan"></span></h4>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <div class="card-body chart">
-                                <canvas id="rekap-skp-chart" style="width: 100%; height: 30rem;"></canvas>
+                        <div class="row no-gutters align-items-center">
+                            <div class="col-lg-12">
+                                <div class="card-body chart">
+                                    <canvas id="laporan-serapan" style="width: 100%; height: 30rem;"></canvas>
+                                </div>
+                                <div class="col-md-12 mr-2">
+
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -18,7 +18,7 @@ $('.detailSkp').on("click", function () {
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
 			$('.form-revisi').attr('action', segments[0] + '/' + segments[3] + '/Kemahasiswaan/validasiSkp/' + data[0].id_poin_skp)
-			$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/poinskp/' + data[0].file_bukti)
+			$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
 		}
 	})
 })
@@ -92,11 +92,11 @@ $('.tambahAnggaran').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-
+			let j = 1;
 			for (var i in data)[
 				$('.data-lembaga').append(`
 				<tr class="d-lembaga">
-					<td></td>
+					<td>` + (j++) + `</td>
 					<td>` + data[i].nama_lembaga + `</td>
 					<td><input type="number" class="form-control" name="lembaga_` + data[i].id_lembaga + `" required></td>
 				</tr>
@@ -114,10 +114,11 @@ $('.edit-anggaran').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			$('.nama-lembaga').val(data[0]['nama_lembaga']);
-			$('.tahun-anggaran').val(data[0]['tahun_kegiatan']);
-			$('.nominal-anggaran').val(data[0]['anggaran_kemahasiswaan']);
-			$('.id-lembaga').val(data[0]['id_lembaga']);
+			console.log(data)
+			$('.nama-lembaga').val(data.nama_lembaga);
+			$('.tahun-anggaran').val(data.tahun_pengajuan);
+			$('.nominal-anggaran').val(data.anggaran_kemahasiswaan);
+			$('.id-lembaga').val(data.id_lembaga);
 
 		}
 	})
@@ -148,9 +149,16 @@ $('a.d-anggaran').on('click', function () {
 	})
 })
 
+$('.periode-rancangan').on('click', function () {
+	let tahun = $(this).data('tahun')
+	let id_lembaga = $(this).data('id')
+	$('.tahun-rancangan').val(tahun)
+	$('.form-tahun-rancangan').attr('action', segments[0] + '/' + segments[3] + '/Kemahasiswaan/editRancanganTahun/' + id_lembaga)
 
-// DASHBOARD
-// For a pie chart
+})
 
-
-// akhir Dashboard
+$('.revisi-rancangan-proker').on('click', function () {
+	let id_daftar_rancangan = $(this).data('id')
+	$('.value-valid').val(2);
+	$('.form-revisi-rancangan').attr('action', segments[0] + '/' + segments[3] + '/Kemahasiswaan/validasiRancanganProker/' + id_daftar_rancangan)
+})

@@ -1,32 +1,12 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-if (segments[4] == "Pimpinan") {
-	$(window).on('load', function () {
-		// $('.dataTables_filter').prepend(`
-		// <select class="custom-select col-lg-4 mr-2 filter-status" id="filter-status">
-
-		// </select>`);
-		// $.ajax({
-		// 	url: segments[0] + '/' + segments[3] + '/Admin/getProfilUser',
-		// 	dataType: 'json',
-		// 	type: 'get',
-		// 	success: function (profil) {
-		// 		console.log(profil);
-		// 		profil.forEach(function (profilu) {
-		// 			$('#filter-status').append(`<option value="` + profilu['jenis_user'] + `">` + profilu['jenis_user'] + `</option>`)
-		// 		})
-		// 	}
-		// });
-	})
-}
-
-$('#table-1').on('click', '.detail-SKP', function () {
+$('.detail-SKP').on('click', function () {
 	let id = $(this).data('id');
 
 	// Data Mahasiswa
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/pimpinan/get_detail_mahasiswa/' + id,
+		url: segments[0] + '/skp/API_skp/get_detail_mahasiswa/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -39,7 +19,7 @@ $('#table-1').on('click', '.detail-SKP', function () {
 	// Data SKP
 	// console.log(id);
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/pimpinan/get_detail_skp/' + id,
+		url: segments[0] + '/skp/API_skp/get_detail_skp/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -69,64 +49,6 @@ $('#table-1').on('click', '.detail-SKP', function () {
 	});
 
 })
-
-$('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
-	let id = $(this).data('id');
-
-	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP/' + id,
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			$('#table-detail_wrapper').remove()
-			$('#rekap-prestasi').append(`<table class="table table-striped rekap-skp" id="table-detail">
-			</table>`)
-			if (data['mahasiswa'].length != 0) {
-				var i = 0;
-				let dataTampung = [];
-				for (var j in data['mahasiswa']) {
-					let temp = [];
-					temp.push(++i)
-					temp.push(data['mahasiswa'][j].nim)
-					temp.push(data['mahasiswa'][j].nama)
-					temp.push(data['prestasi']['nama_prestasi'])
-					temp.push(data['mahasiswa'][j].nama_kegiatan)
-					dataTampung[j] = temp;
-				}
-				$("#table-detail").DataTable({
-					data: dataTampung,
-					columns: [{
-							title: "No"
-						},
-						{
-							title: "Nim"
-						},
-						{
-							title: "Nama"
-						},
-						{
-							title: "Prestasi."
-						},
-						{
-							title: "Nama Kegiatan"
-						}
-					]
-				});
-
-			} else if (data['mahasiswa'].length == 0) {
-				$('#rekap-prestasi').append(`<h3 id="table-detail_wrapper" class="text-center my-2">Data Tidak Ada</h3>
-				`)
-
-			}
-		}
-	});
-})
-
-$(document).ready(function () {
-
-});
-
-
 
 let nama_prestasi = [];
 let jumlah_prestasi = [];
@@ -263,3 +185,54 @@ $(document).ready(function () {
 		},
 	});
 });
+$('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
+	let id = $(this).data('id');
+
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('#table-detail_wrapper').remove()
+			$('#rekap-prestasi').append(`<table class="table table-striped rekap-skp" id="table-detail">
+			</table>`)
+			if (data['mahasiswa'].length != 0) {
+				var i = 0;
+				let dataTampung = [];
+				for (var j in data['mahasiswa']) {
+					let temp = [];
+					temp.push(++i)
+					temp.push(data['mahasiswa'][j].nim)
+					temp.push(data['mahasiswa'][j].nama)
+					temp.push(data['prestasi']['nama_prestasi'])
+					temp.push(data['mahasiswa'][j].nama_kegiatan)
+					dataTampung[j] = temp;
+				}
+				$("#table-detail").DataTable({
+					data: dataTampung,
+					columns: [{
+							title: "No"
+						},
+						{
+							title: "Nim"
+						},
+						{
+							title: "Nama"
+						},
+						{
+							title: "Prestasi."
+						},
+						{
+							title: "Nama Kegiatan"
+						}
+					]
+				});
+
+			} else if (data['mahasiswa'].length == 0) {
+				$('#rekap-prestasi').append(`<h3 id="table-detail_wrapper" class="text-center my-2">Data Tidak Ada</h3>
+				`)
+
+			}
+		}
+	});
+})

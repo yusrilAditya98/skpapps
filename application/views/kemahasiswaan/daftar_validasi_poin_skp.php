@@ -41,7 +41,7 @@
                                                 <?php elseif ($p['validasi_prestasi'] == 1) : ?>
                                                     <div><i class="fa fa-check text-success" aria-hidden="true"></i></div>
                                                 <?php elseif ($p['validasi_prestasi'] == 2) : ?>
-                                                    <div class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                    <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-skp="<?= $p['id_poin_skp'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                 <?php endif; ?>
                                             </td>
                                             <td>

@@ -40,12 +40,10 @@
 
             <div class="col-lg-12">
                 <div class="card">
+                    <input type="hidden" id="tahun_anggran" value="<?= $tahun_saat_ini ?>">
                     <div class="card-header">
-                        <input type="hidden" value="<?= $tahun[0]['tahun'] ?>" id="tahun_anggran">
-                        <h4>Grafik Laporan Serapan Kegiatan Tahun - <?= $tahun[0]['tahun'] ?> </h4>
-
+                        <h4>Grafik Laporan Serapan Kegiatan Tahun <span class="tahun-serapan"></span></h4>
                     </div>
-
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col-lg-12">

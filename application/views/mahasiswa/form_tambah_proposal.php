@@ -81,7 +81,7 @@
                                             </div>
                                             <div class=" form-group">
                                                 <label for="bidangKegiatan">Bidang Kegiatan</label>
-                                                <select class="custom-select bidangKegiatan select2" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
+                                                <select class="custom-select bidangKegiatan" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
                                                     <option value="">-- Pilih Bidang Kegiatan --</option>
                                                 </select>
                                                 <div class=" invalid-feedback">
@@ -90,16 +90,16 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenisKegiatan">Jenis Kegiatan</label>
-                                                <select class="custom-select jenisKegiatan select2" id="jenisKegiatan" name="jenisKegiatan" required>
+                                                <select class="custom-select jenisKegiatan" id="jenisKegiatan" name="jenisKegiatan" required>
                                                     <option value="">-- Pilih Jenis Kegiatan --</option>
                                                 </select>
-                                                <div class=" invalid-feedback">
+                                                <div class="invalid-feedback">
                                                     Jenis kegiatan harap dipilih
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="tingkatKegiatan">Tingkat Kegiatan</label>
-                                                <select class="custom-select tingkatKegiatan select2" id="tingkatKegiatan" name="tingkatKegiatan" required>
+                                                <select class="custom-select tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" required>
                                                     <option value="">-- Pilih Tingkat Kegiatan --</option>
                                                 </select>
                                                 <div class=" invalid-feedback">
@@ -108,7 +108,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
-                                                <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
+                                                <input type="text" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
                                                 <div class="invalid-feedback">
                                                     Tanggal pelaksanaan harap diisi
                                                 </div>
@@ -148,6 +148,7 @@
                                                             <th>Nim</th>
                                                             <th>Nama</th>
                                                             <th>Posisi</th>
+                                                            <th>Action</th>
 
                                                         </tr>
                                                     </thead>
@@ -240,37 +241,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive t-mhs">
-                    <table class="table table-striped index" id="table-1">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nim</th>
-                                <th>Nama</th>
-                                <th>Posisi</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="body-mhs">
-                            <?php $i = 1; ?>
-                            <?php foreach ($mahasiswa as $m) : ?>
-                                <tr class="t-anggota" id="id-<?= $m['nim'] ?>">
-                                    <td><?= $i++ ?></td>
-                                    <td class="t-nim"><?= $m['nim'] ?></td>
-                                    <td class="t-nama"><?= $m['nama'] ?></td>
-                                    <td class="t-prestasi">
-                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
-                                            <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
-                                        </select>
-                                    </td>
-                                    <td class="t-cek">
-                                        <input type="checkbox" class="cek" id="checkbox<?= $m['nim'] ?>">
-                                        <!--  -->
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div class="table-responsive table-mhs">
+
                 </div>
             </div>
             <div class="modal-footer bg-whitesmoke br">

@@ -71,21 +71,17 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="tanggalKegiatan">Tanggal Pelaksanaan</label>
-                                                        <input type="date" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
+                                                        <input type="text" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
                                                         <div class=" invalid-feedback" value="<?= $tgl_pelaksanaan ?>">
                                                             Tanggal pelaksanaan kegiatan harap diisi
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="uploadBukti">Upload Bukti</label>
+                                                        <label for="uploadBukti">Upload Bukti - <a target="_blank" class="btn btn-primary" href="<?= base_url('/assets/pdfjs/web/viewer.html?file=../../../file_bukti/poinskp/') . $file_bukti ?>"><i class="fas fa-file-pdf"></i> Lihat</a></label>
                                                         <input type="file" class="form-control-file btn" id="uploadBukti" name="uploadBukti">
-                                                        <span><a target="_blank" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/poinskp/') . $file_bukti ?>"><?= $file_bukti ?></a>
-                                                        </span>
-                                                        <br>
-                                                        <small>file upload berformat .pdf maksimal 2048Kb</small>
-                                                        <div class=" invalid-feedback">
-                                                            Bukti kegiatan harap diisi
-                                                        </div>
+
+                                                        <small>file upload berformat .pdf dengan maksimal 2048Kb</small>
+
                                                     </div>
 
                                                     <div class="action-button">

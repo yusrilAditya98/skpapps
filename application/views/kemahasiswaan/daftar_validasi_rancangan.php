@@ -10,6 +10,8 @@
                     <div class="card-header">
                         <h4>Permintaan Pengajuan Rancangan Kegiatan</h4>
                     </div>
+                    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+                    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
                     <div class="card-body">
                         <form action="<?= base_url('Kemahasiswaan/daftarRancangan') ?>" method="get">
                             <div class="form-row">

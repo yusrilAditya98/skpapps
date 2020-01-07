@@ -77,6 +77,7 @@ $('.logout').on('click', function () {
 	})
 });
 
+
 $('.table-kategori').on('click', '.hapus-kegiatan', function () {
 	let id_kuliah_tamu = $(this).data('id');
 	// console.log(id_kuliah_tamu);

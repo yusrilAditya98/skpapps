@@ -1,14 +1,15 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-if (segments[4] == "Akademik") {
+if (segments[4] == "akademik") {
 	$(window).on('load', function () {
+		console.log(segments[0] + segments[3] + '/siruas-api/api/ruangan')
 		$.ajax({
 			url: segments[0] + '/siruas-api/api/ruangan',
 			dataType: 'json',
 			type: 'get',
 			success: function (dataRuangan) {
-				// console.log(dataRuangan);
+				console.log(dataRuangan);
 				dataRuangan.data.forEach(function (ruangan) {
 					$('#ruangan').append(`<option value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
 				})
@@ -80,7 +81,7 @@ $('#table-kegiatan').on('click', '.edit-kegiatan', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			// console.log(data);
+			console.log(data);
 			var link_a = window.location.origin + '/' + segments[3] + '/akademik/editKegiatan/' + id;
 			$('form').attr('action', link_a);
 			$('#nama_kegiatan').val(data['nama_event']);

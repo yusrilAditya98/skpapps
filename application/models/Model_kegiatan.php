@@ -24,7 +24,7 @@ class Model_kegiatan extends CI_Model
         }
         return $this->db->get()->row_array();
     }
-    public function getDataKegiatan($penanggung_jawab = null, $status_proposal = null, $id_lembaga = null, $kategori_pengajuan = null, $start_date = null, $end_date = null)
+    public function getDataKegiatan($penanggung_jawab = null, $status_proposal = null)
     {
         $this->db->select('k.*,l.nama_lembaga');
         $this->db->from('kegiatan as k');
@@ -34,20 +34,6 @@ class Model_kegiatan extends CI_Model
         }
         if ($status_proposal != null) {
             $this->db->where('k.status_selesai_proposal', $status_proposal);
-        }
-        if ($id_lembaga != null) {
-            $this->db->where('l.id_lembaga !=', 0);
-        }
-        if ($kategori_pengajuan == 'proposal') {
-            if ($start_date != null && $end_date != null) {
-                $this->db->where('k.tgl_pengajuan_proposal >=', $start_date);
-                $this->db->where('k.tgl_pengajuan_proposal <=', $end_date);
-            }
-        } else if ($kategori_pengajuan == 'lpj') {
-            if ($start_date != null && $end_date != null) {
-                $this->db->where('k.tgl_pengajuan_lpj >=', $start_date);
-                $this->db->where('k.tgl_pengajuan_lpj <=', $end_date);
-            }
         }
         $this->db->order_by('k.status_selesai_proposal ASC, k.status_selesai_lpj ASC');
         return $this->db->get()->result_array();
@@ -222,6 +208,7 @@ class Model_kegiatan extends CI_Model
         $data['status'] = $this->db->get()->result_array();
         return $data;
     }
+
     public function getDaftarProposalKegiatan()
     {
         $this->db->select('*');

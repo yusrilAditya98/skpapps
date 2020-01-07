@@ -11,7 +11,6 @@ class API_skp extends CI_Controller
     {
         parent::__construct();
     }
-
     public function gabungKegiatan($id_kegiatan = null)
     {
         if ($id_kegiatan != null) {
@@ -34,6 +33,7 @@ class API_skp extends CI_Controller
             redirect(base_url('Mahasiswa'));
         }
     }
+
 
     //  mmenampilkan data validasi
     public function validasiKegiatan($id)
@@ -238,8 +238,14 @@ class API_skp extends CI_Controller
     public function dataAnggaran($id_lembaga)
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($this->input->get('tahun'), $id_lembaga);
-        echo json_encode($data['anggaran']);
+        $tahun = $this->input->get('tahun');
+        $this->db->select('rkl.*,l.nama_lembaga');
+        $this->db->from('rekapan_kegiatan_lembaga as rkl');
+        $this->db->join('lembaga as l', 'l.id_lembaga = rkl.id_lembaga', 'left');
+        $this->db->where('rkl.tahun_pengajuan', $tahun);
+        $this->db->where('l.id_lembaga', $id_lembaga);
+        $data =  $this->db->get()->row_array();
+        echo json_encode($data);
     }
 
     // menampilkan jumlah kegiatan
@@ -257,11 +263,6 @@ class API_skp extends CI_Controller
     }
 
 
-    public function beasiswa($id_beasiswa)
-    {
-        $data = $this->db->get_where('beasiswa', ['id' => $id_beasiswa])->row_array();
-        echo json_encode($data);
-    }
 
     // menampilkan laporan serapan kegiatan
     public function laporanSerapan($tahun)
@@ -271,7 +272,6 @@ class API_skp extends CI_Controller
         $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
         $data['lembaga'] = $this->db->get('lembaga')->result_array();
         $data['tahun'] = $this->keuangan->getTahun();
-        $tahun = $data['tahun'][0]['tahun'];
         if ($tahun) {
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         } else {
@@ -285,7 +285,7 @@ class API_skp extends CI_Controller
     private function _serapan($proposal, $lpj, $tahun)
     {
 
-        $lembaga = $this->db->get_where('lembaga', ['id_lembaga!=' => 0])->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
 
         if ($proposal == null) {
             foreach ($lembaga as $l) {
@@ -349,8 +349,8 @@ class API_skp extends CI_Controller
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
 
-            if ($data[$l['id_lembaga']]['dana_terserap'] == 0) {
-                $data[$l['id_lembaga']]['terserap_persen'] =  '-';
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['terserap_persen'] =  0;
             } else {
                 $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
@@ -358,8 +358,8 @@ class API_skp extends CI_Controller
             $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
 
 
-            if ($data[$l['id_lembaga']]['dana_sisa'] == 0) {
-                $data[$l['id_lembaga']]['sisa_terserap'] = '-';
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['sisa_terserap'] = 0;
             } else {
                 $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
@@ -371,7 +371,7 @@ class API_skp extends CI_Controller
     private function _totalDana($laporan)
     {
 
-        $lembaga = $this->db->get_where('lembaga', ['id_lembaga!=' => 0])->result_array();
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         $data['total']['dana_sisa'] = 0;
         $data['total']['dana_terserap'] = 0;
         $data['total']['dana_pagu'] = 0;
@@ -382,8 +382,13 @@ class API_skp extends CI_Controller
             $data['total']['dana_terserap'] += $laporan[$l['id_lembaga']]['dana_terserap'];
             $data['total']['dana_pagu'] += $laporan[$l['id_lembaga']]['dana_pagu'];
         }
-        $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
-        $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        if ($data['total']['dana_pagu'] == 0) {
+            $data['total']['persen_terserap'] = 0;
+            $data['total']['persen_sisa'] = 0;
+        } else {
+            $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
+            $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        }
 
         return $data;
     }
@@ -392,8 +397,57 @@ class API_skp extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $data['poin_skp'] = $this->poinskp->getJumlahKategoriSkp();
+        echo json_encode($data);
+    }
+
+    public function get_detail_mahasiswa($nim)
+    {
+        $this->db->where('mahasiswa.nim', $nim);
+        $this->db->select('nim, nama, nama_prodi');
+        $this->db->from('mahasiswa');
+        $this->db->join('prodi', 'mahasiswa.kode_prodi = prodi.kode_prodi');
+        $detail_mahasiswa = $this->db->get()->row_array();
+        header('Content-type: application/json');
+        echo json_encode($detail_mahasiswa);
+    }
+    public function get_detail_skp($nim)
+    {
+        $this->db->where('poin_skp.nim', $nim);
+        // $this->db->select('*');
+        $this->db->select('id_poin_skp, bobot, nama_prestasi, nama_tingkatan, jenis_kegiatan, nama_bidang, tgl_pelaksanaan, nama_dasar_penilaian');
+        $this->db->from('poin_skp');
+        $this->db->where('poin_skp.validasi_prestasi', 1);
+        $this->db->join('semua_prestasi', 'poin_skp.prestasiid_prestasi = semua_prestasi.id_semua_prestasi');
+        $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
+        $this->db->join('dasar_penilaian', 'semua_prestasi.id_dasar_penilaian = dasar_penilaian.id_dasar_penilaian');
+        $this->db->join('semua_tingkatan', 'semua_prestasi.id_semua_tingkatan = semua_tingkatan.id_semua_tingkatan');
+        $this->db->join('tingkatan', 'semua_tingkatan.id_tingkatan = tingkatan.id_tingkatan');
+        $this->db->join('jenis_kegiatan', 'semua_tingkatan.id_jenis_kegiatan = jenis_kegiatan.id_jenis_kegiatan');
+        $this->db->join('bidang_kegiatan', 'jenis_kegiatan.id_bidang = bidang_kegiatan.id_bidang');
+
+        $detail_skp = $this->db->get()->result_array();
+        header('Content-type: application/json');
+        echo json_encode($detail_skp);
+    }
 
 
+    public function dataMahasiswa()
+    {
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['mhs'] = $this->db->get('mahasiswa')->result_array();
+        $data['mhs_kegiatan'] = [];
+        $data['bkn_mhs_kegiatan'] = [];
+
+        if ($this->input->get('id')) {
+            $data['mhs_kegiatan'] = $this->mahasiswa->getAnggotaKegiatan($this->input->get('id'));
+            $data['bkn_mhs_kegiatan'] = $this->mahasiswa->getBukanAnggotaKegiatan($this->input->get('id'));
+        }
+        echo json_encode($data);
+    }
+
+    public function beasiswa($id_beasiswa)
+    {
+        $data = $this->db->get_where('beasiswa', ['id' => $id_beasiswa])->row_array();
         echo json_encode($data);
     }
 }

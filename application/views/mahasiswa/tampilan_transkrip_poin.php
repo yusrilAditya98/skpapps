@@ -146,6 +146,9 @@
 			<p style="margin-top:100px;"><?= $mahasiswa[0]['nama'] ?> <br> NIM. <?= $mahasiswa[0]['nim'] ?></p>
 		</div>
 	</div>
+	<script>
+		window.print()
+	</script>
 </body>
 
 </html>

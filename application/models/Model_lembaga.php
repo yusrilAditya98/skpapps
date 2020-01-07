@@ -3,15 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Model_lembaga extends CI_Model
 {
     private $dataRacangan = [];
-    private $id_lembaga;
-    private $tahun;
-    private $anggaran;
-
     public function getTahunRancangan()
     {
-        $this->db->select('tahun_pengajuan');
-        $this->db->from('rekapan_kegiatan_lembaga');
-        $this->db->group_by('tahun_pengajuan');
+        $this->db->select('tahun_kegiatan');
+        $this->db->from('daftar_rancangan_kegiatan');
+        $this->db->group_by('tahun_kegiatan');
         return $this->db->get()->result_array();
     }
     public function getDataLembaga($id_lembaga)

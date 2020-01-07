@@ -1,13 +1,13 @@
 <!-- Main Content -->
 <div class="main-content">
     <section class="section">
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="section-header">
             <h1>Point Satuan Kredit Mahasiswa</h1>
         </div>
-        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
-        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
-            <div class="col-lg-8 col-md-6 col-sm-6 col-12">
+            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Tentang Satuan Kredit Prestasi</h4>
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            <div class="col-lg-4 col-md-12 col-sm-12 col-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Point Satuan Kredit Prestasi</h4>
@@ -77,14 +77,15 @@
                     </div>
                     <div class="card-body mb-2" style="margin-top:-1rem;">
                         <p>Panduan Pelaksanaan SKP FEB UB: </p>
-                        <a href="#" class="btn btn-icon btn-primary" style="width:100%">
+                        <a target="_blank" href="<?= base_url('/assets/pdfjs/web/viewer.html?file=../../../berkas/panduan_skp.pdf') ?>" class="btn btn-icon btn-primary" style="width:100%">
                             Download <i class="fas fa-download pl-2"></i></a>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-12">
+            <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Riwayat Kegiatan</h4>
@@ -97,7 +98,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered">
+                            <table class="table table-bordered" id="table-1">
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
@@ -133,11 +134,11 @@
                                                     <?php if ($p['validasi_prestasi'] == 1) : ?>
                                                         <span class="text-success">Disetujui</span>
                                                     <?php else : ?>
-                                                        <div class="col-6">
-                                                            <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-icon btn-info"><i class="fas fa-edit"></i></a>
+                                                        <div class="col-sm-4">
+                                                            <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-icon btn-sm btn-info"><i class="fas fa-edit"></i></a>
                                                         </div>
-                                                        <div class="col-6">
-                                                            <a href="<?= base_url('Mahasiswa/hapusPoinSkp/') . $p['id_poin_skp'] ?>" class="btn btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
+                                                        <div class="col-sm-4">
+                                                            <a href="<?= base_url('Mahasiswa/hapusPoinSkp/') . $p['id_poin_skp'] ?>" class="btn btn-sm btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
                                                         </div>
                                                     <?php endif; ?>
                                                 </div>
@@ -241,7 +242,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Catatan Revisi</label>
                                     <div class="col-sm-9">
-                                        <textarea name="catatan" class="form-control d-catatan" style="height:200px"></textarea>
+                                        <textarea readonly name="catatan" class="form-control d-catatan" style="height:200px"></textarea>
                                     </div>
                                     <input type="hidden" name="valid" value="2">
                                 </div>

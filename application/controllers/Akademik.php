@@ -216,7 +216,7 @@ class Akademik extends CI_Controller
 
             $image_name = 'kuliah_tamu_' . $data_kuliah_tamu['kode_qr'] . '.png'; //buat name dari qr code sesuai dengan nim
 
-            $params['data'] = "http://192.168.42.114/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
+            $params['data'] = base_url("API_skp/gabungKegiatan/")  . $id_kegiatan; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
@@ -293,7 +293,7 @@ class Akademik extends CI_Controller
 
             $image_name = 'kuliah_tamu_' . $data_kuliah_tamu[$i]['kode_qr'] . '.png'; //buat name dari qr code sesuai dengan nim
 
-            $params['data'] = "http://192.168.42.114/skpapps/API_skp/gabungKegiatan/" . $id_kegiatan; //data yang akan di jadikan QR CODE
+            $params['data'] = base_url("API_skp/gabungKegiatan/") .  $id_kegiatan; //data yang akan di jadikan QR CODE
             $params['level'] = 'H'; //H=High
             $params['size'] = 10;
             $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/

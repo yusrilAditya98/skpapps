@@ -88,8 +88,6 @@ $.ajax({
 								dataType: 'json',
 								success: function (data) {
 
-
-
 									let partisipasi = '';
 									let k_partisipasi = $('.k_partisipasi').val();
 									for (var i in data) {
@@ -155,30 +153,99 @@ $('.jenisKegiatan').on("change", function () {
 	})
 })
 
-$('#tingkatKegiatan').on("change", function () {
-	console.log($('.jumlahAnggota').val())
-	$('.jumlahAnggota').val(0);
+var cek = [];
+$('.tingkatKegiatan').on('change', function () {
+	$('.dataTables_wrapper').remove()
+})
+$('.daftarMahasiswa').on("click", function () {
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
-	$('.partisipasi').remove();
-	$('.d-m').remove()
-
-	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			let partisipasi = '';
-			let poin = '';
-			for (var i in data) {
-				partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+	cek = tingkatKegiatan;
+	$('.dataTables_wrapper').remove()
+	$('.partisipasi').remove()
+	if (tingkatKegiatan != 0) {
+		$('.notice-mhs').remove()
+		$('.table-mhs').append(`<table class="table table-striped table-mahasiswa"></table>`)
+		$.ajax({
+			url: segments[0] + '/' + segments[3] + '/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
+			method: 'get',
+			dataType: 'json',
+			success: function (data) {
+				let partisipasi = "";
+				partisipasi += `<select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>`
+				for (var i in data) {
+					partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+				}
+				partisipasi += `</select>`;
+				let id_kegiatan;
+				if (segments[6]) {
+					id_kegiatan = segments[6]
+				}
+				$.ajax({
+					url: segments[0] + '/' + segments[3] + '/API_skp/dataMahasiswa/?id=' + id_kegiatan,
+					method: 'get',
+					dataType: 'json',
+					beforeSend: function () {
+						$('.table-mhs').append(` <div class="loader">
+                        <img src="` + segments[0] + '/' + segments[3] + `/assets/img/loader.gif" alt="">
+                        </div>`)
+					},
+					success: function (data) {
+						let dataTampung = [];
+						let index = 1;
+						let dataMhs = data['mhs']
+						let mhs = data['mhs_kegiatan']
+						let bkn_anggota = data['bkn_mhs_kegiatan'];
+						for (var k in mhs) {
+							for (var j in dataMhs) {
+								if (mhs[k].nim == dataMhs[j].nim) {
+									let temp = [];
+									temp.push(index++)
+									temp.push(`<span id="t-nim-` + dataMhs[j].nim + `">` + dataMhs[j].nim + `</span>`)
+									temp.push(`<span id="t-nama-` + dataMhs[j].nim + `">` + dataMhs[j].nama + `</span>`)
+									temp.push(`<span id="t-prestasi-` + dataMhs[j].nim + `">` + partisipasi + `</span>`)
+									temp.push(`<span id="t-cek-` + dataMhs[j].nim + `"><input checked type="checkbox" class="cek" id="checkbox` + dataMhs[j].nim + `"></span>`)
+									dataTampung.push(temp);
+								}
+							}
+						}
+						for (var j in bkn_anggota) {
+							let temp = [];
+							temp.push(index++)
+							temp.push(`<span id="t-nim-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nim + `</span>`)
+							temp.push(`<span id="t-nama-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nama + `</span>`)
+							temp.push(`<span id="t-prestasi-` + bkn_anggota[j].nim + `">` + partisipasi + `</span>`)
+							temp.push(`<span id="t-cek-` + bkn_anggota[j].nim + `"><input type="checkbox" class="cek" id="checkbox` + bkn_anggota[j].nim + `"></span>`)
+							dataTampung.push(temp);
+						}
+						$('.table-mahasiswa').DataTable({
+							data: dataTampung,
+							columns: [{
+									title: "No"
+								},
+								{
+									title: "Nim"
+								},
+								{
+									title: "Nama"
+								},
+								{
+									title: "Prestasi"
+								},
+								{
+									title: "Action"
+								}
+							]
+						})
+					}
+				})
 			}
-			$('.partisipasiKegiatan').append(partisipasi)
-		}
-	})
+		})
+	} else {
+		$('.table-mhs').append(`<h2 class="notice-mhs">Anda Belum Memilih Tingkat Kegiatan !</h2>`)
+	}
 })
 
 $('#partisipasiKegiatan').on("change", function () {
-
 	let partisipasiKegiatan = $('.partisipasiKegiatan').val()
 	$('#bobotKegiatan').val(0);
 	$.ajax({
@@ -205,9 +272,10 @@ $('.d-revisi').on('click', function () {
 })
 
 
+let jumlahAnggota = $('#jumlahAnggota').val();
 // Menampilkan daftar selurh mahasiswa
 $('.submit-mhs').on('click', function () {
-	$('.d-m').remove()
+
 	let nim = []
 	let nama = []
 	let posisi = []
@@ -221,11 +289,12 @@ $('.submit-mhs').on('click', function () {
 		dataType: 'json',
 		success: function (data) {
 			for (var i in data) {
-				nim.push($('.t-anggota#id-' + data[i].nim + ' .t-nim').text());
-				nama.push($('.t-anggota#id-' + data[i].nim + ' .t-nama').text());
-				posisi.push($('.t-anggota#id-' + data[i].nim + ' .t-prestasi .partisipasiKegiatan option:selected').text());
-				valPosisi.push($('.t-anggota#id-' + data[i].nim + ' .t-prestasi .partisipasiKegiatan option:selected').val());
-				check.push($('.t-anggota#id-' + data[i].nim + ' .cek').is(":checked"));
+
+				nim.push($('#t-nim-' + data[i].nim).text());
+				nama.push($('#t-nama-' + data[i].nim).text());
+				posisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan option:selected').text());
+				valPosisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan option:selected').val());
+				check.push($('#checkbox' + data[i].nim).is(":checked"));
 			}
 			for (var j in data) {
 				if (check[j] == true && valPosisi[j] != 0) {
@@ -237,24 +306,51 @@ $('.submit-mhs').on('click', function () {
 					aMhs.push(oMhs);
 				}
 			}
-			let index = 1;
+
 			let id = 1;
+			if (jumlahAnggota != 0) {
+				id = parseInt(jumlahAnggota) + 1;
+			}
 			for (var k in aMhs) {
+				$('.d-m#data-' + aMhs[k][0] + '').remove()
 				$('.daftar-mhs').append(`
-					<tr class="d-m">
-						<td>` + (index++) + `</td>
+					<tr class="d-m" id="data-` + aMhs[k][0] + `">
+						<td>` + (id) + `</td>
 						<td>` + aMhs[k][0] + `
-							<input  type="hidden" name="nim_` + id + `" value="` + aMhs[k][0] + `" id="nim_` + id + `" >
+							<input  type="hidden" name="nim_` + aMhs[k][0] + `" value="` + aMhs[k][0] + `" id="nim_` + aMhs[k][0] + `" >
 						</td>
 						<td>` + aMhs[k][1] + `</td>
 						<td>` + aMhs[k][2] + `
-							<input  type="hidden" name="prestasi_` + id + `" value="` + aMhs[k][3] + `" id="nim_` + id + `" >
+							<input  type="hidden" name="prestasi_` + aMhs[k][0] + `" value="` + aMhs[k][3] + `" id="nim_` + aMhs[k][0] + `" >
 						</td>
+						<td> <button onclick="myFunction(` + aMhs[k][0] + `)" type="button" data-id="` + aMhs[k][0] + `" class="btn btn-danger hps-mhs-1"><i class="fas fa-trash-alt"></i></></td>
 					</tr>
 				`)
 				id++
 			}
-			$('#jumlahAnggota').val(id - 1);
+			jumlahAnggota = cekJumlahAnggota();
+			$('#jumlahAnggota').val(jumlahAnggota);
+
 		}
 	})
+})
+
+
+function cekJumlahAnggota() {
+	let jumlah = document.querySelectorAll(".d-m")
+	return jumlah.length;
+}
+
+function myFunction(nim) {
+	$('.d-m#data-' + nim + '').remove()
+	$('#jumlahAnggota').val(jumlahAnggota - 1);
+	jumlahAnggota = $('#jumlahAnggota').val();
+}
+
+$('.hps-mhs').on('click', function () {
+	let nim = $(this).data('id')
+	console.log('hapus')
+	$('.d-m#data-' + nim + '').remove()
+	$('#jumlahAnggota').val(jumlahAnggota - 1);
+	jumlahAnggota = $('#jumlahAnggota').val();
 })
