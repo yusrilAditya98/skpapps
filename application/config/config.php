@@ -23,7 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 | a PHP script and you can easily do that on your own.
 |
 */
-$config['base_url'] = 'http://172.30.14.158/skpapps/';
+$config['base_url'] = 'http://localhost/skpapps/';
 
 /*
 |--------------------------------------------------------------------------

@@ -92,4 +92,25 @@ class Model_lembaga extends CI_Model
         $this->db->where('tahun_pengajuan', $tahun);
         $this->db->update('rekapan_kegiatan_lembaga');
     }
+
+    public function getPengajuanProposalLembaga($id_lembaga)
+    {
+        $this->db->select('*');
+        $this->db->from('kegiatan');
+        $this->db->where('id_lembaga', $id_lembaga);
+        $this->db->where('status_selesai_proposal !=', 3);
+        $this->db->limit(5);
+        return $this->db->get()->result_array();
+    }
+
+    public function getPengajuanLpjLembaga($id_lembaga)
+    {
+        $this->db->select('*');
+        $this->db->from('kegiatan');
+        $this->db->where('id_lembaga', $id_lembaga);
+        $this->db->where('status_selesai_proposal', 3);
+        $this->db->where('status_selesai_lpj !=', 3);
+        $this->db->limit(5);
+        return $this->db->get()->result_array();
+    }
 }

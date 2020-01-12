@@ -2,6 +2,12 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_kegiatan extends CI_Model
 {
+
+    private $id_kegiatan;
+    private $jenis_validasi;
+    private $dataKegiatan;
+    private $status;
+
     public function insertKegiatan($dataKegiatan)
     {
         $this->db->set($dataKegiatan);
@@ -34,11 +40,12 @@ class Model_kegiatan extends CI_Model
     }
     public function getInfoKegiatan($id_kegiatan, $penanggung_jawab = null)
     {
-        $this->db->select('*');
-        $this->db->from('kegiatan');
-        $this->db->where('id_kegiatan', $id_kegiatan);
+        $this->db->select('k.*,l.nama_lembaga');
+        $this->db->from('kegiatan as k');
+        $this->db->join('lembaga as l', 'l.id_lembaga = k.id_lembaga', 'left');
+        $this->db->where('k.id_kegiatan', $id_kegiatan);
         if ($penanggung_jawab != null) {
-            $this->db->where('id_penanggung_jawab', $penanggung_jawab);
+            $this->db->where('k.id_penanggung_jawab', $penanggung_jawab);
         }
         return $this->db->get()->row_array();
     }
@@ -200,5 +207,24 @@ class Model_kegiatan extends CI_Model
         $this->db->group_by('status_rancangan');
         $data['status'] = $this->db->get()->result_array();
         return $data;
+    }
+
+    public function getDaftarProposalKegiatan()
+    {
+        $this->db->select('*');
+        $this->db->from('kegiatan');
+        $this->db->where('status_selesai_proposal !=', 3);
+        $this->db->limit(5);
+        return $this->db->get()->result_array();
+    }
+
+    public function getDaftarLpjKegiatan()
+    {
+        $this->db->select('*');
+        $this->db->from('kegiatan');
+        $this->db->where('status_selesai_proposal', 3);
+        $this->db->where('status_selesai_lpj !=', 3);
+        $this->db->limit(5);
+        return $this->db->get()->result_array();
     }
 }

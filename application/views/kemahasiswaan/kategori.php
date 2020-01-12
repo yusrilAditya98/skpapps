@@ -17,6 +17,9 @@
                 <div class="card">
                     <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                         <h4>Bidang Kegiatan</h4>
+                        <div class="card-header-action">
+                            <a data-collapse="#collapseOne" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+                        </div>
                     </div>
                     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
                         <div class="card-body">
@@ -60,6 +63,9 @@
                 <div class="card">
                     <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                         <h4>Jenis Kegiatan</h4>
+                        <div class="card-header-action">
+                            <a data-collapse="#collapseTwo" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+                        </div>
                     </div>
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
                         <div class="card-body">
@@ -109,6 +115,9 @@
                 <div class="card">
                     <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                         <h4>Tingkatan Kegiatan</h4>
+                        <div class="card-header-action">
+                            <a data-collapse="#collapseThree" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+                        </div>
                     </div>
                     <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
                         <div class="card-body">
@@ -154,6 +163,9 @@
                 <div class="card">
                     <div class="card-header" id="headingFour" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
                         <h4>Prestasi Kegiatan</h4>
+                        <div class="card-header-action">
+                            <a data-collapse="#collapseFour" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
+                        </div>
                     </div>
                     <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
                         <div class="card-body">

@@ -4,24 +4,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Admin extends CI_Controller
 {
 
+    private $id_user;
+    private $data_user;
+
     public function __construct()
     {
         parent::__construct();
         is_logged_in();
+        $this->load->model('Model_admin', 'admin');
+        $this->load->library('form_validation');
     }
+
 
     public function template($data)
     {
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar", $data);
-        $this->load->view("template/sidebar", $data);
+        $this->load->view("template/sidebar_admin", $data);
     }
 
     public function index()
     {
         $data['title'] = "Dashboard";
         $data['jumlah_mahasiswa'] = count($this->db->get('mahasiswa')->result_array());
-        $data['jumlah_lembaga'] = count($this->db->get_where('user', ['user_profil_kode' => 2])->result_array());
+        $this->db->where_in('user_profil_kode', [2, 3]);
+        $data['jumlah_lembaga'] = count($this->db->get('user')->result_array());
         $this->template($data);
         $this->load->view("dashboard/dashboard_admin");
         $this->load->view("template/footer");
@@ -30,14 +37,7 @@ class Admin extends CI_Controller
     public function ManagementUser()
     {
         $data['title'] = "Manajemen User";
-        $this->db->where('username != ', $this->session->userdata('username'));
-        $this->db->select('id_user, nama, username, jenis_user, is_active');
-        $this->db->from('user');
-        $this->db->join('user_profil', 'user.user_profil_kode = user_profil.user_profil_kode');
-        $data['user'] = $this->db->get()->result_array();
-        // header('Content-type:application/json');
-        // echo json_encode($data['user']);
-        // die;
+        $data['user'] = $this->admin->getDataUser();
         $this->template($data);
         $this->load->view("admin/manajemen_user");
         $this->load->view("template/footer");
@@ -52,58 +52,139 @@ class Admin extends CI_Controller
     }
     public function tambahUser()
     {
-        $data_user = [
-            'username' => $this->input->post('username'),
-            'nama' => $this->input->post('nama'),
-            'user_profil_kode' => intval($this->input->post('status_user')),
-            'is_active' => intval($this->input->post('status_aktif'))
-        ];
-        $temp = $this->db->get_where('user', ['username' => $data_user['username']])->result_array();
-        if (count($temp) == 0) {
-            if ($data_user['user_profil_kode'] == 1) {
-                $data_mahasiswa = [
-                    'nim' => $this->input->post('username'),
-                    'nama' => $this->input->post('nama'),
-                    'kode_prodi' => intval($this->input->post('prodi'))
-                ];
-                $this->db->insert('mahasiswa', $data_mahasiswa);
-            }
-            $this->db->insert('user', $data_user);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">User berhasil ditambahkan</div>');
-            redirect('admin/ManagementUser');
+        $this->form_validation->set_rules('username', 'Username', 'required|trim|is_unique[user.username]', [
+            'is_unique' => 'Username sudah digunakan!'
+        ]);
+        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[3]|matches[password2]', [
+            'matches' => 'password tidak sesuai!',
+            'min_length' => 'Password terlalu pendek!'
+        ]);
+        $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Tambah User";
+            $data['status_user'] =  $this->db->get('user_profil')->result_array();
+            $this->template($data);
+            $this->load->view("admin/tambah_user");
+            $this->load->view("template/footer");
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Username sudah ada</div>');
-            redirect('admin/ManagementUser');
+
+            $data_user = [
+                'username' => $this->input->post('username'),
+                'nama' => $this->input->post('nama'),
+                'user_profil_kode' => intval($this->input->post('status_user')),
+                'is_active' => intval($this->input->post('status_aktif')),
+                'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT)
+            ];
+
+            $temp = $this->db->get_where('user', ['username' => $data_user['username']])->data_seek();
+            if (!$temp) {
+                if ($data_user['user_profil_kode'] == 1) {
+                    $data_mahasiswa = [
+                        'nim' => $this->input->post('username'),
+                        'nama' => $this->input->post('nama'),
+                        'kode_prodi' => intval($this->input->post('prodi'))
+                    ];
+                    $this->db->insert('mahasiswa', $data_mahasiswa);
+                } elseif ($data_user['user_profil_kode'] == 2 || $data_user['user_profil_kode'] == 3) {
+                    $data_lembaga = [
+                        'id_lembaga' => $this->input->post('username'),
+                        'jenis_lembaga' => $this->input->post('jenis_lembaga'),
+                        'nama_lembaga' => $this->input->post('nama'),
+                        'nama_ketua' => $this->input->post('ketua_lembaga'),
+                        'no_hp_lembaga' => $this->input->post('no_hp'),
+                    ];
+                    $this->db->insert('lembaga', $data_lembaga);
+                }
+
+                $this->db->insert('user', $data_user);
+                $this->session->set_flashdata('message', 'User berhasil ditambahkan');
+                redirect('admin/ManagementUser');
+            } else {
+                $this->session->set_flashdata('failed', 'Tidak bisa menambahkan, Username sudah ada');
+                redirect('admin/ManagementUser');
+            }
         }
     }
 
-    public function editUser($id)
+    public function editUser($username)
     {
-        $data_user = [
-            'username' => $this->input->post('username'),
-            'nama' => $this->input->post('nama'),
-            'user_profil_kode' => intval($this->input->post('status_user')),
-            'is_active' => intval($this->input->post('status_aktif'))
-        ];
-
-        $temp = $this->db->get_where('user', ['username' => $data_user['username']])->result_array();
-        if (count($temp) == 0) {
-            $this->db->set($data_user);
-            $this->db->where('id_user', $id);
-            $this->db->update('user');
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">User berhasil diperbarui</div>');
-            redirect('admin/ManagementUser');
+        $this->form_validation->set_rules('password1', 'Password', 'required|trim|min_length[3]|matches[password2]', [
+            'matches' => 'password tidak sesuai!',
+            'min_length' => 'Password terlalu pendek!'
+        ]);
+        $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Edit User";
+            $data['status_user'] =  $this->db->get('user_profil')->result_array();
+            $data['user'] = $this->db->get_where('user', ['username' => $username])->row_array();
+            if ($data['user']['user_profil_kode'] == 1) {
+                $data['mahasiswa'] = $this->db->get_where('mahasiswa', ['nim' => $username])->row_array();
+                $data['prodi'] = $this->db->get('prodi')->result_array();
+            } else if ($data['user']['user_profil_kode'] == 2 || $data['user']['user_profil_kode'] == 3) {
+                $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga' => $username])->row_array();
+            }
+            $this->template($data);
+            $this->load->view("admin/edit_user");
+            $this->load->view("template/footer");
         } else {
-            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Tidak bisa menambahkan, Username sudah ada</div>');
-            redirect('admin/ManagementUser');
+
+            $data_user = [
+                'nama' => $this->input->post('nama'),
+                'user_profil_kode' => intval($this->input->post('status_user')),
+                'is_active' => intval($this->input->post('status_aktif')),
+                'password' => password_hash($this->input->post('password1'), PASSWORD_DEFAULT)
+            ];
+
+            $temp = $this->db->get_where('user', ['username' => $data_user['username']])->data_seek();
+            if (!$temp) {
+                if ($data_user['user_profil_kode'] == 1) {
+                    $data_mahasiswa = [
+                        'nim' => $this->input->post('username'),
+                        'nama' => $this->input->post('nama'),
+                        'kode_prodi' => intval($this->input->post('prodi')),
+                        'alamat_kos' => $this->input->post('alamat_kos'),
+                        'alamat_rumah' => $this->input->post('alamat_rumah'),
+                        'email' => $this->input->post('email'),
+                        'nomor_hp' => $this->input->post('no_hp')
+                    ];
+                    $this->admin->updateDataMahasiswa($data_mahasiswa, $username);
+                } elseif ($data_user['user_profil_kode'] == 2 || $data_user['user_profil_kode'] == 3) {
+                    $data_lembaga = [
+                        'id_lembaga' => $this->input->post('username'),
+                        'jenis_lembaga' => $this->input->post('jenis_lembaga'),
+                        'nama_lembaga' => $this->input->post('nama'),
+                        'nama_ketua' => $this->input->post('ketua_lembaga'),
+                        'no_hp_lembaga' => $this->input->post('no_hp'),
+                    ];
+                    $this->admin->updateDataLembaga($data_lembaga, $username);
+                }
+
+                $this->admin->updateDataUser($data_user, $username);
+                $this->session->set_flashdata('message', 'User berhasil diperbaharui');
+                redirect('admin/ManagementUser');
+            } else {
+                $this->session->set_flashdata('failed', 'Tidak bisa diperbaharui, Username sudah ada');
+                redirect('admin/ManagementUser');
+            }
         }
     }
 
     public function hapusUser($id)
     {
-        $this->db->where('id_user', intval($id));
-        $this->db->delete('user');
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">User berhasil dihapus</div>');
+        $user = $this->db->get_where('user', ['id_user' => $id])->row_array();
+        if ($user['user_profil_kode'] == 1) {
+            $this->db->where('nim', $user['username']);
+            $this->db->delete('mahasiswa');
+        } else if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
+            $this->db->where('id_lembaga', $user['username']);
+            $this->db->delete('lembaga');
+        }
+        $cek = $this->admin->deleteDataUser($id);
+        if ($cek == 1) {
+            $this->session->set_flashdata('message',  'User Berhasil Dihapus');
+        } else {
+            $this->session->set_flashdata('failed',  'User memiliki foregin key pada tabel validasi!');
+        }
         redirect('admin/ManagementUser');
     }
 
@@ -135,5 +216,58 @@ class Admin extends CI_Controller
         $data = $this->db->get('user_profil')->result_array();
         header('Content-type:application/json');
         echo json_encode($data);
+    }
+    public function importData()
+    {
+        // upload file xls
+        $target = basename($_FILES['import-data']['name']);
+        if ($_FILES['import-data']['name']) {
+            $config['allowed_types'] = 'xls';
+            $config['max_size']     = '2048'; //kb
+            $config['upload_path'] = './berkas/';
+            $config['overwrite'] = true;
+            $config['file_name'] = $_FILES['import-data']['name'];
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            $this->upload->do_upload('import-data');
+        };
+
+        // beri permisi agar file xls dapat di baca
+        chmod('./berkas/' .  $target, 0777);
+        // mengambil isi file xls
+        $path = './berkas/' .  $target;
+        $data = new Spreadsheet_Excel_Reader($path, false);
+        // menghitung jumlah baris data yang ada
+        $jumlah_baris = $data->rowcount($sheet_index = 0);
+        for ($i = 3; $i <= $jumlah_baris; $i++) {
+            // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
+            $result = [
+                "nim" => str_replace("\0", "" , $data->val($i, 2)),
+                "nama" => str_replace("\0", "" , $data->val($i, 3)),
+                "total_poin_skp" => intval(str_replace("\0", "" , $data->val($i, 4))),
+                "alamat_kos" => str_replace("\0", "" , $data->val($i, 5)),
+                "alamat_rumah" => str_replace("\0", "" , $data->val($i, 6)),
+                "email" => str_replace("\0", "" , $data->val($i, 7)),
+                "kode_prodi" => intval($data->val($i, 8)),
+                "nomor_hp" => str_replace("\0", "" , $data->val($i, 9)),
+            ];
+            $user = [
+                "nama" => str_replace("\0", "" , $data->val($i, 3)),
+                "username" => str_replace("\0", "" , $data->val($i, 2)),
+                "password" => str_replace("\0", "" , password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
+                "user_profil_kode" => 1,
+                'is_active' => 1
+            ];
+            if ($result['nim'] != "" && $result['nama'] != "") {
+                // input data ke database (table data_pegawai)
+                $this->db->insert('mahasiswa', $result);
+                $this->db->insert('user', $user);
+            }
+        }
+        // hapus kembali file .xls yang di upload tadi
+        unlink($path);
+        // alihkan halaman ke index.php
+        $this->session->set_flashdata('message', 'Impor data Mahasiswa berhasil');
+        redirect('Admin/ManagementUser');
     }
 }

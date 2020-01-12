@@ -2,6 +2,11 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_kemahasiswaan extends CI_Model
 {
+    private $id_kegiatan;
+    private $jenis_validasi;
+    private $kategori;
+    private $data;
+
     public function getTahunRancangan()
     {
         $this->db->select('tahun_kegiatan');
@@ -37,11 +42,13 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('validasi_prestasi', 0);
         return $this->db->get()->result_array();
     }
-    public function getInfoLembaga()
+    public function getInfoLembaga($status = null)
     {
         $this->db->select('*');
         $this->db->from('lembaga');
-        $this->db->where_not_in('id_lembaga', 0);
+        if ($status != null) {
+            $this->db->where_not_in('id_lembaga', 0);
+        }
         return $this->db->get()->result_array();
     }
     public function updateStatusRencanaKegiatan($data)
@@ -55,7 +62,8 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->from('daftar_rancangan_kegiatan as drk');
         $this->db->group_by('drk.id_lembaga,drk.tahun_kegiatan');
         $from_clause3 = $this->db->get_compiled_select();
-        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*,jk.jumlah_kegiatan');
+
+        $this->db->select('l.nama_lembaga,l.status_rencana_kegiatan,rkl.*,jk.jumlah_kegiatan,l.tahun_rancangan');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
         $this->db->join('lembaga as l', 'l.id_lembaga=rkl.id_lembaga', 'left');
         $this->db->join('(' . $from_clause3 . ') as jk', 'jk.lbg3 =rkl.id_lembaga and jk.tahun_kegiatan =rkl.tahun_pengajuan', 'left');
@@ -80,13 +88,14 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.tahun_kegiatan', $tahun);
         return $this->db->get()->result_array();
     }
+    // update rancangan
     public function updateStatusProker($data)
     {
         $this->db->update_batch('daftar_rancangan_kegiatan', $data);
     }
     public function updateRekapKegiatan($id_lembaga, $tahun, $status = null, $anggaran = null)
     {
-        if ($anggaran != null) {
+        if ($status != null) {
             $this->db->set('status_rancangan', $status);
         }
         if ($anggaran != null) {
@@ -114,6 +123,7 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.tahun_kegiatan', $periode);
         $this->db->group_by('drk.id_lembaga');
         $from_clause1 = $this->db->get_compiled_select();
+
         // // jumlah kegiatan belum terlaksana terlaksana
         $this->db->select('count(drk.id_daftar_rancangan) as blm_terlaksana,drk.id_lembaga as lbg2,');
         $this->db->from('daftar_rancangan_kegiatan as drk');
@@ -136,13 +146,13 @@ class Model_kemahasiswaan extends CI_Model
         $from_clause4 = $this->db->get_compiled_select();
         // menampilkan data
         $this->db->select('drk.id_lembaga,l.nama_lembaga,t.terlaksana, bt.blm_terlaksana,jk.jumlah_kegiatan,da.dana_kegiatan,rkl.anggaran_kemahasiswaan,drk.tahun_kegiatan,l.status_rencana_kegiatan');
-        $this->db->from('daftar_rancangan_kegiatan as drk');
-        $this->db->join('(' . $from_clause1 . ') as t', 't.lbg1 =drk.id_lembaga', 'left');
-        $this->db->join('(' . $from_clause2 . ') as bt', 'bt.lbg2 =drk.id_lembaga', 'left');
-        $this->db->join('(' . $from_clause3 . ') as jk', 'jk.lbg3 =drk.id_lembaga', 'left');
-        $this->db->join('(' . $from_clause4 . ') as da', 'da.lbg4 =drk.id_lembaga', 'left');
-        $this->db->join('lembaga as l', 'l.id_lembaga =drk.id_lembaga', 'left');
-        $this->db->join('rekapan_kegiatan_lembaga as rkl', 'rkl.id_lembaga =drk.id_lembaga', 'left');
+        $this->db->from('rekapan_kegiatan_lembaga as rkl');
+        $this->db->join('(' . $from_clause1 . ') as t', 't.lbg1 =rkl.id_lembaga', 'left');
+        $this->db->join('(' . $from_clause2 . ') as bt', 'bt.lbg2 =rkl.id_lembaga', 'left');
+        $this->db->join('(' . $from_clause3 . ') as jk', 'jk.lbg3 =rkl.id_lembaga', 'left');
+        $this->db->join('(' . $from_clause4 . ') as da', 'da.lbg4 =rkl.id_lembaga', 'left');
+        $this->db->join('lembaga as l', 'l.id_lembaga =rkl.id_lembaga', 'left');
+        $this->db->join('daftar_rancangan_kegiatan as drk', 'rkl.id_lembaga =drk.id_lembaga', 'left');
         $this->db->where('rkl.tahun_pengajuan', $periode);
         $this->db->where('drk.tahun_kegiatan', $periode);
         if ($id_lembaga != null) {
@@ -188,5 +198,14 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->set('validasi_beasiswa', $status);
         $this->db->where('id_penerima', $id_penerima);
         $this->db->update('penerima_beasiswa');
+    }
+
+    public function getRekapanKegiatanLembaga($tahun)
+    {
+        $this->db->select('rkl.*,l.nama_lembaga');
+        $this->db->from('rekapan_kegiatan_lembaga as rkl');
+        $this->db->join('lembaga as l', 'l.id_lembaga = rkl.id_lembaga', 'left');
+        $this->db->where('rkl.tahun_pengajuan', $tahun);
+        return $this->db->get()->result_array();
     }
 }

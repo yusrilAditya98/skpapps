@@ -4,6 +4,8 @@
         <div class="section-header">
             <h1>Lembaga Fakultas Ekonomi dan Bisnis Universitas Brawijaya</h1>
         </div>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -12,7 +14,6 @@
                             <h4>Daftar Lembaga</h4>
                         </div>
                         <div class="col-lg-4">
-
 
                         </div>
                     </div>

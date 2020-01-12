@@ -4,6 +4,7 @@
         <div class="section-header">
             <h1>Validasi Poin Skp</h1>
         </div>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -40,7 +41,7 @@
                                                 <?php elseif ($p['validasi_prestasi'] == 1) : ?>
                                                     <div><i class="fa fa-check text-success" aria-hidden="true"></i></div>
                                                 <?php elseif ($p['validasi_prestasi'] == 2) : ?>
-                                                    <div class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                                                    <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-skp="<?= $p['id_poin_skp'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
@@ -119,7 +120,7 @@
                                                                                     <div class="form-group row">
                                                                                         <label class="col-sm-3 col-form-label">File Bukti</label>
                                                                                         <div class="col-sm-9">
-                                                                                            <a href="" class="d-file btn btn-primary">lihat</a>
+                                                                                            <a target="_blank" href="" class="d-file btn btn-primary">lihat</a>
                                                                                         </div>
                                                                                     </div>
                                                                                 </div>

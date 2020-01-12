@@ -211,6 +211,9 @@
                                                 <label for="gambarKegiatanLpj2">Upload Gambar Kegiatan 2 / Acara
                                                     Pendukung</label>
                                                 <input type="file" class="form-control-file btn" name="gambarKegiatanLpj2" id="gambarKegiatanLpj2" required>
+                                                <div class="invalid-feedback">
+                                                    Gambar kegiatan harap diisi
+                                                </div>
                                                 <small class="form-text text-muted">
                                                     Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
                                                 </small>

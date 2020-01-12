@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_mahasiswa extends CI_Model
 {
+    private $nim;
+    private $dataMahasiswa;
+
     public function getDataMahasiswa($nim = null)
     {
         $this->db->select('*');
@@ -13,10 +16,12 @@ class Model_mahasiswa extends CI_Model
         }
         return $this->db->get()->result_array();
     }
+
     public function insertBeasiswa($data)
     {
         $this->db->insert('penerima_beasiswa', $data);
     }
+
     public function getBeasiswa($nim)
     {
         $this->db->select('b.*,p.*');
@@ -24,6 +29,24 @@ class Model_mahasiswa extends CI_Model
         $this->db->join('beasiswa as b', 'b.id=p.id_beasiswa', 'left');
         $this->db->where('p.nim', $nim);
         $this->db->order_by('validasi_beasiswa ASC');
+        return $this->db->get()->result_array();
+    }
+    public function getAnggotaKegiatan($id_kegiatan)
+    {
+        return $this->db->get_where('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan])->result_array();
+    }
+    public function getBukanAnggotaKegiatan($id_kegiatan)
+    {
+
+        $this->db->select('ak.nim ');
+        $this->db->from('anggota_kegiatan as ak');
+        $this->db->where('ak.id_kegiatan', $id_kegiatan);
+        $from_cluses = $this->db->get_compiled_select();
+
+        $this->db->select('m.*');
+        $this->db->from('mahasiswa as m');
+        $this->db->join('(' . $from_cluses . ') as bkn_ak', 'm.nim = bkn_ak.nim', 'left');
+        $this->db->where('bkn_ak.nim', null);
         return $this->db->get()->result_array();
     }
 }

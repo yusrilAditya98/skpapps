@@ -8,19 +8,19 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <form class="form-revisi" method="post">
+            <form class="form-revisi-rancangan" method="post">
                 <div class="modal-body">
                     <div class="col-12 col-md-12 col-lg-12">
                         <div class="card profile-widget">
                             <div class="profile-widget-description">
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Catatan Revisi</label>
+                                    <input type="hidden" value="" class="value-valid" name="valid">
+                                    <input type="hidden" name="id_lembaga" value="<?= $this->input->get('id_lembaga'); ?>">
+                                    <input type="hidden" name="tahun" value="<?= $this->input->get('tahun'); ?>">
                                     <div class="col-sm-9">
                                         <textarea name="catatan" class="form-control d-catatan" style="height:200px"></textarea>
                                     </div>
-                                    <input type="hidden" name="valid" value="2">
-                                    <input type="hidden" name="revisi" value="2">
-                                    <input type="hidden" name="jenis_validasi" class="jenis_validasi">
                                 </div>
                             </div>
                         </div>

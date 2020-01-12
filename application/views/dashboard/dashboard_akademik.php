@@ -68,5 +68,20 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Rekap Kegiatan Akademik</h4>
+                    </div>
+                    <div class="card-body chart mb-5 mt-5">
+                        <div class="row">
+                            <canvas id="kegiatan-akademik" style="width: 100%; height: 20rem;" class="col-lg-6"></canvas>
+                            <canvas id="peserta-kegiatan-akademik" style="width: 100%; height: 20rem;" class="col-lg-6"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>

@@ -1,64 +1,55 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-if (segments[4] == "Admin") {
-	$(window).on('load', function () {
-		// $('.dataTables_filter').prepend(`
-		// <select class="custom-select col-lg-4 mr-2 filter-status" id="filter-status">
-		// </select>`);
-		// $.ajax({
-		// 	url: segments[0] + '/skpapps/Admin/getProfilUser',
-		// 	dataType: 'json',
-		// 	type: 'get',
-		// 	success: function (profil) {
-		// 		console.log(profil);
-		// 		profil.forEach(function (profilu) {
-		// 			$('#filter-status').append(`<option value="` + profilu['jenis_user'] + `">` + profilu['jenis_user'] + `</option>`)
-		// 		})
-		// 	}
-		// });
-	})
-}
-
-
-$('.tambah-user').on('click', function () {
-	$.ajax({
-		url: segments[0] + '/skpapps/Admin/getStatusUser/',
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			// console.log(data);
-			var link_a = window.location.origin + '/skpapps/admin/tambahUser';
-			$('form').attr('action', link_a);
-			data.forEach(function (status) {
-				$('#status_user').append(`<option value="` + status['user_profil_kode'] + `">` + status['jenis_user'] + `</option>`)
-			})
-		}
-	});
-})
-
 $('#status_user').on('change', function () {
 	console.log($('#status_user').val());
+	$('.prodi').remove()
 	if ($('#status_user').val() == "1") {
 		$.ajax({
-			url: segments[0] + '/skpapps/Admin/getProdi',
+			url: segments[0] + `/` + segments[3] + `/Admin/getProdi`,
 			method: 'get',
 			dataType: 'json',
 			success: function (data) {
 				console.log(data);
 				$('#prodi-extend').html(``);
+				$('#jenis-lembaga-extend').html(``);
+				$('#ketua-lembaga-extend').html(``);
+				$('#hp-lembaga-extend').html(``);
 				$('#prodi-extend').html(`
                     <label for="prodi" class="col-form-label">Prodi</label>
-                        <select class="form-control" id="prodi" name="prodi" placeholder="prodi">
-                            <option value="0" disabled selected hidden>Pilih Status User</option>
-                        </select>`);
+					<select class="form-control" id="prodi" name="prodi" placeholder="prodi">
+						<option value="0" disabled selected hidden>Pilih Status User</option>
+					</select>`);
 				data.forEach(function (prodi) {
-					$('#prodi').append(`<option value="` + prodi['kode_prodi'] + `">` + prodi['nama_prodi'] + `</option>`)
+					$('#prodi').append(`<option class="prodi" value="` + prodi['kode_prodi'] + `">` + prodi['nama_prodi'] + `</option>`)
 				})
 			}
 		});
+	} else if ($('#status_user').val() == "2" || $('#status_user').val() == "3") {
+		$('#prodi-extend').html(``);
+		$('#jenis-lembaga-extend').html(``);
+		$('#ketua-lembaga-extend').html(``);
+		$('#hp-lembaga-extend').html(``);
+		$('#jenis-lembaga-extend').append(`
+		<label for="jenis_lembaga" class="col-form-label">Jenis Lembaga</label>
+		<select class="form-control" id="jenis_lembaga" name="jenis_lembaga" placeholder="Jenis Lembaga" required>
+			<option value="semi otonom" >semi otonom</option>
+			<option value="otonom" >otonom</option>
+		</select>`)
+		$('#ketua-lembaga-extend').append(`
+		<label for="ketua_lembaga" class="col-form-label">Ketua Lembaga</label>
+		<input class="form-control" name="ketua_lembaga" id="ketua_lembaga" required></input>
+		`);
+		$('#hp-lembaga-extend').append(`
+		<label for="no_hp" class="col-form-label">No Hp</label>
+		<input class="form-control" name="no_hp" id="no_hp" required></input>
+		`);
+
 	} else {
 		$('#prodi-extend').html(``);
+		$('#jenis-lembaga-extend').html(``);
+		$('#ketua-lembaga-extend').html(``);
+		$('#hp-lembaga-extend').html(``);
 	}
 
 })
@@ -67,12 +58,11 @@ $('.table-kategori').on('click', '.edit-user', function () {
 	let id = $(this).data('id');
 	console.log(id);
 	$.ajax({
-		url: segments[0] + '/skpapps/Admin/getUser/' + id,
+		url: segments[0] + `/` + segments[3] + `/Admin/getUser/` + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data['status_user']);
-			var link_a = window.location.origin + '/skpapps/admin/editUser/' + id;
+			var link_a = window.location.origin + `/` + segments[3] + `/admin/editUser/` + id;
 			$('form').attr('action', link_a);
 			$('#username_edit').val(data['user']['username']);
 			$('#nama_edit').val(data['user']['nama']);
@@ -86,11 +76,11 @@ $('.table-kategori').on('click', '.edit-user', function () {
 				}
 			})
 			if (data['user']['is_active'] == "1") {
-				$('#status_aktif_edit').append(`<option value="` + data['user']['is_active'] + `" selected>Aktif</option>`)
-				$('#status_aktif_edit').append(`<option value="0">Tidak Aktif</option>`)
+				$('#status_aktif_edit').append(`<option class="aktived" value="` + data['user']['is_active'] + `" selected>Aktif</option>`)
+				$('#status_aktif_edit').append(`<option  class="aktived" value="0">Tidak Aktif</option>`)
 			} else {
-				$('#status_aktif_edit').append(`<option value="1">Aktif</option>`)
-				$('#status_aktif_edit').append(`<option value="` + data['user']['is_active'] + `" selected>Tidak Aktif</option>`)
+				$('#status_aktif_edit').append(`<option  class="aktived" value="1">Aktif</option>`)
+				$('#status_aktif_edit').append(`<option  class="aktived" value="` + data['user']['is_active'] + `" selected>Tidak Aktif</option>`)
 			}
 		}
 	});
@@ -111,7 +101,7 @@ $('.table-kategori').on('click', '.hapus-user', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/skpapps/admin/hapusUser/" + id_user;
+			window.location = window.location.origin + `/` + segments[3] + `/admin/hapusUser/` + id_user;
 		}
 	})
 });

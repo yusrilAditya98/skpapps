@@ -2,6 +2,9 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 class Publikasi extends CI_Controller
 {
+    private $id_kegiatan;
+    private $proposal;
+    private $lpj;
     public function __construct()
     {
         parent::__construct();
@@ -18,8 +21,11 @@ class Publikasi extends CI_Controller
     }
     public function index()
     {
+        $this->load->model('Model_kegiatan', 'kegiatan');
         $data['title'] = 'Dashboard';
         $data['notif'] = $this->_notif();
+        $data['proposal_kegiatan'] = $this->kegiatan->getDaftarProposalKegiatan();
+        $data['lpj_kegiatan'] = $this->kegiatan->getDaftarLpjKegiatan();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -71,6 +77,7 @@ class Publikasi extends CI_Controller
             $data['catatan_revisi'] = $this->input->post('catatan');
             $jenis_validasi = $this->input->post('jenis_validasi');
             $status_proposal = 2;
+            $this->session->set_flashdata('message', 'Proposal berhasil direvisi!');
         }
         $this->kegiatan->updateStatusProposal($id_kegiatan, $status_proposal);
         $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'proposal');
@@ -82,14 +89,9 @@ class Publikasi extends CI_Controller
             ];
             $jenis_validasi = 1 + $this->input->get('jenis_validasi');
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'proposal');
+            $this->session->set_flashdata('message', 'Proposal berhasil divalidasi!');
         }
-        if ($this->session->userdata('user_profil_kode') == 7) {
-            redirect('Publikasi/daftarProposal');
-        } elseif ($this->session->userdata('user_profil_kode') == 6) {
-            redirect('Keuangan/daftarPengajuanKeuangan');
-        } elseif ($this->session->userdata('user_profil_kode') == 2) {
-            redirect('Lembaga/daftarProposal');
-        }
+        redirect('Publikasi/daftarProposal');
     }
     public function validasiLpj($id_kegiatan)
     {
@@ -108,6 +110,7 @@ class Publikasi extends CI_Controller
             $data['catatan_revisi'] = $this->input->post('catatan');
             $jenis_validasi = $this->input->post('jenis_validasi');
             $status_lpj = 2;
+            $this->session->set_flashdata('message', 'Lpj berhasil direvisi!');
         }
         $this->kegiatan->updateStatusLpj($id_kegiatan, $status_lpj);
         $this->proposalKegiatan = $this->kegiatan->updateValidasi($data, $jenis_validasi, $id_kegiatan, 'lpj');
@@ -119,13 +122,8 @@ class Publikasi extends CI_Controller
             ];
             $jenis_validasi = 1 + $this->input->get('jenis_validasi');
             $this->proposalKegiatan = $this->kegiatan->updateValidasi($val_selanjutnya, $jenis_validasi, $id_kegiatan, 'lpj');
+            $this->session->set_flashdata('message', 'Lpj berhasil divalidasi!');
         }
-        if ($this->session->userdata('user_profil_kode') == 7) {
-            redirect('Publikasi/daftarLpj');
-        } elseif ($this->session->userdata('user_profil_kode') == 6) {
-            redirect('Keuangan/daftarPengajuanKeuangan');
-        } elseif ($this->session->userdata('user_profil_kode') == 2) {
-            redirect('Lembaga/daftarProposal');
-        }
+        redirect('Publikasi/daftarLpj');
     }
 }

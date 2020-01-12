@@ -52,7 +52,6 @@
                                                 <h6>Sumber Dana</h6>
 
                                                 <?php foreach ($dana as $d) : ?>
-
                                                     <div class="form-check py-1">
                                                         <input class="form-check-input" type="hidden" value="0" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
                                                         <input class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
@@ -82,7 +81,7 @@
                                             </div>
                                             <div class=" form-group">
                                                 <label for="bidangKegiatan">Bidang Kegiatan</label>
-                                                <select class="custom-select bidangKegiatan select2" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
+                                                <select class="custom-select bidangKegiatan" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
                                                     <option value="">-- Pilih Bidang Kegiatan --</option>
                                                 </select>
                                                 <div class=" invalid-feedback">
@@ -91,16 +90,16 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="jenisKegiatan">Jenis Kegiatan</label>
-                                                <select class="custom-select jenisKegiatan select2" id="jenisKegiatan" name="jenisKegiatan" required>
+                                                <select class="custom-select jenisKegiatan" id="jenisKegiatan" name="jenisKegiatan" required>
                                                     <option value="">-- Pilih Jenis Kegiatan --</option>
                                                 </select>
-                                                <div class=" invalid-feedback">
+                                                <div class="invalid-feedback">
                                                     Jenis kegiatan harap dipilih
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="tingkatKegiatan">Tingkat Kegiatan</label>
-                                                <select class="custom-select tingkatKegiatan select2" id="tingkatKegiatan" name="tingkatKegiatan" required>
+                                                <select class="custom-select tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" required>
                                                     <option value="">-- Pilih Tingkat Kegiatan --</option>
                                                 </select>
                                                 <div class=" invalid-feedback">
@@ -109,7 +108,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
-                                                <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
+                                                <input type="text" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
                                                 <div class="invalid-feedback">
                                                     Tanggal pelaksanaan harap diisi
                                                 </div>
@@ -126,10 +125,19 @@
                                         <div class="bagian-acara mt-5">
                                             <h5>Anggota Kegiatan</h5>
                                             <div class="row">
-                                                <div class="col-12 col-md-12 col-lg-12">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group row mb-4">
+                                                        <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jumlah Anggota</label>
+                                                        <div class="col-lg-2">
+                                                            <input type="number" class="form-control" name="jumlahAnggota" id="jumlahAnggota" required readonly>
+                                                        </div>
+                                                        <small class="text-danger"> <?php echo validation_errors(); ?></small>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-12 col-md-12 col-lg-6">
                                                     <a class="btn btn-icon btn-primary mb-3 text-white daftarMahasiswa" style="float:right" data-toggle="modal" data-target="#daftarMahasiswa">
                                                         Pilih Anggota <i class="fas fa-plus pl-2 text-white"></i></a>
-                                                    <input type="hidden" value="0" name="jumlahAnggota" id="jumlahAnggota">
                                                 </div>
                                             </div>
                                             <div class="table-responsive">
@@ -140,6 +148,7 @@
                                                             <th>Nim</th>
                                                             <th>Nama</th>
                                                             <th>Posisi</th>
+                                                            <th>Action</th>
 
                                                         </tr>
                                                     </thead>
@@ -204,7 +213,7 @@
                                             </div>
                                         </div>
                                         <div class="action-button">
-                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3 confirm-submit">
                                                 Kirim Proposal <i class="fas fa-plus"></i></button>
 
                                             <a href="<?= base_url('Mahasiswa/pengajuanProposal') ?>" style="float:right" class="btn btn-icon btn-secondary">
@@ -232,37 +241,8 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="table-responsive t-mhs">
-                    <table class="table table-striped index" id="table-1">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Nim</th>
-                                <th>Nama</th>
-                                <th>Posisi</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="body-mhs">
-                            <?php $i = 1; ?>
-                            <?php foreach ($mahasiswa as $m) : ?>
-                                <tr class="t-anggota" id="id-<?= $m['nim'] ?>">
-                                    <td><?= $i++ ?></td>
-                                    <td class="t-nim"><?= $m['nim'] ?></td>
-                                    <td class="t-nama"><?= $m['nama'] ?></td>
-                                    <td class="t-prestasi">
-                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
-                                            <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
-                                        </select>
-                                    </td>
-                                    <td class="t-cek">
-                                        <input type="checkbox" class="cek" id="checkbox<?= $m['nim'] ?>">
-                                        <!--  -->
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
+                <div class="table-responsive table-mhs">
+
                 </div>
             </div>
             <div class="modal-footer bg-whitesmoke br">

@@ -3,7 +3,8 @@
         <div class="section-header">
             <h1>Pengajuan Proposal</h1>
         </div>
-        <?= $this->session->flashdata('message'); ?>
+        <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+        <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
             <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -78,7 +79,7 @@
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>
                                                     <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
-                                                    <a href="<?= base_url('Mahasiswa/hapusKegiatan/') . $k['id_kegiatan']; ?>" class="btn btn-icon btn-danger"><i class="fas fa-trash"></i></a>
+                                                    <a href="<?= base_url('Mahasiswa/hapusKegiatan/') . $k['id_kegiatan']; ?>" class="btn btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
                                                 <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
                                                     <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
                                                 <?php endif; ?>

@@ -3,6 +3,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Pimpinan extends CI_Controller
 {
+    private $tahun;
+    private $lpj;
+    private $proposal;
+    private $data;
+    private $nim;
 
     public function __construct()
     {
@@ -19,42 +24,38 @@ class Pimpinan extends CI_Controller
 
     public function index()
     {
+        $this->load->model('Model_keuangan', 'keuangan');
         $data['title'] = 'Dashboard';
         $data['jumlah_mahasiswa'] = count($this->db->get('mahasiswa')->result_array());
-        $data['jumlah_lembaga'] = count($this->db->get('lembaga')->result_array());
+        $data['jumlah_lembaga'] = count($this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array());
         $data['jumlah_kegiatan_mahasiswa'] = count($this->db->get_where('kegiatan', ['acc_rancangan' => 1])->result_array());
+
         $this->db->where('total_poin_skp >=', 100);
         $data_mahasiswa_cukup_skp = $this->db->get('mahasiswa')->result_array();
+        $data['tahun'] = $this->keuangan->getTahun();
+        if ($data['tahun']) {
+            $tahun = $data['tahun'][0]['tahun'];
+            $data['tahun_saat_ini'] = $tahun;
+        } else {
+            $tahun = date('Y');
+            $data['tahun_saat_ini'] = $tahun;
+            $data['tahun'][0]['tahun'] = $tahun;
+        }
+
         $data['jumlah_mahasiswa_cukup_skp'] = count($data_mahasiswa_cukup_skp);
         $this->template($data);
         $this->load->view("dashboard/dashboard_pimpinan", $data);
         $this->load->view("template/footer");
     }
-    public function poin_skp()
+    public function poinSkp()
     {
-        $data['title'] = 'Poin SKP';
-        $data['mahasiswa'] = $this->db->get('mahasiswa')->result_array();
-        for ($i = 0; $i < count($data['mahasiswa']); $i++) {
-            $total_poin_skp = $data['mahasiswa'][$i]['total_poin_skp'];
-            if ($total_poin_skp > 300) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Dengan Pujian";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 4;
-            } else if ($total_poin_skp >= 201 && $total_poin_skp <= 300) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Sangat Baik";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 3;
-            } else if ($total_poin_skp >= 151 && $total_poin_skp <= 200) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Baik";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 2;
-            } else if ($total_poin_skp >= 100 && $total_poin_skp <= 150) {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Cukup";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 1;
-            } else {
-                $data['mahasiswa'][$i]['predikat_poin_skp'] = "Kurang";
-                $data['mahasiswa'][$i]['p_poin_skp'] = 0;
-            }
-        }
-        $this->template($data);
-        $this->load->view("pimpinan/poin_skp", $data);
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['mahasiswa'] = $this->kemahasiswaan->getDataMahasiswa();
+        $data['title'] = 'Poin Skp';
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/poin_skp_mhs");
         $this->load->view("template/footer");
     }
     public function get_detail_mahasiswa($nim)
@@ -67,7 +68,6 @@ class Pimpinan extends CI_Controller
         header('Content-type: application/json');
         echo json_encode($detail_mahasiswa);
     }
-
 
     public function get_detail_skp($nim)
     {
@@ -88,6 +88,150 @@ class Pimpinan extends CI_Controller
         echo json_encode($detail_skp);
     }
 
+    public function laporanSerapan()
+    {
+        $this->load->model('Model_keuangan', 'keuangan');
+        $data['title'] = 'Laporan Serapan Kegiatan';
+        $data['tahun'] = $this->keuangan->getTahun();
+        if ($data['tahun']) {
+            $tahun = $data['tahun'][0]['tahun'];
+            $data['tahun_saat_ini'] = $tahun;
+        } else {
+            $tahun = date('Y');
+            $data['tahun_saat_ini'] = $tahun;
+            $data['tahun'][0]['tahun'] = $tahun;
+        }
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+
+        if ($this->input->post('tahun')) {
+            $tahun = $this->input->post('tahun');
+            $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+            $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
+            $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+            $data['tahun_saat_ini'] = $this->input->post('tahun');
+        } else {
+            $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+            $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
+            $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+        }
+        $data['total'] = $this->_totalDana($data['laporan']);
+
+
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("keuangan/laporan_serapan", $data);
+        $this->load->view("template/footer");
+    }
+
+    private function _serapan($proposal, $lpj, $tahun)
+    {
+
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+
+        if ($proposal == null) {
+            foreach ($lembaga as $l) {
+                $proposal[$l['id_lembaga']] = [
+                    'bulan' => 0,
+                    'dana' => 0,
+                    'id_lembaga' => $l['id_lembaga'],
+                    'nama_lembaga' => $l['nama_lembaga']
+                ];
+            }
+        }
+        if ($lpj == null) {
+            foreach ($lembaga as $l) {
+                $lpj[$l['id_lembaga']] = [
+                    'bulan' => 0,
+                    'dana' => 0,
+                    'id_lembaga' => $l['id_lembaga'],
+                    'nama_lembaga' => $l['nama_lembaga']
+                ];
+            }
+        }
+
+        $data = [];
+        foreach ($lembaga as $l) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$l['id_lembaga']][$j] = 0;
+            }
+            $data[$l['id_lembaga']]['nama_lembaga'] = $l['nama_lembaga'];
+            $dana = $this->db->select('anggaran_kemahasiswaan')->get_where('rekapan_kegiatan_lembaga', ['id_lembaga' => $l['id_lembaga'], 'tahun_pengajuan' => $tahun])->row_array();
+
+            if ($dana['anggaran_kemahasiswaan'] == null) {
+                $data[$l['id_lembaga']]['dana_pagu'] = 0;
+            } else {
+                $data[$l['id_lembaga']]['dana_pagu']  = $dana['anggaran_kemahasiswaan'];
+            }
+            $data[$l['id_lembaga']]['dana_terserap'] = 0;
+        }
+
+        foreach ($proposal as $p) {
+            foreach ($lpj as $l) {
+                for ($i = 1; $i < 13; $i++) {
+                    if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
+                        if ($l['bulan'] == $p['bulan']) {
+                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['bulan'];
+                        } else {
+                            $data[$p['id_lembaga']][$i] = $p['dana'];
+                        }
+                    }
+                    if ($p['id_lembaga'] == $l['id_lembaga'] && $l['bulan'] == $i) {
+                        if ($l['bulan'] == $p['bulan']) {
+                            $data[$l['id_lembaga']][$i] = $p['dana'] + $l['dana'];
+                        } else {
+                            $data[$l['id_lembaga']][$i] = $l['dana'];
+                        }
+                    }
+                }
+            }
+        }
+        foreach ($lembaga as $l) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
+            }
+
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['terserap_persen'] =  0;
+            } else {
+                $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
+            }
+
+            $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
+
+
+            if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
+                $data[$l['id_lembaga']]['sisa_terserap'] = 0;
+            } else {
+                $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
+            }
+        }
+        return $data;
+    }
+    private function _totalDana($laporan)
+    {
+
+        $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
+        $data['total']['dana_sisa'] = 0;
+        $data['total']['dana_terserap'] = 0;
+        $data['total']['dana_pagu'] = 0;
+        $data['total']['persen_terserap'] = 0;
+        $data['total']['persen_sisa'] = 0;
+        foreach ($lembaga as $l) {
+            $data['total']['dana_sisa'] += $laporan[$l['id_lembaga']]['dana_sisa'];
+            $data['total']['dana_terserap'] += $laporan[$l['id_lembaga']]['dana_terserap'];
+            $data['total']['dana_pagu'] += $laporan[$l['id_lembaga']]['dana_pagu'];
+        }
+        if ($data['total']['dana_pagu'] == 0) {
+            $data['total']['persen_terserap'] = 0;
+            $data['total']['persen_sisa'] = 0;
+        } else {
+            $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
+            $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
+        }
+
+        return $data;
+    }
     public function rekapitulasiSKP()
     {
         $data['title'] = 'Rekapitulasi SKP';
@@ -101,17 +245,15 @@ class Pimpinan extends CI_Controller
             $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
             for ($j = 0; $j < count($semua_prestasi); $j++) {
                 $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
-                $mahasiswa = $this->db->get_where('poin_skp', ['id_prestasi' => $id_semua_prestasi])->result_array();
+                $mahasiswa = $this->db->get_where('poin_skp', ['prestasiid_prestasi' => $id_semua_prestasi, 'validasi_prestasi' => 1])->result_array();
                 $count += count($mahasiswa);
             }
             $data['prestasi'][$i]['jumlah'] = $count;
         }
-
         $this->template($data);
         $this->load->view("pimpinan/rekapitulasi_skp", $data);
         $this->load->view("template/footer");
     }
-
     public function rekapitulasiSKPApi()
     {
         $this->db->where('id_prestasi', 7);
@@ -124,15 +266,15 @@ class Pimpinan extends CI_Controller
             $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
             for ($j = 0; $j < count($semua_prestasi); $j++) {
                 $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
-                $mahasiswa = $this->db->get_where('poin_skp', ['id_prestasi' => $id_semua_prestasi])->result_array();
+                $mahasiswa = $this->db->get_where('poin_skp', ['prestasiid_prestasi' => $id_semua_prestasi, 'validasi_prestasi' => 1])->result_array();
                 $count += count($mahasiswa);
             }
             $data['prestasi'][$i]['jumlah'] = $count;
         }
+
         header('Content-type: application/json');
         echo json_encode($data['prestasi']);
     }
-
     public function getRekapitulasiSKP($id_prestasi)
     {
         $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => intval($id_prestasi)])->result_array();
@@ -142,13 +284,14 @@ class Pimpinan extends CI_Controller
             $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
             array_push($id_semua_prestasi_arr, $id_semua_prestasi);
         }
-        $this->db->where_in('id_prestasi', $id_semua_prestasi_arr);
+        $this->db->where_in('prestasiid_prestasi', $id_semua_prestasi_arr);
         $this->db->from('poin_skp');
         $this->db->join('mahasiswa', 'poin_skp.nim = mahasiswa.nim');
         $this->db->join('prodi', 'mahasiswa.kode_prodi = prodi.kode_prodi');
         $data['mahasiswa'] = $this->db->get()->result_array();
-        // array_push($data['prestasi'], $mahasiswa);
 
+
+        // array_push($data['prestasi'], $mahasiswa);
         header('Content-type: application/json');
         // echo json_encode($id_semua_prestasi_arr);
         echo json_encode($data);

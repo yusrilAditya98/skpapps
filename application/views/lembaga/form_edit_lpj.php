@@ -175,7 +175,7 @@
                                                 <h5>Informasi Upload</h5>
 
                                                 <div class="form-group">
-                                                    <label for="fileLpj">Upload File Proposal <a class="btn btn-primary" href="<?= base_url('file_bukti/lpj/') . $kegiatan['lpj_kegiatan'] ?>">Lihat</a></label>
+                                                    <label for="fileLpj">Upload File Proposal <a target="_blank" class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/') . $kegiatan['lpj_kegiatan'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" id="fileLpj" name="fileLpj">
 
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
@@ -188,8 +188,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="beritaLpj">Upload Berita Kegiatan
-                                                        Proposal - <a class="btn btn-primary" href="<?= base_url('file_bukti/berita_lpj/') . $kegiatan['berita_pelaporan'] ?>">Lihat</a></label>
-                                                    <input type="file" class="form-control-file btn" name="beritaLpj" id="beritaLpj">
+                                                        Proposal - <a target="_blank" class="btn btn-primary" href=" <?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/') . $kegiatan['berita_pelaporan'] ?>">Lihat</a> </label> <input type="file" class="form-control-file btn" name="beritaLpj" id="beritaLpj">
 
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                         Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
@@ -202,7 +201,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="gambarKegiatanLpj1">Upload Gambar Kegiatan 1 / Acara
-                                                        Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_lpj/') . $dokumentasi['d_lpj_1'] ?>">Lihat</a></label>
+                                                        Pendukung - <a target="_blank" class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/foto_lpj/') . $dokumentasi['d_lpj_1'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanLpj1" id="gambarKegiatanLpj1">
 
                                                     <small class="form-text text-muted">
@@ -211,7 +210,7 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="gambarKegiatanLpj2">Upload Gambar Kegiatan 2 / Acara
-                                                        Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_lpj/') . $dokumentasi['d_lpj_2'] ?>">Lihat</a></label>
+                                                        Pendukung - <a target="_blank" class="btn btn-primary" href="<?= base_url('assets/pdfjs/web/viewer.html?file=../../../file_bukti/foto_lpj/') . $dokumentasi['d_lpj_2'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanLpj2" id="gambarKegiatanLpj2">
                                                     <small class="form-text text-muted">
                                                         Format Gambar JPG/JPEG Ukuran Maksimal 2 mega

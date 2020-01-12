@@ -22,7 +22,7 @@
                                                     </div>
                                                     <div class=" form-group">
                                                         <label for="bidangKegiatan">Bidang Kegiatan</label>
-                                                        <select class="custom-select bidangKegiatan select2" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
+                                                        <select class="custom-select bidangKegiatan" id="bidangKegiatan" name="bidangKegiatan" name="bidangKegiatan" required>
                                                             <option value="">-- Pilih Bidang Kegiatan --</option>
                                                         </select>
                                                         <div class=" invalid-feedback">
@@ -31,7 +31,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="jenisKegiatan">Jenis Kegiatan</label>
-                                                        <select class="custom-select jenisKegiatan select2" id="jenisKegiatan" name="jenisKegiatan" required>
+                                                        <select class="custom-select jenisKegiatan" id="jenisKegiatan" name="jenisKegiatan" required>
                                                             <option value="">-- Pilih Jenis Kegiatan --</option>
                                                         </select>
                                                         <div class=" invalid-feedback">
@@ -40,7 +40,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="tingkatKegiatan">Tingkat Kegiatan</label>
-                                                        <select class="custom-select tingkatKegiatan select2" id="tingkatKegiatan" name="tingkatKegiatan" required>
+                                                        <select class="custom-select tingkatKegiatan" id="tingkatKegiatan" name="tingkatKegiatan" required>
                                                             <option value="">-- Pilih Tingkat Kegiatan --</option>
                                                         </select>
                                                         <div class=" invalid-feedback">
@@ -50,7 +50,7 @@
 
                                                     <div class="form-group">
                                                         <label for="partisipasiKegiatan">Partisipasi/Jabatan</label>
-                                                        <select class="custom-select partisipasiKegiatan select2" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
+                                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
                                                             <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
                                                         </select>
                                                         <div class=" invalid-feedback">
@@ -71,7 +71,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="tanggalKegiatan">Tanggal Pelaksanaan</label>
-                                                        <input type="date" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
+                                                        <input type="text" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
                                                         <div class=" invalid-feedback">
                                                             Tanggal pelaksanaan kegiatan harap diisi
                                                         </div>
@@ -79,6 +79,10 @@
                                                     <div class="form-group">
                                                         <label for="uploadBukti">Upload Bukti</label>
                                                         <input type="file" class="form-control-file btn" id="uploadBukti" name="uploadBukti" required>
+                                                        <div class=" invalid-feedback">
+                                                            Bukti kegiatan harap diisi
+                                                        </div>
+                                                        <small>file upload berformat .pdf dengan maksimal 2048Kb</small>
                                                         <div class=" invalid-feedback">
                                                             Bukti kegiatan harap diisi
                                                         </div>

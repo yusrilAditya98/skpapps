@@ -4,14 +4,14 @@
         <div class="section-header">
             <h1>Validasi Pengajuan Lpj Kegiatan</h1>
         </div>
-        <?= $this->session->flashdata('message'); ?>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Daftar Beasiswa Mahasiwa</h4>
                     </div>
-
+                    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+                    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-2">
@@ -51,14 +51,9 @@
                                                     <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                 <?php endif; ?></th>
                                             <td>
-                                                <div class="row">
-                                                    <div class="col-lg-4">
-                                                        <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success"><i class="fas fa-check"></i></a>
-                                                    </div>
-                                                    <div class="col-lg-4">
-                                                        <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger"><i class="fas fa-times"></i></a>
-                                                    </div>
-                                                </div>
+                                                <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success"><i class="fas fa-check"></i></a>
+                                                <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger"><i class="fas fa-times"></i></a>
+
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

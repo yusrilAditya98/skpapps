@@ -5,13 +5,15 @@
  *
  */
 // cek detai revisian
+var url = $(location).attr("href");
+var segments = url.split("/");
 $('.uang').mask('000.000.000', {
 	reverse: true
 });
 $('.detail-revisi').on('click', function () {
 	let id = $(this).data('id');
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/validasiKegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/API_skp/validasiKegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -21,6 +23,11 @@ $('.detail-revisi').on('click', function () {
 		}
 	})
 
+})
+
+$('.detail-revisi-rancangan').on('click', function () {
+	let catatan = $(this).data('catatan')
+	$('.d-catatan').html(catatan)
 })
 
 $('.detail-kegiatan').on('click', function (e) {
@@ -33,27 +40,26 @@ $('.detail-kegiatan').on('click', function (e) {
 	$('.temp-class').remove()
 
 	$.ajax({
-		url: segments[0] + '/skpapps/API_skp/infoKegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/API_skp/infoKegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(jenis)
 			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
-			$('.k-nim').val(data.kegiatan['id_penanggung_jawab'])
+			$('.k-nim').val(data.kegiatan['nama_lembaga'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
 			$('.k-dana').val(data.kegiatan['dana_kegiatan'])
 			if (jenis == 'proposal') {
 				$('.k-dana-cair').val(data.kegiatan['dana_proposal'])
-				$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
-				$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
-				$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
-				$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
+				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
+				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
+				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
+				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
 			} else if (jenis == 'lpj') {
 				$('.k-dana-cair').val(data.kegiatan['dana_lpj'])
-				$('.k-proposal').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
-				$('.k-berita-p').attr('href', segments[0] + '/skpapps/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
-				$('.k-gmbr-1').attr('href', segments[0] + '/skpapps/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
-				$('.k-gmbr-2').attr('href', segments[0] + '/skpapps/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_2'])
+				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
+				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
+				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
+				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_2'])
 			}
 
 			for (var i in data.dana) {
@@ -90,9 +96,33 @@ $('.detail-kegiatan').on('click', function (e) {
 $(document).ready(function (e) {
 	$('#dataTabelProposal').DataTable({
 		initComplete: function () {
+			var select;
 			this.api().columns([2, 4]).every(function () {
 				var column = this;
-				var select = $('<select class="form-control-sm selectric" ><option value="">--pilih--</option></select>')
+				select = $('<select class="form-control-sm selectric" ><option value="">pilih</option></select>')
+					.prependTo($('.kategori-filter'))
+					.on('change', function () {
+						var val = $.fn.dataTable.util.escapeRegex(
+							$(this).val()
+						);
+						column
+							.search(val ? '^' + val + '$' : '', true, false)
+							.draw();
+					});
+				column.data().unique().sort().each(function (d, j) {
+					select.append('<option value="' + d + '">' + d + '</option>')
+				});
+
+
+			});
+		}
+	});
+	$('#table-user').DataTable({
+		initComplete: function () {
+			var select;
+			this.api().columns([3, 4]).every(function () {
+				var column = this;
+				select = $('<select class="form-control-sm" ><option value="">pilih</option></select>')
 					.appendTo($(column.footer()).empty())
 					.on('change', function () {
 						var val = $.fn.dataTable.util.escapeRegex(
@@ -105,6 +135,8 @@ $(document).ready(function (e) {
 				column.data().unique().sort().each(function (d, j) {
 					select.append('<option value="' + d + '">' + d + '</option>')
 				});
+
+
 			});
 		}
 	});
@@ -132,7 +164,6 @@ $(document).ready(function (e) {
 			});
 		}
 	});
-
 });
 
 function copyDiv(e) {
@@ -148,7 +179,9 @@ function copyDiv(e) {
 	if (tombolValid.textContent != 'Selesai' && tombolValid.textContent != 'Tidak bisa validasi' && tombolValid.textContent != 'Belum bisa validasi') {
 
 		for (var i = 0; i < cldrnvalid.length; i++) {
-			cldrnvalid[i].classList.add('temp-class')
+			cldrnvalid[0].classList.add('temp-class')
+			cldrnvalid[1].classList.add('temp-class')
+			cldrnvalid[1].classList.add('cek-validasi')
 			$('.t-validasi').append(cldrnvalid[0], cldrnvalid[1])
 		}
 	}
@@ -178,4 +211,324 @@ $(document).ready(function (e) {
 	});
 
 });
+
+let nama_lembaga = [];
+let dana_pagu = [];
+let dana_terserap = [];
+let dana_sisa = [];
+let data_lembaga = [];
+let data_serapan = [];
+let setDataSerapan = [];
+let nama_label = ['Dana Pagu', 'Dana Terserap', 'Dana Sisa'];
+$(document).ready(function () {
+	let tahun = $('#tahun_anggran').val()
+	$('.tahun-serapan').html(tahun)
+
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/laporanSerapan/' + tahun,
+		method: "get",
+		dataType: "json",
+		success: function (data) {
+
+			let temp_pagu = [];
+			let temp_sisa = [];
+
+			for (var i in data) {
+				nama_lembaga.push(data[i].nama_lembaga);
+				dana_pagu.push(data[i].dana_pagu);
+
+			}
+			data_serapan[0] = dana_pagu;
+
+			let anggaran = []
+			for (var i in data) {
+				dana_terserap.push(data[i].dana_terserap);
+
+			}
+			data_serapan[1] = dana_terserap;
+
+			for (var i in data) {
+				dana_sisa.push(data[i].dana_sisa);
+
+			}
+			data_serapan[2] = dana_sisa;
+
+
+			let color = ["#2d98da", "#20bf6b", "#fd9644"];
+			let count = 0;
+
+			for (var i in nama_label) {
+				setDataSerapan.push({
+					label: nama_label[i],
+					type: "bar",
+					backgroundColor: color[i],
+					data: data_serapan[i]
+				})
+
+			}
+
+			const canvasAnggaran = document.querySelector("#laporan-serapan");
+			if (canvasAnggaran) {
+				const grafikAnggaran = canvasAnggaran.getContext("2d");
+				new Chart(grafikAnggaran, {
+					type: "bar",
+					data: {
+						labels: nama_lembaga,
+						datasets: setDataSerapan
+					},
+					options: {
+						responsive: false,
+						maintainAspectRatio: false,
+						layout: {
+							padding: {
+								left: 0,
+								right: 0,
+								top: 10,
+								bottom: 0
+							}
+						},
+						scales: {
+							xAxes: [{
+								time: {
+									unit: "year"
+								},
+								gridLines: {
+									display: true,
+									drawBorder: false
+								},
+								ticks: {
+									min: 2,
+									max: 0,
+									maxTicksLimit: 7
+								},
+								maxBarThickness: 70
+							}],
+							yAxes: [{
+								ticks: {
+									min: 0,
+									max: 5000000,
+									maxTicksLimit: 20,
+									padding: 30
+									// Include a dollar sign in the ticks
+								},
+								gridLines: {
+									color: "rgb(220, 221, 225)",
+									zeroLineColor: "rgb(234, 236, 244)",
+									drawBorder: false,
+									borderDash: [5, 5],
+									zeroLineBorderDash: [2]
+								}
+							}]
+						},
+						legend: {
+							display: true
+						},
+						tooltips: {
+							titleMarginBottom: 10,
+							titleFontColor: "#6e707e",
+							titleFontSize: 14,
+							backgroundColor: "rgb(255,255,255)",
+							bodyFontColor: "#858796",
+							borderColor: "#dddfeb",
+							borderWidth: 1,
+							xPadding: 1,
+							yPadding: 6,
+							displayColors: false,
+							caretPadding: 10
+						}
+					}
+				});
+			}
+		},
+		error: function (data) {
+
+		}
+	});
+});
+
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/penyebaranSkp/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let skp = data['poin_skp'];
+			var data = {
+				datasets: [{
+					data: [skp['kurang'][0].jumlah, skp['cukup'][0].jumlah, skp['baik'][0].jumlah, skp['sangat_baik'][0].jumlah, skp['dengan_pujian'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#f9ca24",
+						"#2d98da",
+						"#20bf6b",
+						"#e056fd",
+					],
+
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Kurang',
+					'Cukup',
+					'Baik',
+					'Sangat Baik',
+					'Dengan Pujian'
+				],
+
+			};
+
+			const canvas_kmhs = document.querySelector("#sebaran-skp");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+
+		}
+	})
+
+
+})
+
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/kegiatanAkademik/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let ka = data['kegiatan_akademik'];
+			var data = {
+				datasets: [{
+					data: [ka['belum_terlaksana'][0].jumlah, ka['sedang_terlaksana'][0].jumlah, ka['sudah_terlaksana'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#f9ca24",
+						"#2d98da",
+					],
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Belum Terlaksana',
+					'Sedang Terlaksana',
+					'Sudah Terlaksana',
+				],
+			};
+			const canvas_kmhs = document.querySelector("#kegiatan-akademik");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+		}
+	})
+})
+
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/pesertaKegiatanAkademik/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let ka = data['peserta_kegiatan_akademik'];
+			var data = {
+				datasets: [{
+					data: [ka['tidak_hadir'][0].jumlah, ka['hadir'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#2d98da",
+					],
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Peserta Tidak Hadir',
+					'Peserta Hadir',
+				],
+			};
+			const canvas_kmhs = document.querySelector("#peserta-kegiatan-akademik");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+		}
+	})
+})
+
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/rekapUser/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let ru = data['rekap_user'];
+			var data = {
+				datasets: [{
+					data: [ru['mahasiswa'][0].jumlah, ru['lembaga'][0].jumlah, ru['pimpinan'][0].jumlah, ru['karyawan'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#f9ca24",
+						"#2d98da",
+						"#20bf6b"
+					],
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Mahasiswa',
+					'Lembaga',
+					'Pimpinan',
+					'Karyawan (Kemahasiswaan & Akademik & Keuangan & PSIK & Admin)',
+				],
+			};
+			const canvas_kmhs = document.querySelector("#rekap-user");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+		}
+	})
+})
 "use strict";

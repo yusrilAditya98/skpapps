@@ -36,5 +36,17 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Rekapitulasi Jumlah User</h4>
+                    </div>
+                    <div class="card-body chart mb-5 mt-5">
+                        <canvas id="rekap-user" style="width: 100%; height: 25rem;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 </div>

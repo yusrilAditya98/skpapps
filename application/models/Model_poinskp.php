@@ -72,7 +72,7 @@ class Model_poinskp extends CI_Model
     {
         $this->db->select('sp.bobot,ps.*,t.*,p.*,jk.*,bk.*,st.id_semua_tingkatan,m.nama');
         $this->db->from('poin_skp as ps');
-        $this->db->join('semua_prestasi as sp', 'ps.id_prestasi=sp.id_semua_prestasi', 'left');
+        $this->db->join('semua_prestasi as sp', 'ps.prestasiid_prestasi=sp.id_semua_prestasi', 'left');
         $this->db->join('semua_tingkatan as st', 'st.id_semua_tingkatan=sp.id_semua_tingkatan', 'left');
         $this->db->join('jenis_kegiatan as jk', 'st.id_jenis_kegiatan=jk.id_jenis_kegiatan', 'left');
         $this->db->join('bidang_kegiatan as bk', 'bk.id_bidang=jk.id_bidang', 'left');
@@ -105,9 +105,101 @@ class Model_poinskp extends CI_Model
     {
         $this->db->select_sum("sp.bobot");
         $this->db->from("poin_skp as ps");
-        $this->db->join('semua_prestasi as sp', 'sp.id_semua_prestasi = ps.id_prestasi', 'left');
+        $this->db->join('semua_prestasi as sp', 'sp.id_semua_prestasi = ps.prestasiid_prestasi', 'left');
         $this->db->where('ps.nim', $nim);
         $this->db->where('ps.validasi_prestasi', 1);
         return $this->db->get()->row_array();
+    }
+    public function getJumlahKategoriSkp()
+    {
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp >', 300);
+        $data['dengan_pujian'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <=', 300);
+        $this->db->where('m.total_poin_skp >=', 201);
+        $data['sangat_baik'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <=', 200);
+        $this->db->where('m.total_poin_skp >=', 151);
+        $data['baik'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <=', 150);
+        $this->db->where('m.total_poin_skp >=', 100);
+        $data['cukup'] = $this->db->get()->result_array();
+
+        $this->db->select('count(m.nim) as jumlah');
+        $this->db->from('mahasiswa as m');
+        $this->db->where('m.total_poin_skp <', 100);
+        $this->db->where('m.total_poin_skp >=', 0);
+
+        $data['kurang'] = $this->db->get()->result_array();
+        return $data;
+    }
+    public function getKegiatanAkademik()
+    {
+        $this->db->select('count(km.id_kuliah_tamu) as jumlah');
+        $this->db->from('kuliah_tamu as km');
+        $this->db->where('km.status_terlaksana', 0);
+        $data['belum_terlaksana'] = $this->db->get()->result_array();
+
+        $this->db->select('count(km.id_kuliah_tamu) as jumlah');
+        $this->db->from('kuliah_tamu as km');
+        $this->db->where('km.status_terlaksana', 1);
+        $data['sudah_terlaksana'] = $this->db->get()->result_array();
+
+        $this->db->select('count(km.id_kuliah_tamu) as jumlah');
+        $this->db->from('kuliah_tamu as km');
+        $this->db->where('km.status_terlaksana', 2);
+        $data['sedang_terlaksana'] = $this->db->get()->result_array();
+
+        return $data;
+    }
+
+    public function getPesertaKegiatanAkademik()
+    {
+        $this->db->select('count(pkt.id_peserta_kuliah_tamu) as jumlah');
+        $this->db->from('peserta_kuliah_tamu as pkt');
+        $this->db->where('pkt.kehadiran', 0);
+        $data['tidak_hadir'] = $this->db->get()->result_array();
+
+        $this->db->select('count(pkt.id_peserta_kuliah_tamu) as jumlah');
+        $this->db->from('peserta_kuliah_tamu as pkt');
+        $this->db->where('pkt.kehadiran', 1);
+        $data['hadir'] = $this->db->get()->result_array();
+
+        return $data;
+    }
+
+    public function getRekapUser()
+    {
+        $this->db->select('count(u.id_user) as jumlah');
+        $this->db->from('user as u');
+        $this->db->where('u.user_profil_kode', 1);
+        $data['mahasiswa'] = $this->db->get()->result_array();
+
+        $this->db->select('count(u.id_user) as jumlah');
+        $this->db->from('user as u');
+        $this->db->where_in('u.user_profil_kode', [2,3]);
+        $data['lembaga'] = $this->db->get()->result_array();
+        
+        $this->db->select('count(u.id_user) as jumlah');
+        $this->db->from('user as u');
+        $this->db->where_in('u.user_profil_kode', [4,6,7,8,9]);
+        $data['karyawan'] = $this->db->get()->result_array();
+        
+        $this->db->select('count(u.id_user) as jumlah');
+        $this->db->from('user as u');
+        $this->db->where('u.user_profil_kode', 5);
+        $data['pimpinan'] = $this->db->get()->result_array();
+
+        return $data;
     }
 }
