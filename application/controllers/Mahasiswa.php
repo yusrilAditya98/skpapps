@@ -173,9 +173,14 @@ class Mahasiswa extends CI_Controller
     {
         $data['title'] = "Pengajuan";
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), null, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
-
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
@@ -307,24 +312,8 @@ class Mahasiswa extends CI_Controller
             // insert data dokumentasi
             $gambar['id_kegiatan'] = $kegiatan['id_kegiatan'];
             $this->kegiatan->insertDokumentasiKegiatan($gambar);
-            // insert dana kegiatan
-            $dana = [
-                1 => $this->input->post('dana1'),
-                2 => $this->input->post('dana2'),
-                3 => $this->input->post('dana3'),
-                4 => $this->input->post('dana4'),
-                5 => $this->input->post('dana5')
-            ];
-            $data_dana = [];
-            foreach ($dana as $d) {
-                if ($d != 0) {
-                    $data_dana[$d] = [
-                        'id_kegiatan' => $kegiatan['id_kegiatan'],
-                        'id_sumber_dana' => $d
-                    ];
-                }
-            }
-            $this->kegiatan->insertDanaKegiatan($data_dana);
+
+
             // insert anggota kegiatan
             $data_anggota = [];
             foreach ($data['mahasiswa'] as $m) {
@@ -421,7 +410,7 @@ class Mahasiswa extends CI_Controller
             $this->load->view("template/footer");
         } else {
             $jumlahAnggota = $this->input->post('jumlahAnggota');
-            if ($data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
+            if ($data['jenis_revisi'] == 0 || $data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
                 if ($jumlahAnggota <= 0) {
                     $this->session->set_flashdata('failed', 'Anggota kegiatan tidak boleh kosong');
                     redirect("Mahasiswa/daftarPengajuanProposal");
@@ -531,33 +520,6 @@ class Mahasiswa extends CI_Controller
             if ($gambar) {
                 $this->kegiatan->updateDokumentasiKegiatan($gambar, $id_kegiatan);
             }
-            if ($this->input->post('jenis_revisi') != 5) {
-                $dana = [
-                    0 => $this->input->post('dana1'),
-                    1 => $this->input->post('dana2'),
-                    2 => $this->input->post('dana3'),
-                    3 => $this->input->post('dana4'),
-                    4 => $this->input->post('dana5')
-                ];
-                $data_dana = [];
-                foreach ($dana as $d) {
-                    if ($d != 0) {
-                        $data_dana[$d] = [
-                            'id_kegiatan' => $id_kegiatan,
-                            'id_sumber_dana' => $d
-                        ];
-                    }
-                }
-
-                if (!$data_dana) {
-                    $this->session->set_flashdata('failed', 'Dana kegiatan tidak boleh kosong');
-                    redirect("Mahasiswa/pengajuanProposal");
-                }
-                // insert dana kegiatan
-                $this->db->delete('kegiatan_sumber_dana', ['id_kegiatan' => $id_kegiatan]);
-                $this->kegiatan->insertDanaKegiatan($data_dana);
-                // insert anggota kegiatan
-            }
 
             if ($data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
                 $data_anggota = [];
@@ -601,7 +563,14 @@ class Mahasiswa extends CI_Controller
     {
         $data['title'] = "Pengajuan";
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
+        }
+
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
 
         $this->load->view("template/header", $data);

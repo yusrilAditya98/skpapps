@@ -15,8 +15,14 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-lg-12">
-                                <a href="<?= base_url('admin/tambahUser') ?>" class="btn btn-success float-right pl-3 text-white">
+                                <a href="<?= base_url('admin/tambahUser') ?>" class="btn btn-success float-right ml-3 text-white">
                                     <i class="fas fa-plus"></i><span> Tambah User</span>
+                                </a>
+                                <a href="<?= base_url('/assets/import_data/Mahasiswa.xls') ?>" class="btn btn-icon btn-primary float-right ml-3">
+                                    <i class="fas fa-download"></i> Download Template Mahasiswa
+                                </a>
+                                <a href="#" data-toggle="modal" data-target=".modalImportData" class="btn btn-warning float-right ml-3 text-white">
+                                    <i class="fas fa-plus"></i><span> Import Data Mahasiswa</span>
                                 </a>
                             </div>
                         </div>
@@ -73,3 +79,29 @@
         </div>
     </section>
 </div>
+
+<!-- Awal Modal Import Data Mahasiswa -->
+<div class=" modal fade bd-example-modal-lg modalImportData" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog modal-dialog-scrollable modal-md">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header bg-blue">
+                                                                    <h5 class="modal-title clr-white" id="exampleModalLabel">Import Data Mahasiswa</span></h5>
+                                                                    <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <div class="card">
+                                                                        <form enctype="multipart/form-data" action="<?= base_url('admin/importData')?>" method="post">
+                                                                            <div class="form-group">
+                                                                                <label for="File">File</label>
+                                                                                <input type="file" class="form-control-file" id="import-data" name="import-data">
+                                                                            </div>
+                                                                            <button type="submit" class="btn btn-primary float-right">Import Data Mahasiswa</button>
+                                                                        </form>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                        </div>
+                        <!-- Akhir Modeal Import Data Mahasiswa -->

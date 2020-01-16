@@ -175,4 +175,9 @@ class Auth extends CI_Controller
     {
         $this->load->view('error403');
     }
+
+    public function phpInfo()
+    {
+        phpinfo();
+    }
 }

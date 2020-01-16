@@ -225,7 +225,14 @@ class Kegiatan extends CI_Controller
         $data['title'] = "Pengajuan";
         $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), null, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'));
+        }
+
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -359,25 +366,7 @@ class Kegiatan extends CI_Controller
             // insert data dokumentasi
             $gambar['id_kegiatan'] = $kegiatan['id_kegiatan'];
             $this->kegiatan->insertDokumentasiKegiatan($gambar);
-            // insert dana kegiatan
-            $dana = [
-                1 => $this->input->post('dana1'),
-                2 => $this->input->post('dana2'),
-                3 => $this->input->post('dana3'),
-                4 => $this->input->post('dana4'),
-                5 => $this->input->post('dana5')
-            ];
-            $data_dana = [];
-            foreach ($dana as $d) {
-                if ($d != 0) {
-                    $data_dana[$d] = [
-                        'id_kegiatan' => $kegiatan['id_kegiatan'],
-                        'id_sumber_dana' => $d
-                    ];
-                }
-            }
-            $this->kegiatan->insertDanaKegiatan($data_dana);
-            // insert anggota kegiatan
+
 
             $data_anggota = [];
             foreach ($data['mahasiswa'] as $m) {
@@ -454,7 +443,7 @@ class Kegiatan extends CI_Controller
         } else {
             $jumlahAnggota = $this->input->post('jumlahAnggota');
 
-            if ($data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
+            if ($data['jenis_revisi'] == 0 || $data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
                 if ($jumlahAnggota <= 0) {
                     $this->session->set_flashdata('failed', 'Anggota kegiatan tidak boleh kosong');
                     redirect("Kegiatan/daftarPengajuanProposal");
@@ -630,7 +619,14 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = "Pengajuan";
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
+
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan($this->session->userdata('username'), 3);
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
@@ -926,7 +922,13 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, null, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);
@@ -941,7 +943,13 @@ class Kegiatan extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $data['notif'] = $this->_notif();
         $this->load->view("template/header", $data);

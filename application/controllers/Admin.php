@@ -27,7 +27,8 @@ class Admin extends CI_Controller
     {
         $data['title'] = "Dashboard";
         $data['jumlah_mahasiswa'] = count($this->db->get('mahasiswa')->result_array());
-        $data['jumlah_lembaga'] = count($this->db->get_where('user', ['user_profil_kode' => 2])->result_array());
+        $this->db->where_in('user_profil_kode', [2, 3]);
+        $data['jumlah_lembaga'] = count($this->db->get('user')->result_array());
         $this->template($data);
         $this->load->view("dashboard/dashboard_admin");
         $this->load->view("template/footer");
@@ -216,4 +217,61 @@ class Admin extends CI_Controller
         header('Content-type:application/json');
         echo json_encode($data);
     }
+    public function importData()
+    {
+        // upload file xls
+        $target = basename($_FILES['import-data']['name']);
+        if ($_FILES['import-data']['name']) {
+            $config['allowed_types'] = 'xls';
+            $config['max_size']     = '2048'; //kb
+            $config['upload_path'] = './berkas/';
+            $config['overwrite'] = true;
+            $config['file_name'] = $_FILES['import-data']['name'];
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            $this->upload->do_upload('import-data');
+        };
+
+        // beri permisi agar file xls dapat di baca
+        chmod('./berkas/' .  $target, 0777);
+        // mengambil isi file xls
+        $path = './berkas/' .  $target;
+        $data = new Spreadsheet_Excel_Reader($path, false);
+        // menghitung jumlah baris data yang ada
+        $jumlah_baris = $data->rowcount($sheet_index = 0);
+        for ($i = 3; $i <= $jumlah_baris; $i++) {
+            // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
+            $result = [
+                "nim" => str_replace("\0", "", $data->val($i, 2)),
+                "nama" => str_replace("\0", "", $data->val($i, 3)),
+                "total_poin_skp" => intval(str_replace("\0", "", $data->val($i, 4))),
+                "alamat_kos" => str_replace("\0", "", $data->val($i, 5)),
+                "alamat_rumah" => str_replace("\0", "", $data->val($i, 6)),
+                "email" => str_replace("\0", "", $data->val($i, 7)),
+                "kode_prodi" => intval($data->val($i, 8)),
+                "nomor_hp" => str_replace("\0", "", $data->val($i, 9)),
+            ];
+            $user = [
+                "nama" => str_replace("\0", "", $data->val($i, 3)),
+                "username" => str_replace("\0", "", $data->val($i, 2)),
+                "password" => str_replace("\0", "", password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
+                "user_profil_kode" => 1,
+                'is_active' => 1
+            ];
+            if ($result['nim'] != "" && $result['nama'] != "") {
+                // input data ke database (table data_pegawai)
+                $this->db->insert('mahasiswa', $result);
+                $this->db->insert('user', $user);
+            }
+        }
+        // hapus kembali file .xls yang di upload tadi
+        unlink($path);
+        // alihkan halaman ke index.php
+        $this->session->set_flashdata('message', 'Impor data Mahasiswa berhasil');
+        redirect('Admin/ManagementUser');
+    }
+
+    // pimpinan FEB
+    public function daftarPimpinan()
+    { }
 }

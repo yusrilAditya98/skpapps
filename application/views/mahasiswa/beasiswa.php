@@ -30,7 +30,7 @@
 															<div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
 														<?php endif; ?>
 													</h5>
-													<p>Beasiswa <span><?= $p['jenis_beasiswa'] ?></span> diterima pada tanggal <span><?= $p['tahun_menerima'] ?></span> dan berakhir pada tanggal <span><?= $p['lama_menerima'] ?></span></p>
+													<p>Beasiswa <span><?= $p['jenis_beasiswa'] ?></span> diterima pada tanggal <span><?= date("d-m-Y", strtotime($p['tahun_menerima']))  ?></span> dan berakhir pada tanggal <span><?= date("d-m-Y", strtotime($p['lama_menerima']))  ?></span> dengan nominal anggaran beasiswa sebesar Rp.<span><?= number_format($p['nominal'], 0, ',', '.') ?></span></p>
 												</div>
 											</li>
 										<?php endforeach; ?>
@@ -63,7 +63,7 @@
 											</div>
 											<div class="form-group">
 												<label for="nimMahasiswa">NIM</label>
-												<input type="text" required name="nimMahasiswa" class="form-control" id="nimMahasiswa" value="<?= $this->session->userdata('username') ?>">
+												<input type="text" required name="nimMahasiswa" class="form-control" id="nimMahasiswa" value="<?= $this->session->userdata('username') ?>" readonly>
 												<div class="invalid-feedback">
 													Nim harap di Isi
 												</div>

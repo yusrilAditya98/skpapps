@@ -77,7 +77,11 @@ class Kemahasiswaan extends CI_Controller
 
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar");
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/daftar_validasi_rancangan");
         $this->load->view("template/footer");
     }
@@ -93,7 +97,11 @@ class Kemahasiswaan extends CI_Controller
         $data['detail_rancangan'] = $this->kemahasiswaan->detailRancangan($id_lembaga, $tahun_pengajuan);
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar");
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/detail_rancangan_kegiatan");
         $this->load->view("modal/modal_revisi");
         $this->load->view("template/footer");
@@ -145,11 +153,21 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, null, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/daftar_validasi_proposal");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
@@ -162,11 +180,21 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/daftar_validasi_lpj");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
@@ -178,11 +206,24 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_poinskp', 'poinskp');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
-        $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
+        if ($this->input->get('start_date')  || $this->input->get('end_date')  || $this->input->get('validasi') != null) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $validasi = $this->input->get('validasi');
+            $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp(null, null, $start_date, $end_date, $validasi);
+        } else {
+            $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
+        }
+
+
         $data['title'] = 'Validasi';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/daftar_validasi_poin_skp", $this->dataPengajuanSkp);
         $this->load->view("template/footer");
     }
@@ -305,7 +346,11 @@ class Kemahasiswaan extends CI_Controller
 
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/daftar_anggaran");
         $this->load->view("template/footer");
     }
@@ -379,7 +424,11 @@ class Kemahasiswaan extends CI_Controller
 
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("keuangan/laporan_serapan", $data);
         $this->load->view("template/footer");
     }
@@ -604,7 +653,11 @@ class Kemahasiswaan extends CI_Controller
         $data['title'] = 'Poin Skp';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/poin_skp_mhs");
         $this->load->view("template/footer");
     }
@@ -613,12 +666,26 @@ class Kemahasiswaan extends CI_Controller
     public function beasiswa()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        if ($this->input->get('start_date')  || $this->input->get('end_date')  || $this->input->get('validasi') != null) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $validasi = $this->input->get('validasi');
+            $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa($start_date, $end_date, $validasi);
+        } else {
+            $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        }
+
+
+
         $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Beasiswa';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/daftar_beasiswa");
         $this->load->view("template/footer");
     }
@@ -636,7 +703,7 @@ class Kemahasiswaan extends CI_Controller
 
     public function kategori()
     {
-        $data['title'] = 'Kategori Kegiatan';
+        $data['title'] = 'Kategori';
         $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
         $this->db->select('id_jenis_kegiatan, jenis_kegiatan, nama_bidang');
         $this->db->from('jenis_kegiatan');
@@ -660,7 +727,11 @@ class Kemahasiswaan extends CI_Controller
 
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
-        $this->load->view("template/sidebar", $data);
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
         $this->load->view("kemahasiswaan/kategori");
         $this->load->view("template/footer");
     }
@@ -996,4 +1067,12 @@ class Kemahasiswaan extends CI_Controller
         redirect('kemahasiswaan/kategori');
     }
     /**Akhir method kahris */
+
+    public function exportBeasiswa()
+    {
+        $this->load->model("Model_kemahasiswaan", "kemahasiswaan");
+        $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        $data['title'] = 'Beasiswa';
+        $this->load->view("kemahasiswaan/export_beasiswa", $data);
+    }
 }

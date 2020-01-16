@@ -1,7 +1,7 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-if (segments[4] == "akademik") {
+if (segments[4] == "Akademik") {
 	$(window).on('load', function () {
 		console.log(segments[0] + segments[3] + '/siruas-api/api/ruangan')
 		$.ajax({

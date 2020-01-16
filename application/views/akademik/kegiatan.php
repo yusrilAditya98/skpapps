@@ -4,7 +4,7 @@
         <div class="section-header">
             <h1>Kegiatan</h1>
         </div>
-        <?= $this->session->flashdata('message'); ?>"
+        <?= $this->session->flashdata('message'); ?>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -14,7 +14,7 @@
                     <div class="card-body">
                         <div class="row mb-3">
                             <div class="col-lg-12">
-                                <a href="<?= base_url('akademik/tambahKegiatan') ?>" class="btn btn-primary float-right pl-3 text-white">
+                                <a href="<?= base_url('Akademik/tambahKegiatan') ?>" class="btn btn-primary float-right pl-3 text-white">
                                     <i class="fas fa-plus"></i><span> Tambah Kegiatan</span>
                                 </a>
                             </div>
@@ -41,22 +41,22 @@
                                             <td><?= $k['pemateri'] ?></td>
                                             <td><?= $k['lokasi'] ?></td>
                                             <?php
-                                                if ($k['status_terlaksana'] == 0) {
-                                                    echo '<td class="text-danger">Belum Terlaksana</td>';
-                                                } else if ($k['status_terlaksana'] == 1) {
-                                                    echo '<td class="text-success">Sudah Terlaksana</td>';
-                                                } else {
-                                                    echo '<td class="text-info">Sedang Berlangsung</td>';
-                                                }
-                                                ?>
+                                            if ($k['status_terlaksana'] == 0) {
+                                                echo '<td class="text-danger">Belum Terlaksana</td>';
+                                            } else if ($k['status_terlaksana'] == 1) {
+                                                echo '<td class="text-success">Sudah Terlaksana</td>';
+                                            } else {
+                                                echo '<td class="text-info">Sedang Berlangsung</td>';
+                                            }
+                                            ?>
                                             <td>
                                                 <?php
-                                                    if ($k['status_terlaksana'] == 2) {
-                                                        echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>
+                                                if ($k['status_terlaksana'] == 2) {
+                                                    echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>

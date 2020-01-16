@@ -12,6 +12,60 @@
                         <h4>Permintaan Pengajuan Poin Skp</h4>
                     </div>
                     <div class="card-body">
+                        <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" class="form-control">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Jenis Validasi</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-feather-alt"></i>
+                                                </div>
+                                            </div>
+                                            <select class="form-control" name="validasi" id="validasi-skp">
+                                                <option value="" selected>--Jenis Validasi--</option>
+                                                <option value="1">Valid</option>
+                                                <option value="0">Proses</option>
+                                                <option value="2">Revisi</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-primary">submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </form>
                         <div class="table-responsive">
 
                             <table class="table table-striped" id="table-1">
@@ -31,7 +85,7 @@
                                     <?php foreach ($poinskp as $p) : ?>
                                         <tr>
                                             <td><?= $index++; ?></td>
-                                            <td><?= $p['tgl_pengajuan'] ?></td>
+                                            <td><?= date("d-m-Y", strtotime($p['tgl_pengajuan']))  ?></td>
                                             <td><?= $p['nim'] ?></td>
                                             <td><?= $p['nama'] ?> </td>
                                             <td><a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" class="detailSkp"><?= $p['nama_kegiatan'] ?></a></td>

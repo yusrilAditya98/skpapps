@@ -70,7 +70,7 @@
                     <div class="card-header">
                         <h4>Data Penyebaran Poin skp</h4>
                         <div class="card-header-action">
-                            <a href="<?= base_url('Pimpinan/poin_skp') ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
+                            <a href="<?= base_url('Pimpinan/poinSkp') ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="card-body chart mb-5 mt-5">

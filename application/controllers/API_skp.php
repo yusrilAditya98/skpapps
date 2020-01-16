@@ -252,9 +252,6 @@ class API_skp extends CI_Controller
     // menampilkan jumlah kegiatan
     public function dataJumlahKegiatan($id_lembaga)
     {
-        if ($this->session->userdata('user_profil_kode') != 4) {
-            redirect('Auth/blocked');
-        }
         $this->load->model("Model_kemahasiswaan", 'kemahasiswaan');
         $this->kondisi = $this->input->get('kondisi');
         $this->tahun = $this->input->get('tahun');
@@ -451,5 +448,37 @@ class API_skp extends CI_Controller
     {
         $data = $this->db->get_where('beasiswa', ['id' => $id_beasiswa])->row_array();
         echo json_encode($data);
+    }
+
+    public function kegiatanAkademik()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $data['kegiatan_akademik'] = $this->poinskp->getKegiatanAkademik();
+        echo json_encode($data);
+    }
+
+    public function pesertaKegiatanAkademik()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $data['peserta_kegiatan_akademik'] = $this->poinskp->getPesertaKegiatanAkademik();
+        echo json_encode($data);
+    }
+
+    public function rekapUser()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $data['rekap_user'] = $this->poinskp->getRekapUser();
+        echo json_encode($data);
+    }
+    public function exportLaporanSerapan($tahun)
+    {
+        $this->load->model('Model_keuangan', 'keuangan');
+        $data['title'] = 'Anggaran';
+        $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+        $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
+        $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+        $data['tahun_saat_ini'] = $this->input->post('tahun');
+        $data['total'] = $this->_totalDana($data['laporan']);
+        $this->load->view("keuangan/export_keuangan", $data);
     }
 }

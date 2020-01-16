@@ -31,7 +31,7 @@
                     </div>
                     <div class="col-3" style="float:right">
                         <div class="font-weight-bold text-capitalize">
-                            Kode Prog./Keg./Sub. Keg./Mak. <br>
+
                             ................................................... <br>
                             Bukti Kas No : <br>
                             Tahun Anggaran : <?= $kegiatan['periode'] ?><br>

@@ -184,12 +184,21 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.id_lembaga', $id_lembaga);
         return $this->db->get()->result_array();
     }
-    public function getBeasiswa()
+    public function getBeasiswa($start_date = null, $end_date = null, $validasi = null)
     {
+
         $this->db->select('b.*,p.*,m.nama');
         $this->db->from('penerima_beasiswa as p');
         $this->db->join('beasiswa as b', 'b.id=p.id_beasiswa', 'left');
         $this->db->join('mahasiswa as m', 'm.nim=p.nim', 'left');
+        if ($start_date != null && $end_date != null) {
+            $this->db->where('p.tahun_menerima >=', $start_date);
+            $this->db->where('p.lama_menerima <=', $end_date);
+        }
+        if ($validasi != null) {
+            $this->db->where('p.validasi_beasiswa', $validasi);
+        }
+
         $this->db->order_by('validasi_beasiswa ASC');
         return $this->db->get()->result_array();
     }

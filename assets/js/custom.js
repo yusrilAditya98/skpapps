@@ -10,6 +10,22 @@ var segments = url.split("/");
 $('.uang').mask('000.000.000', {
 	reverse: true
 });
+
+function rubah(angka) {
+	let new_format = 0;
+	new_format = new Intl.NumberFormat('de-DE', {
+		maximumSignificantDigits: 10
+	}).format(angka)
+	return new_format
+}
+
+function rubah_date(tanggal) {
+	let current_datetime = "";
+	current_datetime = tanggal;
+	let formatted_date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+	return formatted_date;
+}
+
 $('.detail-revisi').on('click', function () {
 	let id = $(this).data('id');
 	$.ajax({
@@ -47,15 +63,16 @@ $('.detail-kegiatan').on('click', function (e) {
 			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
 			$('.k-nim').val(data.kegiatan['nama_lembaga'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
-			$('.k-dana').val(data.kegiatan['dana_kegiatan'])
+			$('.k-dana').val(rubah(data.kegiatan['dana_kegiatan']))
+			console.log()
 			if (jenis == 'proposal') {
-				$('.k-dana-cair').val(data.kegiatan['dana_proposal'])
+				$('.k-dana-cair').val(rubah(data.kegiatan['dana_proposal']))
 				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
 				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
 				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
 				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
 			} else if (jenis == 'lpj') {
-				$('.k-dana-cair').val(data.kegiatan['dana_lpj'])
+				$('.k-dana-cair').val(rubah(data.kegiatan['dana_lpj']))
 				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
 				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
 				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
@@ -94,29 +111,7 @@ $('.detail-kegiatan').on('click', function (e) {
 })
 
 $(document).ready(function (e) {
-	$('#dataTabelProposal').DataTable({
-		initComplete: function () {
-			var select;
-			this.api().columns([2, 4]).every(function () {
-				var column = this;
-				select = $('<select class="form-control-sm selectric" ><option value="">pilih</option></select>')
-					.prependTo($('.kategori-filter'))
-					.on('change', function () {
-						var val = $.fn.dataTable.util.escapeRegex(
-							$(this).val()
-						);
-						column
-							.search(val ? '^' + val + '$' : '', true, false)
-							.draw();
-					});
-				column.data().unique().sort().each(function (d, j) {
-					select.append('<option value="' + d + '">' + d + '</option>')
-				});
 
-
-			});
-		}
-	});
 	$('#table-user').DataTable({
 		initComplete: function () {
 			var select;
@@ -400,4 +395,135 @@ $(document).ready(function () {
 
 })
 
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/kegiatanAkademik/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let ka = data['kegiatan_akademik'];
+			var data = {
+				datasets: [{
+					data: [ka['belum_terlaksana'][0].jumlah, ka['sedang_terlaksana'][0].jumlah, ka['sudah_terlaksana'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#f9ca24",
+						"#2d98da",
+					],
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Belum Terlaksana',
+					'Sedang Terlaksana',
+					'Sudah Terlaksana',
+				],
+			};
+			const canvas_kmhs = document.querySelector("#kegiatan-akademik");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+		}
+	})
+})
+
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/pesertaKegiatanAkademik/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let ka = data['peserta_kegiatan_akademik'];
+			var data = {
+				datasets: [{
+					data: [ka['tidak_hadir'][0].jumlah, ka['hadir'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#2d98da",
+					],
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Peserta Tidak Hadir',
+					'Peserta Hadir',
+				],
+			};
+			const canvas_kmhs = document.querySelector("#peserta-kegiatan-akademik");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+		}
+	})
+})
+
+$(document).ready(function () {
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/rekapUser/',
+		method: "get",
+		dataType: "json",
+		startTime: performance.now(),
+		success: function (data) {
+			let ru = data['rekap_user'];
+			var data = {
+				datasets: [{
+					data: [ru['mahasiswa'][0].jumlah, ru['lembaga'][0].jumlah, ru['pimpinan'][0].jumlah, ru['karyawan'][0].jumlah],
+					backgroundColor: [
+						"#fc544b",
+						"#f9ca24",
+						"#2d98da",
+						"#20bf6b"
+					],
+				}],
+				// These labels appear in the legend and in the tooltips when hovering different arcs
+				labels: [
+					'Mahasiswa',
+					'Lembaga',
+					'Pimpinan',
+					'Karyawan (Kemahasiswaan & Akademik & Keuangan & PSIK & Admin)',
+				],
+			};
+			const canvas_kmhs = document.querySelector("#rekap-user");
+			if (canvas_kmhs) {
+				const ctx = canvas_kmhs.getContext("2d");
+				new Chart(ctx, {
+					type: 'doughnut',
+					data: data,
+					options: {
+						legend: {
+							position: "bottom",
+
+							display: true
+						},
+					}
+
+				});
+			}
+		}
+	})
+})
 "use strict";

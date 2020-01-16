@@ -16,7 +16,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-3 col-form-label">Tanggal Revisi</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control d-tgl" value="0" readonly>
+                                        <input type="date" class="form-control d-tgl" value="0" readonly>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -94,7 +94,7 @@
                     <div class="tab-pane fade" id="dana" role="tabpanel" aria-labelledby="dana-tab3">
                         <div class="form-group">
                             <label for="danaKegiatan">Besar Anggaran</label>
-                            <input type="number" class="form-control k-dana" id="danaKegiatan" name="danaKegiatan" value="" readonly>
+                            <input type="text" class="form-control k-dana uang" id="danaKegiatan" name="danaKegiatan" value="" readonly>
                             <div class="invalid-feedback">
                                 Besar anggaran harap diisi
                             </div>

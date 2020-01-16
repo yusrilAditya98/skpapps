@@ -1,9 +1,6 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-
-
-
 $('#status_user').on('change', function () {
 	console.log($('#status_user').val());
 	$('.prodi').remove()
@@ -29,6 +26,7 @@ $('#status_user').on('change', function () {
 			}
 		});
 	} else if ($('#status_user').val() == "2" || $('#status_user').val() == "3") {
+		$('#prodi-extend').html(``);
 		$('#jenis-lembaga-extend').html(``);
 		$('#ketua-lembaga-extend').html(``);
 		$('#hp-lembaga-extend').html(``);

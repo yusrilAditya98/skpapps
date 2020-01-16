@@ -2,7 +2,7 @@
 <div class="main-content">
     <section class="section">
         <div class="section-header">
-            <h1>Validasi Pengajuan Lpj Kegiatan</h1>
+            <h1>Validasi Penerima Beasiswa</h1>
         </div>
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
@@ -13,6 +13,63 @@
                     <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
                     <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
                     <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="<?= base_url('Kemahasiswaan/exportBeasiswa') ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
+                            </div>
+                        </div>
+                        <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" class="form-control">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label>Jenis Validasi</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-feather-alt"></i>
+                                                </div>
+                                            </div>
+                                            <select class="form-control" name="validasi" id="validasi-skp">
+                                                <option value="" selected>--Jenis Validasi--</option>
+                                                <option value="1">Valid</option>
+                                                <option value="0">Proses</option>
+                                                <option value="2">Revisi</option>
+                                            </select>
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-primary">submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table class="table table-striped" id="table-2">
                                 <thead>
@@ -38,11 +95,11 @@
                                             <td><?= $b['nim'] ?></td>
                                             <td><?= $b['nama'] ?></td>
                                             <td><?= $b['jenis_beasiswa'] ?></td>
-                                            <td><?= $b['tahun_menerima'] ?></td>
-                                            <td><?= $b['lama_menerima'] ?></td>
-                                            <td><?= $b['nominal'] ?></td>
-                                            <td><a href="<?= base_url() ?>assets/pdfjs/web/viewer.html?file=../../../file_bukti/beasiswa/<?= $b['bukti']  ?>">lihat</a></td>
-                                            <td><a href="<?= base_url() ?>/assets/pdfjs/web/viewer.html?file=../../../file_bukti/beasiswa/<?= $b['lampiran']  ?>">lihat</a></td>
+                                            <td><?= date("d-m-Y", strtotime($b['tahun_menerima'])) ?></td>
+                                            <td><?= date("d-m-Y", strtotime($b['lama_menerima'])) ?></td>
+                                            <td>Rp.<?= number_format($b['nominal'], 0, ',', '.'); ?></td>
+                                            <td><a target="_blank" href="<?= base_url() ?>assets/pdfjs/web/viewer.html?file=../../../file_bukti/beasiswa/<?= $b['bukti']  ?>">lihat</a></td>
+                                            <td><a target="_blank" href="<?= base_url() ?>/assets/pdfjs/web/viewer.html?file=../../../file_bukti/beasiswa/<?= $b['lampiran']  ?>">lihat</a></td>
                                             <th><?php if ($b['validasi_beasiswa'] == 0) : ?>
                                                     <div class="badge badge-primary"> Proses</div>
                                                 <?php elseif ($b['validasi_beasiswa'] == 1) : ?>

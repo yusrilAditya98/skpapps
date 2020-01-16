@@ -77,9 +77,13 @@
                                             <td><?= $i++; ?></td>
                                             <td><?= $r['tahun_pengajuan'] ?></td>
                                             <td><?= $r['nama_lembaga'] ?></td>
-                                            <td><?= $r['jumlah_kegiatan'] ?></td>
-                                            <td><?= $r['anggaran_kemahasiswaan'] ?></td>
-                                            <td><?= $r['anggaran_lembaga'] ?></td>
+                                            <?php if ($r['jumlah_kegiatan']) : ?>
+                                                <td><?= $r['jumlah_kegiatan'] ?></td>
+                                            <?php else : ?>
+                                                <td>0</td>
+                                            <?php endif; ?>
+                                            <td>Rp. <?= number_format($r['anggaran_kemahasiswaan'], 0, ',', '.')  ?></td>
+                                            <td>Rp. <?= number_format($r['anggaran_lembaga'], 0, ',', '.')   ?></td>
                                             <td>
                                                 <?php if ($r['status_rancangan'] == 1) :  ?>
                                                     <i class="fa fa-check text-success" aria-hidden="true"></i>

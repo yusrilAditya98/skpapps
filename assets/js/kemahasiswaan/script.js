@@ -1,6 +1,7 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
+
 $('.detailSkp').on("click", function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
@@ -88,7 +89,7 @@ $('.detail-kegiatan').on('click', function () {
 $('.tambahAnggaran').on('click', function () {
 	$('.d-lembaga').remove()
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/API_Skp/dataLembaga/',
+		url: segments[0] + '/' + segments[3] + '/API_skp/dataLembaga/',
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -110,7 +111,7 @@ $('.edit-anggaran').on('click', function () {
 	let id_lembaga = $(this).data('id');
 	let tahun = $(this).data('tahun');
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/API_Skp/dataAnggaran/' + id_lembaga + '?tahun=' + tahun,
+		url: segments[0] + '/' + segments[3] + '/API_skp/dataAnggaran/' + id_lembaga + '?tahun=' + tahun,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -130,17 +131,17 @@ $('a.d-anggaran').on('click', function () {
 	let kondisi = $(this).data('kondisi')
 	$('.temp-anggaran').remove()
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/API_Skp/dataJumlahKegiatan/' + id_lembaga + '?kondisi=' + kondisi + '&tahun=' + tahun,
+		url: segments[0] + '/' + segments[3] + '/API_skp/dataJumlahKegiatan/' + id_lembaga + '?kondisi=' + kondisi + '&tahun=' + tahun,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-
+			let index = 1;
 			for (var i in data) {
 				$('.anggaran-lembaga').append(`
 					<tr class="temp-anggaran">
-						<td></td>
+						<td>` + (index++) + `</td>
 						<td>` + data[i].nama_proker + `</td>
-						<td>` + data[i].anggaran_kegiatan + `</td>
+						<td>Rp. ` + rubah(data[i].anggaran_kegiatan) + `</td>
 					</tr>
 				
 				`)

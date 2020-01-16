@@ -48,7 +48,7 @@
 								<img class="icon-caret-left" style="width: 1.5rem" src="<?= base_url('assets/img/icon/money-bag.png') ?>" alt="">
 							</div>
 							<div class="col-lg-10 col-md-8">
-								<span style="font-size: 18px">Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 2, ',', '.') ?>
+								<span style="font-size: 18px">Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'], 0, ',', '.') ?>
 									(Dana Pagu)</span>
 							</div>
 						</div>
@@ -57,7 +57,7 @@
 								<img class="icon-caret-left" style="width: 1.5rem" src="<?= base_url('assets/img/icon/money.png') ?>" alt="">
 							</div>
 							<div class="col-lg-10 col-sm-10">
-								<span style="font-size: 18px">Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 2, ',', '.')   ?>
+								<span style="font-size: 18px">Rp.<?= number_format($dana_pagu['anggaran_kemahasiswaan'] - $dana_pagu['anggaran_lembaga'], 0, ',', '.')   ?>
 									(Sisa Dana)
 								</span>
 							</div>
