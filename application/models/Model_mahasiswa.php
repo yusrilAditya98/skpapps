@@ -16,6 +16,11 @@ class Model_mahasiswa extends CI_Model
         }
         return $this->db->get()->result_array();
     }
+    public function updateBeasiswa($data, $id)
+    {
+        $this->db->where('id_penerima', $id);
+        $this->db->update('penerima_beasiswa', $data);
+    }
 
     public function insertBeasiswa($data)
     {

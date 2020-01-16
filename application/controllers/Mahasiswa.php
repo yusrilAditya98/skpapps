@@ -516,6 +516,7 @@ class Mahasiswa extends CI_Controller
                 }
             }
 
+
             $this->kegiatan->updateKegiatan($proposal, $id_kegiatan);
             if ($gambar) {
                 $this->kegiatan->updateDokumentasiKegiatan($gambar, $id_kegiatan);
@@ -903,7 +904,6 @@ class Mahasiswa extends CI_Controller
                 "nominal" => $this->input->post('nominalBeasiswa'),
                 "validasi_beasiswa" => 0
             ];
-
 
             // upload file proposal
             if ($_FILES['lampiran']['name']) {

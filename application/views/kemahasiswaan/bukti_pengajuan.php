@@ -65,31 +65,31 @@
                     <div class="col-3">
                         <div class="header-ttd">
                             Mengetahui / Menyetujui, <br>
-                            Pejabat Pembuat Komitmen
+                            <?= $pimpinan[0]['jabatan'] ?>
                         </div>
                         <div class="field-ttd" style="margin-top: 5rem">
-                            Drs. Fulan, MM. <br>
-                            NIP. 127346817346718
+                            <?= $pimpinan[0]['nama'] ?> <br>
+                            NIP. <?= $pimpinan[0]['nip'] ?>
                         </div>
                     </div>
                     <div class="col-3">
                         <div class="header-ttd">
                             Mengetahui <br>
-                            Kasubag Keu / Monitoring
+                            <?= $pimpinan[1]['jabatan'] ?>
                         </div>
                         <div class="field-ttd" style="margin-top: 5rem">
-                            Drs. Adi Joni <br>
-                            NIP. 127346817346718
+                            <?= $pimpinan[1]['nama'] ?> <br>
+                            NIP. <?= $pimpinan[1]['nip'] ?>
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="header-ttd">
                             Lunas dibayar <br> Tanggal: <br>
-                            <p> Bendahara Pengeluaran Pembantu</p>
+                            <p> <?= $pimpinan[2]['jabatan'] ?></p>
                         </div>
                         <div class="field-ttd" style="margin-top: 3.5rem">
-                            Zulfa Ikhsania, SE. <br>
-                            NIP. 127346817346718
+                            <?= $pimpinan[2]['nama'] ?> <br>
+                            NIP. <?= $pimpinan[2]['nip'] ?>
                         </div>
                     </div>
                     <div class="col-2">

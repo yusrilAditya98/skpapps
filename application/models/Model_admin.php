@@ -19,6 +19,12 @@ class Model_admin extends CI_Model
         $this->db->where('username', $username);
         $this->db->update('user');
     }
+    public function updateDataPimpinan($data, $id)
+    {
+        $this->db->set($data);
+        $this->db->where('id', $id);
+        $this->db->update('list_pimpinan');
+    }
 
     public function deleteDataUser($id)
     {

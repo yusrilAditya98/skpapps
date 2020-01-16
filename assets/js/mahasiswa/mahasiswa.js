@@ -136,6 +136,7 @@ $('.tingkatKegiatan').on('change', function () {
 	$('.dataTables_wrapper').remove()
 })
 $('#tingkatKegiatan').on("change", function () {
+	$('#jumlahAnggota').val(0);
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
 	$('.partisipasi').remove();
 	$('.d-m').remove()
@@ -337,7 +338,7 @@ $('.submit-mhs').on('click', function () {
 				$('.d-m#data-' + aMhs[k][0] + '').remove()
 				$('.daftar-mhs').append(`
 					<tr class="d-m" id="data-` + aMhs[k][0] + `">
-						<td>` + (id) + `</td>
+						<td><i class="fas fa-user-alt"></i></td>
 						<td>` + aMhs[k][0] + `
 							<input  type="hidden" name="nim_` + aMhs[k][0] + `" value="` + aMhs[k][0] + `" id="nim_` + aMhs[k][0] + `" >
 						</td>

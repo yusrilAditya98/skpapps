@@ -27,6 +27,7 @@
             <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/laporanSerapan") ?>"><i class="fas fa-pencil-ruler"></i> <span>Laporan Keuangan</span></a></li>
             <li><a class="nav-link" href="<?= base_url("Akademik/kegiatan") ?>"><i class="fas fa-pencil-ruler"></i> <span>Kegiatan</span></a></li>
             <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/kategori") ?>"><i class="fas fa-pencil-ruler"></i> <span>Kategori </span></a></li>
+            <li><a class="nav-link" href="<?= base_url("Admin/daftarPimpinan") ?>"><i class="fas fa-pencil-ruler"></i> <span>Daftar Pimpinan </span></a></li>
         </ul>
     </aside>
 </div>

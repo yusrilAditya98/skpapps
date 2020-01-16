@@ -601,6 +601,8 @@ class Kemahasiswaan extends CI_Controller
     {
         $data['kegiatan'] = [];
         $kegiatan = $this->db->get('kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+
         $index = 0;
         foreach ($kegiatan as $k) {
             if ($this->input->post('cek_' . $k['id_kegiatan'])) {
@@ -635,6 +637,7 @@ class Kemahasiswaan extends CI_Controller
     }
     public function cetakPengajuanDana($id_kegiatan)
     {
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->row_array();
         $status = $this->input->get('status');
         if ($status == 'lpj') {
             $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_lpj as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
@@ -1074,5 +1077,141 @@ class Kemahasiswaan extends CI_Controller
         $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
         $data['title'] = 'Beasiswa';
         $this->load->view("kemahasiswaan/export_beasiswa", $data);
+    }
+
+    public function tambahBeasiswa()
+    {
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
+
+        // set rules form validation
+        $this->form_validation->set_rules('nimMahasiswa', 'Nim Beasiswa', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Beasiswa";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("kemahasiswaan/tambah_beasiswa");
+            $this->load->view("template/footer");
+        } else {
+            $mahasiswa = $this->db->get_where('Mahasiswa', ['nim' => $this->input->post('nimMahasiswa')])->data_seek();
+            if (!$mahasiswa) {
+                $this->session->set_flashdata('failed', 'Beasiswa gagal ditambahkan, Nim Mahasiswa Salah!');
+                redirect("Kemahasiswaan/tambahBeasiswa");
+            }
+
+            $beasiswa = [
+                "id_beasiswa" => $this->input->post('jenisBeasiswa'),
+                "nim" => $this->input->post('nimMahasiswa'),
+                "tahun_menerima" => $this->input->post('tahunMenerima'),
+                "lama_menerima" => $this->input->post('lamaMenerima'),
+                "nama_instansi" => $this->input->post('namaInstansi'),
+                "nominal" => $this->input->post('nominalBeasiswa'),
+                "validasi_beasiswa" => 0
+            ];
+            // upload file proposal
+            if ($_FILES['lampiran']['name']) {
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/beasiswa/';
+                $config['file_name'] = time() . '_lampiran_' . $this->session->userdata('username');
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('lampiran')) {
+                    $beasiswa['lampiran'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal ditambahkan !');
+                    redirect("Kemahasiwaan/beasiswa");
+                }
+            }
+
+            // upload file proposal
+            if ($_FILES['uploadBukti']['name']) {
+                $config2['allowed_types'] = 'pdf';
+                $config2['max_size']     = '2048'; //kb
+                $config2['upload_path'] = './file_bukti/beasiswa/';
+                $config2['file_name'] = time() . '_bukti_penerimaan_' . $this->session->userdata('username');
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('uploadBukti')) {
+                    $beasiswa['bukti'] = $this->upload->data('file_name');
+                } else {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .  $beasiswa['lampiran']);
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal ditambahkan !');
+                    redirect("Kemahasiswaan/beasiswa");
+                }
+            }
+            $this->session->set_flashdata('message', 'Beasiswa berhasil ditambah !');
+            $this->mahasiswa->insertBeasiswa($beasiswa);
+            redirect('Kemahasiswaan/beasiswa');
+        }
+    }
+
+    public function editBeasiswa($id)
+    {
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
+        $data['penerima'] = $this->db->get_where('penerima_beasiswa', ['id_penerima' => $id])->row_array();
+        // set rules form validation
+        $this->form_validation->set_rules('nimMahasiswa', 'Nim Beasiswa', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Beasiswa";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("kemahasiswaan/edit_beasiswa");
+            $this->load->view("template/footer");
+        } else {
+            $mahasiswa = $this->db->get_where('Mahasiswa', ['nim' => $this->input->post('nimMahasiswa')])->data_seek();
+            if (!$mahasiswa) {
+                $this->session->set_flashdata('failed', 'Beasiswa gagal diperbaharui, Nim Mahasiswa Salah!');
+                redirect("Kemahasiswaan/tambahBeasiswa");
+            }
+
+            $beasiswa = [
+                "id_beasiswa" => $this->input->post('jenisBeasiswa'),
+                "nim" => $this->input->post('nimMahasiswa'),
+                "tahun_menerima" => $this->input->post('tahunMenerima'),
+                "lama_menerima" => $this->input->post('lamaMenerima'),
+                "nama_instansi" => $this->input->post('namaInstansi'),
+                "nominal" => $this->input->post('nominalBeasiswa')
+            ];
+            // upload file proposal
+            if ($_FILES['lampiran']['name']) {
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/beasiswa/';
+                $config['file_name'] = time() . '_lampiran_' . $this->session->userdata('username');
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('lampiran')) {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .   $data['penerima']['lampiran']);
+                    $beasiswa['lampiran'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal diperbaharui !');
+                    redirect("Kemahasiwaan/beasiswa");
+                }
+            }
+
+            // upload file proposal
+            if ($_FILES['uploadBukti']['name']) {
+                $config2['allowed_types'] = 'pdf';
+                $config2['max_size']     = '2048'; //kb
+                $config2['upload_path'] = './file_bukti/beasiswa/';
+                $config2['file_name'] = time() . '_bukti_penerimaan_' . $this->session->userdata('username');
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('uploadBukti')) {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .   $data['penerima']['bukti']);
+                    $beasiswa['bukti'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal diperbaharui !');
+                    redirect("Kemahasiswaan/beasiswa");
+                }
+            }
+            $this->session->set_flashdata('message', 'Beasiswa berhasil diperbaharui !');
+            $this->mahasiswa->updateBeasiswa($beasiswa, $id);
+            redirect('Kemahasiswaan/beasiswa');
+        }
     }
 }

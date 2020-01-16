@@ -15,8 +15,10 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12">
+                                <a href="<?= base_url('Kemahasiswaan/tambahBeasiswa') ?>" class="btn btn-primary float-right ml-2"><i class="fas fa-plus mr-2 "></i>Tambah beasiswa</a>
                                 <a href="<?= base_url('Kemahasiswaan/exportBeasiswa') ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
                             </div>
+
                         </div>
                         <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
                             <div class="row">
@@ -94,7 +96,7 @@
                                             <td><?= $index++; ?></td>
                                             <td><?= $b['nim'] ?></td>
                                             <td><?= $b['nama'] ?></td>
-                                            <td><?= $b['jenis_beasiswa'] ?></td>
+                                            <td><?= $b['jenis_beasiswa'] . "-" . $b['nama_instansi'] ?> </td>
                                             <td><?= date("d-m-Y", strtotime($b['tahun_menerima'])) ?></td>
                                             <td><?= date("d-m-Y", strtotime($b['lama_menerima'])) ?></td>
                                             <td>Rp.<?= number_format($b['nominal'], 0, ',', '.'); ?></td>
@@ -110,6 +112,7 @@
                                             <td>
                                                 <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success"><i class="fas fa-check"></i></a>
                                                 <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger"><i class="fas fa-times"></i></a>
+                                                <a href="<?= base_url('Kemahasiswaan/editBeasiswa/') . $b['id_penerima'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
 
                                             </td>
                                         </tr>

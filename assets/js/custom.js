@@ -41,6 +41,19 @@ $('.detail-revisi').on('click', function () {
 
 })
 
+// $('#id-beasiswa').on('change', function () {
+// 	let beasiswa = $('#id-beasiswa').val()
+// 	$.ajax({
+// 		url: segments[0] + '/' + segments[3] + '/API_skp/beasiswa/' + beasiswa,
+// 		method: 'get',
+// 		dataType: 'json',
+// 		success: function (data) {
+// 			console.log(data)
+// 			$('#namaInstansi').val(data.nama_instansi);
+// 		}
+// 	})
+// })
+
 $('.detail-revisi-rancangan').on('click', function () {
 	let catatan = $(this).data('catatan')
 	$('.d-catatan').html(catatan)

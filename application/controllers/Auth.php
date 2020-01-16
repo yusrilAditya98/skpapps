@@ -115,13 +115,19 @@ class Auth extends CI_Controller
         // memanggil method auth dari objek yang telah dibuat dengan method GET
         $result = $auth->auth($data);
         if ($result['msg'] == "true") {
-            $data = [
-                "username" => $result['data']['nim'],
-                "nama" => $result['data']['nama'],
-                "user_profil_kode" => $result['data']['status']
-            ];
-            $this->session->set_userdata($data);
-            redirect('Mahasiswa');
+            $mhs = $this->db->get_where('mahasiswa', ['nim' => $result['data']['nim']])->row_array();
+            if ($mhs) {
+                $data = [
+                    "username" => $result['data']['nim'],
+                    "nama" => $result['data']['nama'],
+                    "user_profil_kode" => $result['data']['status']
+                ];
+                $this->session->set_userdata($data);
+                redirect('Mahasiswa');
+            } else {
+                $this->session->set_flashdata('message', '<div class="px-5 alert alert-warning text-center" role="alert">Anda belum terdaftar !</div> ');
+                redirect('Auth');
+            }
         } else {
 
             $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
