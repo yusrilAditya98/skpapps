@@ -67,7 +67,7 @@
                                         </h6>
                                         <h3><a href="<?= base_url('Publikasi/daftarProposal') ?>"><?= $k['nama_kegiatan'] ?></a> </h3>
                                         <span> Penanggung Jawab : <?= $k['nama_penanggung_jawab'] ?></span>
-                                        <span><i class="fas fa-calendar"></i> Pengajuan Proposal <?= $k['tgl_pengajuan_proposal'] ?></span>
+                                        <span><i class="fas fa-calendar"></i> Pengajuan Proposal <?= date("d-m-Y", strtotime($k['tgl_pengajuan_proposal'])) ?></span>
                                         <span><i class="fas fa-home"></i><?= $k['lokasi_kegiatan'] ?></span>
 
                                     </div>
@@ -101,7 +101,7 @@
 
                                         <h3><a href="<?= base_url('Publikasi/daftarLpj') ?>"><?= $k['nama_kegiatan'] ?></a> </h3>
                                         <span>Penanggung Jawab : <?= $k['nama_penanggung_jawab'] ?></span>
-                                        <span><i class="fas fa-calendar"></i> Pengajuan Lpj <?= $k['tgl_pengajuan_lpj'] ?></span> <span><i class="fas fa-home"></i><?= $k['lokasi_kegiatan'] ?></span>
+                                        <span><i class="fas fa-calendar"></i> Pengajuan Lpj <?= date("d-m-Y", strtotime($k['tgl_pengajuan_lpj'])) ?></span> <span><i class="fas fa-home"></i><?= $k['lokasi_kegiatan'] ?></span>
                                         <hr>
                                     </div>
                                 <?php endforeach; ?>

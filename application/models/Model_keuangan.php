@@ -14,6 +14,7 @@ class Model_keuangan extends CI_Model
         $this->db->join('validasi_kegiatan as vk', 'k.id_kegiatan=vk.id_kegiatan', 'left');
         $this->db->where('vk.jenis_validasi', 6);
         $this->db->where('vk.kategori', 'proposal');
+        $this->db->where('k.status_selesai_proposal', 3);
         $this->db->where('l.id_lembaga !=', 0);
         $this->db->where('YEAR(vk.tanggal_validasi)', $periode);
         $this->db->group_by('MONTH(vk.tanggal_validasi), l.id_lembaga');
@@ -27,6 +28,7 @@ class Model_keuangan extends CI_Model
         $this->db->join('validasi_kegiatan as vk', 'k.id_kegiatan=vk.id_kegiatan', 'left');
         $this->db->where('vk.jenis_validasi', 6);
         $this->db->where('vk.kategori', 'lpj');
+        $this->db->where('k.status_selesai_lpj', 3);
         $this->db->where('YEAR(k.tgl_pengajuan_lpj)', $periode);
         $this->db->where('l.id_lembaga !=', 0);
         $this->db->group_by('MONTH(k.tgl_pengajuan_lpj),l.id_lembaga');

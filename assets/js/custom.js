@@ -314,7 +314,7 @@ $(document).ready(function () {
 							yAxes: [{
 								ticks: {
 									min: 0,
-									max: 5000000,
+									max: 20000000,
 									maxTicksLimit: 20,
 									padding: 30
 									// Include a dollar sign in the ticks

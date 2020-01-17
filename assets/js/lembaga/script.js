@@ -190,6 +190,7 @@ $('.daftarMahasiswa').on("click", function () {
                         </div>`)
 					},
 					success: function (data) {
+						$('.loader').remove()
 						let dataTampung = [];
 						let index = 1;
 						let dataMhs = data['mhs']

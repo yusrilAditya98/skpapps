@@ -25,7 +25,7 @@
                         <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id="<?= $p['id_poin_skp'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                       <?php endif; ?>
                     </h5>
-                    <p>Kegiatan <?= $p['nama_kegiatan']; ?> dilaksanakan pada tanggal <?= $p['tgl_pelaksanaan'] ?> yang bertempat di <?= $p['tempat_pelaksanaan'] ?></p>
+                    <p>Kegiatan <?= $p['nama_kegiatan']; ?> dilaksanakan pada tanggal <?= date("d-m-Y", strtotime($p['tgl_pelaksanaan'])) ?> yang bertempat di <?= $p['tempat_pelaksanaan'] ?></p>
                   </div>
                 </li>
               <?php endforeach; ?>
@@ -45,15 +45,23 @@
             </h1>
             Kategori poin skp:
             <?php if ($mahasiswa[0]['total_poin_skp'] >= 100 && $mahasiswa[0]['total_poin_skp'] <= 150) : ?>
-              <span class="badge badge-warning"> Cukup</span>
+              <span class="badge badge-warning"> Cukup</span> <br>
+              Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.
+              </span>span>
             <?php elseif ($mahasiswa[0]['total_poin_skp'] >= 151 && $mahasiswa[0]['total_poin_skp'] <= 200) : ?>
               <span class="badge badge-primary">Baik</span>
+              Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.
+              </span>
             <?php elseif ($mahasiswa[0]['total_poin_skp'] >= 201 && $mahasiswa[0]['total_poin_skp'] <= 300) : ?>
               <span class="badge badge-success"> Sangat Baik</span>
+              Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.
             <?php elseif ($mahasiswa[0]['total_poin_skp'] > 300) : ?>
               <span class="badge badge-info"> Dengan Pujian</span>
+              Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.
             <?php else : ?>
-              <span class="badge badge-danger"> Kurang</span>
+              <span class="badge badge-danger"> Kurang</span><br>
+              Total poin skp anda <b>TIDAK MEMENUHI SYARAT</b> capaian kriteria poin skp.
+              Anda membutuhkan <span><?= 100 - $mahasiswa[0]['total_poin_skp'] ?> Poin lagi. Semangat!</span>
             <?php endif; ?>
           </div>
         </div>

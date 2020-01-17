@@ -5,20 +5,36 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Document</title>
+	<title>Transkip skp - <?= $this->session->userdata('username') ?></title>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<style type="text/css" media="print">
+		/* @page {size:landscape}  */
+
+		.main-content {
+			position: relative;
+			top: 20px;
+		}
+
+		body {
+			font-family: sans-serif;
+		}
+
+		p {
+			font-size: 12px
+		}
+	</style>
 </head>
 
 <body>
 	<div class="kop-surat mt-2 pb-2" style="border-bottom: 3px solid black;">
 		<div class="row">
-			<div class="col-3">
+			<div class="col-2">
 				<div id="logo-ub"><img src="https://kadowisudaku.com/wp-content/uploads/2016/11/Logo-Universitas-Brawijaya-UB.jpg" alt="logo ub" style="width: 150px;"></div>
 			</div>
-			<div class="col-6 text-center">
-				<span class="h5 font-weight-normal">KEMENTERIAN RISET,TEKNOLOGI, DAN PENDIDIKAN TINGGI</span> <br>
-				<span class="h5 font-weight-normal">UNIVERSITAS BRAWIJAYA</span> <br>
-				<span class="font-weight-bold">FAKULTAS ILMU EKONOMI DAN BISNIS</span> <br>
+			<div class="col-10 text-center" style="padding-right: 10rem">
+				<span class="h4 font-weight-normal">KEMENTERIAN RISET,TEKNOLOGI, DAN PENDIDIKAN TINGGI</span> <br>
+				<span class="h4 font-weight-normal">UNIVERSITAS BRAWIJAYA</span> <br>
+				<span class="h4 font-weight-bold">FAKULTAS EKONOMI DAN BISNIS</span> <br>
 				<!-- yang ini nanti disesuaikan dengan fakultas ekonomi nya -->
 				<span class="p" style="font-size: 14px;">
 					Jl. Veteran No.8, Malang, 65145, Indonesia
@@ -69,16 +85,18 @@
 	</div>
 
 	<div class="row mt-3">
+		<?php $alfa = ['A', 'B', 'C', 'D', 'E', 'F', 'G'] ?>
+		<?php $j = 0 ?>
 		<?php foreach ($bidang as $b) :  ?>
 			<div class="organisasi col-lg-12">
-				<h5>Bidang <span><?= $b['nama_bidang'] ?></span></h5>
+				<h5><?= $alfa[$j++] . ". " ?>Bidang <span><?= $b['nama_bidang'] ?></span></h5>
 				<div class="table-responsive-sm">
-					<table class="table table-sm">
+					<table class="table table-bordered table-sm">
 						<thead>
 							<tr>
 								<th style="width: 5%">No</th>
 								<th style="width: 26.66%">Nama Kegiatan</th>
-								<th style="width: 16.66%">Jabatan</th>
+								<th style="width: 16.66%">Jabatan/Prestasi</th>
 								<th style="width: 16.66%">Tanggal Pelaksanaan</th>
 								<th style="width: 16.66%">Tingkat</th>
 								<th style="width: 16.66%">Point</th>
@@ -93,7 +111,7 @@
 											<td style="width: 5%"><?= $index++; ?></td>
 											<td style="width: 26.66%"><?= $p['nama_kegiatan'] ?></td>
 											<td style="width: 16.66%"><?= $p['nama_prestasi'] ?></td>
-											<td style="width: 16.66%"><?= $p['tgl_pelaksanaan'] ?></td>
+											<td style="width: 16.66%"><?= date("d-m-Y", strtotime($p['tgl_pelaksanaan']))  ?></td>
 											<td style="width: 16.66%"><?= $p['nama_tingkatan'] ?></td>
 											<td style="width: 16.66%"><?= $p['bobot'] ?></td>
 										</tr>
@@ -134,16 +152,51 @@
 							Kurang
 						<?php endif; ?>
 					</div>
+
 				</div>
 			</form>
 		</div>
-		<div class="col-4 mt-5">
-			<img style="width: 100px;" src="http://siakad.ub.ac.id/siam/biodata.fotobynim.php?nim=<?= $this->session->userdata('username') ?>&key=MzIxZm90b3V5ZTEyMysyMDE5LTEyLTAyIDEzOjA4OjI4" class=" profile-widget-picture">
+		<div class="col-4">
+			a.n Dekan <br>
+			<?= $pimpinan[5]['jabatan'] ?>,<br>
+			<p style="margin-top:100px;"><?= $mahasiswa[0]['nama'] ?> <br> NIP. <?= $pimpinan[5]['nip'] ?></p>
 		</div>
 		<div class="col-4">
+
 			<?= date('d M Y') ?> <br>
 			Mahasiswa,<br>
 			<p style="margin-top:100px;"><?= $mahasiswa[0]['nama'] ?> <br> NIM. <?= $mahasiswa[0]['nim'] ?></p>
+		</div>
+
+	</div>
+	<div class="row">
+		<div class="col-lg-4">
+			<table class="table table-sm table-borderless mt-3">
+				<thead>
+					<tr>
+						<th style="width: 10%" scope="col">Predikat</th>
+						<th style="width: 60%" scope="col">Nilai SKP</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th style="width: 10%" scope="row">Dengan Pujian</th>
+						<td style="width: 60%"> 300</td>
+					</tr>
+					<tr>
+						<th style="width: 10%" scope="row">Sangat Baik</th>
+						<td style="width: 60%">201 - 300</td>
+					</tr>
+					<tr>
+						<th style="width: 10%" scope="row">Baik</th>
+						<td style="width: 60%">151 - 200</td>
+					</tr>
+					<tr>
+						<th style="width: 10%" scope="row">Cukup</th>
+						<td style="width: 60%">100 - 150</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	</div>
 	<script>

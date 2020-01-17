@@ -875,6 +875,7 @@ class Mahasiswa extends CI_Controller
         $this->load->model('Model_poinskp', 'poinskp');
         $this->load->model('Model_mahasiswa', 'mahasiswa');
         $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
         $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($this->session->userdata('username'));
         $data['poinskp'] = $this->poinskp->getPoinSkp($this->session->userdata('username'));
         $this->load->view('mahasiswa/tampilan_transkrip_poin', $data);

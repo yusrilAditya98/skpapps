@@ -144,6 +144,9 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('k3.periode', $periode);
         $this->db->group_by('k3.id_lembaga');
         $from_clause4 = $this->db->get_compiled_select();
+
+        // // daftar anggaran kegiatan terlaksana belum LPJ yang digunakan
+
         // menampilkan data
         $this->db->select('drk.id_lembaga,l.nama_lembaga,t.terlaksana, bt.blm_terlaksana,jk.jumlah_kegiatan,da.dana_kegiatan,rkl.anggaran_kemahasiswaan,drk.tahun_kegiatan,l.status_rencana_kegiatan');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
@@ -159,7 +162,16 @@ class Model_kemahasiswaan extends CI_Model
             $this->db->where('l.id_lembaga', $id_lembaga);
         }
         $this->db->group_by('drk.id_lembaga');
-        return $this->db->get()->result_array();
+        $data['kegiatan'] = $this->db->get()->result_array();
+
+        $this->db->select('count(id_kegiatan) as kegiatan_blm_lpj,k4.id_lembaga as lbg5');
+        $this->db->from('kegiatan as k4');
+        $this->db->where('k4.status_selesai_proposal', 3);
+        $this->db->where('k4.status_selesai_lpj !=', 3);
+        $this->db->where('k4.periode', $periode);
+        $this->db->group_by('k4.id_lembaga');
+        $data['blm_lpj'] = $this->db->get()->result_array();
+        return  $data;
     }
     public function getDataMahasiswa()
     {
@@ -184,6 +196,19 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('drk.id_lembaga', $id_lembaga);
         return $this->db->get()->result_array();
     }
+
+    public function getDetailAnggaranBlmLpj($id_lembaga, $periode)
+    {
+        $this->db->select('k4.nama_kegiatan as nama_proker,k4.dana_kegiatan as anggaran_kegiatan');
+        $this->db->from('kegiatan as k4');
+        $this->db->where('k4.id_lembaga', $id_lembaga);
+        $this->db->where('k4.status_selesai_proposal', 3);
+        $this->db->where('k4.status_selesai_lpj !=', 3);
+        $this->db->where('k4.periode', $periode);
+        return $this->db->get()->result_array();
+    }
+
+
     public function getBeasiswa($start_date = null, $end_date = null, $validasi = null)
     {
 

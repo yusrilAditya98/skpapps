@@ -256,7 +256,12 @@ class API_skp extends CI_Controller
         $this->kondisi = $this->input->get('kondisi');
         $this->tahun = $this->input->get('tahun');
         $this->id_lembaga = $id_lembaga;
-        $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
+        if ($this->kondisi == 'terlaksana_blm_lpj') {
+            $data = $this->kemahasiswaan->getDetailAnggaranBlmLpj($this->id_lembaga, $this->tahun);
+        } else {
+
+            $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
+        }
         echo json_encode($data);
     }
 
@@ -306,6 +311,28 @@ class API_skp extends CI_Controller
                 ];
             }
         }
+        // cek data proposal
+        $data_lpj = [];
+        foreach ($proposal as $p) {
+            $data_lpj[$p['id_lembaga']] = [
+                'bulan' => 0,
+                'dana' => 0,
+                'id_lembaga' => $p['id_lembaga'],
+                'nama_lembaga' => $p['nama_lembaga']
+            ];
+        }
+
+
+        foreach ($lpj as $l) {
+            $data_lpj[$l['id_lembaga']] = [
+                'bulan' => $l['bulan'],
+                'dana' => $l['dana'],
+                'id_lembaga' => $l['id_lembaga'],
+                'nama_lembaga' => $l['nama_lembaga']
+            ];
+        }
+
+        $lpj = $data_lpj;
 
         $data = [];
         foreach ($lembaga as $l) {
@@ -328,7 +355,7 @@ class API_skp extends CI_Controller
                 for ($i = 1; $i < 13; $i++) {
                     if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
                         if ($l['bulan'] == $p['bulan']) {
-                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['bulan'];
+                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['dana'];
                         } else {
                             $data[$p['id_lembaga']][$i] = $p['dana'];
                         }

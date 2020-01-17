@@ -11,6 +11,9 @@
 				<div class="card">
 					<div class="card-header">
 						<h4>Daftar Pengajuan Beasiswa</h4>
+						<div class="card-header-action">
+							<a class="btn btn-success" href=""><i class="fas fa-plus mr-2"></i>Tambah Riwayat Beasiswa</a>
+						</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -86,7 +89,7 @@
 											<div class="form-group">
 												<label for="namaInstansi">Nama Instansi Pemberi
 													Beasiswa</label>
-												<input type="text" required class="form-control" name="namaInstansi" id="namaInstansi" readonly>
+												<input type="text" required class="form-control" name="namaInstansi" id="namaInstansi">
 												<div class="invalid-feedback">
 													Nama instansi harap di Isi
 												</div>

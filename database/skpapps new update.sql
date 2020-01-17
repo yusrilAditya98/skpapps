@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 16 Jan 2020 pada 10.24
+-- Generation Time: 17 Jan 2020 pada 08.47
 -- Versi Server: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -59,7 +59,28 @@ INSERT INTO `anggota_kegiatan` (`id_anggota_kegiatan`, `nim`, `id_kegiatan`, `ke
 (269, '195020100111002', 47, 1, 130),
 (270, '175150201111230', 47, 1, 131),
 (272, '155150201111001', 48, 0, 132),
-(273, '165150201111230', 48, 0, 132);
+(273, '165150201111230', 48, 0, 132),
+(274, '155150201111001', 49, 1, 43),
+(275, '165020111123221', 49, 1, 43),
+(276, '165150201111230', 49, 1, 43),
+(277, '165150201111231', 49, 1, 43),
+(278, '175150201111230', 49, 1, 43),
+(279, '195020100111001', 49, 1, 43),
+(280, '195020100111002', 49, 1, 43),
+(281, '195020100111003', 49, 1, 43),
+(282, '195020100111004', 49, 1, 43),
+(283, '195020100111005', 49, 1, 43),
+(284, '165020111123221', 50, 0, 42),
+(285, '165150201111230', 50, 0, 42),
+(286, '155150201111001', 51, 0, 74),
+(287, '165020111123221', 51, 0, 74),
+(288, '165150201111230', 51, 0, 74),
+(289, '165150201111231', 51, 0, 74),
+(290, '175150201111230', 51, 0, 74),
+(291, '195020100111001', 51, 0, 74),
+(292, '195020100111002', 51, 0, 74),
+(293, '195020100111006', 51, 0, 74),
+(294, '195020100111007', 51, 0, 74);
 
 -- --------------------------------------------------------
 
@@ -125,9 +146,10 @@ CREATE TABLE `daftar_rancangan_kegiatan` (
 --
 
 INSERT INTO `daftar_rancangan_kegiatan` (`id_daftar_rancangan`, `nama_proker`, `tanggal_mulai_pelaksanaan`, `tanggal_selesai_pelaksanaan`, `anggaran_kegiatan`, `id_lembaga`, `status_rancangan`, `tahun_kegiatan`, `catatan_revisi`) VALUES
-(29, 'Rapat anggota HMJ', '2020-01-10', '2020-01-11', 2500000, 100, 3, 2020, ''),
-(30, 'Seminar Nasional Modern Economy ', '2020-01-24', '2020-01-25', 2500000, 100, 3, 2020, ''),
-(31, 'Seminar Nasional Ekonomi Digital 4.0', '2020-01-25', '2020-01-25', 100000, 101, 5, 2020, 'apa ngk mau di full kan aja ?');
+(29, 'Rapat anggota HMJ', '2020-01-10', '2020-01-11', 2500000, 100, 5, 2020, ''),
+(30, 'Seminar Nasional Modern Economy ', '2020-01-24', '2020-01-25', 2500000, 100, 4, 2020, ''),
+(31, 'Seminar Nasional Ekonomi Digital 4.0', '2020-01-25', '2020-01-25', 100000, 101, 5, 2020, 'apa ngk mau di full kan aja ?'),
+(32, 'Rapat Anggota', '2020-01-17', '2020-01-18', 8000000, 109, 4, 2020, '');
 
 -- --------------------------------------------------------
 
@@ -188,7 +210,10 @@ CREATE TABLE `dokumentasi_kegiatan` (
 INSERT INTO `dokumentasi_kegiatan` (`id_dokumentasi_kegiatan`, `id_kegiatan`, `d_proposal_1`, `d_proposal_2`, `d_lpj_1`, `d_lpj_2`) VALUES
 (33, 45, '1578071515_gambar1_proposal_101.jpg', '1578071515_gambar2_proposal_101.jpg', '1578277240_gambar1_lpj_101.jpg', '1578277240_gambar2_lpj_101.jpg'),
 (35, 47, '1578281828_gambar1_proposal_175150201111230.jpg', '1578281828_gambar2_proposal_175150201111230.jpg', '1578282736_gambar1_lpj_175150201111230.jpg', '1578282736_gambar2_lpj_175150201111230.jpg'),
-(36, 48, '1579156349_gambar1_proposal_165150201111230.jpg', '1579156349_gambar2_proposal_165150201111230.jpg', '', '');
+(36, 48, '1579156349_gambar1_proposal_165150201111230.jpg', '1579156349_gambar2_proposal_165150201111230.jpg', '', ''),
+(37, 49, '1579231879_gambar1_proposal_100.jpg', '1579231879_gambar2_proposal_100.jpg', '1579239276_gambar1_lpj_100.jpg', '1579239276_gambar2_lpj_100.jpg'),
+(38, 50, '1579239687_gambar1_proposal_100.jpg', '1579239687_gambar2_proposal_100.jpg', '', ''),
+(39, 51, '1579242176_gambar1_proposal_109.jpg', '1579242176_gambar2_proposal_109.jpg', '', '');
 
 -- --------------------------------------------------------
 
@@ -333,7 +358,10 @@ CREATE TABLE `kegiatan` (
 INSERT INTO `kegiatan` (`id_kegiatan`, `nama_kegiatan`, `status_selesai_proposal`, `status_selesai_lpj`, `berita_proposal`, `berita_pelaporan`, `dana_kegiatan`, `dana_lpj`, `dana_proposal`, `id_lembaga`, `tanggal_kegiatan`, `lokasi_kegiatan`, `proposal_kegiatan`, `lpj_kegiatan`, `bukti_berita_proposal`, `bukti_berita_lpj`, `periode`, `ceklist_rekapitulasi`, `acc_rancangan`, `deskripsi_kegiatan`, `tgl_pengajuan_proposal`, `tgl_pengajuan_lpj`, `id_penanggung_jawab`, `nama_penanggung_jawab`, `id_tingkatan`, `no_whatsup`, `waktu_pengajuan`) VALUES
 (45, 'Seminar Nasional Ekonomi Digital 4.0', 3, 3, '1578071515_berita_proposal_101.pdf', '1578277240_berita_lpj_1011.pdf', 100000, 30000, 70000, 101, '2020-01-04', 'Aula FEB UB', '1578071515_file_proposal_101.pdf', '1578277240_file_lpj_10111.pdf', '', '', 2020, 0, 31, 'ini adalah seminar digital', '2020-01-03', '2020-01-06', '101', 'Suherman Warsidi', 3, '081432976117', '1578071515'),
 (47, 'Lomba Internatioonal Idol Student 4.0', 3, 3, '1578281828_berita_proposal_175150201111230.pdf', '1578285187_berita_lpj_1751502011112301.pdf', 10000000, 3000000, 7000000, 0, '2020-01-06', 'Harvard University', '1578282534_file_proposal_175150201111230.pdf', '1578282534_file_lpj_1751502011112301.pdf', '', '', 2020, 0, 1, 'adalah sebuah ajang lomba pencarian bakat', '2020-01-06', '2020-01-06', '175150201111230', 'Hesya Nungki Nabila', 2, '083129097726', '1578282434'),
-(48, 'Lomba Mengarang Bebas 4.0', 1, 0, '1579156349_berita_proposal_165150201111230.pdf', '', 2500000, 0, 1750000, 0, '2020-01-18', 'Tokyo University', '1579156349_file_proposal_165150201111230.pdf', '', '', '', 2020, 0, 1, 'ini hanya karangan saja tidak ada maksud apa-apa', '2020-01-16', '0000-00-00', '165150201111230', 'Aditya Yusril Fikri', 2, '081234567891', '1579157475');
+(48, 'Lomba Mengarang Bebas 4.0', 1, 0, '1579156349_berita_proposal_165150201111230.pdf', '', 2500000, 0, 1750000, 0, '2020-01-18', 'Tokyo University', '1579156349_file_proposal_165150201111230.pdf', '', '', '', 2020, 0, 1, 'ini hanya karangan saja tidak ada maksud apa-apa', '2020-01-16', '0000-00-00', '165150201111230', 'Aditya Yusril Fikri', 2, '081234567891', '1579157475'),
+(49, 'Rapat anggota HMJ', 3, 3, '1579231879_berita_proposal_100.pdf', '1579239276_berita_lpj_100.pdf', 2500000, 750000, 1750000, 100, '2020-02-01', 'FEB UB', '1579231879_file_proposal_100.pdf', '1579239276_file_lpj_100.pdf', '', '', 2020, 0, 29, 'ini adalah rapat hmj', '2020-01-17', '2020-01-17', '100', 'Bambang Pamungkas', 8, '0812312312', '1579231879'),
+(50, 'Seminar Nasional Modern Economy ', 3, 0, '1579239687_berita_proposal_100.pdf', '', 2500000, 0, 1750000, 100, '2020-02-22', 'Universitas Gajah Mada', '1579239687_file_proposal_100.pdf', '', '', '', 2020, 0, 30, 'ini adalah seminar', '2020-01-17', '0000-00-00', '100', 'Boaz Salosa', 3, '089031231123', '1579239687'),
+(51, 'Rapat Anggota', 3, 0, '1579242176_berita_proposal_109.pdf', '', 8000000, 0, 5600000, 109, '2020-01-17', 'FEB UB', '1579242176_file_proposal_109.pdf', '', '', '', 2020, 0, 32, 'ini rapat DPM', '2020-01-17', '0000-00-00', '109', 'Bambang Pamungkas', 19, '082312312231', '1579242176');
 
 -- --------------------------------------------------------
 
@@ -415,10 +443,10 @@ INSERT INTO `lembaga` (`id_lembaga`, `nama_lembaga`, `jenis_lembaga`, `jumlah_an
 (0, 'delegasi', '0', 0, '0', '0', '0', 0, 0),
 (100, 'HMJ', 'otonom', 50, 'Aditya Yusril', '0812345678', 'bem.jpg', 0, 2020),
 (101, 'BEM', 'semi otonom', 42, 'Bambang', '0812345678', 'hmj.jpg', 0, 2020),
-(109, 'DPM', 'semi otonom', 10, 'Kharis', '123456', 'dpm.jpg', 1, 2020),
+(109, 'DPM', 'semi otonom', 10, 'Kharis', '123456', 'dpm.jpg', 0, 2020),
 (112, 'HMJB', 'semi otonom', 0, 'Haryo', '087123123', '', 1, 2020),
-(1001, 'LembagaA', 'semi otonom', 0, 'Mr. A', '08888', '', 0, 0),
-(1011, 'HMII', 'otonom', 0, 'Joni BA', '12345', '', 0, 0);
+(1001, 'LembagaA', 'semi otonom', 0, 'Mr. A', '08888', '', 1, 2020),
+(1011, 'HMII', 'otonom', 0, 'Joni BA', '12345', '', 1, 2020);
 
 -- --------------------------------------------------------
 
@@ -442,7 +470,8 @@ INSERT INTO `list_pimpinan` (`id`, `nip`, `nama`, `jabatan`) VALUES
 (2, '654321', 'Kharis Misbah Huda', 'Kasubag Keu / Monitoring'),
 (3, '2421412', 'Dava', 'Bendahara Pengeluaran Pembantu'),
 (4, '63252', 'Sauki', 'Kasubag Administrasi Umum dan BMN'),
-(5, '97797', 'Ninik Suherti', 'Pelaksana');
+(5, '97797', 'Ninik Suherti', 'Pelaksana'),
+(6, '197101111998021001', 'Dr. MOH. KHUSAINI , SE., M.Si., MA.', 'Wakil dekan bidang kemahasiswaan');
 
 -- --------------------------------------------------------
 
@@ -466,16 +495,16 @@ CREATE TABLE `mahasiswa` (
 --
 
 INSERT INTO `mahasiswa` (`nim`, `nama`, `total_poin_skp`, `alamat_kos`, `alamat_rumah`, `email`, `kode_prodi`, `nomor_hp`) VALUES
-('155150201111001', 'Donny Adriawan', 0, 'Jl. A', 'Jl. A', 'donny@gmail.com', 1, '088888888'),
-('165020111123221', 'Lalu Matlau Roflan', 15, 'Malang', 'Malang Kabupaten', 'roflan@gmail.com', 6, '08221123456'),
-('165150201111230', 'Aditya Yusril Fikri', 65, 'Jln. Simpang Candi Panggung', 'Jln. H. Naim Btn Bumi Mataram Indah Blok B/5 Jempong Barat', 'adit9b02@gmail.com', 7, '083129097726'),
-('165150201111231', 'Ahmad Dahlan', 15, 'Malang', 'Malang raya', 'ahmad@gmail.com', 7, '08123456789'),
-('175150201111230', 'Hesya Nungki Nabila', 45, 'Jln. Sugura gura no 27 malang', 'jln simpang candi panggung gg 3 nomer 6 malang', 'shesya@gmail.com', 3, '081234567'),
-('195020100111001', 'Ignatius Kuncoro Krisnugr', 15, 'malang', 'Jakarta', 'student@gmail.com', 6, '8123456789'),
-('195020100111002', 'Alvina Azizah', 55, 'malang', 'Malang', 'student@gmail.com', 7, '8123456789'),
-('195020100111003', 'Rifky Amalia Annisa', 15, 'malang', 'Palembang', 'student@gmail.com', 7, '8123456789'),
-('195020100111004', 'Dewa Aditya', 15, 'malang', 'Jakarta', 'student@gmail.com', 3, '8123456789'),
-('195020100111005', 'Muhammad Ainurroziqin', 15, 'malang', 'Mataram', 'student@gmail.com', 1, '8123456789'),
+('155150201111001', 'Donny Adriawan', 10, 'Jl. A', 'Jl. A', 'donny@gmail.com', 1, '088888888'),
+('165020111123221', 'Lalu Matlau Roflan', 25, 'Malang', 'Malang Kabupaten', 'roflan@gmail.com', 6, '08221123456'),
+('165150201111230', 'Aditya Yusril Fikri', 75, 'Jln. Simpang Candi Panggung', 'Jln. H. Naim Btn Bumi Mataram Indah Blok B/5 Jempong Barat', 'adit9b02@gmail.com', 7, '083129097726'),
+('165150201111231', 'Ahmad Dahlan', 25, 'Malang', 'Malang raya', 'ahmad@gmail.com', 7, '08123456789'),
+('175150201111230', 'Hesya Nungki Nabila', 55, 'Jln. Sugura gura no 27 malang', 'jln simpang candi panggung gg 3 nomer 6 malang', 'shesya@gmail.com', 3, '081234567'),
+('195020100111001', 'Ignatius Kuncoro Krisnugr', 25, 'malang', 'Jakarta', 'student@gmail.com', 6, '8123456789'),
+('195020100111002', 'Alvina Azizah', 65, 'malang', 'Malang', 'student@gmail.com', 7, '8123456789'),
+('195020100111003', 'Rifky Amalia Annisa', 25, 'malang', 'Palembang', 'student@gmail.com', 7, '8123456789'),
+('195020100111004', 'Dewa Aditya', 25, 'malang', 'Jakarta', 'student@gmail.com', 3, '8123456789'),
+('195020100111005', 'Muhammad Ainurroziqin', 25, 'malang', 'Mataram', 'student@gmail.com', 1, '8123456789'),
 ('195020100111006', 'Ervan Kurniawan', 15, 'malang', 'Jogja', 'student@gmail.com', 2, '8123456789'),
 ('195020100111007', 'Rifqi Aqil Asyrof', 15, 'malang', 'Surabaya', 'student@gmail.com', 3, '8123456789'),
 ('195020100111008', 'Zelinka Natalia Agelina', 15, 'malang', 'Mataram', 'student@gmail.com', 4, '8123456789'),
@@ -573,7 +602,17 @@ INSERT INTO `poin_skp` (`id_poin_skp`, `nim`, `nama_kegiatan`, `validasi_prestas
 (14, '195020100111010', 'Seminar Nasional Ekonomi Digital 4.0', 1, '2020-01-06', '2020-01-04', 'lpj/1578277240_file_lpj_10111.pdf', 'Aula FEB UB', '-', 42),
 (17, '165150201111230', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 129),
 (18, '195020100111002', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 130),
-(19, '175150201111230', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 131);
+(19, '175150201111230', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 131),
+(20, '155150201111001', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(21, '165020111123221', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(22, '165150201111230', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(23, '165150201111231', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(24, '175150201111230', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(25, '195020100111001', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(26, '195020100111002', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(27, '195020100111003', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(28, '195020100111004', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43),
+(29, '195020100111005', 'Rapat anggota HMJ', 1, '2020-01-17', '2020-02-01', 'lpj/1579239276_file_lpj_100.pdf', 'FEB UB', '-', 43);
 
 -- --------------------------------------------------------
 
@@ -664,9 +703,9 @@ CREATE TABLE `rekapan_kegiatan_lembaga` (
 --
 
 INSERT INTO `rekapan_kegiatan_lembaga` (`id_rancangan`, `id_lembaga`, `tahun_pengajuan`, `anggaran_lembaga`, `status_rancangan`, `anggaran_kemahasiswaan`) VALUES
-(15, 100, 2020, 5000000, 3, 5000000),
+(15, 100, 2020, 5000000, 1, 5000000),
 (16, 101, 2020, 100000, 1, 1000000),
-(17, 109, 2020, 0, 0, 8000000),
+(17, 109, 2020, 8000000, 1, 8000000),
 (18, 112, 2020, 0, 0, 5000000);
 
 -- --------------------------------------------------------
@@ -1291,7 +1330,37 @@ INSERT INTO `validasi_kegiatan` (`id`, `kategori`, `jenis_validasi`, `status_val
 (242, 'proposal', 3, 1, '2020-01-16', 8, 48, '-'),
 (243, 'proposal', 4, 1, '2020-01-16', 8, 48, '-'),
 (244, 'proposal', 5, 4, '0000-00-00', 8, 48, ''),
-(245, 'proposal', 6, 0, '0000-00-00', 8, 48, '');
+(245, 'proposal', 6, 0, '0000-00-00', 8, 48, ''),
+(246, 'proposal', 2, 1, '2020-01-17', 2, 49, '-'),
+(247, 'proposal', 3, 1, '2020-01-17', 3, 49, '-'),
+(248, 'proposal', 4, 1, '2020-01-17', 3, 49, '-'),
+(249, 'proposal', 5, 1, '2020-01-17', 7, 49, '-'),
+(250, 'proposal', 6, 1, '2020-01-17', 5, 49, '-'),
+(251, 'lpj', 2, 1, '2020-01-17', 2, 49, '-'),
+(252, 'lpj', 3, 1, '2020-01-17', 3, 49, '-'),
+(253, 'lpj', 4, 1, '2020-01-17', 3, 49, '-'),
+(254, 'lpj', 5, 1, '2020-01-17', 7, 49, '-'),
+(255, 'lpj', 6, 1, '2020-01-17', 5, 49, '-'),
+(256, 'proposal', 2, 1, '2020-01-17', 2, 50, '-'),
+(257, 'proposal', 3, 1, '2020-01-17', 3, 50, '-'),
+(258, 'proposal', 4, 1, '2020-01-17', 3, 50, '-'),
+(259, 'proposal', 5, 1, '2020-01-17', 7, 50, '-'),
+(260, 'proposal', 6, 1, '2020-01-17', 5, 50, '-'),
+(261, 'lpj', 2, 0, '0000-00-00', 8, 50, ''),
+(262, 'lpj', 3, 0, '0000-00-00', 8, 50, ''),
+(263, 'lpj', 4, 0, '0000-00-00', 8, 50, ''),
+(264, 'lpj', 5, 0, '0000-00-00', 8, 50, ''),
+(265, 'lpj', 6, 0, '0000-00-00', 8, 50, ''),
+(266, 'proposal', 2, 1, '2020-01-17', 2, 51, '-'),
+(267, 'proposal', 3, 1, '2020-01-17', 3, 51, '-'),
+(268, 'proposal', 4, 1, '2020-01-17', 3, 51, '-'),
+(269, 'proposal', 5, 1, '2020-01-17', 7, 51, '-'),
+(270, 'proposal', 6, 1, '2020-01-17', 5, 51, '-'),
+(271, 'lpj', 2, 0, '0000-00-00', 8, 51, ''),
+(272, 'lpj', 3, 0, '0000-00-00', 8, 51, ''),
+(273, 'lpj', 4, 0, '0000-00-00', 8, 51, ''),
+(274, 'lpj', 5, 0, '0000-00-00', 8, 51, ''),
+(275, 'lpj', 6, 0, '0000-00-00', 8, 51, '');
 
 --
 -- Indexes for dumped tables
@@ -1530,7 +1599,7 @@ ALTER TABLE `validasi_kegiatan`
 -- AUTO_INCREMENT for table `anggota_kegiatan`
 --
 ALTER TABLE `anggota_kegiatan`
-  MODIFY `id_anggota_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=274;
+  MODIFY `id_anggota_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=295;
 
 --
 -- AUTO_INCREMENT for table `beasiswa`
@@ -1542,13 +1611,13 @@ ALTER TABLE `beasiswa`
 -- AUTO_INCREMENT for table `bidang_kegiatan`
 --
 ALTER TABLE `bidang_kegiatan`
-  MODIFY `id_bidang` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_bidang` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `daftar_rancangan_kegiatan`
 --
 ALTER TABLE `daftar_rancangan_kegiatan`
-  MODIFY `id_daftar_rancangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id_daftar_rancangan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `dasar_penilaian`
@@ -1560,13 +1629,13 @@ ALTER TABLE `dasar_penilaian`
 -- AUTO_INCREMENT for table `dokumentasi_kegiatan`
 --
 ALTER TABLE `dokumentasi_kegiatan`
-  MODIFY `id_dokumentasi_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id_dokumentasi_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `jenis_kegiatan`
 --
 ALTER TABLE `jenis_kegiatan`
-  MODIFY `id_jenis_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id_jenis_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT for table `jurusan`
@@ -1578,7 +1647,7 @@ ALTER TABLE `jurusan`
 -- AUTO_INCREMENT for table `kegiatan`
 --
 ALTER TABLE `kegiatan`
-  MODIFY `id_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id_kegiatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `kegiatan_sumber_dana`
@@ -1602,7 +1671,7 @@ ALTER TABLE `lembaga`
 -- AUTO_INCREMENT for table `list_pimpinan`
 --
 ALTER TABLE `list_pimpinan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `peserta_kuliah_tamu`
@@ -1614,13 +1683,13 @@ ALTER TABLE `peserta_kuliah_tamu`
 -- AUTO_INCREMENT for table `poin_skp`
 --
 ALTER TABLE `poin_skp`
-  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `prestasi`
 --
 ALTER TABLE `prestasi`
-  MODIFY `id_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `prodi`
@@ -1638,13 +1707,13 @@ ALTER TABLE `rekapan_kegiatan_lembaga`
 -- AUTO_INCREMENT for table `semua_prestasi`
 --
 ALTER TABLE `semua_prestasi`
-  MODIFY `id_semua_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=183;
+  MODIFY `id_semua_prestasi` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=182;
 
 --
 -- AUTO_INCREMENT for table `semua_tingkatan`
 --
 ALTER TABLE `semua_tingkatan`
-  MODIFY `id_semua_tingkatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=93;
+  MODIFY `id_semua_tingkatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=92;
 
 --
 -- AUTO_INCREMENT for table `sumber_dana`
@@ -1656,7 +1725,7 @@ ALTER TABLE `sumber_dana`
 -- AUTO_INCREMENT for table `tingkatan`
 --
 ALTER TABLE `tingkatan`
-  MODIFY `id_tingkatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_tingkatan` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `user`
@@ -1692,7 +1761,7 @@ ALTER TABLE `user_sub_menu`
 -- AUTO_INCREMENT for table `validasi_kegiatan`
 --
 ALTER TABLE `validasi_kegiatan`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=246;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=276;
 
 --
 -- Ketidakleluasaan untuk tabel pelimpahan (Dumped Tables)

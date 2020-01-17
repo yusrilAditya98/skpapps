@@ -385,15 +385,4 @@ $('#danaKegiatan').keyup(function () {
 	$('#danaKegiatanDiterima').val(nominal)
 })
 
-$('#id-beasiswa').on('change', function () {
-	let beasiswa = $('#id-beasiswa').val()
-	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/API_skp/beasiswa/' + beasiswa,
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			console.log(data)
-			$('#namaInstansi').val(data.nama_instansi);
-		}
-	})
-})
+

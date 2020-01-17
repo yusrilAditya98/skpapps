@@ -105,12 +105,6 @@
                             <small id="anggaranHelp" class="form-text text-muted">Dana
                                 anggaran yang akan diterima</small>
                         </div>
-                        <div class="sumber-dana-chekboxes mb-3">
-                            <h6>Sumber Dana</h6>
-                            <div class="form-check py-1 k-sumber">
-                                <input class="form-check-input" type="hidden" value="0" id="dana" name="dana">
-                            </div>
-                        </div>
                     </div>
                     <div class="tab-pane fade" id="acara" role="tabpanel" aria-labelledby="acara-tab3">
                         <div class="form-group">

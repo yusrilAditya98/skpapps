@@ -147,6 +147,7 @@
                                                             <th>Nim</th>
                                                             <th>Nama</th>
                                                             <th>Posisi</th>
+                                                            <th>Action</th>
 
                                                         </tr>
                                                     </thead>

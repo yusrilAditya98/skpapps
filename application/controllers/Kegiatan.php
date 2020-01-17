@@ -1039,7 +1039,6 @@ class Kegiatan extends CI_Controller
 
         if ($this->input->post('tahun')) {
             $tahun = $this->input->post('tahun');
-
             $data['kegiatan'] = $this->db->get_where('kegiatan', ['id_lembaga' => $this->session->userdata('username'), 'YEAR(kegiatan.tgl_pengajuan_proposal)' => $tahun])->result_array();
         } else {
             $data['kegiatan'] = $this->db->get_where('kegiatan', ['id_lembaga' => $this->session->userdata('username'), 'YEAR(kegiatan.tgl_pengajuan_proposal)' => $tahun])->result_array();
@@ -1090,13 +1089,33 @@ class Kegiatan extends CI_Controller
             $data[$k['id_kegiatan']]['dana_terserap'] = 0;
         }
 
+
+        $data_lpj = [];
+        foreach ($proposal as $p) {
+            $data_lpj[$p['id_kegiatan']] = [
+                'bulan_pengajuan' => 0,
+                'id_kegiatan' => $p['id_kegiatan'],
+                'dana' => 0
+            ];
+        }
+
+
+        foreach ($lpj as $l) {
+            $data_lpj[$l['id_kegiatan']] = [
+                'bulan_pengajuan' => $l['bulan_pengajuan'],
+                'id_kegiatan' => $l['id_kegiatan'],
+                'dana' =>  $l['dana'],
+            ];
+        }
+        $lpj = $data_lpj;
+
         foreach ($proposal as $p) {
             // data lpj haruslah tidak boleh kosong
             foreach ($lpj as $l) {
                 for ($i = 1; $i < 13; $i++) {
                     if ($p['id_kegiatan'] == $l['id_kegiatan'] && $p['bulan_pengajuan'] == $i) {
                         if ($l['bulan_pengajuan'] == $p['bulan_pengajuan']) {
-                            $data[$p['id_kegiatan']][$i] = $p['dana'] + $l['bulan_pengajuan'];
+                            $data[$p['id_kegiatan']][$i] = $p['dana'] + $l['dana'];
                         } else {
                             $data[$p['id_kegiatan']][$i] = $p['dana'];
                         }

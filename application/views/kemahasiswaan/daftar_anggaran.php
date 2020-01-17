@@ -46,6 +46,7 @@
                                         <th>Jumlah Kegiatan</th>
                                         <th>Kegiatan Terlaksana</th>
                                         <th>Kegiatan Belum Terlaksana</th>
+                                        <th>Kegiatan Terlaksana Belum LPJ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -64,8 +65,8 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                Rp.<?= number_format($l['dana_kegiatan'], 0, ',', '.');
-                                                        $l['anggaran_kemahasiswaan'] - $l['dana_kegiatan'] ?>
+                                                Rp.<?= number_format($l['anggaran_kemahasiswaan'] - $l['dana_kegiatan'], 0, ',', '.');
+                                                        ?>
                                             </td>
                                             <td>
                                                 <?php if ($l['jumlah_kegiatan']) : ?>
@@ -84,6 +85,13 @@
                                             <td>
                                                 <?php if ($l['blm_terlaksana']) : ?>
                                                     <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah  Kegiatan Belum Terlaksana" data-kondisi="blmTerlaksana" href=""> <?= $l['blm_terlaksana'] ?></a>
+                                                <?php else : ?>
+                                                    0
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($l['blm_lpj']) : ?>
+                                                    <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah  Kegiatan Terlaksana Belum LPJ" data-kondisi="terlaksana_blm_lpj" href=""> <?= $l['blm_lpj'] ?></a>
                                                 <?php else : ?>
                                                     0
                                                 <?php endif; ?>

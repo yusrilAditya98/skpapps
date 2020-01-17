@@ -275,6 +275,28 @@ class Keuangan extends CI_Controller
             }
         }
 
+        // cek data proposal
+        $data_lpj = [];
+        foreach ($proposal as $p) {
+            $data_lpj[$p['id_lembaga']] = [
+                'bulan' => 0,
+                'dana' => 0,
+                'id_lembaga' => $p['id_lembaga'],
+                'nama_lembaga' => $p['nama_lembaga']
+            ];
+        }
+
+
+        foreach ($lpj as $l) {
+            $data_lpj[$l['id_lembaga']] = [
+                'bulan' => $l['bulan'],
+                'dana' => $l['dana'],
+                'id_lembaga' => $l['id_lembaga'],
+                'nama_lembaga' => $l['nama_lembaga']
+            ];
+        }
+
+        $lpj = $data_lpj;
         $data = [];
         foreach ($lembaga as $l) {
             for ($j = 1; $j < 13; $j++) {
@@ -296,7 +318,7 @@ class Keuangan extends CI_Controller
                 for ($i = 1; $i < 13; $i++) {
                     if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
                         if ($l['bulan'] == $p['bulan']) {
-                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['bulan'];
+                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['dana'];
                         } else {
                             $data[$p['id_lembaga']][$i] = $p['dana'];
                         }
