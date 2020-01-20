@@ -1078,8 +1078,6 @@ class Kemahasiswaan extends CI_Controller
             $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
             $data['pengajuan'] = $this->db->get()->result_array();
         } else {
-            // $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
-            $this->db->where('periode', 2020);
             $this->db->from('pengajuan_anggota_lembaga');
             $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
             $data['pengajuan'] = $this->db->get()->result_array();
