@@ -1,22 +1,19 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-if (segments[4] == "Akademik") {
-	$(window).on('load', function () {
-		console.log(segments[0] + segments[3] + '/siruas-api/api/ruangan')
-		$.ajax({
-			url: segments[0] + '/siruas-api/api/ruangan',
-			dataType: 'json',
-			type: 'get',
-			success: function (dataRuangan) {
-				console.log(dataRuangan);
-				dataRuangan.data.forEach(function (ruangan) {
-					$('#ruangan').append(`<option value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
-				})
-			}
-		});
-	})
-}
+$(window).on('load', function () {
+	$.ajax({
+		url: segments[0] + '/siruas-api/api/ruangan',
+		dataType: 'json',
+		type: 'get',
+		success: function (dataRuangan) {
+			console.log(dataRuangan);
+			dataRuangan.data.forEach(function (ruangan) {
+				$('#ruangan').append(`<option value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
+			})
+		}
+	});
+})
 
 $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 	let id = $(this).data('id');

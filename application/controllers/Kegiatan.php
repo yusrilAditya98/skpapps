@@ -1130,4 +1130,224 @@ class Kegiatan extends CI_Controller
         }
         return $data;
     }
+
+    public function anggota()
+    {
+        $data['title'] = 'Anggota';
+        $data['notif'] = $this->_notif();
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga' => $this->session->userdata('username')])->row_array();
+        if ($this->input->get('tahun') != "") {
+            $data['tahun'] = intval($this->input->get('tahun'));
+        } else {
+            $data['tahun'] = intval($data['lembaga']['tahun_rancangan']);
+        }
+        $tahun = $data['tahun'];
+        $data['pengajuan'] = $this->db->get_where('pengajuan_anggota_lembaga', ['id_lembaga' => $this->session->userdata('username'), 'periode' => $tahun])->row_array();
+
+        $this->db->where('periode', $tahun);
+        $this->db->where('pengajuan_anggota_lembaga.status_validasi', 1);
+        $this->db->from('daftar_anggota_lembaga');
+        $this->db->join('mahasiswa', 'daftar_anggota_lembaga.nim = mahasiswa.nim');
+        $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
+        $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
+        $this->db->join('pengajuan_anggota_lembaga', 'daftar_anggota_lembaga.id_pengajuan_anggota_lembaga = pengajuan_anggota_lembaga.id');
+        $this->db->order_by('id_sm_prestasi ASC');
+        $data['anggota'] = $this->db->get()->result_array();
+
+        // Update jumlah anggota
+        // $this->db->where('id_lembaga', $this->session->userdata('username'));
+        // $this->db->update('lembaga', ['jumlah_anggota' => count($data['anggota'])]);
+
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("lembaga/anggota", $data);
+        $this->load->view("template/footer");
+    }
+
+    public function rancanganAnggota()
+    {
+        $data['title'] = 'Anggota';
+        $data['notif'] = $this->_notif();
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga' => $this->session->userdata('username')])->row_array();
+        if ($this->input->get('tahun') != "") {
+            $data['tahun'] = intval($this->input->get('tahun'));
+        } else {
+            $data['tahun'] = intval($data['lembaga']['tahun_rancangan']);
+        };
+        $tahun = $data['tahun'];
+        $data['pengajuan'] = $this->db->get_where('pengajuan_anggota_lembaga', ['id_lembaga' => $this->session->userdata('username'), 'periode' => $tahun])->row_array();
+        $this->db->where('periode', $tahun);
+        $this->db->from('daftar_anggota_lembaga');
+        $this->db->join('mahasiswa', 'daftar_anggota_lembaga.nim = mahasiswa.nim');
+        $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
+        $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
+        $this->db->join('pengajuan_anggota_lembaga', 'daftar_anggota_lembaga.id_pengajuan_anggota_lembaga = pengajuan_anggota_lembaga.id');
+        $this->db->order_by('id_sm_prestasi ASC');
+        $data['anggota'] = $this->db->get()->result_array();
+        $data['jumlah_anggota'] = count($data['anggota']);
+
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("lembaga/rancanganAnggota", $data);
+        $this->load->view("template/footer");
+    }
+
+    public function tambahRancanganAnggota()
+    {
+        $this->load->model('Model_lembaga', 'lembaga');
+        $this->load->model('Model_kegiatan', 'kegiatan');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['notif'] = $this->_notif();
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();
+        $lembaga = $this->lembaga->getPeriodeLembaga($this->session->userdata('username'));
+        $data['periode_lembaga'] = intval($lembaga['tahun_rancangan']);
+        if ($lembaga['jenis_lembaga'] == "otonom") {
+            $data['jenis_lembaga'] = 6;
+        } else {
+            $data['jenis_lembaga'] = 7;
+        }
+        $data['dana'] = $this->db->get('sumber_dana')->result_array();
+        $gambar = [];
+        // set rules form validation
+        $this->form_validation->set_rules('namaLembaga', 'Nama Lembaga', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Anggota";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("lembaga/form_tambah_anggota");
+            $this->load->view("template/footer");
+        } else {
+            $jumlahAnggota = intval($this->input->post('jumlahAnggota'));
+            $tahunPeriode = intval($this->input->post('periode'));
+            if ($jumlahAnggota <= 0) {
+                $this->session->set_flashdata('failed', 'Anggota Lembaga tidak boleh kosong');
+                redirect("Kegiatan/tambahRancanganAnggota");
+            }
+            if ($tahunPeriode == "") {
+                $this->session->set_flashdata('failed', 'Periode tidak boleh kosong');
+                redirect("Kegiatan/tambahRancanganAnggota");
+            }
+
+            // get id semua tingkatan
+            $sm_tingkatan_id = $this->input->post('jenis_lembaga');
+            $idTingkatan = $this->db->get_where('semua_tingkatan', ['id_semua_tingkatan' => $sm_tingkatan_id])->row_array();
+            $id_lembaga = intval($this->input->post('id_lembaga'));
+            $periode = intval($this->input->post('periode'));
+
+            // cek ketersediaan rancangan
+            $rancanganAnggota = $this->lembaga->getIdRancanganAnggota($id_lembaga, $periode);
+
+            if ($rancanganAnggota == null) {
+                $rancanganAnggota = [
+                    'id_lembaga' => $id_lembaga,
+                    'status_pembukaan' => 0,
+                    'periode' => $periode,
+                    'status_validasi' => 0,
+                    'status_keaktifan' => 0,
+                ];
+                $this->lembaga->insertRancanganAnggota($rancanganAnggota);
+                $rancanganAnggota = $this->lembaga->getIdRancanganAnggota($id_lembaga, $periode);
+            }
+
+            if ($rancanganAnggota['status_validasi'] == 1) {
+                $this->session->set_flashdata('failed', 'Anggota Lembaga Periode ' . $periode . ' sudah divalidasi');
+                redirect("Kegiatan/tambahRancanganAnggota");
+            }
+
+            // Jumlah Anggota Sekarang
+            $lembaga = $this->db->get_where('lembaga', ['id_lembaga' => $id_lembaga])->row_array();
+            $anggota_temp = intval($lembaga['jumlah_anggota']);
+
+            // insert Anggota Lembaga
+            $data_anggota = [];
+            $ketua = "";
+            foreach ($data['mahasiswa'] as $m) {
+                if ($this->input->post('nim_' . $m['nim'])) {
+                    if (intval($this->input->post('prestasi_' . $m['nim'])) == 22 || intval($this->input->post('prestasi_' . $m['nim'])) == 27) {
+                        $ketua = $m['nama'];
+                    }
+                    $data_anggota[$m['nim']] = [
+                        'nim' => $this->input->post('nim_' . $m['nim']),
+                        'status_aktif' => 0,
+                        'id_pengajuan_anggota_lembaga' => intval($rancanganAnggota['id']),
+                        'id_sm_prestasi' => intval($this->input->post('prestasi_' . $m['nim'])),
+                    ];
+                }
+            }
+
+            $this->lembaga->insertAnggotaLembaga($data_anggota);
+
+            // Update jumlah Anggota & Ketua
+            if ($ketua != "") {
+                $lembaga = [
+                    'nama_ketua' => $ketua
+                ];
+            }
+            $this->lembaga->updateLembaga($lembaga, $id_lembaga);
+
+            $this->session->set_flashdata('message', 'Anggota Lembaga berhasil ditambah !');
+            redirect("Kegiatan/rancanganAnggota");
+        }
+    }
+    public function hapusRancanganAnggota()
+    {
+        $id = intval($this->input->get('id'));
+        $id_sm_prestasi = intval($this->input->get('id_sm_prestasi'));
+        $nim = $this->input->get('nim');
+        $this->db->where('id_pengajuan_anggota_lembaga', $id);
+        $this->db->where('nim', $nim);
+        $this->db->where('id_sm_prestasi', $id_sm_prestasi);
+        $this->db->delete('daftar_anggota_lembaga');
+        $this->session->set_flashdata('message', 'Anggota Lembaga berhasil dihapus !');
+        redirect("Kegiatan/rancanganAnggota");
+    }
+    public function ajukanRancanganAnggota($id_pengajuan)
+    {
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_pembukaan' => 1]);
+        $this->session->set_flashdata('message', 'Akses Penambahan Anggota Lembaga berhasil ditutup !');
+        redirect("Kegiatan/rancanganAnggota");
+    }
+    public function ajukanValidasiAnggota($id_pengajuan)
+    {
+        $anggota_lembaga = $this->db->get_where('daftar_anggota_lembaga', ['id_pengajuan_anggota_lembaga' => intval($id_pengajuan)])->result_array();
+        $jumlah_anggota = count($anggota_lembaga);
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 2, 'jumlah_anggota_lembaga' => $jumlah_anggota]);
+
+        $this->session->set_flashdata('message', 'Validasi Anggota Lembaga berhasil diajukan !');
+        redirect("Kegiatan/rancanganAnggota");
+    }
+    public function bukaRancanganAnggota($id_pengajuan)
+    {
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_pembukaan' => 0]);
+        $this->session->set_flashdata('message', 'Akses Penambahan Anggota Lembaga berhasil dibuka !');
+        redirect("Kegiatan/rancanganAnggota");
+    }
+    public function laporanKeaktifanAnggota($id_pengajuan)
+    {
+        $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
+        $anggota_lembaga = $this->db->get('daftar_anggota_lembaga')->result_array();
+
+        $anggota_status_aktif = [];
+        for ($i = 0; $i < count($anggota_lembaga); $i++) {
+            $nama = 'keaktifan_' . $anggota_lembaga[$i]['nim'];
+            $data = [
+                'id' => intval($anggota_lembaga[$i]['id']),
+                'status_aktif' => intval($this->input->post($nama))
+            ];
+            array_push($anggota_status_aktif, $data);
+        }
+        $this->db->update_batch('daftar_anggota_lembaga', $anggota_status_aktif, 'id');
+
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_keaktifan' => 2]);
+        // var_dump($anggota_status_aktif);die;
+        $this->session->set_flashdata('message', 'Laporan Keaktifan Anggota Lembaga berhasil diajukan !');
+        redirect("Kegiatan/anggota");
+    }
 }

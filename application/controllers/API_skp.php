@@ -473,4 +473,33 @@ class API_skp extends CI_Controller
         $data['rekap_user'] = $this->poinskp->getRekapUser();
         echo json_encode($data);
     }
+
+    // Anggota Lembaga
+    public function daftarAnggotaLembaga()
+    {
+        $id = intval($this->input->get('id'));
+        $this->db->where('id_pengajuan_anggota_lembaga', $id);
+        $anggota_lembaga = $this->db->get('daftar_anggota_lembaga')->result_array();
+        echo json_encode($anggota_lembaga);
+    }
+
+    public function getDetailLembaga($id)
+    {
+        $this->db->where('id', intval($id));
+        $this->db->from('pengajuan_anggota_lembaga');
+        $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
+        $lembaga = $this->db->get()->row_array();
+        echo json_encode($lembaga);
+    }
+
+    public function getDetailAnggotaLembaga($id)
+    {
+        $this->db->where('id_pengajuan_anggota_lembaga', intval($id));
+        $this->db->from('daftar_anggota_lembaga');
+        $this->db->join('mahasiswa', 'daftar_anggota_lembaga.nim = mahasiswa.nim');
+        $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
+        $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
+        $anggota_lembaga = $this->db->get()->result_array();
+        echo json_encode($anggota_lembaga);
+    }
 }

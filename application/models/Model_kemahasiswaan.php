@@ -208,4 +208,21 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->where('rkl.tahun_pengajuan', $tahun);
         return $this->db->get()->result_array();
     }
+
+
+    // Anggota Lembaga Notifikasi
+    public function getNotifValidasiAnggotaLembaga()
+    {
+        $this->db->select('*');
+        $this->db->from('pengajuan_anggota_lembaga');
+        $this->db->where('status_validasi', 2);
+        return $this->db->get()->result_array();
+    }
+    public function getNotifValidasiKeaktifanLembaga()
+    {
+        $this->db->select('*');
+        $this->db->from('pengajuan_anggota_lembaga');
+        $this->db->where('status_keaktifan', 2);
+        return $this->db->get()->result_array();
+    }
 }

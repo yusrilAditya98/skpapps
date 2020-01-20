@@ -211,6 +211,12 @@ class Admin extends CI_Controller
         header('Content-type:application/json');
         echo json_encode($data);
     }
+    public function getMahasiswa()
+    {
+        $data = $this->db->get('mahasiswa')->result_array();
+        header('Content-type:application/json');
+        echo json_encode($data);
+    }
     public function getProfilUser()
     {
         $data = $this->db->get('user_profil')->result_array();
@@ -242,19 +248,19 @@ class Admin extends CI_Controller
         for ($i = 3; $i <= $jumlah_baris; $i++) {
             // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
             $result = [
-                "nim" => str_replace("\0", "" , $data->val($i, 2)),
-                "nama" => str_replace("\0", "" , $data->val($i, 3)),
-                "total_poin_skp" => intval(str_replace("\0", "" , $data->val($i, 4))),
-                "alamat_kos" => str_replace("\0", "" , $data->val($i, 5)),
-                "alamat_rumah" => str_replace("\0", "" , $data->val($i, 6)),
-                "email" => str_replace("\0", "" , $data->val($i, 7)),
+                "nim" => str_replace("\0", "", $data->val($i, 2)),
+                "nama" => str_replace("\0", "", $data->val($i, 3)),
+                "total_poin_skp" => intval(str_replace("\0", "", $data->val($i, 4))),
+                "alamat_kos" => str_replace("\0", "", $data->val($i, 5)),
+                "alamat_rumah" => str_replace("\0", "", $data->val($i, 6)),
+                "email" => str_replace("\0", "", $data->val($i, 7)),
                 "kode_prodi" => intval($data->val($i, 8)),
-                "nomor_hp" => str_replace("\0", "" , $data->val($i, 9)),
+                "nomor_hp" => str_replace("\0", "", $data->val($i, 9)),
             ];
             $user = [
-                "nama" => str_replace("\0", "" , $data->val($i, 3)),
-                "username" => str_replace("\0", "" , $data->val($i, 2)),
-                "password" => str_replace("\0", "" , password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
+                "nama" => str_replace("\0", "", $data->val($i, 3)),
+                "username" => str_replace("\0", "", $data->val($i, 2)),
+                "password" => str_replace("\0", "", password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
                 "user_profil_kode" => 1,
                 'is_active' => 1
             ];

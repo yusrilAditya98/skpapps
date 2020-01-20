@@ -26,6 +26,8 @@ class Kemahasiswaan extends CI_Controller
         $this->notif['notif_kmhs_proposal'] = count($this->kemahasiswaan->getNotifValidasi(3, 'proposal'));
         $this->notif['notif_kmhs_rancangan'] = count($this->kemahasiswaan->getNotifValidasiRancangan());
         $this->notif['notif_kmhs_skp'] = count($this->kemahasiswaan->getNotifValidasiSkp());
+        $this->notif['notif_kmhs_validasi_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiAnggotaLembaga());
+        $this->notif['notif_kmhs_keaktifan_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiKeaktifanLembaga());
         return $this->notif;
     }
 
@@ -1036,4 +1038,113 @@ class Kemahasiswaan extends CI_Controller
         redirect('kemahasiswaan/kategori');
     }
     /**Akhir method kahris */
+
+    // Validasi Rancangan Anggota Lembaga
+    public function daftarLembaga()
+    {
+        $data['title'] = 'Validasi';
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['lembaga'] = $this->kemahasiswaan->getInfoLembaga(1);
+        // $data['filter'] = $this->kegiatan->getDataFilterRancangan();
+        $data['filter'] = [];
+        $this->db->select('periode');
+        $this->db->from('pengajuan_anggota_lembaga');
+        $this->db->group_by('periode');
+        $data['filter']['tahun'] = $this->db->get()->result_array();
+        // var_dump($data['filter']);
+        // die;
+        // $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga' => $this->session->userdata('username')])->row_array();
+        $data['notif'] = $this->_notifKmhs();
+        if ($this->input->get('tahun') != null || $this->input->get('lembaga') != null || $this->input->get('status') != null || $this->input->get('aktif') != null) {
+            $tahun = $this->input->get('tahun');
+            $lembaga = $this->input->get('lembaga');
+            $valid =  $this->input->get('status');
+            $aktif =  $this->input->get('aktif');
+            // $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan($tahun, $lembaga, $status);
+            if ($this->input->get('tahun') != null) {
+                $this->db->where('periode', $tahun);
+            }
+            if ($this->input->get('lembaga') != null) {
+                $this->db->where('lembaga.id_lembaga', intval($lembaga));
+            }
+            if ($this->input->get('status') != null) {
+                $this->db->where('status_validasi', $valid);
+            }
+            if ($this->input->get('aktif') != null) {
+                $this->db->where('status_keaktifan', $aktif);
+            }
+            $this->db->from('pengajuan_anggota_lembaga');
+            $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
+            $data['pengajuan'] = $this->db->get()->result_array();
+        } else {
+            // $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
+            $this->db->where('periode', 2020);
+            $this->db->from('pengajuan_anggota_lembaga');
+            $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
+            $data['pengajuan'] = $this->db->get()->result_array();
+        }
+
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        if ($this->session->userdata('user_profil_kode') == 9) {
+            $this->load->view("template/sidebar_admin", $data);
+        } else {
+            $this->load->view("template/sidebar", $data);
+        }
+        $this->load->view("kemahasiswaan/daftar_lembaga");
+        $this->load->view("template/footer");
+    }
+
+    public function validasiAnggotaLembaga($id_pengajuan)
+    {
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 1]);
+
+        $this->session->set_flashdata('message', 'Anggota Lembaga berhasil divalidasi !');
+        redirect("Kemahasiswaan/daftarLembaga");
+    }
+
+    public function validasiKeaktifanAnggota($id_pengajuan)
+    {
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_keaktifan' => 1]);
+
+        // Tambahkan SKP ke masing" anggota
+        $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
+        $this->db->from('daftar_anggota_lembaga');
+        $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
+        $anggota_lembaga = $this->db->get()->result_array();
+
+        $anggota_status_aktif = [];
+        $mahasiswa = [];
+        for ($i = 0; $i < count($anggota_lembaga); $i++) {
+            $data = [
+                'nim' => $anggota_lembaga[$i]['nim'],
+                'nama_kegiatan' => 'Keanggotaan Lembaga',
+                'validasi_prestasi' => 1,
+                'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi'])
+            ];
+            $this->db->where('nim', $anggota_lembaga[$i]['nim']);
+            $mahasiswa_temp = $this->db->get('mahasiswa')->row_array();
+            $poin_skp_sementara = intval($mahasiswa_temp['total_poin_skp']);
+            $poin_tambahan = intval($anggota_lembaga[$i]['bobot']);
+
+            $data2 = [
+                'nim' => $anggota_lembaga[$i]['nim'],
+                'total_poin_skp' => $poin_skp_sementara + $poin_tambahan
+            ];
+            if ($anggota_lembaga[$i]['status_aktif'] == 1) {
+                array_push($mahasiswa, $data2);
+                array_push($anggota_status_aktif, $data);
+            }
+        }
+        // Update total SKP
+        $this->db->update_batch('mahasiswa', $mahasiswa, 'nim');
+
+        $this->db->insert_batch('poin_skp', $anggota_status_aktif);
+
+        $this->session->set_flashdata('message', 'Keaktifan Anggota Lembaga berhasil divalidasi !');
+        redirect("Kemahasiswaan/daftarLembaga");
+    }
 }

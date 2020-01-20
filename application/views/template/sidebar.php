@@ -111,6 +111,14 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                                                     <?php if ($ssb['id_sub_sub_menu'] == 15 && $notif['notif_keuangan_lpj'] != 0) : ?>
                                                         <span class="badge badge-warning"><?= $notif['notif_keuangan_lpj'] ?></span>
                                                     <?php endif; ?>
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 17 && $notif['notif_kmhs_validasi_anggota_lembaga'] != 0) : ?>
+                                                        <span class="badge badge-warning"><?= $notif['notif_kmhs_validasi_anggota_lembaga'] ?></span>
+                                                    <?php endif; ?>
+
+                                                    <?php if ($ssb['id_sub_sub_menu'] == 17 && $notif['notif_kmhs_keaktifan_anggota_lembaga'] != 0) : ?>
+                                                        <span class="badge badge-success"><?= $notif['notif_kmhs_keaktifan_anggota_lembaga'] ?></span>
+                                                    <?php endif; ?>
                                                 </div>
                                             </div>
 

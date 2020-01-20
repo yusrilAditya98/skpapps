@@ -48,6 +48,10 @@ $(".table-kategori").DataTable({
 	"pageLength": 5
 });
 
+$(".table-anggota-lembaga").DataTable({
+	"pageLength": 5
+});
+
 $("#table-kegiatan").DataTable({
 	"pageLength": 5,
 	"columnDefs": [{

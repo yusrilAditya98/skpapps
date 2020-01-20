@@ -163,3 +163,223 @@ $('.revisi-rancangan-proker').on('click', function () {
 	$('.value-valid').val(2);
 	$('.form-revisi-rancangan').attr('action', segments[0] + '/' + segments[3] + '/Kemahasiswaan/validasiRancanganProker/' + id_daftar_rancangan)
 })
+
+// Validasi Anggota Lembaga
+
+$('#table-1').on('click', '.validasiAnggota', function () {
+	let id = $(this).data('id');
+	let lembaga = $(this).data('lembaga');
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/validasiAnggotaLembaga/' + id;
+	$('.detailValidasiAnggota').attr('href', link_a);
+	// console.log(lembaga);
+
+	// Data Lembaga
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('.nama_lembaga').html("Nama Lembaga : " + data['nama_lembaga']);
+			$('.jenis_lembaga').html("Jenis Lembaga   : " + data['jenis_lembaga']);
+			$('.periode').html("Periode Keanggotaan   : " + data['periode']);
+		}
+	});
+
+	// Data SKP
+	// console.log(id);
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailAnggotaLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			// console.log(data);
+			if (data.length != 0) {
+				$('.body-validasi-anggota').html('');
+				var i = 0;
+				data.forEach(function (dataA) {
+					$('.body-validasi-anggota').append(`<tr>
+					<td class="text-center">` + (++i) + `</td>
+					<td>` + dataA['nama'] + `</td>
+					<td>` + dataA['nim'] + `</td>
+					<td>` + dataA['nama_prestasi'] + `</td>
+                    </tr>`)
+				})
+			} else {
+				$('.body-validasi-anggota').html('');
+				$('.body-validasi-anggota').html(`
+                <tr>
+                   <td colspan="6">
+                        <h3 class="text-center my-2">Belum ada Anggota</h3>
+                    </td>
+                </tr>`);
+			}
+		}
+	});
+
+})
+
+$('#table-1').on('click', '.validasiAnggotaFix', function () {
+	let id = $(this).data('id');
+	let lembaga = $(this).data('lembaga');
+	// console.log(lembaga);
+
+	// Data Lembaga
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('.nama_lembaga_fix').html("Nama Lembaga : " + data['nama_lembaga']);
+			$('.jenis_lembaga_fix').html("Jenis Lembaga   : " + data['jenis_lembaga']);
+			$('.periode_fix').html("Periode Keanggotaan   : " + data['periode']);
+		}
+	});
+
+	// Data SKP
+	// console.log(id);
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailAnggotaLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			// console.log(data);
+			if (data.length != 0) {
+				$('.body-validasi-anggota-fix').html('');
+				var i = 0;
+				data.forEach(function (dataA) {
+					$('.body-validasi-anggota-fix').append(`<tr>
+					<td class="text-center">` + (++i) + `</td>
+					<td>` + dataA['nama'] + `</td>
+					<td>` + dataA['nim'] + `</td>
+					<td>` + dataA['nama_prestasi'] + `</td>
+                    </tr>`)
+				})
+			} else {
+				$('.body-validasi-anggota-fix').html('');
+				$('.body-validasi-anggota-fix').html(`
+                <tr>
+                   <td colspan="6">
+                        <h3 class="text-center my-2">Belum ada Anggota</h3>
+                    </td>
+                </tr>`);
+			}
+		}
+	});
+
+})
+
+$('#table-1').on('click', '.keaktifanAnggota', function () {
+	let id = $(this).data('id');
+	let lembaga = $(this).data('lembaga');
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/validasiKeaktifanAnggota/' + id;
+	$('.detailKeaktifanAnggota').attr('href', link_a);
+	// console.log(lembaga);
+
+	// Data Lembaga
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('.nama_lembaga_aktif').html("Nama Lembaga : " + data['nama_lembaga']);
+			$('.jenis_lembaga_aktif').html("Jenis Lembaga   : " + data['jenis_lembaga']);
+			$('.periode_aktif').html("Periode Keanggotaan   : " + data['periode']);
+		}
+	});
+
+	// Data SKP
+	// console.log(id);
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailAnggotaLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			// console.log(data);
+			if (data.length != 0) {
+				$('.body-keaktifan-anggota').html('');
+				var i = 0;
+				data.forEach(function (dataA) {
+					$('.body-keaktifan-anggota').append(`<tr class="keaktifan_anggota_` + dataA['nim'] + `">
+					<td class="text-center">` + (++i) + `</td>
+					<td>` + dataA['nama'] + `</td>
+					<td>` + dataA['nim'] + `</td>
+					<td>` + dataA['nama_prestasi'] + `</td>
+					<td>` + dataA['bobot'] + `</td>
+					</tr>`);
+					var classA = '.keaktifan_anggota_' + dataA['nim'];
+					if (dataA['status_aktif'] == 1) {
+						$(classA).append(`<td class="text-success">Aktif</td>`)
+					} else {
+						$(classA).append(`<td class="text-danger">Tidak Aktif</td>`)
+					}
+				})
+			} else {
+				$('.body-keaktifan-anggota').html('');
+				$('.body-keaktifan-anggota').html(`
+                <tr>
+                   <td colspan="6">
+                        <h3 class="text-center my-2">Belum ada Anggota</h3>
+                    </td>
+                </tr>`);
+			}
+		}
+	});
+
+})
+
+$('#table-1').on('click', '.keaktifanAnggotaFix', function () {
+	let id = $(this).data('id');
+	let lembaga = $(this).data('lembaga');
+	// console.log(lembaga);
+
+	// Data Lembaga
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('.nama_lembaga_aktif_fix').html("Nama Lembaga : " + data['nama_lembaga']);
+			$('.jenis_lembaga_aktif_fix').html("Jenis Lembaga   : " + data['jenis_lembaga']);
+			$('.periode_aktif_fix').html("Periode Keanggotaan   : " + data['periode']);
+		}
+	});
+
+	// Data SKP
+	// console.log(id);
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDetailAnggotaLembaga/' + id,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			// console.log(data);
+			if (data.length != 0) {
+				$('.body-keaktifan-anggota-fix').html('');
+				var i = 0;
+				data.forEach(function (dataA) {
+					$('.body-keaktifan-anggota-fix').append(`<tr class="keaktifan_anggota_` + dataA['nim'] + `">
+					<td class="text-center">` + (++i) + `</td>
+					<td>` + dataA['nama'] + `</td>
+					<td>` + dataA['nim'] + `</td>
+					<td>` + dataA['nama_prestasi'] + `</td>
+					<td>` + dataA['bobot'] + `</td>
+					</tr>`);
+					var classA = '.keaktifan_anggota_' + dataA['nim'];
+					if (dataA['status_aktif'] == 1) {
+						$(classA).append(`<td class="text-success">Aktif</td>`)
+					} else {
+						$(classA).append(`<td class="text-danger">Tidak Aktif</td>`)
+					}
+				})
+			} else {
+				$('.body-keaktifan-anggota-fix').html('');
+				$('.body-keaktifan-anggota-fix').html(`
+                <tr>
+                   <td colspan="6">
+                        <h3 class="text-center my-2">Belum ada Anggota</h3>
+                    </td>
+                </tr>`);
+			}
+		}
+	});
+
+})

@@ -113,4 +113,39 @@ class Model_lembaga extends CI_Model
         $this->db->limit(5);
         return $this->db->get()->result_array();
     }
+
+    public function getPeriodeLembaga($id_lembaga)
+    {
+        $this->db->select('tahun_rancangan, jenis_lembaga');
+        $this->db->from('lembaga');
+        $this->db->where('id_lembaga', $id_lembaga);
+        $data = $this->db->get()->row_array();
+        return $data;
+    }
+
+    //Rancangan Anggota
+    public function insertRancanganAnggota($rancanganAnggota)
+    {
+        $this->db->set($rancanganAnggota);
+        $this->db->insert('pengajuan_anggota_lembaga');
+    }
+    public function getIdRancanganAnggota($id_lembaga = null, $periode = null)
+    {
+        $this->db->select('*');
+        $this->db->from('pengajuan_anggota_lembaga');
+        if ($id_lembaga != null || $periode != null) {
+            $this->db->where('periode', $periode);
+            $this->db->where('id_lembaga', $id_lembaga);
+        }
+        return $this->db->get()->row_array();
+    }
+    public function insertAnggotaLembaga($dataAnggota)
+    {
+        $this->db->insert_batch('daftar_anggota_lembaga', $dataAnggota);
+    }
+    public function updateLembaga($data, $id_lembaga)
+    {
+        $this->db->where('id_lembaga', $id_lembaga);
+        $this->db->update('lembaga', $data);
+    }
 }

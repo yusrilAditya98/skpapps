@@ -146,10 +146,10 @@
 											<td><?= $r['tahun_kegiatan'] ?>
 											<td class="text-left">
 												<?php $date = date_create($r['tanggal_mulai_pelaksanaan']);
-													echo date_format($date, "d M Y"); ?>
+												echo date_format($date, "d M Y"); ?>
 												-
 												<?php $date = date_create($r['tanggal_selesai_pelaksanaan']);
-													echo date_format($date, "d M Y"); ?>
+												echo date_format($date, "d M Y"); ?>
 											</td>
 
 											<td class="text-left"><?= $r['nama_proker'] ?></td>

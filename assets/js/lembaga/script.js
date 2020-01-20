@@ -273,7 +273,7 @@ $('.d-revisi').on('click', function () {
 
 
 let jumlahAnggota = $('#jumlahAnggota').val();
-// Menampilkan daftar selurh mahasiswa
+// Menampilkan daftar seluruh mahasiswa
 $('.submit-mhs').on('click', function () {
 
 	let nim = []
@@ -354,3 +354,172 @@ $('.hps-mhs').on('click', function () {
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
 })
+
+// Anggota Lembaga
+$('.daftarMahasiswaLembaga').on("click", function () {
+	let tingkatKegiatan = $('#jenis_lembaga').val();
+	console.log(tingkatKegiatan);
+	cek = tingkatKegiatan;
+	$('.dataTables_wrapper').remove()
+	$('.partisipasi').remove()
+	if (tingkatKegiatan != 0) {
+		$('.notice-mhs').remove()
+		$('.table-mhs').append(`<table class="table table-striped table-mahasiswa"></table>`)
+		$.ajax({
+			url: segments[0] + '/' + segments[3] + '/API_skp/partisipasiKegiatan/' + tingkatKegiatan,
+			method: 'get',
+			dataType: 'json',
+			success: function (data) {
+				let partisipasi = "";
+				partisipasi += `<select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>`
+				for (var i in data) {
+					partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+				}
+				partisipasi += `</select>`;
+				let id_kegiatan;
+				if (segments[6]) {
+					id_kegiatan = segments[6]
+				}
+				$.ajax({
+					url: segments[0] + '/' + segments[3] + '/API_skp/dataMahasiswa/?id=' + id_kegiatan,
+					method: 'get',
+					dataType: 'json',
+					beforeSend: function () {
+						$('.table-mhs').append(` <div class="loader">
+                        <img src="` + segments[0] + '/' + segments[3] + `/assets/img/loader.gif" alt="">
+                        </div>`)
+					},
+					success: function (data) {
+						let dataTampung = [];
+						let index = 1;
+						let dataMhs = data['mhs']
+						let mhs = data['mhs_kegiatan']
+						let bkn_anggota = data['bkn_mhs_kegiatan'];
+						for (var k in mhs) {
+							for (var j in dataMhs) {
+								if (mhs[k].nim == dataMhs[j].nim) {
+									let temp = [];
+									temp.push(index++)
+									temp.push(`<span id="t-nim-` + dataMhs[j].nim + `">` + dataMhs[j].nim + `</span>`)
+									temp.push(`<span id="t-nama-` + dataMhs[j].nim + `">` + dataMhs[j].nama + `</span>`)
+									temp.push(`<span id="t-prestasi-` + dataMhs[j].nim + `">` + partisipasi + `</span>`)
+									temp.push(`<span id="t-cek-` + dataMhs[j].nim + `"><input checked type="checkbox" class="cek" id="checkbox` + dataMhs[j].nim + `"></span>`)
+									dataTampung.push(temp);
+								}
+							}
+						}
+						for (var j in bkn_anggota) {
+							let temp = [];
+							temp.push(index++)
+							temp.push(`<span id="t-nim-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nim + `</span>`)
+							temp.push(`<span id="t-nama-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nama + `</span>`)
+							temp.push(`<span id="t-prestasi-` + bkn_anggota[j].nim + `">` + partisipasi + `</span>`)
+							temp.push(`<span id="t-cek-` + bkn_anggota[j].nim + `"><input type="checkbox" class="cek" id="checkbox` + bkn_anggota[j].nim + `"></span>`)
+							dataTampung.push(temp);
+						}
+						$('.table-mahasiswa').DataTable({
+							data: dataTampung,
+							columns: [{
+									title: "No"
+								},
+								{
+									title: "Nim"
+								},
+								{
+									title: "Nama"
+								},
+								{
+									title: "Prestasi"
+								},
+								{
+									title: "Action"
+								}
+							]
+						})
+					}
+				})
+			}
+		})
+	} else {
+		$('.table-mhs').append(`<h2 class="notice-mhs">Anda Belum Memilih Tingkat Kegiatan !</h2>`)
+	}
+})
+
+$('.submit-mhs-lembaga').on('click', function () {
+
+	let nim = []
+	let nama = []
+	let posisi = []
+	let valPosisi = []
+	let check = []
+	let oMhs = []
+	let aMhs = []
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/daftarMahasiswa',
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			for (var i in data) {
+
+				nim.push($('#t-nim-' + data[i].nim).text());
+				nama.push($('#t-nama-' + data[i].nim).text());
+				posisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan option:selected').text());
+				valPosisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan option:selected').val());
+				check.push($('#checkbox' + data[i].nim).is(":checked"));
+			}
+			for (var j in data) {
+				if (check[j] == true && valPosisi[j] != 0) {
+					oMhs = [];
+					oMhs.push(nim[j]);
+					oMhs.push(nama[j]);
+					oMhs.push(posisi[j]);
+					oMhs.push(valPosisi[j]);
+					aMhs.push(oMhs);
+				}
+			}
+
+			let id = 1;
+			if (jumlahAnggota != 0) {
+				id = parseInt(jumlahAnggota) + 1;
+			}
+			for (var k in aMhs) {
+				$('.d-m#data-' + aMhs[k][0] + '').remove()
+				$('.daftar-mhs').append(`
+					<tr class="d-m" id="data-` + aMhs[k][0] + `">
+						<td>` + (id) + `</td>
+						<td>` + aMhs[k][0] + `
+							<input  type="hidden" name="nim_` + aMhs[k][0] + `" value="` + aMhs[k][0] + `" id="nim_` + aMhs[k][0] + `" >
+						</td>
+						<td>` + aMhs[k][1] + `</td>
+						<td>` + aMhs[k][2] + `
+							<input  type="hidden" name="prestasi_` + aMhs[k][0] + `" value="` + aMhs[k][3] + `" id="nim_` + aMhs[k][0] + `" >
+						</td>
+						<td> <button onclick="myFunction(` + aMhs[k][0] + `)" type="button" data-id="` + aMhs[k][0] + `" class="btn btn-danger hps-mhs-1"><i class="fas fa-trash-alt"></i></></td>
+					</tr>
+				`)
+				id++
+			}
+			jumlahAnggota = cekJumlahAnggota();
+			$('#jumlahAnggota').val(jumlahAnggota);
+
+		}
+	})
+})
+
+function aktifSemua() {
+	let id_pengajuan = $('#pengajuanId').val();
+	let tahun = $('#tahun').val();
+	console.log(id_pengajuan);
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/daftarAnggotaLembaga?id=' + id_pengajuan,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			console.log(data);
+			for (let i = 0; i < data.length; i++) {
+				var a = 'keaktifan_' + data[i]['nim'];
+				$("input[name='" + a + "'][value='1']").prop("checked", true);
+			}
+		}
+	})
+}
