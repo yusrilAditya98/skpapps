@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 20, 2020 at 06:13 PM
+-- Generation Time: Jan 20, 2020 at 06:46 PM
 -- Server version: 10.4.6-MariaDB
 -- PHP Version: 7.3.8
 
@@ -114,16 +114,6 @@ CREATE TABLE `daftar_anggota_lembaga` (
   `id_pengajuan_anggota_lembaga` int(10) NOT NULL,
   `id_sm_prestasi` int(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `daftar_anggota_lembaga`
---
-
-INSERT INTO `daftar_anggota_lembaga` (`id`, `nim`, `status_aktif`, `id_pengajuan_anggota_lembaga`, `id_sm_prestasi`) VALUES
-(25, '155150201111001', 1, 21, 22),
-(26, '165020111123221', 1, 21, 23),
-(27, '165150201111230', 2, 21, 24),
-(28, '165150201111231', 2, 21, 25);
 
 -- --------------------------------------------------------
 
@@ -462,8 +452,8 @@ CREATE TABLE `mahasiswa` (
 --
 
 INSERT INTO `mahasiswa` (`nim`, `nama`, `total_poin_skp`, `alamat_kos`, `alamat_rumah`, `email`, `kode_prodi`, `nomor_hp`) VALUES
-('155150201111001', 'Donny Adriawan', 45, 'Jl. A', 'Jl. A', 'donny@gmail.com', 1, '088888888'),
-('165020111123221', 'Lalu Matlau Roflan', 55, 'Malang', 'Malang Kabupaten', 'roflan@gmail.com', 6, '08221123456'),
+('155150201111001', 'Donny Adriawan', 0, 'Jl. A', 'Jl. A', 'donny@gmail.com', 1, '088888888'),
+('165020111123221', 'Lalu Matlau Roflan', 15, 'Malang', 'Malang Kabupaten', 'roflan@gmail.com', 6, '08221123456'),
 ('165150201111230', 'Aditya Yusril Fikri', 65, 'Jln. Simpang Candi Panggung', 'Jln. H. Naim Btn Bumi Mataram Indah Blok B/5 Jempong Barat', 'adit9b02@gmail.com', 7, '083129097726'),
 ('165150201111231', 'Ahmad Dahlan', 15, 'Malang', 'Malang raya', 'ahmad@gmail.com', 7, '08123456789'),
 ('175150201111230', 'Hesya Nungki Nabila', 45, 'Jln. Sugura gura no 27 malang', 'jln simpang candi panggung gg 3 nomer 6 malang', 'shesya@gmail.com', 3, '081234567'),
@@ -520,13 +510,6 @@ CREATE TABLE `pengajuan_anggota_lembaga` (
   `status_keaktifan` int(2) NOT NULL,
   `jumlah_anggota_lembaga` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `pengajuan_anggota_lembaga`
---
-
-INSERT INTO `pengajuan_anggota_lembaga` (`id`, `id_lembaga`, `status_pembukaan`, `periode`, `status_validasi`, `status_keaktifan`, `jumlah_anggota_lembaga`) VALUES
-(21, 100, 1, 2020, 1, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -590,9 +573,7 @@ INSERT INTO `poin_skp` (`id_poin_skp`, `nim`, `nama_kegiatan`, `validasi_prestas
 (14, '195020100111010', 'Seminar Nasional Ekonomi Digital 4.0', 1, '2020-01-06', '2020-01-04', 'lpj/1578277240_file_lpj_10111.pdf', 'Aula FEB UB', '-', 42),
 (17, '165150201111230', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 129),
 (18, '195020100111002', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 130),
-(19, '175150201111230', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 131),
-(22, '155150201111001', 'Keanggotaan Lembaga', 1, '0000-00-00', '0000-00-00', '', '', '', 22),
-(23, '165020111123221', 'Keanggotaan Lembaga', 1, '0000-00-00', '0000-00-00', '', '', '', 23);
+(19, '175150201111230', 'Lomba Internatioonal Idol Student 4.0', 1, '2020-01-06', '2020-01-06', 'lpj/1578282534_file_lpj_1751502011112301.pdf', 'Harvard University', '-', 131);
 
 -- --------------------------------------------------------
 
@@ -1586,7 +1567,7 @@ ALTER TABLE `bidang_kegiatan`
 -- AUTO_INCREMENT for table `daftar_anggota_lembaga`
 --
 ALTER TABLE `daftar_anggota_lembaga`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `daftar_rancangan_kegiatan`
@@ -1646,7 +1627,7 @@ ALTER TABLE `lembaga`
 -- AUTO_INCREMENT for table `pengajuan_anggota_lembaga`
 --
 ALTER TABLE `pengajuan_anggota_lembaga`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `peserta_kuliah_tamu`
@@ -1658,7 +1639,7 @@ ALTER TABLE `peserta_kuliah_tamu`
 -- AUTO_INCREMENT for table `poin_skp`
 --
 ALTER TABLE `poin_skp`
-  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id_poin_skp` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `prestasi`
