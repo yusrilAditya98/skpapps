@@ -33,6 +33,24 @@ class Auth extends CI_Controller
             $this->_login_siam();
         }
     }
+
+    public function login()
+    {
+        if ($this->session->userdata('user_profil_kode')) {
+            redirect(link_dashboard($this->session->userdata('user_profil_kode')));
+        }
+
+        $this->form_validation->set_rules('username', 'Username', 'required|trim');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $data['title'] = 'SKP-APPS Login Staff';
+            $this->load->view('auth/login_staff', $data);
+        } else {
+            // validasi success
+            $this->_login();
+        }
+    }
     // login by non-siam accounts
     private function _login()
     {
@@ -61,7 +79,7 @@ class Auth extends CI_Controller
                             $this->session->unset_userdata('nama');
                             $this->session->unset_userdata('user_profil_kode');
                             $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data lembaga belum terdaftar !</div> ');
-                            redirect('Auth');
+                            redirect('Auth/login');
                         }
                     } elseif ($user['user_profil_kode'] == 1) {
                         $mahasiswa = $this->db->get_where('mahasiswa', ['nim' => $this->username])->row_array();
@@ -72,7 +90,7 @@ class Auth extends CI_Controller
                             $this->session->unset_userdata('nama');
                             $this->session->unset_userdata('user_profil_kode');
                             $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data mahasiswa belum terdaftar !</div> ');
-                            redirect('Auth');
+                            redirect('Auth/login');
                         }
                     } elseif ($user['user_profil_kode'] == 4) {
                         redirect('Kemahasiswaan');
@@ -89,15 +107,15 @@ class Auth extends CI_Controller
                     }
                 } else {
                     $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Password salah !</div> ');
-                    redirect('Auth');
+                    redirect('Auth/login');
                 }
             } else {
                 $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Akun belum aktif!</div> ');
-                redirect('Auth');
+                redirect('Auth/login');
             }
         } else {
             $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data tidak ditemukan !</div> ');
-            redirect('Auth');
+            redirect('Auth/login');
         }
     }
     // login by siam accounts

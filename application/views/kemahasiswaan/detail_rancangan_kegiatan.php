@@ -62,7 +62,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="col-lg-4">
-                                                            <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="<?= $r['id_daftar_rancangan'] ?>" class="btn btn-primary revisi-rancangan-proker"><i class="fas fa-edit"></i></button>
+                                                            <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="<?= $r['id_daftar_rancangan'] ?>" class="btn btn-primary btn-sm revisi-rancangan-proker"><i class="fas fa-edit"></i></button>
                                                         </div>
                                                     </div>
                                                 <?php elseif ($r['status_rancangan'] == 0) : ?>

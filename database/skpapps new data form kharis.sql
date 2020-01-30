@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 17 Jan 2020 pada 08.47
+-- Generation Time: 30 Jan 2020 pada 01.32
 -- Versi Server: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -122,6 +122,20 @@ INSERT INTO `bidang_kegiatan` (`id_bidang`, `nama_bidang`) VALUES
 (4, 'Minat dan Bakat'),
 (5, 'Kepedulian Sosial dan Kemasyarakatan'),
 (6, 'Lainnya');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `daftar_anggota_lembaga`
+--
+
+CREATE TABLE `daftar_anggota_lembaga` (
+  `id` int(11) NOT NULL,
+  `nim` varchar(50) NOT NULL,
+  `status_aktif` int(1) NOT NULL,
+  `id_pengajuan_anggota_lembaga` int(10) NOT NULL,
+  `id_sm_prestasi` int(10) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -539,6 +553,22 @@ INSERT INTO `penerima_beasiswa` (`id_penerima`, `id_beasiswa`, `nim`, `tahun_men
 (0, 1, '165150201111230', '2020-01-16', '2020-01-17', 2000000, '1579165019_lampiran_107.pdf', '1579165019_bukti_penerimaan_107.pdf', 0, 'Kemnristekditi'),
 (1, 1, '165150201111230', '2019-12-08', '2019-12-13', 1500000, '1575802633_kegiatan_1.pdf', '1575802633_kegiatan_11.pdf', 1, 'Kemenristekditi'),
 (2, 1, '165150201111230', '2019-12-09', '2019-12-10', 1800000, '1575802790_kegiatan_1.pdf', '1575802790_kegiatan_2.pdf', 2, 'Kemenristekditi');
+
+-- --------------------------------------------------------
+
+--
+-- Struktur dari tabel `pengajuan_anggota_lembaga`
+--
+
+CREATE TABLE `pengajuan_anggota_lembaga` (
+  `id` int(11) NOT NULL,
+  `id_lembaga` int(10) NOT NULL,
+  `status_pembukaan` int(11) NOT NULL,
+  `periode` year(4) NOT NULL,
+  `status_validasi` int(1) NOT NULL,
+  `status_keaktifan` int(2) NOT NULL,
+  `jumlah_anggota_lembaga` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -1148,7 +1178,8 @@ INSERT INTO `user_access_menu` (`id`, `user_profil_kode`, `menu_id`) VALUES
 (11, 9, 8),
 (12, 9, 4),
 (13, 9, 5),
-(14, 9, 6);
+(14, 9, 6),
+(15, 9, 7);
 
 -- --------------------------------------------------------
 
@@ -1235,8 +1266,8 @@ INSERT INTO `user_sub_menu` (`id`, `judul`, `url`, `ikon`, `menu_id`, `has_sub`)
 (12, 'Lembaga', 'Kemahasiswaan/lembaga', 'fas fa-university', 4, 0),
 (13, 'Anggaran', 'Kemahasiswaan/laporanSerapan', 'fas fa-file-invoice-dollar', 4, 0),
 (15, 'Dashboard', 'Pimpinan', 'fas fa-fire', 5, 0),
-(16, 'Poin Skp Mahasiswa', 'Pimpinan/poinSkp', 'fas fa-rocket', 5, 0),
-(17, 'Anggaran Pengeluaran', 'Pimpinan/laporanSerapan', 'fas fa-rocket', 5, 0),
+(16, 'Poin Skp', 'Pimpinan/poinSkp', 'fas fa-rocket', 5, 0),
+(17, 'Laporan Serapan Kegiatan', 'Pimpinan/laporanSerapan', 'fas fa-rocket', 5, 0),
 (18, 'Dashboard', 'Publikasi', 'fas fa-fire', 7, 0),
 (19, 'Validasi', '', 'fas fa-rocket', 7, 1),
 (20, 'Dashboard', 'Keuangan', 'fas fa-fire', 6, 0),
@@ -1245,9 +1276,11 @@ INSERT INTO `user_sub_menu` (`id`, `judul`, `url`, `ikon`, `menu_id`, `has_sub`)
 (23, 'Kegiatan', 'Akademik/kegiatan', 'fas fa-rocket', 8, 0),
 (24, 'Dashboard', '', 'fas fa-rocket', 9, 0),
 (25, 'Manegement User', 'Admin/ManagementUser', 'fas fa-rocket', 9, 0),
-(26, 'Laporan Serapan Kegiatan', 'Keuangan/laporanSerapan', 'fas fa-rocket', 6, 0),
+(26, 'Laporan Serapan Kegiatan', 'Keuangan/laporanSerapan', 'fas fa-file-invoice-dollar', 6, 0),
 (27, 'Kategori', 'Kemahasiswaan/kategori', 'fas fa-rocket', 4, 0),
-(29, 'Beasiswa', 'Mahasiswa/beasiswa', 'fas fa-briefcase', 1, 0);
+(29, 'Beasiswa', 'Mahasiswa/beasiswa', 'fas fa-briefcase', 1, 0),
+(30, 'Rekapitulasi SKP', 'Pimpinan/rekapitulasiSKP', 'fas fa-rocket', 5, 0),
+(31, 'Anggota', 'Kegiatan/anggota', 'fas fa-user', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -1282,7 +1315,8 @@ INSERT INTO `user_sub_sub_menu` (`id_sub_sub_menu`, `nama`, `url`, `id_sub_menu`
 (13, 'Lpj', 'Publikasi/daftarLpj', 19),
 (14, 'Proposal', 'Keuangan/daftarPengajuanKeuangan', 21),
 (15, 'Lpj', 'Keuangan/daftarPengajuanLpj', 21),
-(16, 'Beasiswa', 'Kemahasiswaan/beasiswa', 10);
+(16, 'Beasiswa', 'Kemahasiswaan/beasiswa', 10),
+(17, 'Anggota', 'Kemahasiswaan/daftarLembaga', 10);
 
 -- --------------------------------------------------------
 
@@ -1388,6 +1422,15 @@ ALTER TABLE `bidang_kegiatan`
   ADD PRIMARY KEY (`id_bidang`);
 
 --
+-- Indexes for table `daftar_anggota_lembaga`
+--
+ALTER TABLE `daftar_anggota_lembaga`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `nim` (`nim`),
+  ADD KEY `id_pengajuan_anggota_lembaga` (`id_pengajuan_anggota_lembaga`),
+  ADD KEY `id_sm_prestasi` (`id_sm_prestasi`);
+
+--
 -- Indexes for table `daftar_rancangan_kegiatan`
 --
 ALTER TABLE `daftar_rancangan_kegiatan`
@@ -1476,6 +1519,13 @@ ALTER TABLE `penerima_beasiswa`
   ADD PRIMARY KEY (`id_penerima`),
   ADD KEY `FKpenerima_b395565` (`id_beasiswa`),
   ADD KEY `nim` (`nim`);
+
+--
+-- Indexes for table `pengajuan_anggota_lembaga`
+--
+ALTER TABLE `pengajuan_anggota_lembaga`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_lembaga` (`id_lembaga`);
 
 --
 -- Indexes for table `peserta_kuliah_tamu`
@@ -1614,6 +1664,12 @@ ALTER TABLE `bidang_kegiatan`
   MODIFY `id_bidang` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
+-- AUTO_INCREMENT for table `daftar_anggota_lembaga`
+--
+ALTER TABLE `daftar_anggota_lembaga`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `daftar_rancangan_kegiatan`
 --
 ALTER TABLE `daftar_rancangan_kegiatan`
@@ -1672,6 +1728,12 @@ ALTER TABLE `lembaga`
 --
 ALTER TABLE `list_pimpinan`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `pengajuan_anggota_lembaga`
+--
+ALTER TABLE `pengajuan_anggota_lembaga`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `peserta_kuliah_tamu`
@@ -1737,7 +1799,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user_access_menu`
 --
 ALTER TABLE `user_access_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `user_menu`
@@ -1755,7 +1817,7 @@ ALTER TABLE `user_profil`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `validasi_kegiatan`
@@ -1774,6 +1836,14 @@ ALTER TABLE `anggota_kegiatan`
   ADD CONSTRAINT `FKanggota_ke292503` FOREIGN KEY (`id_kegiatan`) REFERENCES `kegiatan` (`id_kegiatan`),
   ADD CONSTRAINT `FKanggota_ke69235` FOREIGN KEY (`id_prestasi`) REFERENCES `semua_prestasi` (`id_semua_prestasi`),
   ADD CONSTRAINT `anggota_kegiatan_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
+
+--
+-- Ketidakleluasaan untuk tabel `daftar_anggota_lembaga`
+--
+ALTER TABLE `daftar_anggota_lembaga`
+  ADD CONSTRAINT `daftar_anggota_lembaga_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`),
+  ADD CONSTRAINT `daftar_anggota_lembaga_ibfk_2` FOREIGN KEY (`id_pengajuan_anggota_lembaga`) REFERENCES `pengajuan_anggota_lembaga` (`id`),
+  ADD CONSTRAINT `daftar_anggota_lembaga_ibfk_3` FOREIGN KEY (`id_sm_prestasi`) REFERENCES `semua_prestasi` (`id_semua_prestasi`);
 
 --
 -- Ketidakleluasaan untuk tabel `daftar_rancangan_kegiatan`
@@ -1825,6 +1895,12 @@ ALTER TABLE `mahasiswa`
 ALTER TABLE `penerima_beasiswa`
   ADD CONSTRAINT `FKpenerima_b395565` FOREIGN KEY (`id_beasiswa`) REFERENCES `beasiswa` (`id`),
   ADD CONSTRAINT `penerima_beasiswa_ibfk_1` FOREIGN KEY (`nim`) REFERENCES `mahasiswa` (`nim`);
+
+--
+-- Ketidakleluasaan untuk tabel `pengajuan_anggota_lembaga`
+--
+ALTER TABLE `pengajuan_anggota_lembaga`
+  ADD CONSTRAINT `pengajuan_anggota_lembaga_ibfk_1` FOREIGN KEY (`id_lembaga`) REFERENCES `lembaga` (`id_lembaga`);
 
 --
 -- Ketidakleluasaan untuk tabel `peserta_kuliah_tamu`

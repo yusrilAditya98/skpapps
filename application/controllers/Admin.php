@@ -211,6 +211,13 @@ class Admin extends CI_Controller
         header('Content-type:application/json');
         echo json_encode($data);
     }
+    public function getMahasiswa()
+    {
+        $data = $this->db->get('mahasiswa')->result_array();
+        header('Content-type:application/json');
+        echo json_encode($data);
+    }
+
     public function getProfilUser()
     {
         $data = $this->db->get('user_profil')->result_array();

@@ -159,7 +159,7 @@
 		<div class="col-4">
 			a.n Dekan <br>
 			<?= $pimpinan[5]['jabatan'] ?>,<br>
-			<p style="margin-top:100px;"><?= $mahasiswa[0]['nama'] ?> <br> NIP. <?= $pimpinan[5]['nip'] ?></p>
+			<p style="margin-top:100px;"><?= $pimpinan[5]['nama'] ?> <br> NIP. <?= $pimpinan[5]['nip'] ?></p>
 		</div>
 		<div class="col-4">
 

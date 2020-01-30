@@ -38,13 +38,25 @@ $('#status_user').on('change', function () {
 		</select>`)
 		$('#ketua-lembaga-extend').append(`
 		<label for="ketua_lembaga" class="col-form-label">Ketua Lembaga</label>
-		<input class="form-control" name="ketua_lembaga" id="ketua_lembaga" required></input>
+		<select class="form-control" name="ketua_lembaga" id="ketua_lembaga" required>
+			<option value="" hidden selected>Pilih Mahasiswa</option>
+		</select>
 		`);
 		$('#hp-lembaga-extend').append(`
 		<label for="no_hp" class="col-form-label">No Hp</label>
 		<input class="form-control" name="no_hp" id="no_hp" required></input>
 		`);
 
+		$.ajax({
+			url: segments[0] + `/` + segments[3] + `/Admin/getMahasiswa`,
+			method: 'get',
+			dataType: 'json',
+			success: function (data) {
+				data.forEach(function (mahasiswa) {
+					$('#ketua_lembaga').append(`<option value="` + mahasiswa['username'] + `">` + mahasiswa['nama'] + `</option>`)
+				});
+			}
+		});
 	} else {
 		$('#prodi-extend').html(``);
 		$('#jenis-lembaga-extend').html(``);
