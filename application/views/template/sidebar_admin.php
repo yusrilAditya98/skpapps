@@ -22,6 +22,7 @@
                     <li><a class="nav-link" href="<?= base_url("Keuangan/daftarPengajuanLpj") ?>">Lpj Keuangan</a></li>
                     <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarPoinSkp") ?>">Poin SKP</a></li>
                     <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/beasiswa") ?>">Beasiswa</a></li>
+                    <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarLembaga") ?>">Anggota</a></li>
                 </ul>
             </li>
             <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/lembaga") ?>"><i class="fas fa-university"></i> <span>Kegiatan Lembaga</span></a></li>
