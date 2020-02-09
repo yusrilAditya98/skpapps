@@ -24,7 +24,7 @@
                     <div class="col-9">
                         <div class="font-weight-bold text-uppercase">
                             <h5>
-                                kementerian riset, teknologi dan pendidikan tinggi <br>
+                                kementrian pendidikan dan kebudayaan <br>
                                 <span class="h3">universitas brawijaya</span>
                             </h5>
                         </div>

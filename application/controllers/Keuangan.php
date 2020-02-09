@@ -409,4 +409,16 @@ class Keuangan extends CI_Controller
 
         return $data;
     }
+
+    public function cetakPengajuanDana($id_kegiatan)
+    {
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $status = $this->input->get('status');
+        if ($status == 'lpj') {
+            $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_lpj as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
+        } else {
+            $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_proposal as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
+        }
+        $this->load->view('kemahasiswaan/bukti_pengajuan', $data);
+    }
 }

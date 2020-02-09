@@ -17,6 +17,7 @@
                             <div class="col-lg-12">
                                 <a href="<?= base_url('Kemahasiswaan/tambahBeasiswa') ?>" class="btn btn-primary float-right ml-2"><i class="fas fa-plus mr-2 "></i>Tambah beasiswa</a>
                                 <a href="<?= base_url('Kemahasiswaan/exportBeasiswa') ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
+                                <a href="#" class="btn btn-info float-right mr-2" data-toggle="modal" data-target="#kategoriBeasiswa"><i class="fas fa-info mr-2"></i>Kategori Beasiswa</a>
                             </div>
 
                         </div>
@@ -126,3 +127,63 @@
         </div>
     </section>
 </div>
+
+<!-- modal kategori beasiswa -->
+<div class="modal fade" id="kategoriBeasiswa" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="kategoriBeasiswaLabel">Daftar Beasiswa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="<?= base_url('Kemahasiswaan/tambahJenisBeasiswa') ?>" method="post">
+                    <div class="input-group mb-4">
+                        <input type="text" name="jenis_beasiswa" placeholder="tambah jenis beasiswa..." class="form-control">
+                        <div class="input-group-prepend">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <table class="table table-striped" id="table-2">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Kategori Beasiswa</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php $index = 1; ?>
+                            <?php foreach ($kategori_beasiswa as $kb) : ?>
+                                <tr>
+                                    <td><?= $index++ ?></td>
+                                    <td>
+                                        <form action="<?= base_url('Kemahasiswaan/editJenisBeasiswa/') . $kb['id'] ?>" method="post">
+                                            <div class="input-group">
+                                                <input type="text" name="jenis_beasiswa" value="<?= $kb['jenis_beasiswa'] ?>" class="form-control">
+                                                <div class="input-group-prepend">
+                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-edit"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-danger btn-small" href="<?= base_url('Kemahasiswaan/hapusJenisBeasiswa/') . $kb['id'] ?>"><i class="fas fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- akhir modal -->

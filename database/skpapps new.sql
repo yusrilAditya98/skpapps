@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: 30 Jan 2020 pada 01.32
+-- Generation Time: 09 Feb 2020 pada 13.48
 -- Versi Server: 10.1.28-MariaDB
 -- PHP Version: 7.1.11
 
@@ -98,7 +98,28 @@ CREATE TABLE `beasiswa` (
 --
 
 INSERT INTO `beasiswa` (`id`, `jenis_beasiswa`) VALUES
-(1, 'PPA');
+(1, 'PPA'),
+(3, 'BBM'),
+(4, 'PPA MABA'),
+(5, 'PPA BBM'),
+(6, 'BIDIK MISI'),
+(7, 'BEASISWA UNGGULAN'),
+(8, 'SUPERSEMAR'),
+(9, 'DJARUM'),
+(10, 'BANK INDONESIA'),
+(11, 'I-MHERE'),
+(12, 'PGN'),
+(13, 'PERTAMINA'),
+(14, 'BCA FINANCE'),
+(15, 'ETOS'),
+(16, 'IKOMA'),
+(17, 'BUMN PEDULI'),
+(18, 'SEMEN GERSIK'),
+(19, 'BFI FINANCE'),
+(20, 'MARGAJAYA SEJAHTERA'),
+(21, 'UNITED TRACTORS'),
+(22, 'BEASISWA LAINNYA'),
+(23, 'BEASISWA PT PETROKIMIA GRSIK');
 
 -- --------------------------------------------------------
 
@@ -1280,7 +1301,8 @@ INSERT INTO `user_sub_menu` (`id`, `judul`, `url`, `ikon`, `menu_id`, `has_sub`)
 (27, 'Kategori', 'Kemahasiswaan/kategori', 'fas fa-rocket', 4, 0),
 (29, 'Beasiswa', 'Mahasiswa/beasiswa', 'fas fa-briefcase', 1, 0),
 (30, 'Rekapitulasi SKP', 'Pimpinan/rekapitulasiSKP', 'fas fa-rocket', 5, 0),
-(31, 'Anggota', 'Kegiatan/anggota', 'fas fa-user', 2, 0);
+(31, 'Anggota', 'Kegiatan/anggota', 'fas fa-user', 2, 0),
+(32, 'Rekapitulasi SKP', 'Pimpinan/rekapitulasiSKP', 'fas fa-fw fa-tachometer-alt', 4, 0);
 
 -- --------------------------------------------------------
 
@@ -1655,7 +1677,7 @@ ALTER TABLE `anggota_kegiatan`
 -- AUTO_INCREMENT for table `beasiswa`
 --
 ALTER TABLE `beasiswa`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `bidang_kegiatan`
@@ -1817,7 +1839,7 @@ ALTER TABLE `user_profil`
 -- AUTO_INCREMENT for table `user_sub_menu`
 --
 ALTER TABLE `user_sub_menu`
-  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `validasi_kegiatan`

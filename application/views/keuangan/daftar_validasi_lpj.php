@@ -63,6 +63,7 @@
                                     <th>PSIK</th>
                                     <th>Keuangan</th>
                                     <th>Action</th>
+                                    <th></th>
                                 </thead>
                                 <tbody>
                                     <?php $index = 1; ?>
@@ -126,6 +127,7 @@
                                                     <?php endif; ?>
                                                 <?php endfor; ?>
                                             </td>
+                                            <td> <a target="_blank" href="<?= base_url('Keuangan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=lpj" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a></td>
                                         </tr>
                                     <?php endforeach; ?>
 

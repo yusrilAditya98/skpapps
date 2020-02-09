@@ -65,6 +65,7 @@
                                     <th class="text-center">PSIK</th>
                                     <th class="text-center">Keuangan</th>
                                     <th class="text-center">Action</th>
+                                    <th class="text-center"></th>
 
                                 </thead>
                                 <tbody>
@@ -133,6 +134,7 @@
                                                     <?php endif; ?>
                                                 <?php endfor; ?>
                                             </td>
+                                            <td> <a target="_blank" href="<?= base_url('Keuangan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=proposal" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a></td>
                                         </tr>
                                     <?php endforeach; ?>
 

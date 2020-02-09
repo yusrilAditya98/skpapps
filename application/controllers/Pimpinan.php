@@ -12,7 +12,20 @@ class Pimpinan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        is_logged_in();
+        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5) { } else {
+            redirect('Auth/bloked');
+        }
+    }
+    private function _notifKmhs()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_kmhs_lpj'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $this->notif['notif_kmhs_proposal'] = count($this->kemahasiswaan->getNotifValidasi(3, 'proposal'));
+        $this->notif['notif_kmhs_rancangan'] = count($this->kemahasiswaan->getNotifValidasiRancangan());
+        $this->notif['notif_kmhs_skp'] = count($this->kemahasiswaan->getNotifValidasiSkp());
+        $this->notif['notif_kmhs_validasi_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiAnggotaLembaga());
+        $this->notif['notif_kmhs_keaktifan_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiKeaktifanLembaga());
+        return $this->notif;
     }
 
     public function template($data)
@@ -264,6 +277,7 @@ class Pimpinan extends CI_Controller
         // $this->db->where('id_prestasi', 7);
         // $this->db->or_where('id_prestasi', 8);
         // $this->db->or_where('id_prestasi', 9);
+        $data['notif'] = $this->_notifKmhs();
         $data['prestasi'] = $this->db->get('prestasi')->result_array();
         for ($i = 0; $i < count($data['prestasi']); $i++) {
             $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);

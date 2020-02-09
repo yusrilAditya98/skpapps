@@ -856,9 +856,7 @@ class Kemahasiswaan extends CI_Controller
         } else {
             $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
         }
-
-
-
+        $data['kategori_beasiswa'] = $this->db->get('beasiswa')->result_array();
         $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Beasiswa';
         $this->load->view("template/header", $data);
@@ -1262,7 +1260,7 @@ class Kemahasiswaan extends CI_Controller
     {
         $this->load->model('Model_mahasiswa', 'mahasiswa');
         $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
-
+        $data['notif'] = $this->_notifKmhs();
         // set rules form validation
         $this->form_validation->set_rules('nimMahasiswa', 'Nim Beasiswa', 'required');
         if ($this->form_validation->run() == false) {
@@ -1331,6 +1329,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_mahasiswa', 'mahasiswa');
         $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
         $data['penerima'] = $this->db->get_where('penerima_beasiswa', ['id_penerima' => $id])->row_array();
+        $data['notif'] = $this->_notifKmhs();
         // set rules form validation
         $this->form_validation->set_rules('nimMahasiswa', 'Nim Beasiswa', 'required');
         if ($this->form_validation->run() == false) {
@@ -1501,5 +1500,29 @@ class Kemahasiswaan extends CI_Controller
 
         $this->session->set_flashdata('message', 'Keaktifan Anggota Lembaga berhasil divalidasi !');
         redirect("Kemahasiswaan/daftarLembaga");
+    }
+
+    public function tambahJenisBeasiswa()
+    {
+        $this->db->set('jenis_beasiswa', $this->input->post('jenis_beasiswa'));
+        $this->db->insert('beasiswa');
+        $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Ditambah');
+        redirect("Kemahasiswaan/beasiswa");
+    }
+
+    public function hapusJenisBeasiswa($id)
+    {
+        $this->db->delete('beasiswa', ['id' => $id]);
+        $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Dihapus');
+        redirect("Kemahasiswaan/beasiswa");
+    }
+
+    public function editJenisBeasiswa($id)
+    {
+        $this->db->set('jenis_beasiswa', $this->input->post('jenis_beasiswa'));
+        $this->db->where('id', $id);
+        $this->db->update('beasiswa');
+        $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Diubah');
+        redirect("Kemahasiswaan/beasiswa");
     }
 }
