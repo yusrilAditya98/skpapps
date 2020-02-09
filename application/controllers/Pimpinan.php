@@ -13,7 +13,7 @@ class Pimpinan extends CI_Controller
     {
         parent::__construct();
         if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5) { } else {
-            redirect('Auth/bloked');
+            redirect('Auth/blocked');
         }
     }
     private function _notifKmhs()
