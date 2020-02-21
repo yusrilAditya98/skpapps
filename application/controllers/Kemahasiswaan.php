@@ -216,8 +216,6 @@ class Kemahasiswaan extends CI_Controller
         } else {
             $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
         }
-
-
         $data['title'] = 'Validasi';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -235,8 +233,9 @@ class Kemahasiswaan extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $mahasiswa = $this->db->select('nim')->get_where('poin_skp', ['id_poin_skp' => $id_kegiatan])->row_array();
+        $valid = $this->input->post('valid');
         $this->dataskp = [
-            'validasi_prestasi' => $this->input->post('valid'),
+            'validasi_prestasi' => intval($valid),
             'catatan' => $this->input->post('catatan'),
         ];
         $this->poinskp->updatePoinSkp($id_kegiatan, $this->dataskp);

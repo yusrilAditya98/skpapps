@@ -4,6 +4,8 @@
                     <div class="section-header">
                         <h1>Form Tambah SKP</h1>
                     </div>
+                    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+                    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-12">
                             <div class="card">
