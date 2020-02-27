@@ -310,12 +310,13 @@ class Akademik extends CI_Controller
         $data = $this->input->post('validasi');
         if ($data == null) {
             // echo "HAHA";
+            $this->db->set('status_terlaksana', 1);
+            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
+            $this->db->update('kuliah_tamu');
         } else {
             $this->db->set('status_terlaksana', 1);
             $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             $this->db->update('kuliah_tamu');
-            // echo json_encode($this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => intval($this->input->post('id_kuliah_tamu'))])->row_array());
-            // die;
 
             for ($i = 0; $i < count($data); $i++) {
                 $this->db->set('kehadiran', 1);
@@ -329,19 +330,19 @@ class Akademik extends CI_Controller
                     'validasi_prestasi' => 1,
                     'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
                     'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
-                    'id_prestasi' => 115
+                    'prestasiid_prestasi' => 115
                 ];
                 // header('Content-type: application/json');
                 // echo json_encode($data_poin_skp);
                 // die;
-                // $this->db->insert('poin_skp', $data_poin_skp);
+                $this->db->insert('poin_skp', $data_poin_skp);
             }
             // $this->db->set('status_terlaksana', 1);
             // $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             // $this->db->update('kuliah_tamu');
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
-            redirect('akademik/kegiatan');
         }
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
+        redirect('akademik/kegiatan');
     }
     public function hei()
     {

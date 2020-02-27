@@ -135,13 +135,13 @@ $('a.d-anggaran').on('click', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-
+			let index = 1;
 			for (var i in data) {
 				$('.anggaran-lembaga').append(`
 					<tr class="temp-anggaran">
-						<td></td>
+						<td>` + (index++) + `</td>
 						<td>` + data[i].nama_proker + `</td>
-						<td>` + data[i].anggaran_kegiatan + `</td>
+						<td>Rp. ` + rubah(data[i].anggaran_kegiatan) + `</td>
 					</tr>
 				
 				`)

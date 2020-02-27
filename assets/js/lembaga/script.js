@@ -190,6 +190,7 @@ $('.daftarMahasiswa').on("click", function () {
                         </div>`)
 					},
 					success: function (data) {
+						$('.loader').remove()
 						let dataTampung = [];
 						let index = 1;
 						let dataMhs = data['mhs']
@@ -273,7 +274,7 @@ $('.d-revisi').on('click', function () {
 
 
 let jumlahAnggota = $('#jumlahAnggota').val();
-// Menampilkan daftar seluruh mahasiswa
+// Menampilkan daftar selurh mahasiswa
 $('.submit-mhs').on('click', function () {
 
 	let nim = []
@@ -354,7 +355,6 @@ $('.hps-mhs').on('click', function () {
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
 })
-
 // Anggota Lembaga
 $('.daftarMahasiswaLembaga').on("click", function () {
 	let tingkatKegiatan = $('#jenis_lembaga').val();

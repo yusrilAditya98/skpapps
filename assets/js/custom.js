@@ -10,6 +10,22 @@ var segments = url.split("/");
 $('.uang').mask('000.000.000', {
 	reverse: true
 });
+
+function rubah(angka) {
+	let new_format = 0;
+	new_format = new Intl.NumberFormat('de-DE', {
+		maximumSignificantDigits: 10
+	}).format(angka)
+	return new_format
+}
+
+function rubah_date(tanggal) {
+	let current_datetime = "";
+	current_datetime = tanggal;
+	let formatted_date = current_datetime.getDate() + "-" + (current_datetime.getMonth() + 1) + "-" + current_datetime.getFullYear()
+	return formatted_date;
+}
+
 $('.detail-revisi').on('click', function () {
 	let id = $(this).data('id');
 	$.ajax({
@@ -24,6 +40,19 @@ $('.detail-revisi').on('click', function () {
 	})
 
 })
+
+// $('#id-beasiswa').on('change', function () {
+// 	let beasiswa = $('#id-beasiswa').val()
+// 	$.ajax({
+// 		url: segments[0] + '/' + segments[3] + '/API_skp/beasiswa/' + beasiswa,
+// 		method: 'get',
+// 		dataType: 'json',
+// 		success: function (data) {
+// 			console.log(data)
+// 			$('#namaInstansi').val(data.nama_instansi);
+// 		}
+// 	})
+// })
 
 $('.detail-revisi-rancangan').on('click', function () {
 	let catatan = $(this).data('catatan')
@@ -47,15 +76,16 @@ $('.detail-kegiatan').on('click', function (e) {
 			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
 			$('.k-nim').val(data.kegiatan['nama_lembaga'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
-			$('.k-dana').val(data.kegiatan['dana_kegiatan'])
+			$('.k-dana').val(rubah(data.kegiatan['dana_kegiatan']))
+			console.log()
 			if (jenis == 'proposal') {
-				$('.k-dana-cair').val(data.kegiatan['dana_proposal'])
+				$('.k-dana-cair').val(rubah(data.kegiatan['dana_proposal']))
 				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
 				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_proposal/' + data.kegiatan['berita_proposal'])
 				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
 				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
 			} else if (jenis == 'lpj') {
-				$('.k-dana-cair').val(data.kegiatan['dana_lpj'])
+				$('.k-dana-cair').val(rubah(data.kegiatan['dana_lpj']))
 				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
 				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
 				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_lpj/' + data.dokumentasi['d_lpj_1'])
@@ -94,29 +124,7 @@ $('.detail-kegiatan').on('click', function (e) {
 })
 
 $(document).ready(function (e) {
-	$('#dataTabelProposal').DataTable({
-		initComplete: function () {
-			var select;
-			this.api().columns([2, 4]).every(function () {
-				var column = this;
-				select = $('<select class="form-control-sm selectric" ><option value="">pilih</option></select>')
-					.prependTo($('.kategori-filter'))
-					.on('change', function () {
-						var val = $.fn.dataTable.util.escapeRegex(
-							$(this).val()
-						);
-						column
-							.search(val ? '^' + val + '$' : '', true, false)
-							.draw();
-					});
-				column.data().unique().sort().each(function (d, j) {
-					select.append('<option value="' + d + '">' + d + '</option>')
-				});
 
-
-			});
-		}
-	});
 	$('#table-user').DataTable({
 		initComplete: function () {
 			var select;
@@ -306,7 +314,7 @@ $(document).ready(function () {
 							yAxes: [{
 								ticks: {
 									min: 0,
-									max: 5000000,
+									max: 20000000,
 									maxTicksLimit: 20,
 									padding: 30
 									// Include a dollar sign in the ticks

@@ -14,9 +14,44 @@
 
                     </div>
                     <div class="card-body">
+                        <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" class="form-control">
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-primary">submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <div class="kategori-filter float-right mb-2">
 
+                        </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-2">
+                            <table class="table table-striped" id="dataTabelProposal">
                                 <thead class="text-center">
 
                                     <th> No</th>
@@ -30,6 +65,7 @@
                                     <th class="text-center">PSIK</th>
                                     <th class="text-center">Keuangan</th>
                                     <th class="text-center">Action</th>
+                                    <th class="text-center"></th>
 
                                 </thead>
                                 <tbody>
@@ -38,11 +74,10 @@
                                         <tr>
                                             <td>
                                                 <div class="custom-checkbox custom-control">
-
                                                     <?= $j++ ?>
                                                 </div>
                                             </td>
-                                            <td><?= $k['tgl_pengajuan_proposal'] ?></td>
+                                            <td><?= date("d-m-Y", strtotime($k['tgl_pengajuan_proposal']))    ?></td>
                                             <td><?= $k['nama_lembaga'] ?></td>
                                             <td>
                                                 <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="proposal"><?= $k['nama_kegiatan'] ?></a>
@@ -99,6 +134,7 @@
                                                     <?php endif; ?>
                                                 <?php endfor; ?>
                                             </td>
+                                            <td> <a target="_blank" href="<?= base_url('Keuangan/cetakPengajuanDana/') . $k['id_kegiatan'] ?>?status=proposal" class="btn btn-primary"><i class="text-warning fas fa-file-alt"></i></a></td>
                                         </tr>
                                     <?php endforeach; ?>
 

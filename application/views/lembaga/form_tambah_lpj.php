@@ -49,17 +49,7 @@
                                                     anggaran yang akan diterima 30% dari besar anggaran
                                                     pengajuan</small>
                                             </div>
-                                            <div class="sumber-dana-chekboxes mb-3">
-                                                <h6>Sumber Dana</h6>
-                                                <?php foreach ($dana as $d) : ?>
-                                                    <div class="form-check py-1">
-                                                        <input checked class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>" readonly>
-                                                        <label class="form-check-label" for="dana <?= $d['id_sumber_dana'] ?>">
-                                                            <?= $d['nama_sumber_dana'] ?>
-                                                        </label>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </div>
+
                                         </div>
                                         <div class="bagian-acara mt-5">
                                             <h5>Informasi Acara</h5>
@@ -167,7 +157,7 @@
                                             <h5>Informasi Upload</h5>
 
                                             <div class="form-group">
-                                                <label for="fileLpj">Upload File Proposal</label>
+                                                <label for="fileLpj">Upload File LPJ</label>
                                                 <input type="file" class="form-control-file btn" id="fileLpj" name="fileLpj" required>
                                                 <div class="invalid-feedback">
                                                     File lpj harap diisi
@@ -182,7 +172,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="beritaLpj">Upload Berita Kegiatan
-                                                    Proposal</label>
+                                                    LPJ</label>
                                                 <input type="file" class="form-control-file btn" name="beritaLpj" id="beritaLpj" required>
                                                 <div class="invalid-feedback">
                                                     Berita kegiatan harap diisi

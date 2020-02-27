@@ -135,6 +135,27 @@ var cek = [];
 $('.tingkatKegiatan').on('change', function () {
 	$('.dataTables_wrapper').remove()
 })
+$('#tingkatKegiatan').on("change", function () {
+	$('#jumlahAnggota').val(0);
+	let tingkatKegiatan = $('.tingkatKegiatan').val()
+	$('.partisipasi').remove();
+	$('.d-m').remove()
+
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			let partisipasi = '';
+			let poin = '';
+			for (var i in data) {
+				partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
+			}
+			$('.partisipasiKegiatan').append(partisipasi)
+		}
+	})
+})
+
 $('.daftarMahasiswa').on("click", function () {
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
 	cek = tingkatKegiatan;
@@ -317,7 +338,7 @@ $('.submit-mhs').on('click', function () {
 				$('.d-m#data-' + aMhs[k][0] + '').remove()
 				$('.daftar-mhs').append(`
 					<tr class="d-m" id="data-` + aMhs[k][0] + `">
-						<td>` + (id) + `</td>
+						<td><i class="fas fa-user-alt"></i></td>
 						<td>` + aMhs[k][0] + `
 							<input  type="hidden" name="nim_` + aMhs[k][0] + `" value="` + aMhs[k][0] + `" id="nim_` + aMhs[k][0] + `" >
 						</td>
@@ -364,15 +385,4 @@ $('#danaKegiatan').keyup(function () {
 	$('#danaKegiatanDiterima').val(nominal)
 })
 
-$('#id-beasiswa').on('change', function () {
-	let beasiswa = $('#id-beasiswa').val()
-	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/API_skp/beasiswa/' + beasiswa,
-		method: 'get',
-		dataType: 'json',
-		success: function (data) {
-			console.log(data)
-			$('#namaInstansi').val(data.nama_instansi);
-		}
-	})
-})
+

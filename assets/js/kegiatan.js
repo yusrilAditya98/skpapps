@@ -175,6 +175,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 					</thead>
 					<tbody class="body-tabel">
 						<tr>
+							<input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu" value="` + data['id_kuliah_tamu'] + `">
 							<td colspan="5"><h3 class="text-center">Belum ada peserta</h3></td>
 						</tr>
 					</tbody>

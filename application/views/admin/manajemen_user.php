@@ -82,26 +82,26 @@
 
 <!-- Awal Modal Import Data Mahasiswa -->
 <div class=" modal fade bd-example-modal-lg modalImportData" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-scrollable modal-md">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header bg-blue">
-                                                                    <h5 class="modal-title clr-white" id="exampleModalLabel">Import Data Mahasiswa</span></h5>
-                                                                    <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="card">
-                                                                        <form enctype="multipart/form-data" action="<?= base_url('admin/importData')?>" method="post">
-                                                                            <div class="form-group">
-                                                                                <label for="File">File</label>
-                                                                                <input type="file" class="form-control-file" id="import-data" name="import-data">
-                                                                            </div>
-                                                                            <button type="submit" class="btn btn-primary float-right">Import Data Mahasiswa</button>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+    <div class="modal-dialog modal-dialog-scrollable modal-md">
+        <div class="modal-content">
+            <div class="modal-header bg-blue">
+                <h5 class="modal-title clr-white" id="exampleModalLabel">Import Data Mahasiswa</span></h5>
+                <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <form enctype="multipart/form-data" action="<?= base_url('admin/importData') ?>" method="post">
+                        <div class="form-group">
+                            <label for="File">File</label>
+                            <input type="file" class="form-control-file" id="import-data" name="import-data">
                         </div>
-                        <!-- Akhir Modeal Import Data Mahasiswa -->
+                        <button type="submit" class="btn btn-primary float-right">Import Data Mahasiswa</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Akhir Modeal Import Data Mahasiswa -->

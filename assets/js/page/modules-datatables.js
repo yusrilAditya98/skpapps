@@ -37,6 +37,44 @@ $("#table-1").DataTable({
 
 });
 
+$('#dataTabelProposal').DataTable({
+	initComplete: function () {
+		var select;
+		this.api().columns([2]).every(function () {
+			var column = this;
+			select = $('<select class="form-control-sm" ><option value="">Pilih Pengaju</option></select>')
+				.prependTo($('.kategori-filter'))
+				.on('change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+					column
+						.search(val ? '^' + val + '$' : '', true, false)
+						.draw();
+				});
+			column.data().unique().sort().each(function (d, j) {
+				select.append('<option value="' + d + '">' + d + '</option>')
+			});
+		});
+		this.api().columns([4]).every(function () {
+			var column = this;
+			select = $('<select class="form-control-sm mr-2" ><option value="">Pilih Status</option></select>')
+				.prependTo($('.kategori-filter'))
+				.on('change', function () {
+					var val = $.fn.dataTable.util.escapeRegex(
+						$(this).val()
+					);
+					column
+						.search(val ? '^' + val + '$' : '', true, false)
+						.draw();
+				});
+			column.data().unique().sort().each(function (d, j) {
+				select.append('<option value="' + d + '">' + d + '</option>')
+			});
+		});
+	}
+});
+
 $("#table-2").DataTable({
 	"columnDefs": [{
 		"sortable": false,
@@ -47,7 +85,6 @@ $("#table-2").DataTable({
 $(".table-kategori").DataTable({
 	"pageLength": 5
 });
-
 $(".table-anggota-lembaga").DataTable({
 	"pageLength": 5
 });

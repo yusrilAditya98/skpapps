@@ -12,9 +12,46 @@
                         <h4>Permintaan Pengajuan Rancangan Kegiatan</h4>
 
                     </div>
+                    <div class="card-body" style="margin-bottom: -3rem">
+                        <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" class="form-control">
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-primary">submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
                     <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
                         <div class="card-body mb-2">
-                            <button type="submit" class="btn btn-icon icon-left btn-warning float-right"><i class="fas fa-print"></i> Cetak Pengajuan</button>
+                            <div class="kategori-filter float-right mb-2">
+                                <button type="submit" class="btn btn-icon icon-left btn-warning float-right ml-5"><i class="fas fa-print"></i> Cetak Pengajuan</button>
+                            </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -54,7 +91,7 @@
                                                     </div>
 
                                                 </td>
-                                                <td><?= $k['tgl_pengajuan_proposal'] ?></td>
+                                                <td><?= date("d-m-Y", strtotime($k['tgl_pengajuan_proposal']))   ?></td>
                                                 <td><?= $k['nama_lembaga'] ?></td>
                                                 <td>
                                                     <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="proposal"><?= $k['nama_kegiatan'] ?></a>

@@ -37,9 +37,9 @@
                                             <td><?= $r['nama_lembaga'] ?></td>
                                             <td><?= $r['nama_proker'] ?></td>
                                             <td><?= date("d M Y", strtotime($r['tanggal_mulai_pelaksanaan'])) . ' - ' . date("d M Y", strtotime($r['tanggal_selesai_pelaksanaan']))  ?></td>
-                                            <td><?= $r['anggaran_kegiatan'] ?></td>
+                                            <td>Rp. <?= number_format($r['anggaran_kegiatan'], 0, ',', '.')   ?></td>
                                             <td>
-                                                <?php if ($r['status_rancangan'] == 1) :  ?>
+                                                <?php if ($r['status_rancangan'] == 1 || $r['status_rancangan'] == 4 || $r['status_rancangan'] == 5) :  ?>
                                                     <i class="fa fa-check text-success" aria-hidden="true"></i>
                                                 <?php elseif ($r['status_rancangan'] == 2) : ?>
                                                     <div class="btn btn-warning circle-content detail-revisi-rancangan" data-toggle="modal" data-target="#i-revisi" data-catatan="<?= $r['catatan_revisi'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
@@ -62,7 +62,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="col-lg-4">
-                                                            <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="<?= $r['id_daftar_rancangan'] ?>" class="btn btn-primary revisi-rancangan-proker"><i class="fas fa-edit"></i></button>
+                                                            <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="<?= $r['id_daftar_rancangan'] ?>" class="btn btn-primary btn-sm revisi-rancangan-proker"><i class="fas fa-edit"></i></button>
                                                         </div>
                                                     </div>
                                                 <?php elseif ($r['status_rancangan'] == 0) : ?>

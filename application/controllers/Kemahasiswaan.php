@@ -135,7 +135,7 @@ class Kemahasiswaan extends CI_Controller
         $cek_status = true;
 
         foreach ($data['detail_rancangan'] as $d) {
-            if ($d['status_rancangan'] == 2 || $d['status_rancangan'] == 0) {
+            if ($d['status_rancangan'] == 2 || $d['status_rancangan'] == 0 || $d['status_rancangan'] == 3) {
                 $cek_status = false;
             }
         }
@@ -145,7 +145,7 @@ class Kemahasiswaan extends CI_Controller
             $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 2);
         }
 
-        redirect('Kemahasiswaan/daftarRancangan');
+        redirect('Kemahasiswaan/detailRancanganKegiatan?id_lembaga=' . $id_lembaga . '&tahun=' . $tahun_pengajuan);
     }
 
     // Berfungsi untuk melakukan validasi Proposal kegiatan mahasiswa dan lembaga
@@ -155,7 +155,13 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, null, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -176,7 +182,13 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -196,7 +208,16 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_poinskp', 'poinskp');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
-        $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
+        if ($this->input->get('start_date')  || $this->input->get('end_date')  || $this->input->get('validasi') != null) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $validasi = $this->input->get('validasi');
+            $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp(null, null, $start_date, $end_date, $validasi);
+        } else {
+            $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
+        }
+
+
         $data['title'] = 'Validasi';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -304,8 +325,8 @@ class Kemahasiswaan extends CI_Controller
         $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Lembaga';;
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         $data['tahun'] = $this->kemahasiswaan->getTahunRancangan();
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         if ($data['tahun']) {
             $data['tahun_saat_ini'] = $data['tahun'][0]['tahun_kegiatan'];
         } else {
@@ -324,7 +345,7 @@ class Kemahasiswaan extends CI_Controller
             $data['anggaran'] = $this->kemahasiswaan->getDanaAnggaran($data['tahun_saat_ini']);
             $data['dana_pagu'] = $this->kemahasiswaan->getRekapanKegiatanLembaga($data['tahun_saat_ini']);
         }
-
+        $data['anggaran'] = $this->_insertKegiatanBlmLpj($data['anggaran'],   $data['tahun_saat_ini']);
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         if ($this->session->userdata('user_profil_kode') == 9) {
@@ -334,6 +355,133 @@ class Kemahasiswaan extends CI_Controller
         }
         $this->load->view("kemahasiswaan/daftar_anggaran");
         $this->load->view("template/footer");
+    }
+    private function _serapanLembaga($proposal, $lpj, $id_lembaga)
+    {
+        $kegiatan = $this->db->get_where('kegiatan', ['id_lembaga' => $id_lembaga])->result_array();
+
+        if ($proposal == null) {
+            foreach ($kegiatan as $k) {
+                $proposal[$k['id_lembaga']] = [
+                    'bulan_pengajuan' => 0,
+                    'id_kegiatan' => $k['id_kegiatan'],
+                    'dana' => 0
+                ];
+            }
+        }
+
+        if ($lpj == null) {
+            foreach ($kegiatan as $k) {
+                $lpj[$k['id_kegiatan']] = [
+                    'bulan_pengajuan' => 0,
+                    'id_kegiatan' => $k['id_kegiatan'],
+                    'dana' => 0
+                ];
+            }
+        }
+
+        $data = [];
+        foreach ($kegiatan as $k) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$k['id_kegiatan']][$j] = 0;
+            }
+            $data[$k['id_kegiatan']]['anggaran_kegiatan'] = $k['dana_kegiatan'];
+            $data[$k['id_kegiatan']]['dana_terserap'] = 0;
+        }
+
+
+        $data_lpj = [];
+        foreach ($proposal as $p) {
+            $data_lpj[$p['id_kegiatan']] = [
+                'bulan_pengajuan' => 0,
+                'id_kegiatan' => $p['id_kegiatan'],
+                'dana' => 0
+            ];
+        }
+
+
+        foreach ($lpj as $l) {
+            $data_lpj[$l['id_kegiatan']] = [
+                'bulan_pengajuan' => $l['bulan_pengajuan'],
+                'id_kegiatan' => $l['id_kegiatan'],
+                'dana' =>  $l['dana'],
+            ];
+        }
+        $lpj = $data_lpj;
+
+        foreach ($proposal as $p) {
+            // data lpj haruslah tidak boleh kosong
+            foreach ($lpj as $l) {
+                for ($i = 1; $i < 13; $i++) {
+                    if ($p['id_kegiatan'] == $l['id_kegiatan'] && $p['bulan_pengajuan'] == $i) {
+                        if ($l['bulan_pengajuan'] == $p['bulan_pengajuan']) {
+                            $data[$p['id_kegiatan']][$i] = $p['dana'] + $l['bulan_pengajuan'];
+                        } else {
+                            $data[$p['id_kegiatan']][$i] = $p['dana'];
+                        }
+                    }
+                    if ($p['id_kegiatan'] == $l['id_kegiatan'] && $l['bulan_pengajuan'] == $i) {
+                        if ($l['bulan_pengajuan'] == $p['bulan_pengajuan']) {
+                            $data[$l['id_kegiatan']][$i] = $p['dana'] + $l['dana'];
+                        } else {
+                            $data[$l['id_kegiatan']][$i] = $l['dana'];
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach ($kegiatan as $k) {
+            for ($j = 1; $j < 13; $j++) {
+                $data[$k['id_kegiatan']]['dana_terserap'] += $data[$k['id_kegiatan']][$j];
+            }
+        }
+        return $data;
+    }
+    private function _totalDanaLembaga($laporan, $id_lembaga)
+    {
+        $kegiatan = $this->db->get_where('kegiatan', ['id_lembaga' => $id_lembaga])->result_array();
+        $data['total']['dana_terserap'] = 0;
+        foreach ($kegiatan as $k) {
+            $data['total']['dana_terserap'] += $laporan[$k['id_kegiatan']]['dana_terserap'];
+        }
+        return $data;
+    }
+    private function _danaTerserap($id_lembaga)
+    {
+        $this->load->model('Model_keuangan', 'keuangan');
+        $data['serapan_proposal'] = $this->keuangan->getAnggaranLembagaProposal($id_lembaga);
+        $data['serapan_lpj'] = $this->keuangan->getAnggaranLembagaLpj($id_lembaga);
+        $data['laporan'] = $this->_serapanLembaga($data['serapan_proposal'], $data['serapan_lpj'], $id_lembaga);
+        $dana_terserap = $this->_totalDanaLembaga($data['laporan'], $id_lembaga);
+
+        return $dana_terserap['total']['dana_terserap'];
+    }
+    public function _insertKegiatanBlmLpj($blm_lpj, $tahun)
+    {
+
+        $data = [];
+        $i = 0;
+        foreach ($blm_lpj['kegiatan'] as $b) {
+            $data[$i] = [
+                "id_lembaga" => $b['id_lembaga'],
+                "nama_lembaga" => $b['nama_lembaga'],
+                "terlaksana" => $b['terlaksana'],
+                "blm_terlaksana" => $b['blm_terlaksana'],
+                "jumlah_kegiatan" => $b['jumlah_kegiatan'],
+                "anggaran_kemahasiswaan" => $b['anggaran_kemahasiswaan'],
+                "tahun_kegiatan" => $b['tahun_kegiatan'],
+                "blm_lpj" => 0
+            ];
+            foreach ($blm_lpj['blm_lpj'] as $bm) {
+                if ($bm['lbg5'] ==  $b['id_lembaga']) {
+                    $data[$i]['blm_lpj'] =  $bm['kegiatan_blm_lpj'];
+                }
+            }
+            $data[$i]["dana_kegiatan"] = $this->_danaTerserap($data[$i]['id_lembaga']);
+            $i++;
+        }
+        return $data;
     }
 
     public function editRancanganTahun($id_lembaga)
@@ -388,6 +536,7 @@ class Kemahasiswaan extends CI_Controller
             $data['tahun_saat_ini'] = $tahun;
             $data['tahun'][0]['tahun'] = $tahun;
         }
+
         $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
 
         if ($this->input->post('tahun')) {
@@ -401,6 +550,7 @@ class Kemahasiswaan extends CI_Controller
             $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         }
+
         $data['total'] = $this->_totalDana($data['laporan']);
 
         $this->load->view("template/header", $data);
@@ -439,7 +589,28 @@ class Kemahasiswaan extends CI_Controller
                 ];
             }
         }
-
+        // inisialisasi data lpj
+        $data_lpj = [];
+        $index1 = 0;
+        foreach ($proposal as $p) {
+            $data_lpj[$index1++] = [
+                'bulan' => 0,
+                'dana' => 0,
+                'id_lembaga' => $p['id_lembaga'],
+                'nama_lembaga' => $p['nama_lembaga']
+            ];
+        }
+        // mengisikan nilai array LPJ
+        $index2 = 0;
+        foreach ($lpj as $l) {
+            $data_lpj[$index2++] = [
+                'bulan' => $l['bulan'],
+                'dana' => $l['dana'],
+                'id_lembaga' => $l['id_lembaga'],
+                'nama_lembaga' => $l['nama_lembaga']
+            ];
+        }
+        $lpj = $data_lpj;
         $data = [];
         foreach ($lembaga as $l) {
             for ($j = 1; $j < 13; $j++) {
@@ -455,49 +626,76 @@ class Kemahasiswaan extends CI_Controller
             }
             $data[$l['id_lembaga']]['dana_terserap'] = 0;
         }
-
         foreach ($proposal as $p) {
-            foreach ($lpj as $l) {
-                for ($i = 1; $i < 13; $i++) {
-                    if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
-                        if ($l['bulan'] == $p['bulan']) {
-                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['bulan'];
-                        } else {
-                            $data[$p['id_lembaga']][$i] = $p['dana'];
-                        }
-                    }
-                    if ($p['id_lembaga'] == $l['id_lembaga'] && $l['bulan'] == $i) {
-                        if ($l['bulan'] == $p['bulan']) {
-                            $data[$l['id_lembaga']][$i] = $p['dana'] + $l['dana'];
-                        } else {
-                            $data[$l['id_lembaga']][$i] = $l['dana'];
-                        }
-                    }
-                }
+            if ($p['bulan'] == "1") {
+                $data[$p['id_lembaga']][1] += $p['dana'];
+            } elseif ($p['bulan'] == "2") {
+                $data[$p['id_lembaga']][2] += $p['dana'];
+            } elseif ($p['bulan'] == "3") {
+                $data[$p['id_lembaga']][3] += $p['dana'];
+            } elseif ($p['bulan'] == "4") {
+                $data[$p['id_lembaga']][4] += $p['dana'];
+            } elseif ($p['bulan'] == "5") {
+                $data[$p['id_lembaga']][5] += $p['dana'];
+            } elseif ($p['bulan'] == "6") {
+                $data[$p['id_lembaga']][6] += $p['dana'];
+            } elseif ($p['bulan'] == "7") {
+                $data[$p['id_lembaga']][7] += $p['dana'];
+            } elseif ($p['bulan'] == "8") {
+                $data[$p['id_lembaga']][8] += $p['dana'];
+            } elseif ($p['bulan'] == "9") {
+                $data[$p['id_lembaga']][9] += $p['dana'];
+            } elseif ($p['bulan'] == "10") {
+                $data[$p['id_lembaga']][10] += $p['dana'];
+            } elseif ($p['bulan'] == "11") {
+                $data[$p['id_lembaga']][11] += $p['dana'];
+            } elseif ($p['bulan'] == "12") {
+                $data[$p['id_lembaga']][12] += $p['dana'];
             }
         }
-
+        foreach ($lpj as $l) {
+            if ($l['bulan'] == "1") {
+                $data[$l['id_lembaga']][1] += $l['dana'];
+            } elseif ($l['bulan'] == "2") {
+                $data[$l['id_lembaga']][2] += $l['dana'];
+            } elseif ($l['bulan'] == "3") {
+                $data[$l['id_lembaga']][3] += $l['dana'];
+            } elseif ($l['bulan'] == "4") {
+                $data[$l['id_lembaga']][4] += $l['dana'];
+            } elseif ($l['bulan'] == "5") {
+                $data[$l['id_lembaga']][5] += $l['dana'];
+            } elseif ($l['bulan'] == "6") {
+                $data[$l['id_lembaga']][6] += $l['dana'];
+            } elseif ($l['bulan'] == "7") {
+                $data[$l['id_lembaga']][7] += $l['dana'];
+            } elseif ($l['bulan'] == "8") {
+                $data[$l['id_lembaga']][8] += $l['dana'];
+            } elseif ($l['bulan'] == "9") {
+                $data[$l['id_lembaga']][9] += $l['dana'];
+            } elseif ($l['bulan'] == "10") {
+                $data[$l['id_lembaga']][10] += $l['dana'];
+            } elseif ($l['bulan'] == "11") {
+                $data[$l['id_lembaga']][11] += $l['dana'];
+            } elseif ($l['bulan'] == "12") {
+                $data[$l['id_lembaga']][12] += $l['dana'];
+            }
+        }
         foreach ($lembaga as $l) {
             for ($j = 1; $j < 13; $j++) {
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
-
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['terserap_persen'] =  0;
             } else {
                 $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
-
             $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
-
-
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['sisa_terserap'] = 0;
             } else {
                 $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
         }
-
         return $data;
     }
     private function _totalDana($laporan)
@@ -582,6 +780,8 @@ class Kemahasiswaan extends CI_Controller
     {
         $data['kegiatan'] = [];
         $kegiatan = $this->db->get('kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+
         $index = 0;
         foreach ($kegiatan as $k) {
             if ($this->input->post('cek_' . $k['id_kegiatan'])) {
@@ -616,6 +816,7 @@ class Kemahasiswaan extends CI_Controller
     }
     public function cetakPengajuanDana($id_kegiatan)
     {
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
         $status = $this->input->get('status');
         if ($status == 'lpj') {
             $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_lpj as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
@@ -647,7 +848,15 @@ class Kemahasiswaan extends CI_Controller
     public function beasiswa()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        if ($this->input->get('start_date')  || $this->input->get('end_date')  || $this->input->get('validasi') != null) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $validasi = $this->input->get('validasi');
+            $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa($start_date, $end_date, $validasi);
+        } else {
+            $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        }
+        $data['kategori_beasiswa'] = $this->db->get('beasiswa')->result_array();
         $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Beasiswa';
         $this->load->view("template/header", $data);
@@ -1039,6 +1248,151 @@ class Kemahasiswaan extends CI_Controller
     }
     /**Akhir method kahris */
 
+    public function exportBeasiswa()
+    {
+        $this->load->model("Model_kemahasiswaan", "kemahasiswaan");
+        $data['beasiswa'] = $this->kemahasiswaan->getBeasiswa();
+        $data['title'] = 'Beasiswa';
+        $this->load->view("kemahasiswaan/export_beasiswa", $data);
+    }
+
+    public function tambahBeasiswa()
+    {
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
+        $data['notif'] = $this->_notifKmhs();
+        // set rules form validation
+        $this->form_validation->set_rules('nimMahasiswa', 'Nim Beasiswa', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Beasiswa";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("kemahasiswaan/tambah_beasiswa");
+            $this->load->view("template/footer");
+        } else {
+            $mahasiswa = $this->db->get_where('Mahasiswa', ['nim' => $this->input->post('nimMahasiswa')])->data_seek();
+            if (!$mahasiswa) {
+                $this->session->set_flashdata('failed', 'Beasiswa gagal ditambahkan, Nim Mahasiswa Salah!');
+                redirect("Kemahasiswaan/tambahBeasiswa");
+            }
+
+            $beasiswa = [
+                "id_beasiswa" => $this->input->post('jenisBeasiswa'),
+                "nim" => $this->input->post('nimMahasiswa'),
+                "tahun_menerima" => $this->input->post('tahunMenerima'),
+                "lama_menerima" => $this->input->post('lamaMenerima'),
+                "nama_instansi" => $this->input->post('namaInstansi'),
+                "nominal" => $this->input->post('nominalBeasiswa'),
+                "validasi_beasiswa" => 0
+            ];
+            // upload file proposal
+            if ($_FILES['lampiran']['name']) {
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/beasiswa/';
+                $config['file_name'] = time() . '_lampiran_' . $this->session->userdata('username');
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('lampiran')) {
+                    $beasiswa['lampiran'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal ditambahkan !');
+                    redirect("Kemahasiwaan/beasiswa");
+                }
+            }
+
+            // upload file proposal
+            if ($_FILES['uploadBukti']['name']) {
+                $config2['allowed_types'] = 'pdf';
+                $config2['max_size']     = '2048'; //kb
+                $config2['upload_path'] = './file_bukti/beasiswa/';
+                $config2['file_name'] = time() . '_bukti_penerimaan_' . $this->session->userdata('username');
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('uploadBukti')) {
+                    $beasiswa['bukti'] = $this->upload->data('file_name');
+                } else {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .  $beasiswa['lampiran']);
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal ditambahkan !');
+                    redirect("Kemahasiswaan/beasiswa");
+                }
+            }
+            $this->session->set_flashdata('message', 'Beasiswa berhasil ditambah !');
+            $this->mahasiswa->insertBeasiswa($beasiswa);
+            redirect('Kemahasiswaan/beasiswa');
+        }
+    }
+
+    public function editBeasiswa($id)
+    {
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $data['beasiswa'] = $this->db->get('beasiswa')->result_array();
+        $data['penerima'] = $this->db->get_where('penerima_beasiswa', ['id_penerima' => $id])->row_array();
+        $data['notif'] = $this->_notifKmhs();
+        // set rules form validation
+        $this->form_validation->set_rules('nimMahasiswa', 'Nim Beasiswa', 'required');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Beasiswa";
+            $this->load->view("template/header", $data);
+            $this->load->view("template/navbar");
+            $this->load->view("template/sidebar", $data);
+            $this->load->view("kemahasiswaan/edit_beasiswa");
+            $this->load->view("template/footer");
+        } else {
+            $mahasiswa = $this->db->get_where('Mahasiswa', ['nim' => $this->input->post('nimMahasiswa')])->data_seek();
+            if (!$mahasiswa) {
+                $this->session->set_flashdata('failed', 'Beasiswa gagal diperbaharui, Nim Mahasiswa Salah!');
+                redirect("Kemahasiswaan/tambahBeasiswa");
+            }
+
+            $beasiswa = [
+                "id_beasiswa" => $this->input->post('jenisBeasiswa'),
+                "nim" => $this->input->post('nimMahasiswa'),
+                "tahun_menerima" => $this->input->post('tahunMenerima'),
+                "lama_menerima" => $this->input->post('lamaMenerima'),
+                "nama_instansi" => $this->input->post('namaInstansi'),
+                "nominal" => $this->input->post('nominalBeasiswa')
+            ];
+            // upload file proposal
+            if ($_FILES['lampiran']['name']) {
+                $config['allowed_types'] = 'pdf';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/beasiswa/';
+                $config['file_name'] = time() . '_lampiran_' . $this->session->userdata('username');
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('lampiran')) {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .   $data['penerima']['lampiran']);
+                    $beasiswa['lampiran'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal diperbaharui !');
+                    redirect("Kemahasiwaan/beasiswa");
+                }
+            }
+
+            // upload file proposal
+            if ($_FILES['uploadBukti']['name']) {
+                $config2['allowed_types'] = 'pdf';
+                $config2['max_size']     = '2048'; //kb
+                $config2['upload_path'] = './file_bukti/beasiswa/';
+                $config2['file_name'] = time() . '_bukti_penerimaan_' . $this->session->userdata('username');
+                $this->load->library('upload', $config2);
+                $this->upload->initialize($config2);
+                if ($this->upload->do_upload('uploadBukti')) {
+                    unlink(FCPATH . "file_bukti/beasiswa/" .   $data['penerima']['bukti']);
+                    $beasiswa['bukti'] = $this->upload->data('file_name');
+                } else {
+                    $this->session->set_flashdata('failed', 'Beasiswa gagal diperbaharui !');
+                    redirect("Kemahasiswaan/beasiswa");
+                }
+            }
+            $this->session->set_flashdata('message', 'Beasiswa berhasil diperbaharui !');
+            $this->mahasiswa->updateBeasiswa($beasiswa, $id);
+            redirect('Kemahasiswaan/beasiswa');
+        }
+    }
+
     // Validasi Rancangan Anggota Lembaga
     public function daftarLembaga()
     {
@@ -1078,6 +1432,8 @@ class Kemahasiswaan extends CI_Controller
             $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
             $data['pengajuan'] = $this->db->get()->result_array();
         } else {
+            // $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
+            $this->db->where('periode', 2020);
             $this->db->from('pengajuan_anggota_lembaga');
             $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
             $data['pengajuan'] = $this->db->get()->result_array();
@@ -1108,6 +1464,10 @@ class Kemahasiswaan extends CI_Controller
         $this->db->where('id', intval($id_pengajuan));
         $this->db->update('pengajuan_anggota_lembaga', ['status_keaktifan' => 1]);
 
+        $pengajuan = $this->db->get_where('pengajuan_anggota_lembaga', ['id' => intval($id_pengajuan)])->row_array();
+
+        $tahun_temp = "01-01-".$pengajuan['periode'];
+
         // Tambahkan SKP ke masing" anggota
         $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
         $this->db->from('daftar_anggota_lembaga');
@@ -1120,6 +1480,7 @@ class Kemahasiswaan extends CI_Controller
             $data = [
                 'nim' => $anggota_lembaga[$i]['nim'],
                 'nama_kegiatan' => 'Keanggotaan Lembaga',
+                'tgl_pelaksanaan' => $tahun_temp,
                 'validasi_prestasi' => 1,
                 'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi'])
             ];
@@ -1144,5 +1505,29 @@ class Kemahasiswaan extends CI_Controller
 
         $this->session->set_flashdata('message', 'Keaktifan Anggota Lembaga berhasil divalidasi !');
         redirect("Kemahasiswaan/daftarLembaga");
+    }
+
+    public function tambahJenisBeasiswa()
+    {
+        $this->db->set('jenis_beasiswa', $this->input->post('jenis_beasiswa'));
+        $this->db->insert('beasiswa');
+        $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Ditambah');
+        redirect("Kemahasiswaan/beasiswa");
+    }
+
+    public function hapusJenisBeasiswa($id)
+    {
+        $this->db->delete('beasiswa', ['id' => $id]);
+        $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Dihapus');
+        redirect("Kemahasiswaan/beasiswa");
+    }
+
+    public function editJenisBeasiswa($id)
+    {
+        $this->db->set('jenis_beasiswa', $this->input->post('jenis_beasiswa'));
+        $this->db->where('id', $id);
+        $this->db->update('beasiswa');
+        $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Diubah');
+        redirect("Kemahasiswaan/beasiswa");
     }
 }

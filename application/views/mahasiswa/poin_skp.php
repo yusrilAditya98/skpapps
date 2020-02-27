@@ -98,7 +98,7 @@
                             </div>
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="table-1">
+                            <table class="table table-bordered table-striped" id="table-1">
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
@@ -115,7 +115,7 @@
                                     foreach ($poinskp as $p) : ?>
                                         <tr>
                                             <td scope="row"><?= $i++ ?></td>
-                                            <td><?= $p['tgl_pengajuan'] ?></td>
+                                            <td><?= date("d-m-Y", strtotime($p['tgl_pengajuan'])) ?></td>
                                             <td> <a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" class="detailSkp"><?= $p['nama_kegiatan'] ?></a> </td>
                                             <td><?= $p['nama_tingkatan'] ?><br><small><?= $p['nama_prestasi'] ?></small></td>
                                             <td><?= $p['bobot'] ?></td>
@@ -129,10 +129,11 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-
                                                 <div class="row">
                                                     <?php if ($p['validasi_prestasi'] == 1) : ?>
-                                                        <span class="text-success">Disetujui</span>
+                                                        <div class="col-lg-12">
+                                                            <span class="text-success">Disetujui</span>
+                                                        </div>
                                                     <?php else : ?>
                                                         <div class="col-sm-4">
                                                             <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-icon btn-sm btn-info"><i class="fas fa-edit"></i></a>

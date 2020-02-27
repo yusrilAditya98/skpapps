@@ -68,7 +68,7 @@ class Model_poinskp extends CI_Model
         $this->db->insert('poin_skp');
     }
 
-    public function getPoinSkp($username = null, $id_poin_skp = null)
+    public function getPoinSkp($username = null, $id_poin_skp = null, $start_date = null, $end_date = null, $validasi = null)
     {
         $this->db->select('sp.bobot,ps.*,t.*,p.*,jk.*,bk.*,st.id_semua_tingkatan,m.nama');
         $this->db->from('poin_skp as ps');
@@ -84,6 +84,15 @@ class Model_poinskp extends CI_Model
         }
         if ($id_poin_skp != null) {
             $this->db->where('ps.id_poin_skp', $id_poin_skp);
+        }
+
+        if ($start_date != null && $end_date != null) {
+            $this->db->where('ps.tgl_pengajuan >=', $start_date);
+            $this->db->where('ps.tgl_pengajuan <=', $end_date);
+        }
+
+        if ($validasi != null) {
+            $this->db->where('ps.validasi_prestasi', $validasi);
         }
         $this->db->order_by('ps.validasi_prestasi', 'ASC');
         return $this->db->get()->result_array();
@@ -187,14 +196,14 @@ class Model_poinskp extends CI_Model
 
         $this->db->select('count(u.id_user) as jumlah');
         $this->db->from('user as u');
-        $this->db->where_in('u.user_profil_kode', [2,3]);
+        $this->db->where_in('u.user_profil_kode', [2, 3]);
         $data['lembaga'] = $this->db->get()->result_array();
-        
+
         $this->db->select('count(u.id_user) as jumlah');
         $this->db->from('user as u');
-        $this->db->where_in('u.user_profil_kode', [4,6,7,8,9]);
+        $this->db->where_in('u.user_profil_kode', [4, 6, 7, 8, 9]);
         $data['karyawan'] = $this->db->get()->result_array();
-        
+
         $this->db->select('count(u.id_user) as jumlah');
         $this->db->from('user as u');
         $this->db->where('u.user_profil_kode', 5);

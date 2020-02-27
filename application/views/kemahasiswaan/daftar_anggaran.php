@@ -16,7 +16,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <form action="<?= base_url('Kemahasiswaan/lembaga') ?>" method="get">
                             <div class="form-group float-right">
                                 <div class="input-group">
@@ -46,6 +45,7 @@
                                         <th>Jumlah Kegiatan</th>
                                         <th>Kegiatan Terlaksana</th>
                                         <th>Kegiatan Belum Terlaksana</th>
+                                        <th>Kegiatan Terlaksana Belum LPJ</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -55,17 +55,17 @@
                                             <td><?= $index++ ?></td>
                                             <td><?= $l['tahun_kegiatan'] ?></td>
                                             <td><?= $l['nama_lembaga'] ?></td>
-                                            <td>Rp.<?= number_format($l['anggaran_kemahasiswaan'], 2, ',', '.'); ?></td>
+                                            <td>Rp.<?= number_format($l['anggaran_kemahasiswaan'], 0, ',', '.'); ?></td>
                                             <td>
                                                 <?php if ($l['dana_kegiatan']) : ?>
-                                                    Rp.<?= number_format($l['dana_kegiatan'], 2, ',', '.'); ?>
+                                                    Rp.<?= number_format($l['dana_kegiatan'], 0, ',', '.'); ?>
                                                 <?php else : ?>
-                                                    0
+                                                    Rp.0
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <?= number_format($l['dana_kegiatan'], 2, ',', '.');
-                                                    $l['anggaran_kemahasiswaan'] - $l['dana_kegiatan'] ?>
+                                                Rp.<?= number_format($l['anggaran_kemahasiswaan'] - $l['dana_kegiatan'], 0, ',', '.');
+                                                        ?>
                                             </td>
                                             <td>
                                                 <?php if ($l['jumlah_kegiatan']) : ?>
@@ -84,6 +84,13 @@
                                             <td>
                                                 <?php if ($l['blm_terlaksana']) : ?>
                                                     <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah  Kegiatan Belum Terlaksana" data-kondisi="blmTerlaksana" href=""> <?= $l['blm_terlaksana'] ?></a>
+                                                <?php else : ?>
+                                                    0
+                                                <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <?php if ($l['blm_lpj']) : ?>
+                                                    <a class="d-anggaran" data-toggle="modal" data-target="#daftarKegiatan" data-id="<?= $l['id_lembaga'] ?>" data-tahun="<?= $l['tahun_kegiatan'] ?>" data-status="Jumlah  Kegiatan Terlaksana Belum LPJ" data-kondisi="terlaksana_blm_lpj" href=""> <?= $l['blm_lpj'] ?></a>
                                                 <?php else : ?>
                                                     0
                                                 <?php endif; ?>
@@ -124,7 +131,7 @@
                                         <tr>
                                             <td><?= $d['nama_lembaga'] ?></td>
                                             <td><?= $d['tahun_pengajuan'] ?></td>
-                                            <td><?= $d['anggaran_kemahasiswaan'] ?></td>
+                                            <td>Rp.<?= number_format($d['anggaran_kemahasiswaan'], 0, ',', '.');  ?></td>
                                             <td>
 
                                                 <a href="#" class="btn btn-primary edit-anggaran" data-toggle="modal" data-target="#editAnggaran" data-id="<?= $d['id_lembaga'] ?>" data-tahun="<?= $d['tahun_pengajuan'] ?>"><i class="fas fa-edit"></i> </a>
@@ -153,7 +160,6 @@
                                         <th>No</th>
                                         <th>Tahun Periode</th>
                                         <th>Nama Lembaga</th>
-
                                         <th>Status Rancangan</th>
                                         <th>Action</th>
                                     </tr>

@@ -34,8 +34,6 @@ class API_skp extends CI_Controller
             redirect(base_url('Mahasiswa'));
         }
     }
-
-
     //  mmenampilkan data validasi
     public function validasiKegiatan($id)
     {
@@ -50,7 +48,6 @@ class API_skp extends CI_Controller
         $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();
         echo json_encode($data['mahasiswa']);
     }
-
     // Filter Kategori Detail Tingkatan
     public function getDataDetail()
     {
@@ -61,7 +58,6 @@ class API_skp extends CI_Controller
         header('Content-type: application/json');
         echo json_encode($data);
     }
-
     // menampilkan bidang kegiatan
     public function bidangKegiatan()
     {
@@ -252,14 +248,16 @@ class API_skp extends CI_Controller
     // menampilkan jumlah kegiatan
     public function dataJumlahKegiatan($id_lembaga)
     {
-        if ($this->session->userdata('user_profil_kode') != 4) {
-            redirect('Auth/blocked');
-        }
         $this->load->model("Model_kemahasiswaan", 'kemahasiswaan');
         $this->kondisi = $this->input->get('kondisi');
         $this->tahun = $this->input->get('tahun');
         $this->id_lembaga = $id_lembaga;
-        $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
+        if ($this->kondisi == 'terlaksana_blm_lpj') {
+            $data = $this->kemahasiswaan->getDetailAnggaranBlmLpj($this->id_lembaga, $this->tahun);
+        } else {
+
+            $data = $this->kemahasiswaan->getDetailAnggaranLembaga($this->id_lembaga, $this->tahun, $this->kondisi);
+        }
         echo json_encode($data);
     }
 
@@ -286,9 +284,7 @@ class API_skp extends CI_Controller
     // mengolah data serapan anggaran
     private function _serapan($proposal, $lpj, $tahun)
     {
-
         $lembaga = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
-
         if ($proposal == null) {
             foreach ($lembaga as $l) {
                 $proposal[$l['id_lembaga']] = [
@@ -309,14 +305,35 @@ class API_skp extends CI_Controller
                 ];
             }
         }
-
+        // inisialisasi data lpj
+        $data_lpj = [];
+        $index1 = 0;
+        foreach ($proposal as $p) {
+            $data_lpj[$index1++] = [
+                'bulan' => 0,
+                'dana' => 0,
+                'id_lembaga' => $p['id_lembaga'],
+                'nama_lembaga' => $p['nama_lembaga']
+            ];
+        }
+        // mengisikan nilai array LPJ
+        $index2 = 0;
+        foreach ($lpj as $l) {
+            $data_lpj[$index2++] = [
+                'bulan' => $l['bulan'],
+                'dana' => $l['dana'],
+                'id_lembaga' => $l['id_lembaga'],
+                'nama_lembaga' => $l['nama_lembaga']
+            ];
+        }
+        $lpj = $data_lpj;
         $data = [];
         foreach ($lembaga as $l) {
             for ($j = 1; $j < 13; $j++) {
                 $data[$l['id_lembaga']][$j] = 0;
             }
             $data[$l['id_lembaga']]['nama_lembaga'] = $l['nama_lembaga'];
-            $dana = $this->db->select('anggaran_kemahasiswaan')->get_where('rekapan_kegiatan_lembaga', ['id_lembaga' => $l['id_lembaga'], 'tahun_pengajuan' => $tahun])->row_array();
+            $dana = $this->db->select('anggaran_kemahasiswaan')->get_where('rekapan_kegiatan_lembaga', ['id_lembaga' => $l['id_lembaga'],  'tahun_pengajuan' => $tahun])->row_array();
 
             if ($dana['anggaran_kemahasiswaan'] == null) {
                 $data[$l['id_lembaga']]['dana_pagu'] = 0;
@@ -325,41 +342,70 @@ class API_skp extends CI_Controller
             }
             $data[$l['id_lembaga']]['dana_terserap'] = 0;
         }
-
         foreach ($proposal as $p) {
-            foreach ($lpj as $l) {
-                for ($i = 1; $i < 13; $i++) {
-                    if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
-                        if ($l['bulan'] == $p['bulan']) {
-                            $data[$p['id_lembaga']][$i] = $p['dana'] + $l['bulan'];
-                        } else {
-                            $data[$p['id_lembaga']][$i] = $p['dana'];
-                        }
-                    }
-                    if ($p['id_lembaga'] == $l['id_lembaga'] && $l['bulan'] == $i) {
-                        if ($l['bulan'] == $p['bulan']) {
-                            $data[$l['id_lembaga']][$i] = $p['dana'] + $l['dana'];
-                        } else {
-                            $data[$l['id_lembaga']][$i] = $l['dana'];
-                        }
-                    }
-                }
+            if ($p['bulan'] == "1") {
+                $data[$p['id_lembaga']][1] += $p['dana'];
+            } elseif ($p['bulan'] == "2") {
+                $data[$p['id_lembaga']][2] += $p['dana'];
+            } elseif ($p['bulan'] == "3") {
+                $data[$p['id_lembaga']][3] += $p['dana'];
+            } elseif ($p['bulan'] == "4") {
+                $data[$p['id_lembaga']][4] += $p['dana'];
+            } elseif ($p['bulan'] == "5") {
+                $data[$p['id_lembaga']][5] += $p['dana'];
+            } elseif ($p['bulan'] == "6") {
+                $data[$p['id_lembaga']][6] += $p['dana'];
+            } elseif ($p['bulan'] == "7") {
+                $data[$p['id_lembaga']][7] += $p['dana'];
+            } elseif ($p['bulan'] == "8") {
+                $data[$p['id_lembaga']][8] += $p['dana'];
+            } elseif ($p['bulan'] == "9") {
+                $data[$p['id_lembaga']][9] += $p['dana'];
+            } elseif ($p['bulan'] == "10") {
+                $data[$p['id_lembaga']][10] += $p['dana'];
+            } elseif ($p['bulan'] == "11") {
+                $data[$p['id_lembaga']][11] += $p['dana'];
+            } elseif ($p['bulan'] == "12") {
+                $data[$p['id_lembaga']][12] += $p['dana'];
+            }
+        }
+        foreach ($lpj as $l) {
+            if ($l['bulan'] == "1") {
+                $data[$l['id_lembaga']][1] += $l['dana'];
+            } elseif ($l['bulan'] == "2") {
+                $data[$l['id_lembaga']][2] += $l['dana'];
+            } elseif ($l['bulan'] == "3") {
+                $data[$l['id_lembaga']][3] += $l['dana'];
+            } elseif ($l['bulan'] == "4") {
+                $data[$l['id_lembaga']][4] += $l['dana'];
+            } elseif ($l['bulan'] == "5") {
+                $data[$l['id_lembaga']][5] += $l['dana'];
+            } elseif ($l['bulan'] == "6") {
+                $data[$l['id_lembaga']][6] += $l['dana'];
+            } elseif ($l['bulan'] == "7") {
+                $data[$l['id_lembaga']][7] += $l['dana'];
+            } elseif ($l['bulan'] == "8") {
+                $data[$l['id_lembaga']][8] += $l['dana'];
+            } elseif ($l['bulan'] == "9") {
+                $data[$l['id_lembaga']][9] += $l['dana'];
+            } elseif ($l['bulan'] == "10") {
+                $data[$l['id_lembaga']][10] += $l['dana'];
+            } elseif ($l['bulan'] == "11") {
+                $data[$l['id_lembaga']][11] += $l['dana'];
+            } elseif ($l['bulan'] == "12") {
+                $data[$l['id_lembaga']][12] += $l['dana'];
             }
         }
         foreach ($lembaga as $l) {
             for ($j = 1; $j < 13; $j++) {
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
-
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['terserap_persen'] =  0;
             } else {
                 $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
             }
-
             $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
-
-
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['sisa_terserap'] = 0;
             } else {
@@ -473,7 +519,17 @@ class API_skp extends CI_Controller
         $data['rekap_user'] = $this->poinskp->getRekapUser();
         echo json_encode($data);
     }
-
+    public function exportLaporanSerapan($tahun)
+    {
+        $this->load->model('Model_keuangan', 'keuangan');
+        $data['title'] = 'Anggaran';
+        $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
+        $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
+        $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
+        $data['tahun_saat_ini'] = $this->input->post('tahun');
+        $data['total'] = $this->_totalDana($data['laporan']);
+        $this->load->view("keuangan/export_keuangan", $data);
+    }
     // Anggota Lembaga
     public function daftarAnggotaLembaga()
     {

@@ -50,28 +50,7 @@
                                                         anggaran yang akan diterima 70% dari besar anggaran
                                                         pengajuan</small>
                                                 </div>
-                                                <div class="sumber-dana-chekboxes mb-3">
-                                                    <h6>Sumber Dana</h6>
-                                                    <?php foreach ($dana_kegiatan as $d) : ?>
-                                                        <div class="form-check py-1">
-                                                            <input class="form-check-input" type="hidden" value="0" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
-                                                            <input checked class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
-                                                            <label class="form-check-label" for="dana <?= $d['id_sumber_dana'] ?>">
-                                                                <?= $d['nama_sumber_dana'] ?>
-                                                            </label>
-                                                        </div>
-                                                    <?php endforeach; ?>
-                                                    <?php foreach ($dana as $d) : ?>
-                                                        <div class="form-check py-1">
-                                                            <input class="form-check-input" type="hidden" value="0" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
-                                                            <input class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>">
-                                                            <label class="form-check-label" for="dana <?= $d['id_sumber_dana'] ?>">
-                                                                <?= $d['nama_sumber_dana'] ?>
-                                                            </label>
-                                                        </div>
-                                                    <?php endforeach; ?>
 
-                                                </div>
                                             </div>
                                         <?php endif; ?>
                                         <div class="bagian-acara mt-5">
@@ -148,7 +127,7 @@
                                                             <div class="col-lg-2">
                                                                 <input type="number" class="form-control" name="jumlahAnggota" id="jumlahAnggota" value="<?= count($tingkat) ?>" required readonly>
                                                             </div>
-                                                            <small class="text-danger"> <?php echo validation_errors(); ?></small>
+
                                                         </div>
 
                                                     </div>
@@ -177,11 +156,11 @@
                                                                     <tr class="d-m" id="data-<?= $a['nim'] ?>">
                                                                         <td><?= $index++ ?></td>
                                                                         <td><?= $a['nim'] ?>
-                                                                            <input type="hidden" name="nim_<?= $id ?>" value="<?= $a['nim'] ?>" id="nim_<?= $id ?>">
+                                                                            <input type="hidden" name="nim_<?= $a['nim'] ?>" value="<?= $a['nim'] ?>" id="nim_<?= $a['nim'] ?>">
                                                                         </td>
                                                                         <td><?= $a['nama'] ?></td>
                                                                         <td><?= $a['nama_prestasi'] ?>
-                                                                            <input type="hidden" name="prestasi_<?= $id ?>" value="<?= $a['id_semua_prestasi'] ?>" id="nim_<?= $id; ?>">
+                                                                            <input type="hidden" name="prestasi_<?= $a['nim'] ?>" value="<?= $a['id_semua_prestasi'] ?>" id="nim_<?= $a['nim']; ?>">
                                                                         </td>
                                                                         <td> <button type="button" data-id="<?= $a['nim'] ?>" class="btn btn-danger hps-mhs"><i class="fas fa-trash-alt"></i></button></td>
                                                                     </tr>

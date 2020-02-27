@@ -33,6 +33,24 @@ class Auth extends CI_Controller
             $this->_login_siam();
         }
     }
+
+    public function login()
+    {
+        if ($this->session->userdata('user_profil_kode')) {
+            redirect(link_dashboard($this->session->userdata('user_profil_kode')));
+        }
+
+        $this->form_validation->set_rules('username', 'Username', 'required|trim');
+        $this->form_validation->set_rules('password', 'Password', 'required|trim');
+
+        if ($this->form_validation->run() == false) {
+            $data['title'] = 'SKP-APPS Login Staff';
+            $this->load->view('auth/login_staff', $data);
+        } else {
+            // validasi success
+            $this->_login();
+        }
+    }
     // login by non-siam accounts
     private function _login()
     {
@@ -61,7 +79,7 @@ class Auth extends CI_Controller
                             $this->session->unset_userdata('nama');
                             $this->session->unset_userdata('user_profil_kode');
                             $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data lembaga belum terdaftar !</div> ');
-                            redirect('Auth');
+                            redirect('Auth/login');
                         }
                     } elseif ($user['user_profil_kode'] == 1) {
                         $mahasiswa = $this->db->get_where('mahasiswa', ['nim' => $this->username])->row_array();
@@ -72,7 +90,7 @@ class Auth extends CI_Controller
                             $this->session->unset_userdata('nama');
                             $this->session->unset_userdata('user_profil_kode');
                             $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data mahasiswa belum terdaftar !</div> ');
-                            redirect('Auth');
+                            redirect('Auth/login');
                         }
                     } elseif ($user['user_profil_kode'] == 4) {
                         redirect('Kemahasiswaan');
@@ -89,15 +107,15 @@ class Auth extends CI_Controller
                     }
                 } else {
                     $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Password salah !</div> ');
-                    redirect('Auth');
+                    redirect('Auth/login');
                 }
             } else {
                 $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Akun belum aktif!</div> ');
-                redirect('Auth');
+                redirect('Auth/login');
             }
         } else {
             $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data tidak ditemukan !</div> ');
-            redirect('Auth');
+            redirect('Auth/login');
         }
     }
     // login by siam accounts
@@ -115,51 +133,22 @@ class Auth extends CI_Controller
         // memanggil method auth dari objek yang telah dibuat dengan method GET
         $result = $auth->auth($data);
         if ($result['msg'] == "true") {
-            $data = [
-                "username" => $result['data']['nim'],
-                "nama" => $result['data']['nama'],
-                "user_profil_kode" => $result['data']['status']
-            ];
-            $this->session->set_userdata($data);
-            redirect('Mahasiswa');
-        } else {
-
-            $user = $this->db->get_where('user', ['username' => $this->username])->row_array();
-            if ($user != null) {
-                if ($user['is_active'] == 1) {
-                    // cek password
-                    if (password_verify($this->password, $user['password'])) {
-                        $data = [
-                            'username' => $user['username'],
-                            "nama" => $user['nama'],
-                            'user_profil_kode' => $user['user_profil_kode']
-                        ];
-
-                        $this->session->set_userdata($data);
-                        if ($user['user_profil_kode'] == 2 || $user['user_profil_kode'] == 3) {
-                            redirect('Kegiatan');
-                        } elseif ($user['user_profil_kode'] == 4) {
-                            redirect('Kemahasiswaan');
-                        } elseif ($user['user_profil_kode'] == 5) {
-                            redirect('Pimpinan');
-                        } elseif ($user['user_profil_kode'] == 6) {
-                            redirect('Keuangan');
-                        } elseif ($user['user_profil_kode'] == 7) {
-                            redirect('Publikasi');
-                        } elseif ($user['user_profil_kode'] == 8) {
-                            redirect('Akademik');
-                        } elseif ($user['user_profil_kode'] == 9) {
-                            redirect('Admin');
-                        }
-                    } else {
-                        $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Wrong Password !</div> ');
-                        redirect('Auth');
-                    }
-                }
+            $mhs = $this->db->get_where('mahasiswa', ['nim' => $result['data']['nim']])->row_array();
+            if ($mhs) {
+                $data = [
+                    "username" => $result['data']['nim'],
+                    "nama" => $result['data']['nama'],
+                    "user_profil_kode" => $result['data']['status']
+                ];
+                $this->session->set_userdata($data);
+                redirect('Mahasiswa');
             } else {
-                $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data tidak ditemukan !</div> ');
+                $this->session->set_flashdata('message', '<div class="px-5 alert alert-warning text-center" role="alert">Anda belum terdaftar !</div> ');
                 redirect('Auth');
             }
+        } else {
+            $this->session->set_flashdata('message', '<div class="px-5 alert alert-danger text-center" role="alert">Data tidak ditemukan !</div> ');
+            redirect('Auth');
         }
     }
     public function logout()
@@ -173,6 +162,16 @@ class Auth extends CI_Controller
     }
     public function blocked()
     {
-        $this->load->view('error403');
+        $this->load->view('auth/errors-403');
+    }
+
+    public function notfound404()
+    {
+        $this->load->view('auth/errors-404');
+    }
+
+    public function phpInfo()
+    {
+        phpinfo();
     }
 }

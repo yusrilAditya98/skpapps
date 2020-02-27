@@ -8,7 +8,7 @@ class Publikasi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') != 7) {
+        if ($this->session->userdata('user_profil_kode') == 7 || $this->session->userdata('user_profil_kode') == 9) { } else {
             redirect('auth/blocked');
         }
     }
@@ -37,7 +37,13 @@ class Publikasi extends CI_Controller
         $data['title'] = 'Validasi';
         $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, null, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan();
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'proposal');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -51,7 +57,13 @@ class Publikasi extends CI_Controller
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['notif'] = $this->_notif();
-        $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        if ($this->input->get('start_date') && $this->input->get('end_date')) {
+            $start_date = $this->input->get('start_date');
+            $end_date = $this->input->get('end_date');
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3, $start_date, $end_date);
+        } else {
+            $data['kegiatan'] = $this->kegiatan->getDataKegiatan(null, 3);
+        }
         $data['validasi'] = $this->kegiatan->getDataValidasi(null, null, 'lpj');
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");

@@ -12,8 +12,45 @@
                         <h4>Daftar Pengajuan Proposal Kegiatan</h4>
                     </div>
                     <div class="card-body">
-                        <a href="<?= base_url('Mahasiswa/tambahProposal') ?>" style="float:right" class="btn btn-icon btn-success mb-3">
-                            Pengajuan Proposal <i class="fas fa-plus pl-2"></i></a>
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <a href="<?= base_url('Mahasiswa/tambahProposal') ?>" class="btn btn-icon btn-success float-right">
+                                    Pengajuan Proposal <i class="fas fa-plus pl-2"> </i></a>
+                            </div>
+                        </div>
+                        <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" class="form-control">
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-primary">submit</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTabelKegiatan">
 
@@ -36,8 +73,8 @@
                                     <?php $index = 1; ?>
                                     <?php foreach ($kegiatan as $k) : ?>
                                         <tr>
-                                            <th scope="row"><?= $index++ ?></th>
-                                            <td><?= $k['tgl_pengajuan_proposal'] ?></td>
+                                            <td scope="row"><?= $index++ ?></td>
+                                            <td><?= date("d-m-Y", strtotime($k['tgl_pengajuan_proposal']))   ?></td>
                                             <td><a href="" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-jenis="proposal" data-target="#i-kegiatan"><?= $k['nama_kegiatan'] ?></a>
                                             </td>
                                             <?php if ($k['status_selesai_proposal'] == 0) : ?>
@@ -81,7 +118,10 @@
                                                     <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
                                                     <a href="<?= base_url('Mahasiswa/hapusKegiatan/') . $k['id_kegiatan']; ?>" class="btn btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
                                                 <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
-                                                    <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
+                                                    <form action="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>" method="post">
+                                                        <input type="hidden" name="jenis_revisi" value="<?= $jenis_revisi ?>">
+                                                        <button type="submit" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></button>
+                                                    </form>
                                                 <?php endif; ?>
                                             </td>
                                         </tr>

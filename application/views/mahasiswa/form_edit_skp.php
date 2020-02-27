@@ -50,7 +50,7 @@
 
                                                     <div class="form-group">
                                                         <label for="partisipasiKegiatan">Partisipasi/Jabatan</label>
-                                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>
+                                                        <select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatanSkp" required>
                                                             <option value="">-- Pilih Partisipasi/Jabatan Kegiatan --</option>
                                                         </select>
                                                         <div class=" invalid-feedback">
@@ -60,8 +60,8 @@
                                                     <div class="form-group">
                                                         <label for="bobotKegiatan">Bobot SKP</label>
                                                         <input class="form-control bobotKegiatan" name="bobotKegiatan" id="bobotKegiatan" readonly value="0">
-
                                                     </div>
+
                                                     <div class="form-group">
                                                         <label for="tempatKegiatan">Tempat Pelaksanaan</label>
                                                         <input type="text" class="form-control" id="tempatKegiatan" name="tempatKegiatan" placeholder="Tempat pelaksanaan..." required value="<?= $tempat_pelaksanaan ?>">
@@ -77,7 +77,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="uploadBukti">Upload Bukti - <a target="_blank" class="btn btn-primary" href="<?= base_url('/assets/pdfjs/web/viewer.html?file=../../../file_bukti/poinskp/') . $file_bukti ?>"><i class="fas fa-file-pdf"></i> Lihat</a></label>
+                                                        <label for="uploadBukti">Upload Bukti - <a target="_blank" class="btn btn-primary" href="<?= base_url('/assets/pdfjs/web/viewer.html?file=../../../file_bukti/') . $file_bukti ?>"><i class="fas fa-file-pdf"></i> Lihat</a></label>
                                                         <input type="file" class="form-control-file btn" id="uploadBukti" name="uploadBukti">
 
                                                         <small>file upload berformat .pdf dengan maksimal 2048Kb</small>

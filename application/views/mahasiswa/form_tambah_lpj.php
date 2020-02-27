@@ -48,17 +48,7 @@
                                                     anggaran yang akan diterima 30% dari besar anggaran
                                                     pengajuan</small>
                                             </div>
-                                            <div class="sumber-dana-chekboxes mb-3">
-                                                <h6>Sumber Dana</h6>
-                                                <?php foreach ($dana as $d) : ?>
-                                                    <div class="form-check py-1">
-                                                        <input checked class="form-check-input" type="checkbox" value="<?= $d['id_sumber_dana'] ?>" id="dana<?= $d['id_sumber_dana'] ?>" name="dana<?= $d['id_sumber_dana'] ?>" readonly>
-                                                        <label class="form-check-label" for="dana <?= $d['id_sumber_dana'] ?>">
-                                                            <?= $d['nama_sumber_dana'] ?>
-                                                        </label>
-                                                    </div>
-                                                <?php endforeach; ?>
-                                            </div>
+
                                         </div>
                                         <div class="bagian-acara mt-5">
                                             <h5>Informasi Acara</h5>

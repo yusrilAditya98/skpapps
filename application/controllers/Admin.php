@@ -217,6 +217,7 @@ class Admin extends CI_Controller
         header('Content-type:application/json');
         echo json_encode($data);
     }
+
     public function getProfilUser()
     {
         $data = $this->db->get('user_profil')->result_array();
@@ -275,5 +276,37 @@ class Admin extends CI_Controller
         // alihkan halaman ke index.php
         $this->session->set_flashdata('message', 'Impor data Mahasiswa berhasil');
         redirect('Admin/ManagementUser');
+    }
+
+    // pimpinan FEB
+    public function daftarPimpinan()
+    {
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $data['title'] = "Daftar Pimpinan";
+        $this->template($data);
+        $this->load->view("admin/daftar_pimpinan");
+        $this->load->view("template/footer");
+    }
+
+    public function editPimpinan($id)
+    {
+        $this->form_validation->set_rules('nip', 'Nip', 'required|trim');
+        if ($this->form_validation->run() == false) {
+            $data['title'] = "Edit Pimpinan";
+            $data['pimpinan'] = $this->db->get_where('list_pimpinan', ['id' => $id])->row_array();
+            $this->template($data);
+            $this->load->view("admin/edit_pimpinan");
+            $this->load->view("template/footer");
+        } else {
+
+            $data_pimpinan = [
+                'nip' => $this->input->post('nip'),
+                'nama' => $this->input->post('nama'),
+                'jabatan' => $this->input->post('jabatan'),
+            ];
+            $this->admin->updateDataPimpinan($data_pimpinan, $id);
+            $this->session->set_flashdata('message', 'Data Pimpinan berhasil diperbaharui');
+            redirect('admin/daftarPimpinan');
+        }
     }
 }
