@@ -4,6 +4,8 @@
     <div class="section-header">
       <h1>Dashboard</h1>
     </div>
+    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
     <div class="row">
       <div class="col-12 col-md-6 col-lg-8">
         <div class="card">
@@ -47,7 +49,7 @@
             <?php if ($mahasiswa[0]['total_poin_skp'] >= 100 && $mahasiswa[0]['total_poin_skp'] <= 150) : ?>
               <span class="badge badge-warning"> Cukup</span> <br>
               Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.
-              </span>span>
+              </span>
             <?php elseif ($mahasiswa[0]['total_poin_skp'] >= 151 && $mahasiswa[0]['total_poin_skp'] <= 200) : ?>
               <span class="badge badge-primary">Baik</span>
               Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.

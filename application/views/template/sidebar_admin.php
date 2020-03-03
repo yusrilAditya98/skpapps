@@ -1,7 +1,7 @@
 <div class="main-sidebar">
     <aside id="sidebar-wrapper">
         <div class="sidebar-brand">
-            <a href="index.html"><img src="<?= base_url('assets/img/skpapps.png') ?>" alt="" width="200dp" class="mt-2"></a>
+            <a href="index.html"><img src="<?= base_url('assets/img/white_logo.png') ?>" alt="" width="200dp" class="mt-2"></a>
         </div>
         <div class="sidebar-brand sidebar-brand-sm">
             <a href="index.html">SKP</a>

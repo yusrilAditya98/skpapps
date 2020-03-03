@@ -196,8 +196,6 @@ function copyDiv(e) {
 }
 
 
-
-
 $(document).ready(function (e) {
 	$('#dataTabelPoinSkp').DataTable({
 		initComplete: function () {

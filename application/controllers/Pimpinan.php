@@ -200,7 +200,7 @@ class Pimpinan extends CI_Controller
             if ($dana['anggaran_kemahasiswaan'] == null) {
                 $data[$l['id_lembaga']]['dana_pagu'] = 0;
             } else {
-                $data[$l['id_lembaga']]['dana_pagu']  = $dana['anggaran_kemahasiswaan'];
+                $data[$l['id_lembaga']]['dana_pagu'] = $dana['anggaran_kemahasiswaan'];
             }
             $data[$l['id_lembaga']]['dana_terserap'] = 0;
         }
@@ -231,9 +231,9 @@ class Pimpinan extends CI_Controller
             }
 
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
-                $data[$l['id_lembaga']]['terserap_persen'] =  0;
+                $data[$l['id_lembaga']]['terserap_persen'] = 0;
             } else {
-                $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
+                $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu'] * 100;
             }
 
             $data[$l['id_lembaga']]['dana_sisa'] = $data[$l['id_lembaga']]['dana_pagu'] - $data[$l['id_lembaga']]['dana_terserap'];
@@ -242,7 +242,7 @@ class Pimpinan extends CI_Controller
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['sisa_terserap'] = 0;
             } else {
-                $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu']  * 100;
+                $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu'] * 100;
             }
         }
         return $data;
@@ -279,17 +279,52 @@ class Pimpinan extends CI_Controller
         // $this->db->or_where('id_prestasi', 9);
         $data['notif'] = $this->_notifKmhs();
         $data['prestasi'] = $this->db->get('prestasi')->result_array();
+
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $data['tahun_filter'] = $this->kemahasiswaan->getTahunRancangan();
+
+        $tahun = "";
+        if ($this->input->get('tahun')) {
+            $tahun = $this->input->get('tahun');
+        }
+        $data['tahun'] = $tahun;
         for ($i = 0; $i < count($data['prestasi']); $i++) {
             $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
             $count = 0;
             $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
             for ($j = 0; $j < count($semua_prestasi); $j++) {
                 $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
-                $mahasiswa = $this->db->get_where('poin_skp', ['prestasiid_prestasi' => $id_semua_prestasi, 'validasi_prestasi' => 1])->result_array();
-                $count += count($mahasiswa);
+                $this->db->select('id_poin_skp, YEAR(tgl_pelaksanaan) as tahun');
+                $this->db->where('prestasiid_prestasi', $id_semua_prestasi);
+                $this->db->where('validasi_prestasi', 1);
+                $mahasiswa = $this->db->get('poin_skp')->result_array();
+
+                // $count += count($mahasiswa);
+
+                // Hitung sesuai tahun
+                $count_temp = count($mahasiswa);
+                if ($count_temp != 0) {
+                    if ($tahun != "") {
+                        for ($k = 0; $k < $count_temp; $k++) {
+                            if (intval($mahasiswa[$k]['tahun']) == $tahun) {
+                                $count += 1;
+                            }
+                            // Header('Content-type: application/json');
+                            // echo json_encode($tahun);
+                            // die;
+
+                        }
+                    } else {
+                        $count += $count_temp;
+                    }
+                }
             }
             $data['prestasi'][$i]['jumlah'] = $count;
         }
+        // Header('Content-type: application/json');
+        // echo json_encode($data['prestasi']);
+        // die;
+
         $this->template($data);
         $this->load->view("pimpinan/rekapitulasi_skp", $data);
         $this->load->view("template/footer");
@@ -300,23 +335,64 @@ class Pimpinan extends CI_Controller
         $this->db->or_where('id_prestasi', 8);
         $this->db->or_where('id_prestasi', 9);
         $data['prestasi'] = $this->db->get('prestasi')->result_array();
+        $tahun = "";
+        if ($this->input->get('tahun')) {
+            $tahun = $this->input->get('tahun');
+        }
+        $data['tahun'] = $tahun;
+
         for ($i = 0; $i < count($data['prestasi']); $i++) {
             $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
             $count = 0;
             $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
+            // for ($j = 0; $j < count($semua_prestasi); $j++) {
+            //     $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
+            //     $mahasiswa = $this->db->get_where('poin_skp', ['prestasiid_prestasi' => $id_semua_prestasi, 'validasi_prestasi' => 1])->result_array();
+            //     $count += count($mahasiswa);
+            // }
+
+            // Update
             for ($j = 0; $j < count($semua_prestasi); $j++) {
                 $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
-                $mahasiswa = $this->db->get_where('poin_skp', ['prestasiid_prestasi' => $id_semua_prestasi, 'validasi_prestasi' => 1])->result_array();
-                $count += count($mahasiswa);
+                $this->db->select('id_poin_skp, YEAR(tgl_pelaksanaan) as tahun');
+                $this->db->where('prestasiid_prestasi', $id_semua_prestasi);
+                $this->db->where('validasi_prestasi', 1);
+                $mahasiswa = $this->db->get('poin_skp')->result_array();
+
+                // $count += count($mahasiswa);
+
+                // Hitung sesuai tahun
+                $count_temp = count($mahasiswa);
+                if ($count_temp != 0) {
+                    if ($tahun != "") {
+                        for ($k = 0; $k < $count_temp; $k++) {
+                            if (intval($mahasiswa[$k]['tahun']) == $tahun) {
+                                $count += 1;
+                            }
+                            // Header('Content-type: application/json');
+                            // echo json_encode($tahun);
+                            // die;
+
+                        }
+                    } else {
+                        $count += $count_temp;
+                    }
+                }
             }
+
             $data['prestasi'][$i]['jumlah'] = $count;
         }
 
         header('Content-type: application/json');
         echo json_encode($data['prestasi']);
     }
-    public function getRekapitulasiSKP($id_prestasi)
+    public function getRekapitulasiSKP()
     {
+        $id_prestasi = $this->input->get('id_prestasi');
+        $tahun = "";
+        if ($this->input->get('tahun')) {
+            $tahun = $this->input->get('tahun');
+        }
         $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => intval($id_prestasi)])->result_array();
         $data['prestasi'] = $this->db->get_where('prestasi', ['id_prestasi' => intval($id_prestasi)])->row_array();
         $id_semua_prestasi_arr = [];
@@ -325,16 +401,39 @@ class Pimpinan extends CI_Controller
             array_push($id_semua_prestasi_arr, $id_semua_prestasi);
         }
         $this->db->where_in('prestasiid_prestasi', $id_semua_prestasi_arr);
+        $this->db->select('poin_skp.id_poin_skp, YEAR(poin_skp.tgl_pelaksanaan) as tahun, mahasiswa.nim, mahasiswa.nama, poin_skp.nama_kegiatan');
         $this->db->from('poin_skp');
         $this->db->join('mahasiswa', 'poin_skp.nim = mahasiswa.nim');
         $this->db->join('prodi', 'mahasiswa.kode_prodi = prodi.kode_prodi');
-        $data['mahasiswa'] = $this->db->get()->result_array();
+        $mahasiswa = $this->db->get()->result_array();
+        // $data['mahasiswa'] = $this->db->get()->result_array();
 
+
+        $data['mahasiswa'] = [];
+
+        // Hitung sesuai tahun
+        $count_temp = count($mahasiswa);
+        // Header('Content-type: application/json');
+        // echo json_encode($count_temp);
+        // die;
+        if ($count_temp != 0) {
+            if ($tahun != "") {
+                for ($k = 0; $k < $count_temp; $k++) {
+                    if (intval($mahasiswa[$k]['tahun']) == $tahun) {
+                        array_push($data['mahasiswa'], $mahasiswa[$k]);
+                    }
+                }
+            } else {
+                $data['mahasiswa'] = $mahasiswa;
+            }
+        }
 
         // array_push($data['prestasi'], $mahasiswa);
         header('Content-type: application/json');
         // echo json_encode($id_semua_prestasi_arr);
         echo json_encode($data);
         // die;
+
+
     }
 }

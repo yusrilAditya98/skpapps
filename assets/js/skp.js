@@ -55,8 +55,17 @@ let jumlah_prestasi = [];
 
 
 $(document).ready(function () {
+	var tahun = $('#tahun_temp').val();
+	var link = "";
+	if(tahun == ""){
+		link = segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi/';
+	}
+	else{
+		link = segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi?tahun='+tahun;
+	}
+	console.log($('#tahun_temp').val() == "")
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi/',
+		url: link,
 		method: "get",
 		dataType: "json",
 		success: function (data) {
@@ -187,9 +196,16 @@ $(document).ready(function () {
 });
 $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 	let id = $(this).data('id');
+	var tahun = $('#tahun_temp').val();
+	var link = "";
+	if(tahun == ""){
+		link = segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP?id_prestasi='+id;
+	}else{
+		link = segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP?id_prestasi='+id+'&tahun='+tahun;
+	}
 
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP/' + id,
+		url: link,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -220,7 +236,7 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 							title: "Nama"
 						},
 						{
-							title: "Prestasi."
+							title: "Prestasi"
 						},
 						{
 							title: "Nama Kegiatan"

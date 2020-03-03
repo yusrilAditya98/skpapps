@@ -3,13 +3,12 @@ var segments = url.split("/");
 
 $(window).on('load', function () {
 	$.ajax({
-		url: segments[0] + '/siruas-api/api/ruangan',
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDataRuangan/',
+		method: 'get',
 		dataType: 'json',
-		type: 'get',
 		success: function (dataRuangan) {
-			console.log(dataRuangan);
 			dataRuangan.data.forEach(function (ruangan) {
-				$('#ruangan').append(`<option value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
+				$('#ruangan').append(`<option  value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
 			})
 		}
 	});
@@ -175,6 +174,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 					</thead>
 					<tbody class="body-tabel">
 						<tr>
+							<input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu" value="` + data['id_kuliah_tamu'] + `">
 							<td colspan="5"><h3 class="text-center">Belum ada peserta</h3></td>
 						</tr>
 					</tbody>

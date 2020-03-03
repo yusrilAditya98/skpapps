@@ -18,6 +18,12 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
+                        <input type="hidden" id="tahun_temp" value="<?= $tahun?>">
+                        <?php if($tahun != "") : ?>
+                            <h3>Tahun <?= $tahun?></h3>
+                        <?php else : ?>
+                            <h3>Semua Tahun</h3>
+                        <?php endif ?>
                             <div class="card-body chart">
                                 <canvas id="rekap-skp-chart" style="width: 100%; height: 30rem;"></canvas>
                             </div>
@@ -34,6 +40,26 @@
                         <h4>Rekapitulasi SKP Mahasiswa</h4>
                     </div>
                     <div class="card-body">
+                    <?php if($tahun != "") : ?>
+                            <h3>Tahun <?= $tahun?></h3>
+                        <?php else : ?>
+                            <h3>Semua Tahun</h3>
+                        <?php endif ?>
+                        <form action="<?= base_url('Pimpinan/rekapitulasiSKP') ?>" method="get">
+                            <div class="form-group float-right">
+                                <div class="input-group">
+                                    <select name="tahun" class="custom-select" id="inputGroupSelect04">
+                                        <option value="" selected="">Tahun...</option>
+                                        <?php foreach ($tahun_filter as $tf) : ?>
+                                            <option value="<?= $tf['tahun_kegiatan'] ?>"><?= $tf['tahun_kegiatan'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">cari</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="table-responsive">
                             <table class="table table-striped text-center tabel-rekap" id="table-2">
                                 <thead>

@@ -216,6 +216,8 @@ class Kemahasiswaan extends CI_Controller
         } else {
             $this->dataPengajuanSkp['poinskp'] = $this->poinskp->getPoinSkp();
         }
+
+
         $data['title'] = 'Validasi';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -233,9 +235,8 @@ class Kemahasiswaan extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $mahasiswa = $this->db->select('nim')->get_where('poin_skp', ['id_poin_skp' => $id_kegiatan])->row_array();
-        $valid = $this->input->post('valid');
         $this->dataskp = [
-            'validasi_prestasi' => intval($valid),
+            'validasi_prestasi' => $this->input->post('valid'),
             'catatan' => $this->input->post('catatan'),
         ];
         $this->poinskp->updatePoinSkp($id_kegiatan, $this->dataskp);
@@ -324,8 +325,8 @@ class Kemahasiswaan extends CI_Controller
         $data['notif'] = $this->_notifKmhs();
         $data['title'] = 'Lembaga';;
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
-        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         $data['tahun'] = $this->kemahasiswaan->getTahunRancangan();
+        $data['lembaga'] = $this->db->get_where('lembaga', ['id_lembaga !=' => 0])->result_array();
         if ($data['tahun']) {
             $data['tahun_saat_ini'] = $data['tahun'][0]['tahun_kegiatan'];
         } else {
@@ -1463,6 +1464,10 @@ class Kemahasiswaan extends CI_Controller
         $this->db->where('id', intval($id_pengajuan));
         $this->db->update('pengajuan_anggota_lembaga', ['status_keaktifan' => 1]);
 
+        $pengajuan = $this->db->get_where('pengajuan_anggota_lembaga', ['id' => intval($id_pengajuan)])->row_array();
+
+        $tahun_temp = "01-01-".$pengajuan['periode'];
+
         // Tambahkan SKP ke masing" anggota
         $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
         $this->db->from('daftar_anggota_lembaga');
@@ -1475,6 +1480,7 @@ class Kemahasiswaan extends CI_Controller
             $data = [
                 'nim' => $anggota_lembaga[$i]['nim'],
                 'nama_kegiatan' => 'Keanggotaan Lembaga',
+                'tgl_pelaksanaan' => $tahun_temp,
                 'validasi_prestasi' => 1,
                 'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi'])
             ];

@@ -21,7 +21,6 @@ $('.detailSkp').on("click", function (e) {
 			$('.d-catatan').val(data[0].catatan)
 			$('.form-revisi').attr('action', segments[0] + '/' + segments[3] + '/Kemahasiswaan/validasiSkp/' + data[0].id_poin_skp)
 			$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
-
 		}
 	})
 	copyDivValidasiSkp(e)
@@ -33,11 +32,8 @@ function copyDivValidasiSkp(e) {
 	let clnValid = valid.cloneNode(true);
 	let cldrnvalid = '';
 	cldrnvalid = clnValid.children;
-
-	console.log(cldrnvalid[0])
 	cldrnvalid[0].classList.add('temp-class')
 	$('.t-validasi').append(cldrnvalid[0])
-
 }
 
 $('.d-revisi').on("click", function () {

@@ -15,9 +15,9 @@ class Akademik extends CI_Controller
     {
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar", $data);
-        if($this->session->userdata('user_profil_kode') == 9){
+        if ($this->session->userdata('user_profil_kode') == 9) {
             $this->load->view("template/sidebar_admin", $data);
-        }else{
+        } else {
             $this->load->view("template/sidebar", $data);
         }
     }
@@ -310,12 +310,13 @@ class Akademik extends CI_Controller
         $data = $this->input->post('validasi');
         if ($data == null) {
             // echo "HAHA";
+            $this->db->set('status_terlaksana', 1);
+            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
+            $this->db->update('kuliah_tamu');
         } else {
             $this->db->set('status_terlaksana', 1);
             $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             $this->db->update('kuliah_tamu');
-            // echo json_encode($this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => intval($this->input->post('id_kuliah_tamu'))])->row_array());
-            // die;
 
             for ($i = 0; $i < count($data); $i++) {
                 $this->db->set('kehadiran', 1);
@@ -329,19 +330,26 @@ class Akademik extends CI_Controller
                     'validasi_prestasi' => 1,
                     'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
                     'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
-                    'id_prestasi' => 115
+                    'prestasiid_prestasi' => 115
                 ];
                 // header('Content-type: application/json');
                 // echo json_encode($data_poin_skp);
                 // die;
-                // $this->db->insert('poin_skp', $data_poin_skp);
+                $this->db->insert('poin_skp', $data_poin_skp);
+
+                // update poin skp
+                $this->load->model('Model_poinskp', 'poinskp');
+                $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($mahasiswa['nim']);
+                $this->db->set('total_poin_skp', $this->totalPoinSKp['bobot']);
+                $this->db->where('nim', $mahasiswa['nim']);
+                $this->db->update('mahasiswa');
             }
             // $this->db->set('status_terlaksana', 1);
             // $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             // $this->db->update('kuliah_tamu');
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
-            redirect('akademik/kegiatan');
         }
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
+        redirect('akademik/kegiatan');
     }
     public function hei()
     {
@@ -349,5 +357,15 @@ class Akademik extends CI_Controller
         // $this->db->set('status_terlaksana', 1);
         // $this->db->where('id_kuliah_tamu', 14);
         // $this->db->update('kuliah_tamu');
+    }
+    public function setKegiatanBerlangsung($id_kuliah_tamu)
+    {
+        $id_kt = intval($id_kuliah_tamu);
+        $this->db->set('status_terlaksana', 2);
+        $this->db->where('id_kuliah_tamu', $id_kt);
+        $this->db->update('kuliah_tamu');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Status Keberlangsungan Berhasil diganti</div>');
+        redirect('akademik/kegiatan');
     }
 }

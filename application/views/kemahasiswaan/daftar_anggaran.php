@@ -16,7 +16,6 @@
                         </div>
                     </div>
                     <div class="card-body">
-
                         <form action="<?= base_url('Kemahasiswaan/lembaga') ?>" method="get">
                             <div class="form-group float-right">
                                 <div class="input-group">
