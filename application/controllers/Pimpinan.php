@@ -12,12 +12,9 @@ class Pimpinan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        // if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5) {
-        // }
-        // else {
-        //     redirect('Auth/blocked');
-        // }
-        is_logged_in();
+        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5 || $this->session->userdata('user_profil_kode') == 9) { } else {
+            redirect('Auth/blocked');
+        }
     }
     private function _notifKmhs()
     {
@@ -37,8 +34,7 @@ class Pimpinan extends CI_Controller
         $this->load->view("template/navbar", $data);
         if ($this->session->userdata('user_profil_kode') == 9) {
             $this->load->view("template/sidebar_admin", $data);
-        }
-        else {
+        } else {
             $this->load->view("template/sidebar", $data);
         }
     }
@@ -57,8 +53,7 @@ class Pimpinan extends CI_Controller
         if ($data['tahun']) {
             $tahun = $data['tahun'][0]['tahun'];
             $data['tahun_saat_ini'] = $tahun;
-        }
-        else {
+        } else {
             $tahun = date('Y');
             $data['tahun_saat_ini'] = $tahun;
             $data['tahun'][0]['tahun'] = $tahun;
@@ -118,8 +113,7 @@ class Pimpinan extends CI_Controller
         if ($data['tahun']) {
             $tahun = $data['tahun'][0]['tahun'];
             $data['tahun_saat_ini'] = $tahun;
-        }
-        else {
+        } else {
             $tahun = date('Y');
             $data['tahun_saat_ini'] = $tahun;
             $data['tahun'][0]['tahun'] = $tahun;
@@ -132,8 +126,7 @@ class Pimpinan extends CI_Controller
             $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
             $data['tahun_saat_ini'] = $this->input->post('tahun');
-        }
-        else {
+        } else {
             $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
             $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
@@ -206,8 +199,7 @@ class Pimpinan extends CI_Controller
 
             if ($dana['anggaran_kemahasiswaan'] == null) {
                 $data[$l['id_lembaga']]['dana_pagu'] = 0;
-            }
-            else {
+            } else {
                 $data[$l['id_lembaga']]['dana_pagu'] = $dana['anggaran_kemahasiswaan'];
             }
             $data[$l['id_lembaga']]['dana_terserap'] = 0;
@@ -219,16 +211,14 @@ class Pimpinan extends CI_Controller
                     if ($p['id_lembaga'] == $l['id_lembaga'] && $p['bulan'] == $i) {
                         if ($l['bulan'] == $p['bulan']) {
                             $data[$p['id_lembaga']][$i] = $p['dana'] + $l['dana'];
-                        }
-                        else {
+                        } else {
                             $data[$p['id_lembaga']][$i] = $p['dana'];
                         }
                     }
                     if ($p['id_lembaga'] == $l['id_lembaga'] && $l['bulan'] == $i) {
                         if ($l['bulan'] == $p['bulan']) {
                             $data[$l['id_lembaga']][$i] = $p['dana'] + $l['dana'];
-                        }
-                        else {
+                        } else {
                             $data[$l['id_lembaga']][$i] = $l['dana'];
                         }
                     }
@@ -242,8 +232,7 @@ class Pimpinan extends CI_Controller
 
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['terserap_persen'] = 0;
-            }
-            else {
+            } else {
                 $data[$l['id_lembaga']]['terserap_persen'] = $data[$l['id_lembaga']]['dana_terserap'] / $data[$l['id_lembaga']]['dana_pagu'] * 100;
             }
 
@@ -252,8 +241,7 @@ class Pimpinan extends CI_Controller
 
             if ($data[$l['id_lembaga']]['dana_pagu'] == 0) {
                 $data[$l['id_lembaga']]['sisa_terserap'] = 0;
-            }
-            else {
+            } else {
                 $data[$l['id_lembaga']]['sisa_terserap'] = $data[$l['id_lembaga']]['dana_sisa'] / $data[$l['id_lembaga']]['dana_pagu'] * 100;
             }
         }
@@ -276,8 +264,7 @@ class Pimpinan extends CI_Controller
         if ($data['total']['dana_pagu'] == 0) {
             $data['total']['persen_terserap'] = 0;
             $data['total']['persen_sisa'] = 0;
-        }
-        else {
+        } else {
             $data['total']['persen_terserap'] = $data['total']['dana_terserap'] / $data['total']['dana_pagu'] * 100;
             $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
         }
@@ -327,8 +314,7 @@ class Pimpinan extends CI_Controller
                             // die;
 
                         }
-                    }
-                    else {
+                    } else {
                         $count += $count_temp;
                     }
                 }
@@ -388,8 +374,7 @@ class Pimpinan extends CI_Controller
                             // die;
 
                         }
-                    }
-                    else {
+                    } else {
                         $count += $count_temp;
                     }
                 }
@@ -423,9 +408,9 @@ class Pimpinan extends CI_Controller
         $mahasiswa = $this->db->get()->result_array();
         // $data['mahasiswa'] = $this->db->get()->result_array();
 
-        
+
         $data['mahasiswa'] = [];
-        
+
         // Hitung sesuai tahun
         $count_temp = count($mahasiswa);
         // Header('Content-type: application/json');
@@ -438,8 +423,7 @@ class Pimpinan extends CI_Controller
                         array_push($data['mahasiswa'], $mahasiswa[$k]);
                     }
                 }
-            }
-            else {
+            } else {
                 $data['mahasiswa'] = $mahasiswa;
             }
         }

@@ -15,9 +15,9 @@ class Akademik extends CI_Controller
     {
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar", $data);
-        if($this->session->userdata('user_profil_kode') == 9){
+        if ($this->session->userdata('user_profil_kode') == 9) {
             $this->load->view("template/sidebar_admin", $data);
-        }else{
+        } else {
             $this->load->view("template/sidebar", $data);
         }
     }
@@ -41,13 +41,20 @@ class Akademik extends CI_Controller
             $akhir = date_create(); // waktu sekarang
             $diff  = date_diff($awal, $akhir);
             $beda_hari = $diff->days;
+            $tanda = $diff->format("%R%a");
+            
+            $tanda_beda = substr($tanda, 0, 1);
+            $hari_ini = substr($tanda, 0, 2);
+
             $data['kuliah_tamu'][$i]['H-'] = $beda_hari;
+            $data['kuliah_tamu'][$i]['tanda'] = $tanda_beda;
+            $data['kuliah_tamu'][$i]['hari_ini'] = $hari_ini;
         }
 
         //Penentuan kegiatan dengan waktu terdekat (belum terlaksana)
         $kegiatan_terdekat = '';
         for ($i = 0; $i < count($data['kuliah_tamu']); $i++) {
-            if ($data['kuliah_tamu'][$i]['status_terlaksana'] == 0) {
+            if ($data['kuliah_tamu'][$i]['status_terlaksana'] != 1 && ($data['kuliah_tamu'][$i]['tanda'] == "-" || $data['kuliah_tamu'][$i]['hari_ini'] == "+0")) {
                 if ($kegiatan_terdekat == '') {
                     $kegiatan_terdekat = $data['kuliah_tamu'][$i];
                 } else {
@@ -308,47 +315,106 @@ class Akademik extends CI_Controller
     public function validasiKegiatan()
     {
         $data = $this->input->post('validasi');
+        // Header('Content-type: application/json');
+        // echo json_encode($data);die;
+
+        // Tidak Ada yang hadir
         if ($data == null) {
-            // echo "HAHA";
-            $this->db->set('status_terlaksana', 1);
-            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
-            $this->db->update('kuliah_tamu');
-        } else {
-            $this->db->set('status_terlaksana', 1);
-            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
-            $this->db->update('kuliah_tamu');
+            $this->db->where('peserta_kuliah_tamu.id_kuliah_tamu' , intval($this->input->post('id_kuliah_tamu')));
+            $this->db->from('peserta_kuliah_tamu');
+            $this->db->join('kuliah_tamu', 'peserta_kuliah_tamu.id_kuliah_tamu = kuliah_tamu.id_kuliah_tamu');
+            $mahasiswa = $this->db->get()->result_array();
 
-            for ($i = 0; $i < count($data); $i++) {
-                $this->db->set('kehadiran', 1);
-                $this->db->where('id_peserta_kuliah_tamu', intval($data[$i]));
+            // Hapus mahasiswa di tabel poin skp
+            for ($i = 0; $i < count($mahasiswa); $i++) {
+                $this->db->where('nim', $mahasiswa[$i]['nim']);
+                $this->db->where('nama_kegiatan', $mahasiswa[$i]['nama_event']);
+                $this->db->where('validasi_prestasi', 3);
+                $this->db->where('tgl_pelaksanaan', $mahasiswa[$i]['tanggal_event']);
+                $this->db->where('tempat_pelaksanaan', $mahasiswa[$i]['lokasi']);
+                $this->db->where('prestasiid_prestasi', 115);
+                // Mau dihapus apa update ??
+                $this->db->delete('poin_skp');
+
+                // Update kehadiran - tidak hadir
+                $this->db->set('kehadiran', 0);
+                $this->db->where('id_peserta_kuliah_tamu', intval($mahasiswa[$i]['id_peserta_kuliah_tamu']));
                 $this->db->update('peserta_kuliah_tamu');
-
-                $mahasiswa = $this->db->get_where('peserta_kuliah_tamu', ['id_peserta_kuliah_tamu' => intval($data[$i])])->row_array();
-                $data_poin_skp = [
-                    'nim' => $mahasiswa['nim'],
-                    'nama_kegiatan' => $this->input->post('nama_kegiatan'),
-                    'validasi_prestasi' => 1,
-                    'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
-                    'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
-                    'prestasiid_prestasi' => 115
-                ];
-                // header('Content-type: application/json');
-                // echo json_encode($data_poin_skp);
-                // die;
-                $this->db->insert('poin_skp', $data_poin_skp);
             }
-            // $this->db->set('status_terlaksana', 1);
-            // $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
-            // $this->db->update('kuliah_tamu');
+            
+            $this->db->set('status_terlaksana', 1);
+            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
+            $this->db->update('kuliah_tamu');
+        } 
+        
+        // Ada yang hadir paling tidak 1
+        else {
+
+            // Mahasiswa tidak hadir
+            $this->db->where_not_in('peserta_kuliah_tamu.id_peserta_kuliah_tamu' , $data);
+            $this->db->from('peserta_kuliah_tamu');
+            $this->db->join('kuliah_tamu', 'peserta_kuliah_tamu.id_kuliah_tamu = kuliah_tamu.id_kuliah_tamu');
+            $mahasiswa_tidak_hadir = $this->db->get()->result_array();
+
+            $this->db->where_in('peserta_kuliah_tamu.id_peserta_kuliah_tamu' , $data);
+            $this->db->from('peserta_kuliah_tamu');
+            $this->db->join('kuliah_tamu', 'peserta_kuliah_tamu.id_kuliah_tamu = kuliah_tamu.id_kuliah_tamu');
+            $mahasiswa_hadir = $this->db->get()->result_array();
+
+            // Update status validasi - Mahasiswa Hadir
+            for ($i = 0; $i < count($mahasiswa_hadir); $i++) {
+                $this->db->set('validasi_prestasi', 1);
+                $this->db->where('nim', $mahasiswa_hadir[$i]['nim']);
+                $this->db->where('nama_kegiatan', $mahasiswa_hadir[$i]['nama_event']);
+                $this->db->where('validasi_prestasi', 3);
+                $this->db->where('tgl_pelaksanaan', $mahasiswa_hadir[$i]['tanggal_event']);
+                $this->db->where('tempat_pelaksanaan', $mahasiswa_hadir[$i]['lokasi']);
+                $this->db->where('prestasiid_prestasi', 115);
+                // Update status validasi
+                $this->db->update('poin_skp');
+
+                // Kalkulasi ulang poin skp setiap mahasiswa yang hadir
+                $this->load->model('Model_poinskp', 'poinskp');
+                $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($mahasiswa_hadir[$i]['nim']);
+                $this->db->set('total_poin_skp', $this->totalPoinSKp['bobot']);
+                $this->db->where('nim', $mahasiswa_hadir[$i]['nim']);
+                $this->db->update('mahasiswa');
+            }
+
+            // Hapus mahasiswa di tabel poin skp - tidak hadir
+            for ($i = 0; $i < count($mahasiswa_tidak_hadir); $i++) {
+                $this->db->where('nim', $mahasiswa_tidak_hadir[$i]['nim']);
+                $this->db->where('nama_kegiatan', $mahasiswa_tidak_hadir[$i]['nama_event']);
+                $this->db->where('validasi_prestasi', 3);
+                $this->db->where('tgl_pelaksanaan', $mahasiswa_tidak_hadir[$i]['tanggal_event']);
+                $this->db->where('tempat_pelaksanaan', $mahasiswa_tidak_hadir[$i]['lokasi']);
+                $this->db->where('prestasiid_prestasi', 115);
+                // Mau dihapus apa update
+                $this->db->delete('poin_skp');
+
+                // Update kehadiran - tidak hadir
+                $this->db->set('kehadiran', 0);
+                $this->db->where('id_peserta_kuliah_tamu', intval($mahasiswa_tidak_hadir[$i]['id_peserta_kuliah_tamu']));
+                $this->db->update('peserta_kuliah_tamu');
+            }
+
+            // Validasi kuliah tamu
+            $this->db->set('status_terlaksana', 1);
+            $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
+            $this->db->update('kuliah_tamu');
+
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
         redirect('akademik/kegiatan');
     }
-    public function hei()
+    public function setKegiatanBerlangsung($id_kuliah_tamu)
     {
-        // echo json_encode($this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => 14])->row_array());
-        // $this->db->set('status_terlaksana', 1);
-        // $this->db->where('id_kuliah_tamu', 14);
-        // $this->db->update('kuliah_tamu');
+        $id_kt = intval($id_kuliah_tamu);
+        $this->db->set('status_terlaksana', 2);
+        $this->db->where('id_kuliah_tamu', $id_kt);
+        $this->db->update('kuliah_tamu');
+
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Status Keberlangsungan Berhasil diganti</div>');
+        redirect('akademik/kegiatan');
     }
 }

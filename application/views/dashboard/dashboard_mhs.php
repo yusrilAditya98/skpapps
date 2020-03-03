@@ -4,6 +4,8 @@
     <div class="section-header">
       <h1>Dashboard</h1>
     </div>
+    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
     <div class="row">
       <div class="col-12 col-md-6 col-lg-8">
         <div class="card">
@@ -23,6 +25,8 @@
                         <i class="fa fa-check text-success" aria-hidden="true"></i>
                       <?php elseif ($p['validasi_prestasi'] == 2) : ?>
                         <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id="<?= $p['id_poin_skp'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
+                      <?php elseif ($p['validasi_prestasi'] == 3) : ?>
+                        <div class="badge badge-primary">Menunggu Validasi Peserta</div>
                       <?php endif; ?>
                     </h5>
                     <p>Kegiatan <?= $p['nama_kegiatan']; ?> dilaksanakan pada tanggal <?= date("d-m-Y", strtotime($p['tgl_pelaksanaan'])) ?> yang bertempat di <?= $p['tempat_pelaksanaan'] ?></p>
@@ -47,7 +51,7 @@
             <?php if ($mahasiswa[0]['total_poin_skp'] >= 100 && $mahasiswa[0]['total_poin_skp'] <= 150) : ?>
               <span class="badge badge-warning"> Cukup</span> <br>
               Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.
-              </span>span>
+              </span>
             <?php elseif ($mahasiswa[0]['total_poin_skp'] >= 151 && $mahasiswa[0]['total_poin_skp'] <= 200) : ?>
               <span class="badge badge-primary">Baik</span>
               Total poin skp anda <b>MEMENUHI SYARAT</b> capaian kriteria poin skp.

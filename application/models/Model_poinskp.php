@@ -94,7 +94,7 @@ class Model_poinskp extends CI_Model
         if ($validasi != null) {
             $this->db->where('ps.validasi_prestasi', $validasi);
         }
-        $this->db->order_by('ps.validasi_prestasi', 'ASC');
+        $this->db->order_by('FIELD(ps.validasi_prestasi,0,2,1)');
         return $this->db->get()->result_array();
     }
 

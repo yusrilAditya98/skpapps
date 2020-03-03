@@ -3,13 +3,12 @@ var segments = url.split("/");
 
 $(window).on('load', function () {
 	$.ajax({
-		url: segments[0] + '/siruas-api/api/ruangan',
+		url: segments[0] + '/' + segments[3] + '/API_skp/getDataRuangan/',
+		method: 'get',
 		dataType: 'json',
-		type: 'get',
 		success: function (dataRuangan) {
-			console.log(dataRuangan);
 			dataRuangan.data.forEach(function (ruangan) {
-				$('#ruangan').append(`<option value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
+				$('#ruangan').append(`<option  value="` + ruangan.ruangan + `">` + ruangan.ruangan + `</option>`)
 			})
 		}
 	});
@@ -153,7 +152,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 					<td>` + dataA['nama'] + `</td>
 					<td>` + dataA['nim'] + `</td>
 					<td>` + dataA['nama_prodi'] + `</td>
-					<td><input type="checkbox" name="validasi[]" value="` + dataA['id_peserta_kuliah_tamu'] + `"></td>
+					<td><input type="checkbox" name="validasi[]" value="` + dataA['id_peserta_kuliah_tamu'] + `" checked></td>
 					<input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu" value="` + data['id_kuliah_tamu'] + `">
 					<input type="hidden" id="nama_kegiatan" name="nama_kegiatan" value="` + data['nama_event'] + `">
 					<input type="hidden" id="tgl_pelaksanaan" name="tgl_pelaksanaan" value="` + data['tanggal_format'] + `">

@@ -4,6 +4,8 @@
                     <div class="section-header">
                         <h1>Form Tambah SKP</h1>
                     </div>
+                    <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
+                    <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
                     <div class="row">
                         <div class="col-12 col-md-6 col-lg-12">
                             <div class="card">
@@ -17,8 +19,7 @@
                                                 <form action="<?= base_url("Mahasiswa") ?>/tambahPoinSkp" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                                     <div class="form-group">
                                                         <label for="namaKegiatan">Nama Lembaga/Kegiatan</label>
-                                                        <input type="text" class="form-control namaKegiatan" id="namaKegiatan" name="namaKegiatan" placeholder="Nama kegiatan...">
-                                                        <?= form_error('namaKegiatan', '<small class="text-danger pl-3">', '</small>'); ?>
+                                                        <input type="text" class="form-control namaKegiatan" id="namaKegiatan" name="namaKegiatan" placeholder="Nama kegiatan..." required>
                                                     </div>
                                                     <div class=" form-group">
                                                         <label for="bidangKegiatan">Bidang Kegiatan</label>

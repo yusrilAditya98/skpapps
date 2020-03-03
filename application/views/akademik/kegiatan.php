@@ -28,6 +28,7 @@
                                         <th>Nama Pemateri</th>
                                         <th>Ruangan</th>
                                         <th>Status</th>
+                                        <th>Keberlangsungan</th>
                                         <th>Validasi</th>
                                         <th>Aksi</th>
                                     </tr>
@@ -41,22 +42,31 @@
                                             <td><?= $k['pemateri'] ?></td>
                                             <td><?= $k['lokasi'] ?></td>
                                             <?php
-                                            if ($k['status_terlaksana'] == 0) {
-                                                echo '<td class="text-danger">Belum Terlaksana</td>';
-                                            } else if ($k['status_terlaksana'] == 1) {
-                                                echo '<td class="text-success">Sudah Terlaksana</td>';
-                                            } else {
-                                                echo '<td class="text-info">Sedang Berlangsung</td>';
-                                            }
-                                            ?>
-                                            <td>
-                                                <?php
-                                                if ($k['status_terlaksana'] == 2) {
-                                                    echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
+                                                if ($k['status_terlaksana'] == 0) {
+                                                    echo '<td class="text-danger">Belum Terlaksana</td>';
+                                                } else if ($k['status_terlaksana'] == 1) {
+                                                    echo '<td class="text-success">Sudah Terlaksana</td>';
                                                 } else {
-                                                    echo '';
+                                                    echo '<td class="text-info">Sedang Berlangsung</td>';
                                                 }
                                                 ?>
+                                            <td>
+                                                <?php
+                                                    if ($k['status_terlaksana'] == 0) {
+                                                        echo '<a href="' . base_url('Akademik/setKegiatanBerlangsung/') . $k['id_kuliah_tamu'] . '" class="btn btn-info"><i class="fas fa-check-square"></i></a>';
+                                                    } else {
+                                                        echo '';
+                                                    }
+                                                    ?>
+                                            </td>
+                                            <td>
+                                                <?php
+                                                    if ($k['status_terlaksana'] == 2) {
+                                                        echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
+                                                    } else {
+                                                        echo '';
+                                                    }
+                                                    ?>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>

@@ -103,7 +103,7 @@ class Mahasiswa extends CI_Controller
                     $this->session->set_flashdata('message', 'Skp berhasil ditambahkan!');
                 } else {
                     $this->session->set_flashdata('failed', 'Skp gagal ditambahkan! file bukti tidak sesuai format');
-                    echo $this->upload->display_errors();
+                    redirect("Mahasiswa/tambahPoinSkp");
                 }
                 redirect("Mahasiswa/poinSkp");
             }
@@ -160,7 +160,6 @@ class Mahasiswa extends CI_Controller
                 } else {
                     $this->session->set_flashdata('failed', 'Skp gagal ditambahkan! file bukti tidak sesuai format');
                     echo $this->upload->display_errors();
-                    redirect("Mahasiswa/poinSkp");
                 }
             }
             $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);

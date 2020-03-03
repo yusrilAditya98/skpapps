@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
 
   <!-- CSS Libraries -->
-  <link rel="stylesheet" href="../node_modules/bootstrap-social/bootstrap-social.css">
+
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?= base_url('assets/') ?>/css/style.css">
@@ -24,7 +24,7 @@
       <div class="d-flex flex-wrap align-items-stretch">
         <div class="col-lg-4 col-md-12 col-12 order-lg-1 min-vh-100 order-2 bg-white">
           <div class="p-4 m-3">
-            <img src="<?= base_url() ?>/assets/img/skpapps.png" alt="logo" class="mb-5 mt-2" style="width: 80%;">
+            <img src="<?= base_url() ?>/assets/img/skpapps.png" alt="logo" class="mb-5 mt-2" style="width: 100%;">
             <h4 class="text-dark font-weight-normal">Welcome to <span class="font-weight-bold">SKP-APPS</span></h4>
             <?= $this->session->flashdata('message'); ?>
 
@@ -55,16 +55,16 @@
             </form>
 
             <div class="text-center mt-5 text-small">
-              Copyright &copy; 2019 by Kemahasiswaan FEB UB
+              Copyright &copy; 2020 by Kemahasiswaan FEB UB
             </div>
           </div>
         </div>
-        <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="<?= base_url() ?>/assets/img/unsplash/login-bg.jpg">
+        <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="<?= base_url() ?>/assets/img/bg_feb_1.jpg">
           <div class="absolute-bottom-left index-2">
             <div class="text-light p-5 pb-2">
               <div class="mb-5 pb-3">
                 <h1 class="mb-2 display-4 font-weight-bold">Welcome to</h1>
-                <h5 class="font-weight-normal text-muted-transparent">SKP-APPS, Fakultas Ekonomi dan Bisnis Universitas Brawijaya</h5>
+                <h4 class="font-weight-normal text-muted-transparent">Sistem Kredit Prestasi, Fakultas Ekonomi dan Bisnis Universitas Brawijaya</h4>
               </div>
 
             </div>

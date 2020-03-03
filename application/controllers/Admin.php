@@ -85,6 +85,9 @@ class Admin extends CI_Controller
                         'kode_prodi' => intval($this->input->post('prodi'))
                     ];
                     $this->db->insert('mahasiswa', $data_mahasiswa);
+
+                    $this->session->set_flashdata('message', 'User Mahasiswa berhasil ditambahkan');
+                    redirect('admin/ManagementUser');
                 } elseif ($data_user['user_profil_kode'] == 2 || $data_user['user_profil_kode'] == 3) {
                     $data_lembaga = [
                         'id_lembaga' => $this->input->post('username'),
@@ -258,17 +261,17 @@ class Admin extends CI_Controller
                 "kode_prodi" => intval($data->val($i, 8)),
                 "nomor_hp" => str_replace("\0", "", $data->val($i, 9)),
             ];
-            $user = [
-                "nama" => str_replace("\0", "", $data->val($i, 3)),
-                "username" => str_replace("\0", "", $data->val($i, 2)),
-                "password" => str_replace("\0", "", password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
-                "user_profil_kode" => 1,
-                'is_active' => 1
-            ];
+            // $user = [
+            //     "nama" => str_replace("\0", "", $data->val($i, 3)),
+            //     "username" => str_replace("\0", "", $data->val($i, 2)),
+            //     "password" => str_replace("\0", "", password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
+            //     "user_profil_kode" => 1,
+            //     'is_active' => 1
+            // ];
             if ($result['nim'] != "" && $result['nama'] != "") {
                 // input data ke database (table data_pegawai)
                 $this->db->insert('mahasiswa', $result);
-                $this->db->insert('user', $user);
+                //$this->db->insert('user', $user);
             }
         }
         // hapus kembali file .xls yang di upload tadi

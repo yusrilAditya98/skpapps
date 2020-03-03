@@ -22,10 +22,10 @@
       <div class="d-flex flex-wrap align-items-stretch">
         <div class="col-lg-4 col-md-12 col-12 order-lg-1 min-vh-100 order-2 bg-white">
           <div class="p-4 m-2">
-            <h4 class="mt-5 text-dark font-weight-normal">Welcome to <span class="font-weight-bold">Sistem Layanan Terpadu</span></h4>
+            <h3 class="mt-5 text-dark font-weight-normal"><b>Welcome</b> to <br> <span>Sistem <b>Layanan Terpadu Kemahasiswaan</b></span> FEB UB</h3>
             <?= $this->session->flashdata('message'); ?>
 
-            <form method="POST" action="<?= base_url('Auth/login') ?>" class="needs-validation" novalidate="">
+            <form method="POST" action="<?= base_url('Auth/login') ?>" class="needs-validation mt-4" novalidate="">
               <div class="form-group">
                 <label for="username">Username</label>
                 <input id="username" type="text" class="form-control" name="username" tabindex="1" required autofocus>
@@ -52,16 +52,16 @@
             </form>
 
             <div class="text-center mt-5 text-small">
-              Copyright &copy; 2019 by Kemahasiswaan FEB UB
+              Copyright &copy; 2020 by Kemahasiswaan FEB UB
             </div>
           </div>
         </div>
-        <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="<?= base_url() ?>/assets/img/city2.jpg">
+        <div class="col-lg-8 col-12 order-lg-2 order-1 min-vh-100 background-walk-y position-relative overlay-gradient-bottom" data-background="<?= base_url() ?>/assets/img/bg_feb_2.jpg">
           <div class="absolute-bottom-left index-2">
             <div class="text-light p-5 pb-2">
               <div class="mb-5 pb-3">
                 <h1 class="mb-2 display-4 font-weight-bold">Welcome to</h1>
-                <h5 class="font-weight-normal text-muted-transparent">Sistem Layanan Terpadu, Fakultas Ekonomi dan Bisnis Universitas Brawijaya</h5>
+                <h4 class="font-weight-normal text-muted-transparent">Sistem Layanan Terpadu, Fakultas Ekonomi dan Bisnis Universitas Brawijaya</h4>
               </div>
 
             </div>

@@ -148,7 +148,7 @@ class Model_kemahasiswaan extends CI_Model
         // // daftar anggaran kegiatan terlaksana belum LPJ yang digunakan
 
         // menampilkan data
-        $this->db->select('drk.id_lembaga,l.nama_lembaga,t.terlaksana, bt.blm_terlaksana,jk.jumlah_kegiatan,da.dana_kegiatan,rkl.anggaran_kemahasiswaan,drk.tahun_kegiatan,l.status_rencana_kegiatan');
+        $this->db->select('rkl.id_lembaga,l.nama_lembaga,t.terlaksana, bt.blm_terlaksana,jk.jumlah_kegiatan,da.dana_kegiatan,rkl.anggaran_kemahasiswaan,drk.tahun_kegiatan,l.status_rencana_kegiatan');
         $this->db->from('rekapan_kegiatan_lembaga as rkl');
         $this->db->join('(' . $from_clause1 . ') as t', 't.lbg1 =rkl.id_lembaga', 'left');
         $this->db->join('(' . $from_clause2 . ') as bt', 'bt.lbg2 =rkl.id_lembaga', 'left');
@@ -161,7 +161,7 @@ class Model_kemahasiswaan extends CI_Model
         if ($id_lembaga != null) {
             $this->db->where('l.id_lembaga', $id_lembaga);
         }
-        $this->db->group_by('drk.id_lembaga');
+        $this->db->group_by('rkl.id_lembaga,rkl.anggaran_kemahasiswaan');
         $data['kegiatan'] = $this->db->get()->result_array();
 
         $this->db->select('count(id_kegiatan) as kegiatan_blm_lpj,k4.id_lembaga as lbg5');
