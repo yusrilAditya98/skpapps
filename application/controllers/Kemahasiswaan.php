@@ -1466,7 +1466,7 @@ class Kemahasiswaan extends CI_Controller
 
         $pengajuan = $this->db->get_where('pengajuan_anggota_lembaga', ['id' => intval($id_pengajuan)])->row_array();
 
-        $tahun_temp = "01-01-".$pengajuan['periode'];
+        $tahun_temp = "01-01-" . $pengajuan['periode'];
 
         // Tambahkan SKP ke masing" anggota
         $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
@@ -1529,5 +1529,37 @@ class Kemahasiswaan extends CI_Controller
         $this->db->update('beasiswa');
         $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Diubah');
         redirect("Kemahasiswaan/beasiswa");
+    }
+
+    // cetak poin skp
+    public function cetakSkp()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $nim = $this->input->get("nim");
+        $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($nim);
+        $data['poinskp'] = $this->poinskp->getPoinSkp($nim);
+        $this->load->view('mahasiswa/tampilan_transkrip_poin', $data);
+    }
+
+    // export skp to excel
+    public function exportSkp()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $nim = $this->input->get("nim");
+        $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();
+        $data['poinskp'] = $this->poinskp->getPoinSkp();
+
+        $result = array();
+        foreach ($data['poinskp'] as $element) {
+            $result[$element['nim']][] = $element;
+        }
+        $data['kegiatan'] = $result;
+        $this->load->view('kemahasiswaan/export_skp', $data);
     }
 }

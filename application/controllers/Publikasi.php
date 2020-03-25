@@ -8,7 +8,8 @@ class Publikasi extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') == 7 || $this->session->userdata('user_profil_kode') == 9) { } else {
+        if ($this->session->userdata('user_profil_kode') == 7 || $this->session->userdata('user_profil_kode') == 9) {
+        } else {
             redirect('auth/blocked');
         }
     }
@@ -48,7 +49,7 @@ class Publikasi extends CI_Controller
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("Publikasi/daftar_validasi_proposal");
+        $this->load->view("publikasi/daftar_validasi_proposal");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }
@@ -68,7 +69,7 @@ class Publikasi extends CI_Controller
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
         $this->load->view("template/sidebar", $data);
-        $this->load->view("Publikasi/daftar_validasi_lpj");
+        $this->load->view("publikasi/daftar_validasi_lpj");
         $this->load->view("modal/modal");
         $this->load->view("template/footer");
     }

@@ -34,7 +34,7 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 
 			$('.tabel-peserta').html('');
 			$('.tabel-peserta').html(`<div class="table-responsive">
-			<table class="table table-striped" id="table-1">
+			<table class="table table-striped" id="">
 				<thead>
 					<tr>
 						<th class="text-center">No</th>
@@ -162,7 +162,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 			} else {
 				$('.tabel-peserta_validasi').html('');
 				$('.tabel-peserta_validasi').html(`<div class="table-responsive">
-				<table class="table table-striped" id="table-1">
+				<table class="table table-striped" id="table-user">
 					<thead>
 						<tr>
 							<th class="text-center">No</th>

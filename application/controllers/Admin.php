@@ -79,24 +79,34 @@ class Admin extends CI_Controller
             $temp = $this->db->get_where('user', ['username' => $data_user['username']])->data_seek();
             if (!$temp) {
                 if ($data_user['user_profil_kode'] == 1) {
-                    $data_mahasiswa = [
-                        'nim' => $this->input->post('username'),
-                        'nama' => $this->input->post('nama'),
-                        'kode_prodi' => intval($this->input->post('prodi'))
-                    ];
-                    $this->db->insert('mahasiswa', $data_mahasiswa);
-
-                    $this->session->set_flashdata('message', 'User Mahasiswa berhasil ditambahkan');
+                    $temp2 = $this->db->get_where('mahasiswa', ['nim' => $data_user['username']])->data_seek();
+                    if (!$temp2) {
+                        $data_mahasiswa = [
+                            'nim' => $this->input->post('username'),
+                            'nama' => $this->input->post('nama'),
+                            'kode_prodi' => intval($this->input->post('prodi'))
+                        ];
+                        $this->db->insert('mahasiswa', $data_mahasiswa);
+                        $this->session->set_flashdata('message', 'User Mahasiswa berhasil ditambahkan');
+                    } else {
+                        $this->session->set_flashdata('failed', 'User Mahasiswa sudah digunakan ditambahkan');
+                    }
                     redirect('admin/ManagementUser');
                 } elseif ($data_user['user_profil_kode'] == 2 || $data_user['user_profil_kode'] == 3) {
-                    $data_lembaga = [
-                        'id_lembaga' => $this->input->post('username'),
-                        'jenis_lembaga' => $this->input->post('jenis_lembaga'),
-                        'nama_lembaga' => $this->input->post('nama'),
-                        'nama_ketua' => $this->input->post('ketua_lembaga'),
-                        'no_hp_lembaga' => $this->input->post('no_hp'),
-                    ];
-                    $this->db->insert('lembaga', $data_lembaga);
+                    $temp3 = $this->db->get_where('mahasiswa', ['nim' => $data_user['username']])->data_seek();
+                    if (!$temp3) {
+                        $data_lembaga = [
+                            'id_lembaga' => $this->input->post('username'),
+                            'jenis_lembaga' => $this->input->post('jenis_lembaga'),
+                            'nama_lembaga' => $this->input->post('nama'),
+                            'nama_ketua' => $this->input->post('ketua_lembaga'),
+                            'no_hp_lembaga' => $this->input->post('no_hp'),
+                        ];
+                        $this->db->insert('lembaga', $data_lembaga);
+                    } else {
+                        $this->session->set_flashdata('failed', 'Tidak bisa menambahkan, Username sudah ada');
+                        redirect('admin/ManagementUser');
+                    }
                 }
 
                 $this->db->insert('user', $data_user);
@@ -151,6 +161,8 @@ class Admin extends CI_Controller
                         'nomor_hp' => $this->input->post('no_hp')
                     ];
                     $this->admin->updateDataMahasiswa($data_mahasiswa, $username);
+                    $this->session->set_flashdata('message', 'User berhasil diperbaharui');
+                    redirect('admin/ManagementUser');
                 } elseif ($data_user['user_profil_kode'] == 2 || $data_user['user_profil_kode'] == 3) {
                     $data_lembaga = [
                         'id_lembaga' => $this->input->post('username'),
@@ -161,7 +173,6 @@ class Admin extends CI_Controller
                     ];
                     $this->admin->updateDataLembaga($data_lembaga, $username);
                 }
-
                 $this->admin->updateDataUser($data_user, $username);
                 $this->session->set_flashdata('message', 'User berhasil diperbaharui');
                 redirect('admin/ManagementUser');
@@ -249,7 +260,8 @@ class Admin extends CI_Controller
         $data = new Spreadsheet_Excel_Reader($path, false);
         // menghitung jumlah baris data yang ada
         $jumlah_baris = $data->rowcount($sheet_index = 0);
-        for ($i = 3; $i <= $jumlah_baris; $i++) {
+        $input_data = [];
+        for ($i = 3; $i < $jumlah_baris; $i++) {
             // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
             $result = [
                 "nim" => str_replace("\0", "", $data->val($i, 2)),
@@ -261,19 +273,9 @@ class Admin extends CI_Controller
                 "kode_prodi" => intval($data->val($i, 8)),
                 "nomor_hp" => str_replace("\0", "", $data->val($i, 9)),
             ];
-            // $user = [
-            //     "nama" => str_replace("\0", "", $data->val($i, 3)),
-            //     "username" => str_replace("\0", "", $data->val($i, 2)),
-            //     "password" => str_replace("\0", "", password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
-            //     "user_profil_kode" => 1,
-            //     'is_active' => 1
-            // ];
-            if ($result['nim'] != "" && $result['nama'] != "") {
-                // input data ke database (table data_pegawai)
-                $this->db->insert('mahasiswa', $result);
-                //$this->db->insert('user', $user);
-            }
-        }
+            array_push($input_data, $result);
+        };
+        $this->db->insert_batch('mahasiswa', $input_data);
         // hapus kembali file .xls yang di upload tadi
         unlink($path);
         // alihkan halaman ke index.php

@@ -12,8 +12,9 @@
                     <div class="card-body">
                     </div>
                     <div class="card-body">
+                        <a href="<?= base_url("Kemahasiswaan/exportSkp") ?>" class="btn btn-success float-right text-white mb-2"> <i class="fas fa-file-excel mr-2 "></i> Export to excel </a>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="dataTabelPoinSkp">
+                            <table class="table table-striped table-bordered" id="dataTabelPoinSkp">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -49,7 +50,11 @@
                                             <?php else : ?>
                                                 <td> Kurang</td>
                                             <?php endif; ?>
-                                            <td><button class="btn btn-primary detail-SKP" data-toggle="modal" data-target=".modalDetailSKP" data-id="<?= $m['nim'] ?>"><i class="fas fa-eye"></i> detail</button></td>
+                                            <td>
+                                                <button class="btn btn-primary detail-SKP" data-toggle="modal" data-target=".modalDetailSKP" data-id="<?= $m['nim'] ?>"><i class="fas fa-eye"></i></button>
+
+                                                <a href="<?= base_url('Kemahasiswaan/cetakSkp?nim=') . $m['nim'] ?>" target="_blank" class="btn btn-icon btn-warning mb-3"><i class="fas fa-print"></i></a>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
