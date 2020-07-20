@@ -1175,6 +1175,7 @@ class Kegiatan extends CI_Controller
         $tahun = $data['tahun'];
         $data['pengajuan'] = $this->db->get_where('pengajuan_anggota_lembaga', ['id_lembaga' => $this->session->userdata('username'), 'periode' => $tahun])->row_array();
         $this->db->where('periode', $tahun);
+        $this->db->select('mahasiswa.nama, mahasiswa.nim, prestasi.nama_prestasi, semua_prestasi.bobot, pengajuan_anggota_lembaga.status_validasi, pengajuan_anggota_lembaga.status_pembukaan, daftar_anggota_lembaga.id, daftar_anggota_lembaga.id_sm_prestasi');
         $this->db->from('daftar_anggota_lembaga');
         $this->db->join('mahasiswa', 'daftar_anggota_lembaga.nim = mahasiswa.nim');
         $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
@@ -1294,9 +1295,9 @@ class Kegiatan extends CI_Controller
         $id = intval($this->input->get('id'));
         $id_sm_prestasi = intval($this->input->get('id_sm_prestasi'));
         $nim = $this->input->get('nim');
-        $this->db->where('id_pengajuan_anggota_lembaga', $id);
-        $this->db->where('nim', $nim);
-        $this->db->where('id_sm_prestasi', $id_sm_prestasi);
+        $this->db->where('id', $id);
+        // $this->db->where('nim', $nim);
+        // $this->db->where('id_sm_prestasi', $id_sm_prestasi);
         $this->db->delete('daftar_anggota_lembaga');
         $this->session->set_flashdata('message', 'Anggota Lembaga berhasil dihapus !');
         redirect("Kegiatan/rancanganAnggota");

@@ -346,19 +346,29 @@ function myFunction(nim) {
 	$('.d-m#data-' + nim + '').remove()
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
+	$('.d-m').each(function(i, obj) {
+		var value = i+1;
+		var temp_id = obj['attributes']['id']['value'];
+		$('.nomorid-' + temp_id + '').html(""+value+"");
+	 });
 }
 
 $('.hps-mhs').on('click', function () {
 	let nim = $(this).data('id')
-	console.log('hapus')
+	// console.log('hapus')
 	$('.d-m#data-' + nim + '').remove()
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
+	$('.d-m').each(function(i, obj) {
+		var value = i+1;
+		var temp_id = obj['attributes']['id']['value'];
+		$('.nomorid-' + temp_id + '').html(""+value+"");
+	 });
 })
 // Anggota Lembaga
 $('.daftarMahasiswaLembaga').on("click", function () {
 	let tingkatKegiatan = $('#jenis_lembaga').val();
-	console.log(tingkatKegiatan);
+	// console.log(tingkatKegiatan);
 	cek = tingkatKegiatan;
 	$('.dataTables_wrapper').remove()
 	$('.partisipasi').remove()
@@ -390,6 +400,7 @@ $('.daftarMahasiswaLembaga').on("click", function () {
                         </div>`)
 					},
 					success: function (data) {
+						$('.loader').remove();
 						let dataTampung = [];
 						let index = 1;
 						let dataMhs = data['mhs']
@@ -486,7 +497,7 @@ $('.submit-mhs-lembaga').on('click', function () {
 				$('.d-m#data-' + aMhs[k][0] + '').remove()
 				$('.daftar-mhs').append(`
 					<tr class="d-m" id="data-` + aMhs[k][0] + `">
-						<td>` + (id) + `</td>
+						<td class="nomorid-data-` + aMhs[k][0] + `">` + (id) + `</td>
 						<td>` + aMhs[k][0] + `
 							<input  type="hidden" name="nim_` + aMhs[k][0] + `" value="` + aMhs[k][0] + `" id="nim_` + aMhs[k][0] + `" >
 						</td>
@@ -509,13 +520,13 @@ $('.submit-mhs-lembaga').on('click', function () {
 function aktifSemua() {
 	let id_pengajuan = $('#pengajuanId').val();
 	let tahun = $('#tahun').val();
-	console.log(id_pengajuan);
+	// console.log(id_pengajuan);
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/daftarAnggotaLembaga?id=' + id_pengajuan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
+			// console.log(data);
 			for (let i = 0; i < data.length; i++) {
 				var a = 'keaktifan_' + data[i]['nim'];
 				$("input[name='" + a + "'][value='1']").prop("checked", true);

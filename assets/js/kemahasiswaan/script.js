@@ -234,6 +234,8 @@ $('#table-1').on('click', '.validasiAnggotaFix', function () {
 	let id = $(this).data('id');
 	let lembaga = $(this).data('lembaga');
 	// console.log(lembaga);
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/unvalidasiAnggotaLembaga/' + id;
+	$('.detailValidasiAnggotaFix').attr('href', link_a);
 
 	// Data Lembaga
 	$.ajax({

@@ -1459,6 +1459,14 @@ class Kemahasiswaan extends CI_Controller
         redirect("Kemahasiswaan/daftarLembaga");
     }
 
+    public function unvalidasiAnggotaLembaga($id_pengajuan){
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 0]);
+
+        $this->session->set_flashdata('message', 'Anggota Lembaga berhasil divalidasi !');
+        redirect("Kemahasiswaan/daftarLembaga");
+    }
+
     public function validasiKeaktifanAnggota($id_pengajuan)
     {
         $this->db->where('id', intval($id_pengajuan));

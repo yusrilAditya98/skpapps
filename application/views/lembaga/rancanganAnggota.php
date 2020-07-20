@@ -104,7 +104,7 @@
                                                 <?php else : ?>
                                                 <?php endif; ?>
                                                 <?php if ($a['status_pembukaan'] == 0) : ?>
-                                                    <td><a href="<?= base_url('Kegiatan/hapusRancanganAnggota?id=' . $pengajuan['id'] . '&nim=' . $a['nim'] . '&id_sm_prestasi=' . $a['id_sm_prestasi']) ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                                                    <td><a href="<?= base_url('Kegiatan/hapusRancanganAnggota?id=' . $a['id'] . '&nim=' . $a['nim'] . '&id_sm_prestasi=' . $a['id_sm_prestasi']) ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
                                                 <?php endif; ?>
                                             </tr>
                                         <?php endforeach; ?>

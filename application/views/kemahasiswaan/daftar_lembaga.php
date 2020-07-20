@@ -207,6 +207,10 @@
                                         <tbody class="body-validasi-anggota-fix">
                                         </tbody>
                                     </table>
+                                    <div class="action-button">
+                                        <a href="<?= base_url('Kemahasiswaan/validasiAnggota/unvalid') ?>" style="width:auto; float:right" class="btn btn-icon btn-danger detailValidasiAnggotaFix">
+                                            Unvalidasi Anggota <i class="fas fa-check"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
