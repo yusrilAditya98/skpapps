@@ -67,6 +67,7 @@
                                         <th>Jumlah Anggota</th>
                                         <th>Validasi Anggota</th>
                                         <th>Validasi Keaktifan</th>
+                                        <th>Bukti Pengajuan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -95,6 +96,9 @@
                                                 <?php elseif ($p['status_keaktifan'] == 0) : ?>
                                                     <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td>
+                                            <a target="_blank" href="<?= base_url('file_bukti/'.$p['bukti_pengajuan'])?>"><i class="fas fa-file-alt"></i></a>
                                             </td>
                                             <td>
                                                 <?php if ($p['status_validasi'] == 2) :  ?>

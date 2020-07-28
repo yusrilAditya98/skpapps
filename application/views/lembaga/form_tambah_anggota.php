@@ -31,10 +31,15 @@
                                                 <label for="periode">Periode</label>
                                                 <input input type="text" class="form-control" id="periode" name="periode" value="<?= $tahun ?>" readonly>
                                             </div>
-                                            <!-- <div class="form-group">
+                                            <div class="form-group">
                                                 <label for="buktiPengajuan">Bukti Pengajuan</label>
-                                                <input type="file" class="form-control" id="buktiPengajuan" name="buktiPengajuan" required>
-                                            </div> -->
+                                                <?php if($pengajuan == null){?>
+                                                    <input type="file" class="form-control" id="buktiPengajuan" name="buktiPengajuan" required>
+                                                <?php }else{?>
+                                                    <input type="file" class="form-control" id="buktiPengajuan" name="buktiPengajuan">
+                                                    <small class="text-danger">* Bukti pengajuan sudah ada</small>
+                                                <?php }?>
+                                            </div>
                                         </div>
                                         <div class="bagian-acara mt-5">
                                             <h5>Anggota Lembaga</h5>

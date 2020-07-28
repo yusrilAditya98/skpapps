@@ -1277,23 +1277,36 @@ class Kegiatan extends CI_Controller
                     'status_pembukaan' => 0,
                     'periode' => $periode,
                     'status_validasi' => 0,
-                    'status_keaktifan' => 0,
+                    'status_keaktifan' => 0
                 ];
                 // cek file_bukti
-                // if ($_FILES['buktiPengajuan']['name']) {
-                //     $config['allowed_types'] = 'pdf';
-                //     $config['max_size']     = '2048'; //kb
-                //     $config['upload_path'] = './file_bukti/';
-                //     $config['file_name'] = time() . '_pengajuan_anggota_' . $id_lembaga.'_'.$periode;
-                //     $this->load->library('upload', $config);
-                //     $this->upload->initialize($config);
-                //     if ($this->upload->do_upload('lampiran')) {
-                //         $rancanganAnggota['buktiPengajuan'] = $this->upload->data('file_name');
-                //     }
-                // }
-                // var_dump($FILES['buktiPengajuan']);die;
+                if ($_FILES['buktiPengajuan']['name']) {
+                    $config['allowed_types'] = '*';
+                    $config['max_size']     = '2048'; //kb
+                    $config['upload_path'] = './file_bukti/';
+                    $config['file_name'] = 'pengajuan_anggota_' . $id_lembaga.'_'.$periode;
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+                    if ($this->upload->do_upload('buktiPengajuan')) {
+                        $rancanganAnggota['bukti_pengajuan'] = $this->upload->data('file_name');
+                    }
+                }
+                // var_dump($rancanganAnggota);die;
                 $this->lembaga->insertRancanganAnggota($rancanganAnggota);
                 $rancanganAnggota = $this->lembaga->getIdRancanganAnggota($id_lembaga, $periode);
+            }
+            // cek file_bukti
+            if ($_FILES['buktiPengajuan']['name']) {
+                $config['allowed_types'] = '*';
+                $config['max_size']     = '2048'; //kb
+                $config['upload_path'] = './file_bukti/';
+                $config['file_name'] = 'pengajuan_anggota_' . $id_lembaga.'_'.$periode;
+                $this->load->library('upload', $config);
+                $this->upload->initialize($config);
+                if ($this->upload->do_upload('buktiPengajuan')) {
+                    $this->db->where('id', intval($rancanganAnggota['id']));
+                    $this->db->update('pengajuan_anggota_lembaga', ['bukti_pengajuan' => $this->upload->data('file_name')]);
+                }
             }
 
             if ($rancanganAnggota['status_validasi'] == 1) {
