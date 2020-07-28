@@ -46,10 +46,36 @@
                                 </div>
                             </div>
                         </form>
+
+                        <form class="m-t-20" action="<?= base_url('Export/exportProposalKegiatan') ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-5 input-group mb-3">
+                                    <select class="custom-select" id="kategori" name="kategori">
+                                        <option selected value="null">Kategori...</option>
+                                        <option value="mhs">Mahasiswa</option>
+                                        <option value="lbg">Lembaga</option>
+
+                                    </select>
+                                    <select class="custom-select" id="tahun" name="tahun">
+                                        <option value="kosong">Pilih periode...</option>
+                                        <?php foreach ($filter as $p) : ?>
+                                            <option value="<?= $p['periode'] ?>"><?= $p['periode'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+
+
+
                     <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
                         <div class="card-body mb-2">
                             <div class="kategori-filter float-right mb-2">
+
                                 <button type="submit" class="btn btn-icon icon-left btn-warning float-right ml-5"><i class="fas fa-print"></i> Cetak Pengajuan</button>
                             </div>
                         </div>
@@ -172,6 +198,31 @@
                                         <th class="text-center"></th>
                                         <th class="text-center"></th>
                                     </tfoot>
+                                </table>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td><b>Keterangan</b></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                            <td> : Telah Divalidasi</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                            <td> : Proses Validasi</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                            <td> : Menunggu Pengajuan</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                            <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

@@ -29,6 +29,7 @@ $('.detail-SKP').on('click', function () {
 				data.forEach(function (dataA) {
 					$('.body-skp').append(`<tr>
 					<td class="text-center">` + (++i) + `</td>
+					<td>` + dataA['nama_kegiatan'] + `</td>
 					<td>` + dataA['nama_prestasi'] + `</td>
 					<td>` + dataA['nama_tingkatan'] + `</td>
 					<td>` + dataA['jenis_kegiatan'] + `</td>
@@ -57,11 +58,10 @@ let jumlah_prestasi = [];
 $(document).ready(function () {
 	var tahun = $('#tahun_temp').val();
 	var link = "";
-	if(tahun == ""){
-		link = segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi/';
-	}
-	else{
-		link = segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi?tahun='+tahun;
+	if (tahun == "") {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi/';
+	} else {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi?tahun=' + tahun;
 	}
 	console.log($('#tahun_temp').val() == "")
 	$.ajax({
@@ -198,10 +198,10 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 	let id = $(this).data('id');
 	var tahun = $('#tahun_temp').val();
 	var link = "";
-	if(tahun == ""){
-		link = segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP?id_prestasi='+id;
-	}else{
-		link = segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP?id_prestasi='+id+'&tahun='+tahun;
+	if (tahun == "") {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id;
+	} else {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id + '&tahun=' + tahun;
 	}
 
 	$.ajax({

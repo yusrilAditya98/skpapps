@@ -74,7 +74,7 @@ $('.table-kategori').on('click', '.edit-user', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			var link_a = window.location.origin + `/` + segments[3] + `/admin/editUser/` + id;
+			var link_a = window.location.origin + `/` + segments[3] + `/Admin/editUser/` + id;
 			$('form').attr('action', link_a);
 			$('#username_edit').val(data['user']['username']);
 			$('#nama_edit').val(data['user']['nama']);
@@ -113,7 +113,7 @@ $('.table-kategori').on('click', '.hapus-user', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + `/` + segments[3] + `/admin/hapusUser/` + id_user;
+			window.location = window.location.origin + `/` + segments[3] + `/Admin/hapusUser/` + id_user;
 		}
 	})
 });

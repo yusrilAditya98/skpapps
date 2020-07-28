@@ -124,8 +124,8 @@
                                                         </thead>
                                                         <tbody class="daftar-mhs">
                                                             <?php $i = 1;
-                                                                $j = 0;
-                                                                foreach ($anggota as $a) : ?>
+                                                            $j = 0;
+                                                            foreach ($anggota as $a) : ?>
                                                                 <tr>
                                                                     <td><?= $i++ ?></td>
                                                                     <td><?= $a['nim'] ?></td>
@@ -152,8 +152,8 @@
                                                                     </td>
                                                                 </tr>
                                                             <?php
-                                                                    $j++;
-                                                                endforeach; ?>
+                                                                $j++;
+                                                            endforeach; ?>
 
                                                         </tbody>
                                                     </table>
@@ -171,8 +171,8 @@
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                         Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                         Mega,
-                                                        Format File : Tahun_Nama_Proposal Contoh :
-                                                        2019_AdityaYusrilFikri_Proposal. Format Proposal
+                                                        Format File : Tahun_Nama_LPJ Contoh :
+                                                        2019_AdityaYusrilFikri_LPJ. Format LPJ
                                                         <span><a href="#">Disini</a></span></small>
 
                                                 </div>

@@ -52,7 +52,7 @@
                                         <th>No</th>
                                         <th>Tanggal Pengajuan</th>
                                         <th>Nama Kegiatan</th>
-                                        <th>Status Proposal</th>
+                                        <th>Status LPJ</th>
                                         <th>BEM</th>
                                         <th>Kmhs</th>
                                         <th>WD3</th>

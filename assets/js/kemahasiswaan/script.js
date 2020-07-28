@@ -319,13 +319,14 @@ $('#table-1').on('click', '.keaktifanAnggota', function () {
 					<td>` + dataA['nim'] + `</td>
 					<td>` + dataA['nama_prestasi'] + `</td>
 					<td>` + dataA['bobot'] + `</td>
+					<td>` + dataA['status_aktif'] + `</td>
 					</tr>`);
-					var classA = '.keaktifan_anggota_' + dataA['nim'];
-					if (dataA['status_aktif'] == 1) {
-						$(classA).append(`<td class="text-success">Aktif</td>`)
-					} else {
-						$(classA).append(`<td class="text-danger">Tidak Aktif</td>`)
-					}
+					// var classA = '.keaktifan_anggota_' + dataA['nim'];
+					// if (dataA['status_aktif'] == 1) {
+					// 	$(classA).append(`<td class="text-success">Aktif</td>`)
+					// } else {
+					// 	$(classA).append(`<td class="text-danger">Tidak Aktif</td>`)
+					// }
 				})
 			} else {
 				$('.body-keaktifan-anggota').html('');
@@ -376,13 +377,14 @@ $('#table-1').on('click', '.keaktifanAnggotaFix', function () {
 					<td>` + dataA['nim'] + `</td>
 					<td>` + dataA['nama_prestasi'] + `</td>
 					<td>` + dataA['bobot'] + `</td>
+					<td>` + dataA['status_aktif'] + `</td>
 					</tr>`);
-					var classA = '.keaktifan_anggota_' + dataA['nim'];
-					if (dataA['status_aktif'] == 1) {
-						$(classA).append(`<td class="text-success">Aktif</td>`)
-					} else {
-						$(classA).append(`<td class="text-danger">Tidak Aktif</td>`)
-					}
+					// var classA = '.keaktifan_anggota_' + dataA['nim'];
+					// if (dataA['status_aktif'] == 1) {
+					// 	$(classA).append(`<td class="text-success">Aktif</td>`)
+					// } else {
+					// 	$(classA).append(`<td class="text-danger">Tidak Aktif</td>`)
+					// }
 				})
 			} else {
 				$('.body-keaktifan-anggota-fix').html('');

@@ -12,7 +12,8 @@
 	},
 	"require": {
 		"php": ">=5.3.7",
-		"araditama/siam-ub-auth": "^1.1"
+		"araditama/siam-ub-auth": "^1.1",
+		"phpexcel/phpexcel": "^1.7"
 	},
 	"suggest": {
 		"paragonie/random_compat": "Provides better randomness in PHP 5.x"
@@ -21,4 +22,5 @@
 		"mikey179/vfsStream": "1.1.*",
 		"phpunit/phpunit": "4.* || 5.*"
 	}
+
 }

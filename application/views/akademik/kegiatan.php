@@ -12,13 +12,25 @@
                         <h4>Daftar Kegiatan</h4>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-lg-12">
-                                <a href="<?= base_url('Akademik/tambahKegiatan') ?>" class="btn btn-primary float-right pl-3 text-white">
-                                    <i class="fas fa-plus"></i><span> Tambah Kegiatan</span>
-                                </a>
+
+                        <form class="m-t-20" action="<?= base_url('Export/exportDaftarKuliahTamu') ?>" method="get">
+                            <span>Range Tanggal Kegiatan</span>
+                            <div class="row">
+                                <div class="col-lg-6 input-group mb-3">
+                                    <input type="date" name="tgl_pengajuan_start" id="tgl_pengajuan_start" class="form-control">
+                                    <input type="date" name="tgl_pengajuan_end" id="tgl_pengajuan_date" class="form-control">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Export</button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a href="<?= base_url('Akademik/tambahKegiatan') ?>" class="btn btn-primary float-right pl-3 text-white">
+                                        <i class="fas fa-plus"></i><span> Tambah Kegiatan</span></a>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+
+
                         <div class="table-responsive">
                             <table class="table table-striped text-wrap" id="table-kegiatan">
                                 <thead>
@@ -42,31 +54,31 @@
                                             <td><?= $k['pemateri'] ?></td>
                                             <td><?= $k['lokasi'] ?></td>
                                             <?php
-                                                if ($k['status_terlaksana'] == 0) {
-                                                    echo '<td class="text-danger">Belum Terlaksana</td>';
-                                                } else if ($k['status_terlaksana'] == 1) {
-                                                    echo '<td class="text-success">Sudah Terlaksana</td>';
-                                                } else {
-                                                    echo '<td class="text-info">Sedang Berlangsung</td>';
-                                                }
-                                                ?>
+                                            if ($k['status_terlaksana'] == 0) {
+                                                echo '<td class="text-danger">Belum Terlaksana</td>';
+                                            } else if ($k['status_terlaksana'] == 1) {
+                                                echo '<td class="text-success">Sudah Terlaksana</td>';
+                                            } else {
+                                                echo '<td class="text-info">Sedang Berlangsung</td>';
+                                            }
+                                            ?>
                                             <td>
                                                 <?php
-                                                    if ($k['status_terlaksana'] == 0) {
-                                                        echo '<a href="' . base_url('Akademik/setKegiatanBerlangsung/') . $k['id_kuliah_tamu'] . '" class="btn btn-info"><i class="fas fa-check-square"></i></a>';
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>
+                                                if ($k['status_terlaksana'] == 0) {
+                                                    echo '<a href="' . base_url('Akademik/setKegiatanBerlangsung/') . $k['id_kuliah_tamu'] . '" class="btn btn-info"><i class="fas fa-check-square"></i></a>';
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 <?php
-                                                    if ($k['status_terlaksana'] == 2) {
-                                                        echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>
+                                                if ($k['status_terlaksana'] == 2) {
+                                                    echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>

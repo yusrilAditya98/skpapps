@@ -145,6 +145,8 @@
                                         <th>Nim</th>
                                         <th>Nama</th>
                                         <th>Posisi</th>
+                                        <th>Bobot</th>
+                                        <th>Keaktifan</th>
                                     </tr>
                                 </thead>
                                 <tbody class="daftar-mhs">

@@ -12,7 +12,8 @@ class Pimpinan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5 || $this->session->userdata('user_profil_kode') == 9) { } else {
+        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5 || $this->session->userdata('user_profil_kode') == 9) {
+        } else {
             redirect('Auth/blocked');
         }
     }
@@ -401,6 +402,7 @@ class Pimpinan extends CI_Controller
             array_push($id_semua_prestasi_arr, $id_semua_prestasi);
         }
         $this->db->where_in('prestasiid_prestasi', $id_semua_prestasi_arr);
+        $this->db->where('poin_skp.validasi_prestasi', 1);
         $this->db->select('poin_skp.id_poin_skp, YEAR(poin_skp.tgl_pelaksanaan) as tahun, mahasiswa.nim, mahasiswa.nama, poin_skp.nama_kegiatan');
         $this->db->from('poin_skp');
         $this->db->join('mahasiswa', 'poin_skp.nim = mahasiswa.nim');

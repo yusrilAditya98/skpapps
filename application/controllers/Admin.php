@@ -249,7 +249,6 @@ class Admin extends CI_Controller
         $data = new Spreadsheet_Excel_Reader($path, false);
         // menghitung jumlah baris data yang ada
         $jumlah_baris = $data->rowcount($sheet_index = 0);
-
         $input_data = [];
         for ($i = 3; $i < $jumlah_baris; $i++) {
             // menangkap data dan memasukkan ke variabel sesuai dengan kolumnya masing-masing
@@ -263,20 +262,8 @@ class Admin extends CI_Controller
                 "kode_prodi" => intval($data->val($i, 8)),
                 "nomor_hp" => str_replace("\0", "", $data->val($i, 9)),
             ];
-
             array_push($input_data, $result);
-            // $user = [
-            //     "nama" => str_replace("\0", "", $data->val($i, 3)),
-            //     "username" => str_replace("\0", "", $data->val($i, 2)),
-            //     "password" => str_replace("\0", "", password_hash('p' . $result['nim'], PASSWORD_DEFAULT)),
-            //     "user_profil_kode" => 1,
-            //     'is_active' => 1
-            // ];
-            // input data ke database (table data_pegawai)
-            
-            //$this->db->insert('user', $user);
-        }
-        // var_dump($input_data);die;
+        };
         $this->db->insert_batch('mahasiswa', $input_data);
         // hapus kembali file .xls yang di upload tadi
         unlink($path);

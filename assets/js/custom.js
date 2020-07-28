@@ -106,13 +106,23 @@ $('.detail-kegiatan').on('click', function (e) {
 
 
 			let index = 1;
+			console.log(data.tingkat)
 			for (var j in data.tingkat) {
+				let keaktifan = "";
+				if (data.tingkat[j].keaktifan == 0) {
+					keaktifan = "Tidak Aktif"
+				} else {
+					keaktifan = "Aktif";
+				}
+
 				$('.daftar-mhs').append(`
 				<tr class="k-anggota">
 					<td>` + (index++) + `</td>
 					<td>` + data.tingkat[j].nim + `</td>
 					<td>` + data.tingkat[j].nama + `</td>
 					<td>` + data.tingkat[j].nama_prestasi + `</td>
+					<td>` + data.tingkat[j].bobot + `</td>
+					<td>` + keaktifan + `</td>
 				</tr>
 				`)
 			}

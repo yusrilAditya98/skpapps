@@ -2,7 +2,7 @@ var url = $(location).attr("href");
 var segments = url.split("/");
 
 $('.tambahBidang').on('click', function () {
-	var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahBidang/';
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahBidang/';
 	$('form').attr('action', link_a);
 })
 
@@ -13,7 +13,7 @@ $('.tambahJenis').on('click', function () {
 		type: 'get',
 		success: function (dataBidang) {
 			// console.log(dataBidang);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahJenis/';
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahJenis/';
 			$('form').attr('action', link_a);
 			dataBidang.forEach(function (bidang) {
 				$('#bidang_kegiatan_tambah').append(`<option value="` + bidang['id_bidang'] + `">` + bidang['nama_bidang'] + `</option>`)
@@ -23,17 +23,17 @@ $('.tambahJenis').on('click', function () {
 })
 
 $('.tambahTingkatan').on('click', function () {
-	var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahTingkatan/';
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahTingkatan/';
 	$('form').attr('action', link_a);
 })
 
 $('.tambahPrestasi').on('click', function () {
-	var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahPrestasi/';
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahPrestasi/';
 	$('form').attr('action', link_a);
 })
 
 $('.tambah-dasar-penilaian').on('click', function () {
-	var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahDasarPenilaian/';
+	var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahDasarPenilaian/';
 	$('form').attr('action', link_a);
 })
 
@@ -45,7 +45,7 @@ $('.tambah-detail-tingkatan').on('click', function () {
 		type: 'get',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahDetailTingkatan/';
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahDetailTingkatan/';
 			$('form').attr('action', link_a);
 
 			$('.bidang_tambah').html(`<option value="0" disabled selected hidden>Pilih Bidang Kegiatan</option>`)
@@ -98,7 +98,7 @@ $('.tambah-detail-prestasi').on('click', function () {
 		type: 'get',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/tambahDetailPrestasi/';
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/tambahDetailPrestasi/';
 			$('form').attr('action', link_a);
 
 			$('.bidang_tambah_prestasi').html(`<option value="0" disabled selected hidden>Pilih Bidang Kegiatan</option>`)
@@ -178,7 +178,7 @@ $('.table-kategori').on('click', '.edit-bidang', function () {
 		dataType: 'json',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editBidang/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editBidang/' + id;
 			$('form').attr('action', link_a);
 			$('#bidang_kegiatan_edit').val(data['nama_bidang']);
 		}
@@ -195,7 +195,7 @@ $('.table-kategori').on('click', '.edit-jenis', function () {
 		dataType: 'json',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editJenis/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editJenis/' + id;
 			$('form').attr('action', link_a);
 			$('#jenis_kegiatan_edit').val(data['jenisKegiatan']['jenis_kegiatan']);
 			data['semua_bidang'].forEach(function (bidang) {
@@ -218,7 +218,7 @@ $('.table-kategori').on('click', '.edit-tingkatan', function () {
 		dataType: 'json',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editTingkatan/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editTingkatan/' + id;
 			$('form').attr('action', link_a);
 			$('#tingkatan_kegiatan_edit').val(data['nama_tingkatan']);
 		}
@@ -234,7 +234,7 @@ $('.table-kategori').on('click', '.edit-prestasi', function () {
 		dataType: 'json',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editPrestasi/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editPrestasi/' + id;
 			$('form').attr('action', link_a);
 			$('#prestasi_kegiatan_edit').val(data['nama_prestasi']);
 		}
@@ -250,7 +250,7 @@ $('.table-kategori').on('click', '.edit-dasar-penilaian', function () {
 		dataType: 'json',
 		success: function (data) {
 			// console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editDasarPenilaian/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editDasarPenilaian/' + id;
 			$('form').attr('action', link_a);
 			$('#dasar_penilaian_edit').val(data['nama_dasar_penilaian']);
 		}
@@ -269,7 +269,7 @@ $('.table-kategori').on('click', '.edit-detail-tingkatan', function () {
 		dataType: 'json',
 		success: function (data) {
 			console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editDetailTingkatan/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editDetailTingkatan/' + id;
 			$('form').attr('action', link_a);
 			data['list_bidang'].forEach(function (bidang) {
 				if (bidang['id_bidang'] == data['real']['id_bidang']) {
@@ -339,7 +339,7 @@ $('.table-kategori').on('click', '.edit-detail-prestasi', function () {
 		dataType: 'json',
 		success: function (data) {
 			console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/kemahasiswaan/editDetailPrestasi/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Kemahasiswaan/editDetailPrestasi/' + id;
 			$('form').attr('action', link_a);
 			data['list_bidang'].forEach(function (bidang) {
 				if (bidang['id_bidang'] == data['real']['id_bidang']) {

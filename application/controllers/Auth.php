@@ -119,7 +119,7 @@ class Auth extends CI_Controller
         }
     }
     // login by siam accounts
-    private function _login_siam()
+     private function _login_siam()
     {
         $auth = new AuthSIAM;
 
@@ -131,14 +131,21 @@ class Auth extends CI_Controller
             'password' => $this->password
         ];
         // memanggil method auth dari objek yang telah dibuat dengan method GET
-        $result = $auth->auth($data);
+        // $result = $auth->auth($data);
+        $result = $auth->authManual($data);
+
         if ($result['msg'] == "true") {
             $mhs = $this->db->get_where('mahasiswa', ['nim' => $result['data']['nim']])->row_array();
             if ($mhs) {
+                // $data = [
+                //     "username" => $result['data']['nim'],
+                //     "nama" => $result['data']['nama'],
+                //     "user_profil_kode" => $result['data']['status']
+                // ];
                 $data = [
-                    "username" => $result['data']['nim'],
-                    "nama" => $result['data']['nama'],
-                    "user_profil_kode" => $result['data']['status']
+                    "username" => $mhs['nim'],
+                    "nama" => $mhs['nama'],
+                    "user_profil_kode" => 1
                 ];
                 $this->session->set_userdata($data);
                 redirect('Mahasiswa');
@@ -151,6 +158,7 @@ class Auth extends CI_Controller
             redirect('Auth');
         }
     }
+    
     public function logout()
     {
         $this->session->unset_userdata('username');

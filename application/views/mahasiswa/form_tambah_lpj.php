@@ -156,7 +156,7 @@
                                             <h5>Informasi Upload</h5>
 
                                             <div class="form-group">
-                                                <label for="fileLpj">Upload File Proposal</label>
+                                                <label for="fileLpj">Upload File LPJ</label>
                                                 <input type="file" class="form-control-file btn" id="fileLpj" name="fileLpj" required>
                                                 <div class="invalid-feedback">
                                                     File lpj harap diisi
@@ -164,14 +164,14 @@
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                     Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                     Mega,
-                                                    Format File : Tahun_Nama_Proposal Contoh :
-                                                    2019_AdityaYusrilFikri_Proposal. Format Proposal
+                                                    Format File : Tahun_Nama_LPJ Contoh :
+                                                    2019_AdityaYusrilFikri_LPJ. Format LPJ
                                                     <span><a href="#">Disini</a></span></small>
 
                                             </div>
                                             <div class="form-group">
                                                 <label for="beritaLpj">Upload Berita Kegiatan
-                                                    Proposal</label>
+                                                    LPJ</label>
                                                 <input type="file" class="form-control-file btn" name="beritaLpj" id="beritaLpj" required>
                                                 <div class="invalid-feedback">
                                                     Berita kegiatan harap diisi
@@ -206,7 +206,7 @@
                                             </div>
                                         </div>
                                         <div class="action-button">
-                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+                                            <button onclick="return confirm('Apakah anda sudah yakin ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Kirim Lpj <i class="fas fa-plus"></i></button>
                                             <a href="<?= base_url('Mahasiswa/pengajuanLpj') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>

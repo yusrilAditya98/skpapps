@@ -46,6 +46,27 @@
                                 </div>
                             </div>
                         </form>
+                        <form class="m-t-20" action="<?= base_url('Export/exportProposalKegiatan') ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-5 input-group mb-3">
+                                    <select class="custom-select" id="kategori" name="kategori">
+                                        <option selected value="null">Kategori...</option>
+                                        <option value="mhs">Mahasiswa</option>
+                                        <option value="lbg">Lembaga</option>
+
+                                    </select>
+                                    <select class="custom-select" id="tahun" name="tahun">
+                                        <option value="kosong">Pilih periode...</option>
+                                        <?php foreach ($filter as $p) : ?>
+                                            <option value="<?= $p['periode'] ?>"><?= $p['periode'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="kategori-filter float-right mb-2">
 
                         </div>

@@ -16,7 +16,7 @@
                     <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarRancangan") ?>">Rancangan</a></li>
                     <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarProposal") ?>">Proposal Kemahasiswaan</a></li>
                     <li><a class="nav-link" href="<?= base_url("Publikasi/daftarProposal") ?>">Proposal Publikasi</a></li>
-                    <li><a class="nav-link" href="<?= base_url("Keuangan/daftarPengajuanProposal") ?>">Proposal Keuangan</a></li>
+                    <li><a class="nav-link" href="<?= base_url("Keuangan/daftarPengajuanKeuangan") ?>">Proposal Keuangan</a></li>
                     <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarLpj") ?>">Lpj Kemahasiswaan</a></li>
                     <li><a class="nav-link" href="<?= base_url("Publikasi/daftarLpj") ?>">Lpj Publikasi</a></li>
                     <li><a class="nav-link" href="<?= base_url("Keuangan/daftarPengajuanLpj") ?>">Lpj Keuangan</a></li>

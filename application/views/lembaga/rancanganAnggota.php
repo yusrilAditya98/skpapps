@@ -16,16 +16,16 @@
                         <div class="row mb-4">
                             <div class="col-lg-12">
                                 <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
-                                    <a href="<?= base_url('Kegiatan/tambahRancanganAnggota') ?>" class="btn btn-icon btn-success float-right">
+                                    <a href="<?= base_url('Kegiatan/tambahRancanganAnggota?tahun='.$tahun) ?>" class="btn btn-icon btn-success float-right">
                                         Tambah Anggota</a>
                                     <?php if ($jumlah_anggota != 0) : ?>
-                                        <a href="<?= base_url('Kegiatan/ajukanRancanganAnggota/' . $pengajuan['id']) ?>" class="btn btn-icon btn-primary float-right mr-3">
+                                        <a href="<?= base_url('Kegiatan/ajukanRancanganAnggota/' . $pengajuan['id'].'?tahun='.$tahun) ?>" class="btn btn-icon btn-primary float-right mr-3">
                                             Tutup Akses Penambahan Anggota</a>
                                     <?php endif; ?>
                                 <?php elseif ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 1) : ?>
-                                    <a href="<?= base_url('Kegiatan/ajukanValidasiAnggota/' . $pengajuan['id']) ?>" class="btn btn-icon btn-success float-right">
+                                    <a href="<?= base_url('Kegiatan/ajukanValidasiAnggota/' . $pengajuan['id'].'?tahun='.$tahun) ?>" class="btn btn-icon btn-success float-right">
                                         Ajukan Validasi</a>
-                                    <a href="<?= base_url('Kegiatan/bukaRancanganAnggota/' . $pengajuan['id']) ?>" class="btn btn-icon btn-primary float-right mr-3">
+                                    <a href="<?= base_url('Kegiatan/bukaRancanganAnggota/' . $pengajuan['id'].'?tahun='.$tahun) ?>" class="btn btn-icon btn-primary float-right mr-3">
                                         Buka Akses Penambahan Anggota</a>
                                 <?php endif; ?>
                             </div>
@@ -104,7 +104,7 @@
                                                 <?php else : ?>
                                                 <?php endif; ?>
                                                 <?php if ($a['status_pembukaan'] == 0) : ?>
-                                                    <td><a href="<?= base_url('Kegiatan/hapusRancanganAnggota?id=' . $a['id'] . '&nim=' . $a['nim'] . '&id_sm_prestasi=' . $a['id_sm_prestasi']) ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                                                    <td><a href="<?= base_url('Kegiatan/hapusRancanganAnggota?id=' . $a['id'] . '&nim=' . $a['nim'] . '&id_sm_prestasi=' . $a['id_sm_prestasi'].'&tahun='.$tahun) ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
                                                 <?php endif; ?>
                                             </tr>
                                         <?php endforeach; ?>

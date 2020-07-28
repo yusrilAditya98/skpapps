@@ -142,7 +142,7 @@ class Kemahasiswaan extends CI_Controller
         if ($cek_status) {
             $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 1);
         } else {
-            $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 2);
+            $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 3);
         }
 
         redirect('Kemahasiswaan/detailRancanganKegiatan?id_lembaga=' . $id_lembaga . '&tahun=' . $tahun_pengajuan);
@@ -155,6 +155,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -1433,7 +1434,7 @@ class Kemahasiswaan extends CI_Controller
             $data['pengajuan'] = $this->db->get()->result_array();
         } else {
             // $data['rancangan'] = $this->kemahasiswaan->getRekapRancangan();
-            $this->db->where('periode', 2020);
+            // $this->db->where('periode', 2020);
             $this->db->from('pengajuan_anggota_lembaga');
             $this->db->join('lembaga', 'pengajuan_anggota_lembaga.id_lembaga = lembaga.id_lembaga');
             $data['pengajuan'] = $this->db->get()->result_array();
@@ -1453,19 +1454,20 @@ class Kemahasiswaan extends CI_Controller
     public function validasiAnggotaLembaga($id_pengajuan)
     {
         $this->db->where('id', intval($id_pengajuan));
-        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 1]);
+        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 1, 'tanggal_validasi' => date('Y-m-d')]);
 
         $this->session->set_flashdata('message', 'Anggota Lembaga berhasil divalidasi !');
         redirect("Kemahasiswaan/daftarLembaga");
     }
-
-    public function unvalidasiAnggotaLembaga($id_pengajuan){
+    public function unvalidasiAnggotaLembaga($id_pengajuan)
+    {
         $this->db->where('id', intval($id_pengajuan));
         $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 0]);
 
-        $this->session->set_flashdata('message', 'Anggota Lembaga berhasil divalidasi !');
+        $this->session->set_flashdata('message', 'Anggota Lembaga berhasil diunvalidasi !');
         redirect("Kemahasiswaan/daftarLembaga");
     }
+
 
     public function validasiKeaktifanAnggota($id_pengajuan)
     {
@@ -1474,7 +1476,7 @@ class Kemahasiswaan extends CI_Controller
 
         $pengajuan = $this->db->get_where('pengajuan_anggota_lembaga', ['id' => intval($id_pengajuan)])->row_array();
 
-        $tahun_temp = "01-01-".$pengajuan['periode'];
+        $tahun_temp = $pengajuan['periode']."-09-01";
 
         // Tambahkan SKP ke masing" anggota
         $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
@@ -1490,22 +1492,24 @@ class Kemahasiswaan extends CI_Controller
                 'nama_kegiatan' => 'Keanggotaan Lembaga',
                 'tgl_pelaksanaan' => $tahun_temp,
                 'validasi_prestasi' => 1,
-                'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi'])
+                'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi']),
+                'nilai_bobot' => $anggota_lembaga[$i]['status_aktif']
             ];
             $this->db->where('nim', $anggota_lembaga[$i]['nim']);
             $mahasiswa_temp = $this->db->get('mahasiswa')->row_array();
             $poin_skp_sementara = intval($mahasiswa_temp['total_poin_skp']);
-            $poin_tambahan = intval($anggota_lembaga[$i]['bobot']);
+            $poin_tambahan = intval($anggota_lembaga[$i]['bobot'])*floatval($anggota_lembaga[$i]['status_aktif']);
 
             $data2 = [
                 'nim' => $anggota_lembaga[$i]['nim'],
                 'total_poin_skp' => $poin_skp_sementara + $poin_tambahan
             ];
-            if ($anggota_lembaga[$i]['status_aktif'] == 1) {
                 array_push($mahasiswa, $data2);
                 array_push($anggota_status_aktif, $data);
-            }
         }
+        // Header('Content-type: application/json');
+        // echo json_encode($anggota_status_aktif);
+        // die;
         // Update total SKP
         $this->db->update_batch('mahasiswa', $mahasiswa, 'nim');
 
@@ -1537,5 +1541,58 @@ class Kemahasiswaan extends CI_Controller
         $this->db->update('beasiswa');
         $this->session->set_flashdata('message', 'Jenis Beasiswa Berhasil Diubah');
         redirect("Kemahasiswaan/beasiswa");
+    }
+
+    // cetak poin skp
+    public function cetakSkp()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $nim = $this->input->get("nim");
+        $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($nim);
+        $data['poinskp'] = $this->poinskp->getPoinSkp($nim);
+        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+        
+        // QR Code
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']        = './assets/'; //string, the default is application/cache/
+        $config['errorlog']        = './assets/'; //string, the default is application/logs/
+        $config['imagedir']        = 'assets/qrcode/'; //direktori penyimpanan qr code
+        $config['quality']        = true; //boolean, the default is true
+        $config['size']            = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+
+        $image_name = 'bukti_skp_' . $nim . '.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = base_url("API_skp/cetakSkp?nim=".$nim); //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+        $this->load->view('mahasiswa/tampilan_transkrip_poin', $data);
+    }
+
+    // export skp to excel
+    public function exportSkp()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $nim = $this->input->get("nim");
+        $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa();
+        $data['poinskp'] = $this->poinskp->getPoinSkp();
+
+        $result = array();
+        foreach ($data['poinskp'] as $element) {
+            $result[$element['nim']][] = $element;
+        }
+        $data['kegiatan'] = $result;
+        $this->load->view('kemahasiswaan/export_skp', $data);
     }
 }

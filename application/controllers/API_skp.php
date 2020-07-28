@@ -25,8 +25,7 @@ class API_skp extends CI_Controller
         } else {
             $data_peserta_kuliah_tamu = [
                 'nim' => $this->session->userdata('username'),
-                'id_kuliah_tamu' => intval($id_kegiatan),
-                'kehadiran' => 1
+                'id_kuliah_tamu' => intval($id_kegiatan)
             ];
 
             $data_kuliah_tamu = $this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => intval($id_kegiatan)])->row_array();
@@ -39,12 +38,11 @@ class API_skp extends CI_Controller
             $diff  = date_diff($awal, $akhir);
             $beda_hari = $diff->format("%R%a");
 
-            // var_dump($beda_hari);die;
-
             $tanda_beda = substr($beda_hari, 0, 1);
-            $hari_ini = substr($beda_hari, 0, 2);
 
-            if ($tanda_beda == "+" && $hari_ini != "+0") {
+            if ($tanda_beda == "+") {
+                // var_dump("HAHAHAHA");
+                // die;
                 // Tidak Bisa join, Tanggal Kelebihan
                 $this->session->unset_userdata('id_kegiatan');
                 $this->session->set_flashdata('failed', 'Pendaftaran kuliah tamu tidak berhasil, kuliah tamu sudah terlewat');
@@ -56,43 +54,24 @@ class API_skp extends CI_Controller
                     $this->session->set_flashdata('failed', 'Pendaftaran kuliah tamu tidak berhasil, kuliah tamu sudah di validasi');
                     redirect(base_url('Mahasiswa'));
                 } else {
-                    // Cek duplikasi pendaftar
+                    // $data_poin_skp = [
+                    //     'nim' => $this->session->userdata('username'),
+                    //     'nama_kegiatan' => $data_kuliah_tamu['nama_event'],
+                    //     'validasi_prestasi' => 0,
+                    //     'tgl_pelaksanaan' => $data_kuliah_tamu['tanggal_event'],
+                    //     'tempat_pelaksanaan' => $data_kuliah_tamu['lokasi'],
+                    //     'prestasiid_prestasi' => 115
+                    // ];
+                    // header('Content-type: application/json');
+                    // echo json_encode($data_poin_skp);
+                    // die;
+                    // $this->db->insert('poin_skp', $data_poin_skp);
+
                     $data = $this->db->get_where('peserta_kuliah_tamu', ['nim' => $data_peserta_kuliah_tamu['nim'], 'id_kuliah_tamu' => $data_peserta_kuliah_tamu['id_kuliah_tamu']])->result_array();
-                    
-                    // Belum ada pendaftar
-                    if($data == null){
-
-                        // Insert ke tabel poin skp (keep / proses)
-                        $data_poin_skp = [
-                            'nim' => $this->session->userdata('username'),
-                            'nama_kegiatan' => $data_kuliah_tamu['nama_event'],
-                            'validasi_prestasi' => 3,
-                            'tgl_pengajuan' => date('Y-m-d'),
-                            'tgl_pelaksanaan' => $data_kuliah_tamu['tanggal_event'],
-                            'tempat_pelaksanaan' => $data_kuliah_tamu['lokasi'],
-                            'prestasiid_prestasi' => 115
-                        ];
-                        // header('Content-type: application/json');
-                        // echo json_encode($data_poin_skp);
-                        // die;
-                        $this->db->insert('poin_skp', $data_poin_skp);
-
-                        // Insert ke tabel peserta kuliah tamu
-                        $this->db->insert('peserta_kuliah_tamu', $data_peserta_kuliah_tamu);
-                        
-                        $this->session->unset_userdata('id_kegiatan');
-                        $this->session->set_flashdata('message', 'Pendaftaran kuliah tamu berhasil');
-                        redirect(base_url('Mahasiswa'));
-                    }
-                    // Pendaftar Duplikat
-                    else{
-                        $this->session->unset_userdata('id_kegiatan');
-                        $this->session->set_flashdata('failed', 'Pendaftaran kuliah tamu tidak berhasil, Anda sudah terdaftar pada kuliah tamu tersebut');
-                        redirect(base_url('Mahasiswa'));
-                    }
-
-                    
-                    
+                    $this->db->insert('peserta_kuliah_tamu', $data_peserta_kuliah_tamu);
+                    $this->session->unset_userdata('id_kegiatan');
+                    $this->session->set_flashdata('message', 'Pendaftaran kuliah tamu berhasil');
+                    redirect(base_url('Mahasiswa'));
                 }
             }
         }
@@ -333,14 +312,20 @@ class API_skp extends CI_Controller
         $data['serapan_proposal'] = $this->keuangan->getLaporanSerapanProposal($tahun);
         $data['serapan_lpj'] = $this->keuangan->getLaporanSerapanLpj($tahun);
         $data['lembaga'] = $this->db->get('lembaga')->result_array();
-        $data['tahun'] = $this->keuangan->getTahun();
-        $tahun = $data['tahun'][0]['tahun'];
-        if ($tahun) {
+        $this->db->select('tahun_pengajuan as tahun');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('tahun_pengajuan');
+        $data['tahun'] = $this->db->get()->result_array();
+
+        if ($tahun != null) {
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         } else {
+            $tahun = $data['tahun'][0]['tahun'];
             $data['laporan'] = $this->_serapan($data['serapan_proposal'], $data['serapan_lpj'], $tahun);
         }
         $data['total'] = $this->_totalDana($data['laporan']);
+
+
         echo json_encode($data['laporan']);
     }
 
@@ -525,7 +510,7 @@ class API_skp extends CI_Controller
     {
         $this->db->where('poin_skp.nim', $nim);
         // $this->db->select('*');
-        $this->db->select('id_poin_skp, bobot, nama_prestasi, nama_tingkatan, jenis_kegiatan, nama_bidang, tgl_pelaksanaan, nama_dasar_penilaian');
+        $this->db->select('id_poin_skp, bobot, nama_prestasi, nama_tingkatan, jenis_kegiatan, nama_bidang, tgl_pelaksanaan, nama_dasar_penilaian,nama_kegiatan');
         $this->db->from('poin_skp');
         $this->db->where('poin_skp.validasi_prestasi', 1);
         $this->db->join('semua_prestasi', 'poin_skp.prestasiid_prestasi = semua_prestasi.id_semua_prestasi');
@@ -626,5 +611,16 @@ class API_skp extends CI_Controller
     {
         $json = file_get_contents('https://psik.feb.ub.ac.id/siruas-api/api/ruangan');
         echo $json;
+    }
+
+    public function cetakSkp(){
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->load->model('Model_mahasiswa', 'mahasiswa');
+        $nim = $this->input->get("nim");
+        $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
+        $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
+        $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($nim);
+        $data['poinskp'] = $this->poinskp->getPoinSkp($nim);
+        $this->load->view('mahasiswa/tampilan_transkrip_poin', $data);
     }
 }

@@ -65,7 +65,7 @@
                                             </td>
                                             <td>
                                                 Rp.<?= number_format($l['anggaran_kemahasiswaan'] - $l['dana_kegiatan'], 0, ',', '.');
-                                                        ?>
+                                                    ?>
                                             </td>
                                             <td>
                                                 <?php if ($l['jumlah_kegiatan']) : ?>
@@ -110,14 +110,14 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4>Latest Posts</h4>
+                        <h4>Daftar Anggaran Lembaga</h4>
                         <div class="card-header-action">
                             <a href="#" data-toggle="modal" data-target="#tambahAnggaran" data-id="" class="btn btn-icon icon-left btn-success float-right tambahAnggaran"><i class="fas fa-plus"></i>Tambah Anggaran Lembaga</a>
                         </div>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-3">
                         <div class="table-responsive">
-                            <table class="table table-striped mb-0">
+                            <table class="table table-striped mb-0" id="table-1">
                                 <thead>
                                     <tr>
                                         <th>Lembaga</th>
@@ -157,11 +157,11 @@
                             <table class="table table-striped" id="table-2">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Tahun Periode</th>
-                                        <th>Nama Lembaga</th>
-                                        <th>Status Rancangan</th>
-                                        <th>Action</th>
+                                        <th style="width: 5%;">No</th>
+                                        <th style="width: 10%;">Tahun Periode</th>
+                                        <th style="width: 12%;">Nama Lembaga</th>
+                                        <th style="width: 10%;">Status Rancangan</th>
+                                        <th style="width: 10%;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -179,13 +179,11 @@
                                                 <?php endif; ?>
                                             </td>
                                             <td>
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=1' ?>" class="btn btn-success"><i class="fas fa-check"></i> </a>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=0' ?>" class="btn btn-danger"><i class="fas fa-times"></i> </a>
-                                                    </div>
+                                                <div class="btn-group">
+
+                                                    <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=1' ?>" class="btn btn-sm btn-success"><i class="fas fa-check"></i> </a>
+
+                                                    <a href="<?= base_url('Kemahasiswaan/pembukaanRancanganKegiatan/') . $l['id_lembaga'] . '?status=0' ?>" class="btn btn-sm btn-danger"><i class="fas fa-times"></i> </a>
 
                                                 </div>
                                             </td>
@@ -235,13 +233,12 @@
                     <div class="input-group">
                         <select class="custom-select" id="tahun" name="tahun_rancangan" required>
                             <option value="">Pilih tahun pengajuan proker...</option>
-                            <option value="2019">2019</option>
-                            <option value="2020">2020</option>
-                            <option value="2021">2021</option>
-                            <option value="2022">2022</option>
-                            <option value="2023">2023</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
+                            <?php $tahun = date('Y') - 2  ?>
+                            <?php for ($i = 0; $i < 10; $i++) : ?>
+                                <option value="<?= $tahun ?>"><?= $tahun ?></option>
+                                <?php $tahun++; ?>
+                            <?php endfor; ?>
+
                         </select>
                     </div>
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

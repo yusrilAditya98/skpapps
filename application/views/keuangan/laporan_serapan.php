@@ -32,7 +32,7 @@
                                 </form>
                             </div>
                             <div class="col-lg-8">
-                                <a target="_blank" href="<?= base_url('API_Skp/exportLaporanSerapan/') . $tahun_saat_ini ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
+                                <a target="_blank" href="<?= base_url('API_skp/exportLaporanSerapan/') . $tahun_saat_ini ?>" class="btn btn-success float-right"><i class="fas fa-file-excel mr-2 "></i>Export to excel</a>
                             </div>
                         </div>
                     </div>
@@ -79,7 +79,7 @@
                                                 <td class="text-left"><?= number_format($l[$i], 2, ',', '.'); ?></td>
                                             <?php endfor; ?>
                                             <td><?= number_format($l['dana_pagu'], 2, ',', '.');
-                                                    ?></td>
+                                                ?></td>
                                             <td><?= number_format($l['dana_terserap'], 2, ',', '.');  ?></td>
                                             <td><?= round($l['terserap_persen'], 2) ?></td>
                                             <td><?= number_format($l['dana_sisa'], 2, ',', '.');  ?></td>

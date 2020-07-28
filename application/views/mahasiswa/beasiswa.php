@@ -11,9 +11,6 @@
 				<div class="card">
 					<div class="card-header">
 						<h4>Daftar Pengajuan Beasiswa</h4>
-						<div class="card-header-action">
-							<a class="btn btn-success" href=""><i class="fas fa-plus mr-2"></i>Tambah Riwayat Beasiswa</a>
-						</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -142,7 +139,7 @@
 											</div>
 										</div>
 										<div class="action-button">
-											<button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+											<button onclick="return confirm('Apakah anda sudah yakin dengan data pengajuan beasiswa ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
 												Kirim <i class="fab fa-telegram-plane"></i></button>
 
 										</div>

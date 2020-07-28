@@ -9,21 +9,33 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
+
                     <div class="card-body">
-                    </div>
-                    <div class="card-body">
+                        <form class="m-t-20" action="<?= base_url('Export/exportPoinSkp') ?>" method="get">
+                            <span>Range Tanggal Pengajuan</span>
+                            <div class="row">
+                                <div class="col-lg-6 input-group mb-3">
+                                    <input type="date" name="tgl_pengajuan_start" id="tgl_pengajuan_start" class="form-control">
+                                    <input type="date" name="tgl_pengajuan_end" id="tgl_pengajuan_date" class="form-control">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Export</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
                         <div class="table-responsive">
-                            <table class="table table-striped" id="dataTabelPoinSkp">
+                            <table class="table table-striped table-bordered" id="dataTabelPoinSkp">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nim</th>
-                                        <th>Nama</th>
-                                        <th>Jurusan</th>
-                                        <th>Prodi</th>
-                                        <th>Poin SKP</th>
-                                        <th>Kategori</th>
-                                        <th>Action</th>
+                                        <th style="width: 10%;">No</th>
+                                        <th style="width: 10%;">Nim</th>
+                                        <th style="width: 40%;">Nama</th>
+                                        <th style="width: 10%;">Jurusan</th>
+                                        <th style="width: 10%;">Prodi</th>
+                                        <th style="width: 5%;">Poin SKP</th>
+                                        <th style="width: 10%;">Kategori</th>
+                                        <th style="width: 10%;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -49,7 +61,13 @@
                                             <?php else : ?>
                                                 <td> Kurang</td>
                                             <?php endif; ?>
-                                            <td><button class="btn btn-primary detail-SKP" data-toggle="modal" data-target=".modalDetailSKP" data-id="<?= $m['nim'] ?>"><i class="fas fa-eye"></i> detail</button></td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button class="btn btn-icon btn-primary detail-SKP" data-toggle="modal" data-target=".modalDetailSKP" data-id="<?= $m['nim'] ?>"><i class="fas fa-eye"></i></button>
+
+                                                    <a href="<?= base_url('Kemahasiswaan/cetakSkp?nim=') . $m['nim'] ?>" target="_blank" class="btn btn-icon btn-warning"><i class="fas fa-print"></i></a>
+                                                </div>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
@@ -100,6 +118,7 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center">No</th>
+                                                <th>Nama Kegiatan</th>
                                                 <th>Prestasi</th>
                                                 <th>Tingkatan</th>
                                                 <th>Jenis Kegiatan</th>

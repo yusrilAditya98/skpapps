@@ -29,13 +29,12 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="periode">Periode</label>
-                                                <select class="form-control" id="periode" name="periode">
-                                                    <option value="" selected hidden>Pilih Periode</option>
-                                                    <option value="2020">2020</option>
-                                                    <option value="2021">2021</option>
-                                                    <option value="2022">2022</option>
-                                                </select>
+                                                <input input type="text" class="form-control" id="periode" name="periode" value="<?= $tahun ?>" readonly>
                                             </div>
+                                            <!-- <div class="form-group">
+                                                <label for="buktiPengajuan">Bukti Pengajuan</label>
+                                                <input type="file" class="form-control" id="buktiPengajuan" name="buktiPengajuan" required>
+                                            </div> -->
                                         </div>
                                         <div class="bagian-acara mt-5">
                                             <h5>Anggota Lembaga</h5>
@@ -44,7 +43,7 @@
                                                     <div class="form-group row mb-4">
                                                         <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Jumlah Anggota</label>
                                                         <div class="col-lg-2">
-                                                            <input type="number" class="form-control jumlahAnggota" name="jumlahAnggota" id="jumlahAnggota" readonly>
+                                                            <input type="number" class="form-control jumlahAnggota" name="jumlahAnggota" id="jumlahAnggota" value="<?= count($anggota)?>" readonly>
                                                         </div>
                                                     </div>
 
@@ -66,6 +65,19 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody class="daftar-mhs">
+                                                    <?php $i= 1; foreach ($anggota as $a) :?>
+                                                    <tr class="d-m" id="data-<?= $a['nim'] ?>">
+                                                        <td class="nomorid-data-<?= $a['nim'] ?>"><?= ($i++)?></td>
+                                                        <td><?= $a['nim'] ?>
+                                                            <input  type="hidden" name="nim_<?= $a['nim'] ?>" value="<?= $a['nim'] ?>" id="nim_<?= $a['nim'] ?>" >
+                                                        </td>
+                                                        <td><?= $a['nama'] ?></td>
+                                                        <td><?= $a['nama_prestasi'] ?>
+                                                            <input  type="hidden" name="prestasi_<?= $a['nim'] ?>" value="<?= $a['id_sm_prestasi'] ?>" id="nim_<?= $a['nim'] ?>" >
+                                                        </td>
+                                                        <td> <button onclick="myFunction(<?= $a['nim'] ?>)" type="button" data-id="<?= $a['nim'] ?>" class="btn btn-danger hps-mhs-1"><i class="fas fa-trash-alt"></i></td>
+                                                    </tr>
+                                                    <?php endforeach;?>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -74,7 +86,7 @@
                                             <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Ajukan Rancangan Anggota <i class="fas fa-plus"></i></button>
 
-                                            <a href="<?= base_url('Kegiatan/rancanganAnggota') ?>" style="float:right" class="btn btn-icon btn-secondary">
+                                            <a href="<?= base_url('Kegiatan/rancanganAnggota?tahun='.$tahun) ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>
                                         </div>
                                     </form>

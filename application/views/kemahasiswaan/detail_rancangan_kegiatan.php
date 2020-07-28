@@ -15,7 +15,7 @@
                     <div class="card-body">
 
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-1">
+                            <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -52,18 +52,14 @@
 
                                             <td>
                                                 <?php if ($r['status_rancangan'] == 2 || $r['status_rancangan'] == 3) : ?>
-                                                    <div class="row">
-                                                        <div class="col-lg-4">
-                                                            <form action="<?= base_url('Kemahasiswaan/validasiRancanganProker/') . $r['id_daftar_rancangan'] ?>" method="post">
-                                                                <input type="hidden" name="id_lembaga" value="<?= $this->input->get('id_lembaga'); ?>">
-                                                                <input type="hidden" name="tahun" value="<?= $this->input->get('tahun'); ?>">
-                                                                <input type="hidden" name="valid" value="1">
-                                                                <button type="submit" class="btn btn-success"><i class="fas fa-check"></i></button>
-                                                            </form>
-                                                        </div>
-                                                        <div class="col-lg-4">
-                                                            <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="<?= $r['id_daftar_rancangan'] ?>" class="btn btn-primary btn-sm revisi-rancangan-proker"><i class="fas fa-edit"></i></button>
-                                                        </div>
+                                                    <div class="btn-group">
+                                                        <form action="<?= base_url('Kemahasiswaan/validasiRancanganProker/') . $r['id_daftar_rancangan'] ?>" method="post">
+                                                            <input type="hidden" name="id_lembaga" value="<?= $this->input->get('id_lembaga'); ?>">
+                                                            <input type="hidden" name="tahun" value="<?= $this->input->get('tahun'); ?>">
+                                                            <input type="hidden" name="valid" value="1">
+                                                            <button type="submit" class="btn btn-success btn-sm "><i class="fas fa-check"></i></button>
+                                                        </form>
+                                                        <button type="button" data-toggle="modal" data-target="#revisi-rancangan" data-id="<?= $r['id_daftar_rancangan'] ?>" class="btn btn-primary btn-sm revisi-rancangan-proker"><i class="fas fa-edit"></i></button>
                                                     </div>
                                                 <?php elseif ($r['status_rancangan'] == 0) : ?>
                                                     Belum Bisa Validasi
@@ -80,6 +76,33 @@
 
                                 </tbody>
                             </table>
+                            <a type="button" href="<?= base_url('Kemahasiswaan/daftarRancangan') ?>" class="btn btn-secondary float-right"> <i class="fas fa-"></i> Kembali</a>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td><b>Keterangan</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan Rancangan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
                         </div>
 
                     </div>

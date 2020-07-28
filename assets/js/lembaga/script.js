@@ -343,14 +343,48 @@ function cekJumlahAnggota() {
 }
 
 function myFunction(nim) {
+	// console.log(nim);
+	// let id = $(this).data('id')
+	let id_lembaga = $('#id_lembaga').val()
+	let periode = $('#periode').val()
+	// console.log(id_lembaga)
+	// console.log(periode)
+    $.ajax({
+        url: segments[0] + '/' + segments[3] + '/Kegiatan/hapusAnggotaApi?nim=' + nim + '&id_lembaga='+id_lembaga+'&periode='+periode,
+        type: 'get',
+        success: function(data){
+			console.log(data);
+            // $.ajax({
+            //     url: 'http://localhost:8080/logbookApi/'+no_induk,
+            //     type: 'get',
+            //     dataType: 'json',
+            //     success: function(dataA){
+            //         var j = 1;
+            //         console.log(dataA)
+            //         $('#table-tugas-utama').html('');
+            //         dataA['tugas_hari_ini'].forEach(function(pp) {
+            //             $('#table-tugas-utama').append(`
+            //             <tr class="row`+pp['id_tugas']+`">
+            //                 <td>`+(j++)+`</td>
+            //                 <td>`+pp['nama_tugas']+`</td>
+            //                 <td>`+pp['jumlah_tugas']+`</td>
+            //             </tr>
+            //             `);
+            //             addRow(pp['id_tugas'], pp['status_tugas'], pp['catatan'], pp['bukti'], no_induk);
+            //         })
+            //     }
+            // });
+        }
+    });
+
 	$('.d-m#data-' + nim + '').remove()
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
-	$('.d-m').each(function(i, obj) {
-		var value = i+1;
+	$('.d-m').each(function (i, obj) {
+		var value = i + 1;
 		var temp_id = obj['attributes']['id']['value'];
-		$('.nomorid-' + temp_id + '').html(""+value+"");
-	 });
+		$('.nomorid-' + temp_id + '').html("" + value + "");
+	});
 }
 
 $('.hps-mhs').on('click', function () {
@@ -359,16 +393,16 @@ $('.hps-mhs').on('click', function () {
 	$('.d-m#data-' + nim + '').remove()
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
-	$('.d-m').each(function(i, obj) {
-		var value = i+1;
+	$('.d-m').each(function (i, obj) {
+		var value = i + 1;
 		var temp_id = obj['attributes']['id']['value'];
-		$('.nomorid-' + temp_id + '').html(""+value+"");
-	 });
+		$('.nomorid-' + temp_id + '').html("" + value + "");
+	});
 })
 // Anggota Lembaga
 $('.daftarMahasiswaLembaga').on("click", function () {
 	let tingkatKegiatan = $('#jenis_lembaga').val();
-	// console.log(tingkatKegiatan);
+	//console.log(tingkatKegiatan);
 	cek = tingkatKegiatan;
 	$('.dataTables_wrapper').remove()
 	$('.partisipasi').remove()
@@ -520,13 +554,13 @@ $('.submit-mhs-lembaga').on('click', function () {
 function aktifSemua() {
 	let id_pengajuan = $('#pengajuanId').val();
 	let tahun = $('#tahun').val();
-	// console.log(id_pengajuan);
+	console.log(id_pengajuan);
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/daftarAnggotaLembaga?id=' + id_pengajuan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			// console.log(data);
+			console.log(data);
 			for (let i = 0; i < data.length; i++) {
 				var a = 'keaktifan_' + data[i]['nim'];
 				$("input[name='" + a + "'][value='1']").prop("checked", true);

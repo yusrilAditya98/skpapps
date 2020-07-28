@@ -25,8 +25,6 @@
                         <i class="fa fa-check text-success" aria-hidden="true"></i>
                       <?php elseif ($p['validasi_prestasi'] == 2) : ?>
                         <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi" data-id="<?= $p['id_poin_skp'] ?>"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
-                      <?php elseif ($p['validasi_prestasi'] == 3) : ?>
-                        <div class="badge badge-primary">Menunggu Validasi Peserta</div>
                       <?php endif; ?>
                     </h5>
                     <p>Kegiatan <?= $p['nama_kegiatan']; ?> dilaksanakan pada tanggal <?= date("d-m-Y", strtotime($p['tgl_pelaksanaan'])) ?> yang bertempat di <?= $p['tempat_pelaksanaan'] ?></p>

@@ -216,6 +216,14 @@ class Model_kegiatan extends CI_Model
         return $data;
     }
 
+    public function getDaftarTahunKegiatan()
+    {
+        $this->db->select('periode');
+        $this->db->from('kegiatan');
+        $this->db->group_by('periode');
+        return $this->db->get()->result_array();
+    }
+
     public function getDaftarProposalKegiatan()
     {
         $this->db->select('*');

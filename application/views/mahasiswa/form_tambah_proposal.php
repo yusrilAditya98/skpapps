@@ -200,7 +200,7 @@
                                             </div>
                                         </div>
                                         <div class="action-button">
-                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3 confirm-submit">
+                                            <button onclick="return confirm('Apakah anda sudah yakin ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3 confirm-submit">
                                                 Kirim Proposal <i class="fas fa-plus"></i></button>
 
                                             <a href="<?= base_url('Mahasiswa/pengajuanProposal') ?>" style="float:right" class="btn btn-icon btn-secondary">

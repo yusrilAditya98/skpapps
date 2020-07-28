@@ -1,0 +1,24 @@
+[Catatan Revisi SKPAPPS]
+
+1. Tambah Kolom nilai_bobot di tabel poin_skp default 1 tipe float
+2. Edit kolom status_keaktifan di tabel daftar_anggota_lembaga tipe menjadi float default 1
+3. Edit view lembaga/anggota (seleksi tahun di tombol rancangan anggota)
+4. Edit controller kegiatan/anggota (sql get anggota lembaga - spesifik lembaga tertentu)
+5. Edit view lembaga/rancanganAnggota (dikasih tahun di tombol Rancangan Anggota Tambah Anggota, tombol buka tutup akses, ajukan validasi, action hapus)
+6. Edit view lembaga/anggota (dikasih tahun di tombol Rancangan Anggota, penilaian keaktifan)
+7. Edit view lembaga/form_tambah_anggota
+8. Edit controller kegiatan/tambahRancanganAnggota (seleksi tambah sesuai tahun periode)
+9. Edit controller kegiatan/hapusRancanganAnggota (seleksi tambah sesuai tahun periode)
+10. Edit controller kegiatan/ajukanRancanganAnggota (seleksi tambah sesuai tahun periode)
+11. Edit controller kegiatan/ajukanValidasiAnggota (seleksi tambah sesuai tahun periode)
+12. Edit controller kegiatan/bukaRancanganAnggota (seleksi tambah sesuai tahun periode)
+13. Edit controller API_Skp tambah method cetakSkp (Referensi cetak dan QRCode)
+14. Edit controller kemahasiswaan/cetakSkp dan Mahasiswa/cetakSkp (QRCode)
+15. Edit controller kemahasiswaan/validasiKeaktifanAnggota
+16. Edit view mahasiswa/tampilan_transkrip_poin (QRCode dan nilai bobot)
+17. Edit view mahasiswa/tampilan_transkrip_poin (QRCode dan nilai bobot)
+18. Edit view kemahasiswaan/daftar_lembaga modal detail validasi keaktifan
+19. Edit js kemahasiswaan/script validasiAnggotaFix, keaktifanAnggota dan keaktifanAnggotaFix
+20. Tambah kolom bukti_pengajuan di tabel pengajuan_anggota_lembaga tipe varchar 500
+
+Bukti Rancangan Anggota belum - Script upload code igniter selalu error

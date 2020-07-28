@@ -306,7 +306,7 @@
                                                 <th>NIM</th>
                                                 <th>Posisi</th>
                                                 <th>Bobot</th>
-                                                <th>Keaktifan</th>
+                                                <th>Nilai Keaktifan</th>
                                             </tr>
                                         </thead>
                                         <tbody class="body-keaktifan-anggota-fix">

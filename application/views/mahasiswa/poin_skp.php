@@ -102,7 +102,7 @@
                                 <thead>
                                     <tr>
                                         <th scope="col">No</th>
-                                        <th scope="col">Tanggal Pelaksanaan</th>
+                                        <th scope="col">Tanggal Pengajuan</th>
                                         <th scope="col" style="width:17rem;">Nama Kegiatan</th>
                                         <th scope="col">Tingkat</th>
                                         <th scope="col">Bobot SKP</th>
@@ -115,12 +115,12 @@
                                     foreach ($poinskp as $p) : ?>
                                         <tr>
                                             <td scope="row"><?= $i++ ?></td>
-                                            <td><?= date("d-m-Y", strtotime($p['tgl_pelaksanaan'])) ?></td>
+                                            <td><?= date("d-m-Y", strtotime($p['tgl_pengajuan'])) ?></td>
                                             <td> <a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" class="detailSkp"><?= $p['nama_kegiatan'] ?></a> </td>
                                             <td><?= $p['nama_tingkatan'] ?><br><small><?= $p['nama_prestasi'] ?></small></td>
                                             <td><?= $p['bobot'] ?></td>
                                             <td>
-                                                <?php if ($p['validasi_prestasi'] == 0 || $p['validasi_prestasi'] == 3) : ?>
+                                                <?php if ($p['validasi_prestasi'] == 0) : ?>
                                                     <div class="badge badge-primary">Proses</div>
                                                 <?php elseif ($p['validasi_prestasi'] == 1) : ?>
                                                     <i class="fa fa-check text-success" aria-hidden="true"></i>
@@ -133,10 +133,6 @@
                                                     <?php if ($p['validasi_prestasi'] == 1) : ?>
                                                         <div class="col-lg-12">
                                                             <span class="text-success">Disetujui</span>
-                                                        </div>
-                                                    <?php elseif ($p['validasi_prestasi'] == 3) : ?>
-                                                        <div class="col-lg-12">
-                                                            <span class="text-primary">Menunggu Validasi Peserta</span>
                                                         </div>
                                                     <?php else : ?>
                                                         <div class="col-sm-4">

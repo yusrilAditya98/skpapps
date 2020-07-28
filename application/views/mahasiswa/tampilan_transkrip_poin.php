@@ -45,7 +45,7 @@
 		</div>
 	</div>
 	<div class="judul text-center mt-3">
-		<h5>DRAFT TRANSKRIP NON AKADEMIK</h5>
+		<h5>TRANSKRIP NON AKADEMIK</h5>
 	</div>
 	<div class="row mt-3">
 		<div class="col-6">
@@ -113,7 +113,7 @@
 											<td style="width: 16.66%"><?= $p['nama_prestasi'] ?></td>
 											<td style="width: 16.66%"><?= date("d-m-Y", strtotime($p['tgl_pelaksanaan']))  ?></td>
 											<td style="width: 16.66%"><?= $p['nama_tingkatan'] ?></td>
-											<td style="width: 16.66%"><?= $p['bobot'] ?></td>
+											<td style="width: 16.66%"><?= intval($p['bobot']) * floatval($p['nilai_bobot']) ?></td>
 										</tr>
 									<?php endif; ?>
 								<?php endif; ?>
@@ -165,7 +165,8 @@
 
 			<?= date('d M Y') ?> <br>
 			Mahasiswa,<br>
-			<p style="margin-top:100px;"><?= $mahasiswa[0]['nama'] ?> <br> NIM. <?= $mahasiswa[0]['nim'] ?></p>
+			<img height="200" src="<?= base_url('assets/qrcode/bukti_skp_'.$mahasiswa[0]['nim'].'.png')?>" alt="qrcode">
+			<p style="margin-top:10px;"><?= $mahasiswa[0]['nama'] ?> <br> NIM. <?= $mahasiswa[0]['nim'] ?></p>
 		</div>
 
 	</div>

@@ -2,7 +2,7 @@ var url = $(location).attr("href");
 var segments = url.split("/");
 
 $.ajax({
-	url: segments[0] + '/' + segments[3] + '/mahasiswa/bidangKegiatan',
+	url: segments[0] + '/' + segments[3] + '/Mahasiswa/bidangKegiatan',
 	method: 'get',
 	dataType: 'json',
 	success: function (data) {
@@ -22,7 +22,7 @@ $.ajax({
 		$('.jenis').remove();
 		if (bidangKegiatan) {
 			$.ajax({
-				url: segments[0] + '/' + segments[3] + '/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+				url: segments[0] + '/' + segments[3] + '/Mahasiswa/jenisKegiatan/' + bidangKegiatan,
 				method: 'get',
 				dataType: 'json',
 				success: function (data) {
@@ -42,7 +42,7 @@ $.ajax({
 					let jenisKegiatan = $('.jenisKegiatan').val()
 					$('.tingkat').remove();
 					$.ajax({
-						url: segments[0] + '/' + segments[3] + '/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+						url: segments[0] + '/' + segments[3] + '/Mahasiswa/tingkatKegiatan/' + jenisKegiatan,
 						method: 'get',
 						dataType: 'json',
 						success: function (data) {
@@ -61,7 +61,7 @@ $.ajax({
 							let tingkatKegiatan = $('.tingkatKegiatan').val()
 							$('.partisipasi').remove();
 							$.ajax({
-								url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+								url: segments[0] + '/' + segments[3] + '/Mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 								method: 'get',
 								dataType: 'json',
 								success: function (data) {
@@ -90,7 +90,7 @@ $('.bidangKegiatan').on("change", function () {
 	let bidangKegiatan = $('.bidangKegiatan').val()
 	$('.jenis').remove();
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/jenisKegiatan/' + bidangKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -112,7 +112,7 @@ $('.jenisKegiatan').on("change", function () {
 	let jenisKegiatan = $('.jenisKegiatan').val()
 	$('.tingkat').remove();
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/tingkatKegiatan/' + jenisKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -142,7 +142,7 @@ $('#tingkatKegiatan').on("change", function () {
 	$('.d-m').remove()
 
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -250,7 +250,7 @@ $('#partisipasiKegiatan').on("change", function () {
 	let partisipasiKegiatan = $('.partisipasiKegiatan').val()
 	$('#bobotKegiatan').val(0);
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/bobotkegiatan/' + partisipasiKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/bobotkegiatan/' + partisipasiKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -263,7 +263,7 @@ $('.detailSkp').on("click", function () {
 	let id_skp = $(this).data('id');
 
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -285,7 +285,7 @@ $('.detailSkp').on("click", function () {
 $('.d-revisi').on('click', function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -384,5 +384,3 @@ $('#danaKegiatan').keyup(function () {
 	let nominal = $('#danaKegiatan').val() * 0.7
 	$('#danaKegiatanDiterima').val(nominal)
 })
-
-

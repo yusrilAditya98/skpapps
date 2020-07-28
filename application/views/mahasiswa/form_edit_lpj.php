@@ -124,8 +124,8 @@
                                                         </thead>
                                                         <tbody class="daftar-mhs">
                                                             <?php $i = 1;
-                                                                $j = 0;
-                                                                foreach ($anggota as $a) : ?>
+                                                            $j = 0;
+                                                            foreach ($anggota as $a) : ?>
                                                                 <tr>
                                                                     <td><?= $i++ ?></td>
                                                                     <td><?= $a['nim'] ?></td>
@@ -152,8 +152,8 @@
                                                                     </td>
                                                                 </tr>
                                                             <?php
-                                                                    $j++;
-                                                                endforeach; ?>
+                                                                $j++;
+                                                            endforeach; ?>
 
                                                         </tbody>
                                                     </table>
@@ -165,19 +165,19 @@
                                                 <h5>Informasi Upload</h5>
 
                                                 <div class="form-group">
-                                                    <label for="fileLpj">Upload File Proposal <a class="btn btn-primary" href="<?= base_url('file_bukti/lpj/') . $kegiatan['lpj_kegiatan'] ?>" target="_blank">Lihat</a></label>
+                                                    <label for="fileLpj">Upload File LPJ <a class="btn btn-primary" href="<?= base_url('file_bukti/lpj/') . $kegiatan['lpj_kegiatan'] ?>" target="_blank">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" id="fileLpj" name="fileLpj">
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                         Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                         Mega,
-                                                        Format File : Tahun_Nama_Proposal Contoh :
-                                                        2019_AdityaYusrilFikri_Proposal. Format Proposal
+                                                        Format File : Tahun_Nama_LPJ Contoh :
+                                                        2019_AdityaYusrilFikri_LPJ. Format LPJ
                                                         <span><a href="#">Disini</a></span></small>
 
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="beritaLpj">Upload Berita Kegiatan
-                                                        Proposal - <a class="btn btn-primary" href="<?= base_url('file_bukti/berita_lpj/') . $kegiatan['berita_pelaporan'] ?>" target="_blank">Lihat</a></label>
+                                                        LPJ - <a class="btn btn-primary" href="<?= base_url('file_bukti/berita_lpj/') . $kegiatan['berita_pelaporan'] ?>" target="_blank">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="beritaLpj" id="beritaLpj">
 
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan

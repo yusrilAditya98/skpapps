@@ -18,7 +18,7 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 	let id = $(this).data('id');
 	// console.log(id);
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/akademik/get_kegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/Akademik/get_kegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -34,7 +34,7 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 
 			$('.tabel-peserta').html('');
 			$('.tabel-peserta').html(`<div class="table-responsive">
-			<table class="table table-striped" id="table-1">
+			<table class="table table-striped" id="table-2">
 				<thead>
 					<tr>
 						<th class="text-center">No</th>
@@ -73,12 +73,12 @@ $('#table-kegiatan').on('click', '.edit-kegiatan', function () {
 	let id = $(this).data('id');
 	// console.log(id);
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/akademik/get_kegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/Akademik/get_kegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
 			console.log(data);
-			var link_a = window.location.origin + '/' + segments[3] + '/akademik/editKegiatan/' + id;
+			var link_a = window.location.origin + '/' + segments[3] + '/Akademik/editKegiatan/' + id;
 			$('form').attr('action', link_a);
 			$('#nama_kegiatan').val(data['nama_event']);
 			$('#tanggal_kegiatan').val(data['tanggal_format']);
@@ -105,20 +105,18 @@ $('#table-kegiatan').on('click', '.hapus-kegiatan', function () {
 		confirmButtonText: 'Hapus'
 	}).then(function (result) {
 		if (result.value) {
-			window.location = window.location.origin + "/' + segments[3] + '/akademik/hapusKegiatan/" + id_kuliah_tamu;
+			window.location = window.location.origin + "/" + segments[3] + "/Akademik/hapusKegiatan/" + id_kuliah_tamu;
 		}
 	})
 });
 
 $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 	let id = $(this).data('id');
-	console.log(id);
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/akademik/get_kegiatan/' + id,
+		url: segments[0] + '/' + segments[3] + '/Akademik/get_kegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
 			var link_image = window.location.origin + '/' + segments[3] + '/assets/qrcode/kuliah_tamu_' + data['kode_qr'] + '.png';
 			$('.kode_qr_validasi').attr('src', link_image);
 			$('.judul_kegiatan_validasi').html(data['nama_event']);
@@ -157,6 +155,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 					<input type="hidden" id="nama_kegiatan" name="nama_kegiatan" value="` + data['nama_event'] + `">
 					<input type="hidden" id="tgl_pelaksanaan" name="tgl_pelaksanaan" value="` + data['tanggal_format'] + `">
 					<input type="hidden" id="tempat_pelaksanaan" name="tempat_pelaksanaan" value="` + data['lokasi'] + `">
+					<input type="hidden" id="kode_qr" name="kode_qr" value="kuliah_tamu_` + data['kode_qr'] + `.png">
 				</tr>`)
 				})
 			} else {

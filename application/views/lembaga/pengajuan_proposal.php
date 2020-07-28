@@ -132,6 +132,31 @@
                                     </tr>
                                 </tfoot>
                             </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td><b>Keterangan</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

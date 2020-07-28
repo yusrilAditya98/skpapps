@@ -10,7 +10,8 @@ class Keuangan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') == 6 || $this->session->userdata('user_profil_kode') == 9) { } else {
+        if ($this->session->userdata('user_profil_kode') == 6 || $this->session->userdata('user_profil_kode') == 9) {
+        } else {
             redirect('auth/blocked');
         }
     }
@@ -187,7 +188,7 @@ class Keuangan extends CI_Controller
         $kegiatan = $this->db->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
         $i = 0;
         foreach ($anggota as $a) {
-            $this->dataskp[$i++] = [
+            $dataskp[$i++] = [
                 'nim' => $a['nim'],
                 'nama_kegiatan' => $kegiatan['nama_kegiatan'],
                 'validasi_prestasi' => 1,
@@ -199,7 +200,7 @@ class Keuangan extends CI_Controller
                 'prestasiid_prestasi' => $a['id_prestasi'],
             ];
         }
-        $this->kemahasiswaan->insertPoinSkp($this->dataskp);
+        $this->kemahasiswaan->insertPoinSkp($dataskp);
         foreach ($anggota as $a) {
             $this->_update($a['nim']);
         }

@@ -15,7 +15,11 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-lg-12">
-                                <a href="<?= base_url('Kegiatan/rancanganAnggota') ?>" class="btn btn-icon btn-primary float-right">
+                                <?php if($this->input->get('tahun')){?>
+                                <a href="<?= base_url('Kegiatan/rancanganAnggota?tahun='.$this->input->get('tahun')) ?>" class="btn btn-icon btn-primary float-right">
+                                <?php }else{?>
+                                <a href="<?= base_url('Kegiatan/rancanganAnggota?tahun='.$tahun) ?>" class="btn btn-icon btn-primary float-right">
+                                <?php }?>
                                     Rancangan Anggota</a>
                             </div>
                         </div>
@@ -57,7 +61,7 @@
                                 </form>
                             </div>
                         </div>
-                        <form action="<?= base_url('Kegiatan/laporanKeaktifanAnggota/' . $pengajuan['id']) ?>" method="post">
+                        <form action="<?= base_url('Kegiatan/laporanKeaktifanAnggota/' . $pengajuan['id'].'?tahun='.$tahun) ?>" method="post">
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -80,8 +84,8 @@
                                                     <td><?= $a['nama_prestasi'] ?></td>
                                                     <?php if ($pengajuan['status_keaktifan'] == 0) : ?>
                                                         <td>
-                                                            <label><input type="radio" name="keaktifan_<?= $a['nim'] ?>" value="1">Aktif</label>
-                                                            <label><input type="radio" name="keaktifan_<?= $a['nim'] ?>" value="2">Tidak Aktif</label>
+                                                            <input class="form-control" type="number" name="keaktifan_<?= $a['nim'] ?>" placeholder="Masukkan nilai..." step="any" min="0" required>
+                                                            
                                                         </td>
                                                     <?php elseif ($a['status_aktif'] == 1 && $pengajuan['status_keaktifan'] == 1) : ?>
                                                         <td class="text-success">Aktif</td>
@@ -92,6 +96,17 @@
                                                     <?php endif; ?>
                                                 </tr>
                                             <?php endforeach; ?>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <?php if ($pengajuan['status_keaktifan'] == 0) : ?>
+                                                        <td>
+                                                            <small class="text-danger">Range nilai dari 0.0 - 1.0</small>
+                                                        </td>
+                                                    <?php endif; ?>
+                                                </tr>
                                         <?php else : ?>
                                             <tr>
                                                 <td colspan="5" class="text-center">
@@ -103,7 +118,7 @@
                                 </table>
                                 <?php if ($pengajuan['status_validasi'] == 1 && $pengajuan['status_keaktifan'] == 0) : ?>
                                     <button type="submit" class="btn btn-icon btn-success float-right">Ajukan Laporan Keaktifan Anggota</button>
-                                    <a href="#" class="btn btn-info float-right mr-3" onclick="aktifSemua()">Aktif Semua</a>
+                                    <!-- <a href="#" class="btn btn-info float-right mr-3" onclick="aktifSemua()">Aktif Semua</a> -->
                                     <input type="hidden" value="<?= $pengajuan['id'] ?>" id="pengajuanId">
                                 <?php endif; ?>
                             </div>

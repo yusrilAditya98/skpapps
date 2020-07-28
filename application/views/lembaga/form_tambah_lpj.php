@@ -165,8 +165,8 @@
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                     Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                     Mega,
-                                                    Format File : Tahun_Nama_Proposal Contoh :
-                                                    2019_AdityaYusrilFikri_Proposal. Format Proposal
+                                                    Format File : Tahun_Nama_LPJ Contoh :
+                                                    2019_AdityaYusrilFikri_LPJ. Format LPJ
                                                     <span><a href="#">Disini</a></span></small>
 
                                             </div>
@@ -210,7 +210,7 @@
                                             </div>
                                         </div>
                                         <div class="action-button">
-                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+                                            <button onclick="return confirm('Apakah anda sudah yakin ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Kirim Lpj <i class="fas fa-plus"></i></button>
                                             <a href="<?= base_url('Kegiatan/pengajuanLpj') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>
