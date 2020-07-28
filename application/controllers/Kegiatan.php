@@ -1165,6 +1165,7 @@ class Kegiatan extends CI_Controller
         $this->db->order_by('id_sm_prestasi ASC');
         $data['anggota'] = $this->db->get()->result_array();
 
+        // var_dump($data);die;
         // Update jumlah anggota
         // $this->db->where('id_lembaga', $this->session->userdata('username'));
         // $this->db->update('lembaga', ['jumlah_anggota' => count($data['anggota'])]);

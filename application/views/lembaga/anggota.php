@@ -25,6 +25,11 @@
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-8">
+                                <?php if($pengajuan == null){?>
+                                    <div class="alert alert-light" role="alert">
+                                        Anggota Periode Lembaga <?= $tahun ?> Belum ada, Silahkan cek menu Rancangan Anggota
+                                    </div>
+                                <?php }else{?>
                                 <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_keaktifan'] == 0) : ?>
                                     <div class="alert alert-light" role="alert">
                                         Anggota Periode Lembaga <?= $tahun ?> Belum ada, Silahkan cek menu Rancangan Anggota
@@ -42,6 +47,7 @@
                                         Anggota Lembaga Periode <?= $tahun ?>
                                     </div>
                                 <?php endif; ?>
+                                <?php }?>
                             </div>
                             <div class="col-lg-4">
                                 <form action="<?= base_url('Kegiatan/anggota') ?>" method="get">
@@ -82,10 +88,12 @@
                                                     <td><?= $a['nama'] ?></td>
                                                     <td><?= $a['nim'] ?></td>
                                                     <td><?= $a['nama_prestasi'] ?></td>
+                                                    <?php if($pengajuan == null){?>
+                                                    <td></td>
+                                                    <?php }else{?>
                                                     <?php if ($pengajuan['status_keaktifan'] == 0) : ?>
                                                         <td>
                                                             <input class="form-control" type="number" name="keaktifan_<?= $a['nim'] ?>" placeholder="Masukkan nilai..." step="any" min="0" required>
-                                                            
                                                         </td>
                                                     <?php elseif ($a['status_aktif'] == 1 && $pengajuan['status_keaktifan'] == 1) : ?>
                                                         <td class="text-success">Aktif</td>
@@ -94,6 +102,7 @@
                                                     <?php elseif ($pengajuan['status_keaktifan'] == 2) : ?>
                                                         <td class="text-primary">Proses</td>
                                                     <?php endif; ?>
+                                                    <?php }?>
                                                 </tr>
                                             <?php endforeach; ?>
                                                 <tr>
@@ -101,11 +110,15 @@
                                                     <td></td>
                                                     <td></td>
                                                     <td></td>
+                                                    <?php if($pengajuan == null){?>
+                                                    <td></td>
+                                                    <?php }else{?>
                                                     <?php if ($pengajuan['status_keaktifan'] == 0) : ?>
                                                         <td>
                                                             <small class="text-danger">Range nilai dari 0.0 - 1.0</small>
                                                         </td>
                                                     <?php endif; ?>
+                                                    <?php }?>
                                                 </tr>
                                         <?php else : ?>
                                             <tr>

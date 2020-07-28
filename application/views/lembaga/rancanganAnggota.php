@@ -15,6 +15,10 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-lg-12">
+                                <?php if ($pengajuan == null) { ?>
+                                    <a href="<?= base_url('Kegiatan/tambahRancanganAnggota?tahun='.$tahun) ?>" class="btn btn-icon btn-success float-right">
+                                        Tambah Anggota</a>
+                                <?php }else{?>
                                 <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
                                     <a href="<?= base_url('Kegiatan/tambahRancanganAnggota?tahun='.$tahun) ?>" class="btn btn-icon btn-success float-right">
                                         Tambah Anggota</a>
@@ -28,10 +32,16 @@
                                     <a href="<?= base_url('Kegiatan/bukaRancanganAnggota/' . $pengajuan['id'].'?tahun='.$tahun) ?>" class="btn btn-icon btn-primary float-right mr-3">
                                         Buka Akses Penambahan Anggota</a>
                                 <?php endif; ?>
+                                <?php }?>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-8">
+                            <?php if ($pengajuan == null) { ?>
+                                <div class="alert alert-light" role="alert">
+                                        Anggota Periode Lembaga <?= $tahun ?> Belum diajukan, Silahkan Tambah Anggota dan tutup akses penambahan anggota untuk mengajukan validasi
+                                </div>
+                            <?php } else { ?>
                                 <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
                                     <div class="alert alert-light" role="alert">
                                         Anggota Periode Lembaga <?= $tahun ?> Belum diajukan, Silahkan Tambah Anggota dan tutup akses penambahan anggota untuk mengajukan validasi
@@ -49,6 +59,7 @@
                                         Anggota Lembaga Periode <?= $tahun ?> sudah di validasi
                                     </div>
                                 <?php endif; ?>
+                            <?php } ?>
                             </div>
                             <div class="col-lg-4">
                                 <form action="<?= base_url('Kegiatan/rancanganAnggota') ?>" method="get">
