@@ -67,7 +67,11 @@
                                 </form>
                             </div>
                         </div>
+                        <?php if($pengajuan == null){?>
                         <form action="<?= base_url('Kegiatan/laporanKeaktifanAnggota/' . $pengajuan['id'].'?tahun='.$tahun) ?>" method="post">
+                        <?php }else{?>
+                        <form action="">
+                        <?php }?>
                             <div class="table-responsive">
                                 <table class="table table-bordered">
                                     <thead>
@@ -129,11 +133,13 @@
                                         <?php endif; ?>
                                     </tbody>
                                 </table>
-                                <?php if ($pengajuan['status_validasi'] == 1 && $pengajuan['status_keaktifan'] == 0) : ?>
-                                    <button type="submit" class="btn btn-icon btn-success float-right">Ajukan Laporan Keaktifan Anggota</button>
-                                    <!-- <a href="#" class="btn btn-info float-right mr-3" onclick="aktifSemua()">Aktif Semua</a> -->
-                                    <input type="hidden" value="<?= $pengajuan['id'] ?>" id="pengajuanId">
-                                <?php endif; ?>
+                                <?php if($pengajuan != null){?>
+                                    <?php if ($pengajuan['status_validasi'] == 1 && $pengajuan['status_keaktifan'] == 0) : ?>
+                                        <button type="submit" class="btn btn-icon btn-success float-right">Ajukan Laporan Keaktifan Anggota</button>
+                                        <!-- <a href="#" class="btn btn-info float-right mr-3" onclick="aktifSemua()">Aktif Semua</a> -->
+                                        <input type="hidden" value="<?= $pengajuan['id'] ?>" id="pengajuanId">
+                                    <?php endif; ?>
+                                <?php } ?>
                             </div>
                         </form>
                     </div>

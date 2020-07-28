@@ -88,12 +88,14 @@
                                         <th>NIM</th>
                                         <th>Posisi</th>
                                         <th>Bobot</th>
-                                        <?php if ($pengajuan['status_validasi'] == 1 || $pengajuan['status_pembukaan'] == 1) : ?>
-                                            <th>Status</th>
-                                        <?php endif; ?>
-                                        <?php if ($pengajuan['status_pembukaan'] == 0) : ?>
-                                            <th>Action</th>
-                                        <?php endif; ?>
+                                        <?php if($pengajuan != null){?>
+                                            <?php if ($pengajuan['status_validasi'] == 1 || $pengajuan['status_pembukaan'] == 1) : ?>
+                                                <th>Status</th>
+                                            <?php endif; ?>
+                                            <?php if ($pengajuan['status_pembukaan'] == 0) : ?>
+                                                <th>Action</th>
+                                            <?php endif; ?>
+                                        <?php }?>
                                     </tr>
                                 </thead>
                                 <tbody>
