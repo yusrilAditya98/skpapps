@@ -8,7 +8,7 @@
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
                     <div class="card-header">
-                        <h4>Daftar Beasiswa Mahasiwa</h4>
+                        <h4>Daftar Beasiswa Mahasiswa</h4>
                     </div>
                     <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
                     <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
@@ -74,20 +74,20 @@
                             </div>
                         </form>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-2">
+                            <table class="table table-striped table-bordered" id="table-2">
                                 <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nim</th>
-                                        <th>Nama Mahasiswa</th>
-                                        <th>Jenis Beasiswa</th>
-                                        <th>Tahun Menerima</th>
-                                        <th>Lama Menerima</th>
-                                        <th>Nominal</th>
-                                        <th>Bukti</th>
-                                        <th>Lampiran</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
+                                    <tr class="text-center">
+                                        <th class="align-middle">No</th>
+                                        <th class="align-middle">Nim</th>
+                                        <th class="align-middle">Nama Mahasiswa</th>
+                                        <th class="align-middle">Jenis Beasiswa</th>
+                                        <th class="align-middle">Tahun Menerima</th>
+                                        <th class="align-middle">Lama Menerima</th>
+                                        <th class="align-middle">Nominal</th>
+                                        <th class="align-middle">Bukti</th>
+                                        <th class="align-middle">Lampiran</th>
+                                        <th class="align-middle">Status</th>
+                                        <th class="align-middle">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -111,9 +111,11 @@
                                                     <div class="btn btn-warning circle-content d-revisi" data-toggle="modal" data-target="#infoRevisi"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></div>
                                                 <?php endif; ?></th>
                                             <td>
-                                                <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success"><i class="fas fa-check"></i></a>
-                                                <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger"><i class="fas fa-times"></i></a>
-                                                <a href="<?= base_url('Kemahasiswaan/editBeasiswa/') . $b['id_penerima'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                                <div class="btn-group">
+                                                    <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=1" class="btn btn-success">valid</a>
+                                                    <a href="<?= base_url('Kemahasiswaan/validasiBeasiswa/') . $b['id_penerima'] ?>?status=2" class="btn btn-danger">tolak</a>
+                                                    <a href="<?= base_url('Kemahasiswaan/editBeasiswa/') . $b['id_penerima'] ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                                </div>
 
                                             </td>
                                         </tr>

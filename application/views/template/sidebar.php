@@ -131,6 +131,26 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                             <?php endif; ?>
                         <?php endforeach; ?>
                     <?php endforeach; ?>
+
+                    <li class="menu-header mt-2">Download</li>
+                    <?php if ($this->session->userdata('user_profil_kode') == 1) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Mahasiswa/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 2) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Kegiatan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 3) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Kegiatan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Pengaturan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Pimpinan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 6) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Keuangan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 7) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Publikasi/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
+                        <li><a class="nav-link" href="<?= base_url("Akademik/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                    <?php endif ?>
+
             </ul>
         <?php elseif ($this->session->userdata("user_profil_kode") == 9) : ?>
             <ul class="sidebar-menu">

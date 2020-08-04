@@ -87,7 +87,7 @@ class Akademik extends CI_Controller
                 $this->db->update('kuliah_tamu');
             }
         }
-        $this->db->order_by('tanggal_event', 'ASC');
+        $this->db->order_by('tanggal_event', 'DESC');
         $data['kegiatan'] = $this->db->get('kuliah_tamu')->result_array();
         $this->template($data);
         $this->load->view("akademik/kegiatan", $data);
@@ -108,9 +108,9 @@ class Akademik extends CI_Controller
         $kegiatan['peserta_kegiatan'] = $this->db->get()->result_array();
         for ($i = 0; $i < count($kegiatan['peserta_kegiatan']); $i++) {
             if ($kegiatan['peserta_kegiatan'][$i]['kehadiran'] == "0") {
-                $kegiatan['peserta_kegiatan'][$i]['kehadiran_teks'] = "<p class='text-danger'>Tidak Hadir</p>";
+                $kegiatan['peserta_kegiatan'][$i]['kehadiran_teks'] = "Tidak Hadir";
             } else {
-                $kegiatan['peserta_kegiatan'][$i]['kehadiran_teks'] = "<p class='text-success'>Hadir</p>";
+                $kegiatan['peserta_kegiatan'][$i]['kehadiran_teks'] = "Hadir";
             }
         }
         Header('Content-type: application/json');
@@ -317,7 +317,7 @@ class Akademik extends CI_Controller
             $this->db->set('status_terlaksana', 1);
             $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             $this->db->update('kuliah_tamu');
-
+            $tgl_pengajuan = date('Y-m-d');
             for ($i = 0; $i < count($data); $i++) {
                 $this->db->set('kehadiran', 1);
                 $this->db->where('id_peserta_kuliah_tamu', intval($data[$i]));
@@ -328,9 +328,12 @@ class Akademik extends CI_Controller
                     'nim' => $mahasiswa['nim'],
                     'nama_kegiatan' => $this->input->post('nama_kegiatan'),
                     'validasi_prestasi' => 1,
+                    'tgl_pengajuan' => $tgl_pengajuan,
                     'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
+                    'tgl_selesai_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
                     'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
-                    'prestasiid_prestasi' => 115
+                    'prestasiid_prestasi' => 115,
+                    'file_bukti' => '../assets/qrcode/' . $this->input->post('kode_qr')
                 ];
                 // header('Content-type: application/json');
                 // echo json_encode($data_poin_skp);
@@ -367,5 +370,15 @@ class Akademik extends CI_Controller
 
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Status Keberlangsungan Berhasil diganti</div>');
         redirect('akademik/kegiatan');
+    }
+    public function daftarFileDownload()
+    {
+        $data['title'] = 'File Download';
+        $data['file_download'] = $this->db->get('file_download')->result_array();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_file_download");
+        $this->load->view("template/footer");
     }
 }

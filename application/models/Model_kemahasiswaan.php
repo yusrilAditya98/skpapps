@@ -1,4 +1,7 @@
 <?php
+
+use SebastianBergmann\Environment\Console;
+
 defined('BASEPATH') or exit('No direct script access allowed');
 class Model_kemahasiswaan extends CI_Model
 {
@@ -7,12 +10,95 @@ class Model_kemahasiswaan extends CI_Model
     private $kategori;
     private $data;
 
+    // start datatables
+    var $column_order = array(null, 'm.nim', 'm.nama', 'j.nama_jurusan', 'p.nama_prodi', 'm.total_poin_skp', null); //set column field database for datatable orderable
+    var $column_search = array('nim', 'm.nama'); //set column field database for datatable searchable
+    var $column_select = array('j.nama_jurusan', 'p.nama_prodi', 'm.total_poin_skp');
+    var $order = array('m.nim' => 'dsc'); // default order 
+
+    private function _get_datatables_query()
+    {
+        $this->db->select('m.nim,m.nama,m.total_poin_skp,p.nama_prodi,j.nama_jurusan');
+        $this->db->from('mahasiswa as m');
+        $this->db->join('prodi as p', 'm.kode_prodi=p.kode_prodi', 'left');
+        $this->db->join('jurusan as j', 'j.kode_jurusan=p.kode_jurusan', 'left');
+        $i = 0;
+        foreach ($this->column_search as $item) { // loop column 
+            if (@$_POST['search']['value']) { // if datatable send POST for search
+                if ($i === 0) { // first loop
+                    $this->db->group_start(); // open bracket. query Where with OR clause better with bracket. because maybe can combine with other WHERE with AND.
+                    $this->db->like($item, $_POST['search']['value']);
+                } else {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
+                if (count($this->column_search) - 1 == $i) //last loop
+                    $this->db->group_end(); //close bracket
+            }
+            $i++;
+        }
+
+        if ($this->input->post('jurusan')) {
+            $this->db->like('j.nama_jurusan', $this->input->post('jurusan'));
+        };
+        if ($this->input->post('prodi')) {
+            $this->db->like('p.nama_prodi', $this->input->post('prodi'));
+        };
+        if ($this->input->post('kategori') == 'dengan pujian') {
+            $this->db->where('m.total_poin_skp >', 300);
+        } elseif ($this->input->post('kategori') == 'sangat baik') {
+            $this->db->where('m.total_poin_skp <=', 300);
+            $this->db->where('m.total_poin_skp >=', 201);
+        } elseif ($this->input->post('kategori') == 'baik') {
+            $this->db->where('m.total_poin_skp <=', 200);
+            $this->db->where('m.total_poin_skp >=', 151);
+        } elseif ($this->input->post('kategori') == 'cukup') {
+            $this->db->where('m.total_poin_skp <=', 150);
+            $this->db->where('m.total_poin_skp >=', 100);
+        } elseif ($this->input->post('kategori') == 'kurang') {
+            $this->db->where('m.total_poin_skp <', 100);
+            $this->db->where('m.total_poin_skp >=', 0);
+        }
+
+        if (isset($_POST['order'])) { // here order processing
+            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } else if (isset($this->order)) {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+    }
+    function get_datatables()
+    {
+        $this->_get_datatables_query();
+        if (@$_POST['length'] != -1)
+            $this->db->limit(@$_POST['length'], @$_POST['start']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    function count_filtered()
+    {
+        $this->_get_datatables_query();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    function count_all()
+    {
+        $this->db->from('mahasiswa');
+        return $this->db->count_all_results();
+    }
+    // end datatables
+
+
+
+
+
+
+
     public function getTahunRancangan()
     {
-        $this->db->select('tahun_kegiatan');
-        $this->db->from('daftar_rancangan_kegiatan');
-        $this->db->group_by('tahun_kegiatan');
-        $this->db->order_by('tahun_kegiatan DESC');
+        $this->db->select('tahun_pengajuan as tahun_kegiatan');
+        $this->db->from('rekapan_kegiatan_lembaga');
+        $this->db->group_by('tahun_pengajuan');
+        $this->db->order_by('tahun_pengajuan DESC');
         return $this->db->get()->result_array();
     }
     public function insertPoinSkp($data)
@@ -181,6 +267,8 @@ class Model_kemahasiswaan extends CI_Model
         $this->db->join('jurusan as j', 'j.kode_jurusan=p.kode_jurusan', 'left');
         return $this->db->get()->result_array();
     }
+
+
     public function getDetailAnggaranLembaga($id_lembaga, $periode, $kondisi)
     {
         // // jumlah kegiatan belum terlaksana terlaksana

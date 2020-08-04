@@ -53,7 +53,9 @@ class Model_keuangan extends CI_Model
         $this->db->where('vk.status_validasi', 1);
         $this->db->where('vk.kategori', 'proposal');
         $this->db->where('k.status_selesai_proposal', 3);
-        $this->db->where('id_penanggung_jawab', $id_lembaga);
+
+        $this->db->where('id_lembaga', $id_lembaga);
+
         return $this->db->get()->result_array();
     }
     public function getAnggaranLembagaLpj($id_lembaga)
@@ -64,7 +66,7 @@ class Model_keuangan extends CI_Model
         $this->db->where('vk.jenis_validasi', 6);
         $this->db->where('vk.kategori', 'lpj');
         $this->db->where('k.status_selesai_lpj', 3);
-        $this->db->where('id_penanggung_jawab', $id_lembaga);
+        $this->db->where('id_lembaga', $id_lembaga);
         return $this->db->get()->result_array();
     }
 }

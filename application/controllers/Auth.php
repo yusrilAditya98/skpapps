@@ -131,15 +131,29 @@ class Auth extends CI_Controller
             'password' => $this->password
         ];
         // memanggil method auth dari objek yang telah dibuat dengan method GET
+
+        // masuk kesiam 
         $result = $auth->auth($data);
+
+        // masuk secara manual
+        // $result = $auth->authManual($data);
+
         if ($result['msg'] == "true") {
             $mhs = $this->db->get_where('mahasiswa', ['nim' => $result['data']['nim']])->row_array();
             if ($mhs) {
+                // data siam
                 $data = [
                     "username" => $result['data']['nim'],
                     "nama" => $result['data']['nama'],
                     "user_profil_kode" => $result['data']['status']
                 ];
+
+                // data manual
+                // $data = [
+                //     "username" => $mhs['nim'],
+                //     "nama" => $mhs['nama'],
+                //     "user_profil_kode" => 1
+                // ];
                 $this->session->set_userdata($data);
                 redirect('Mahasiswa');
             } else {

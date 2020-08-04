@@ -38,6 +38,7 @@ class Publikasi extends CI_Controller
         $data['title'] = 'Validasi';
         $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -58,6 +59,7 @@ class Publikasi extends CI_Controller
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
         $data['notif'] = $this->_notif();
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -138,5 +140,16 @@ class Publikasi extends CI_Controller
             $this->session->set_flashdata('message', 'Lpj berhasil divalidasi!');
         }
         redirect('Publikasi/daftarLpj');
+    }
+    public function daftarFileDownload()
+    {
+        $data['title'] = 'File Download';
+        $data['notif'] = $this->_notif();
+        $data['file_download'] = $this->db->get('file_download')->result_array();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_file_download");
+        $this->load->view("template/footer");
     }
 }

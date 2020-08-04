@@ -7,10 +7,32 @@
         <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
             <div class="col-12 col-md-6 col-lg-12">
+                <div class="alert alert-info " role="alert">
+                    <p class="d-flex align-items-center"> <i class="fas fa-info-circle mr-4" style="font-size: 30px;"></i><b>Perhatian! &MediumSpace;</b> Laporan Pertanggung Jawaban diajukan sebelum <b>&MediumSpace;14&MediumSpace;</b> hari setelah selesai kegiatan. <br>
+                        <ul class="ml-4">
+                            <?php foreach ($kegiatan as $kg) : ?>
+                                <?php $startTimeStamp = strtotime($kg['tanggal_selesai_kegiatan']);
+                                $endTimeStamp = strtotime(date('Y-m-d'));
+
+                                $timeDiff = abs($endTimeStamp - $startTimeStamp);
+
+                                $numberDays = $timeDiff / 86400;  // 86400 seconds in one day
+
+                                // and you might want to convert to integer
+                                $numberDays = intval($numberDays); ?>
+
+                                <?php if ($kg['status_selesai_lpj'] == 0  && $numberDays >= 14) : ?>
+                                    <li>Kegiatan <b><?= $kg['nama_kegiatan']  ?> </b>belum dilakukan pengajuan LPJ. <b>Segera lakukan pengajuan LPJ!</b></li>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </p>
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>Daftar Pengajuan LPJ Kegiatan</h4>
                     </div>
+
                     <div class="card-body">
                         <form action="<?= base_url($this->uri->segment(1) . "/" . $this->uri->segment(2)) ?>" method="get">
                             <div class="row">
@@ -45,20 +67,25 @@
                                 </div>
                             </div>
                         </form>
+
+                        <div class="kategori-filter float-right mb-2">
+
+
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Nama Kegiatan</th>
-                                        <th>Status Proposal</th>
-                                        <th>BEM</th>
-                                        <th>Kmhs</th>
-                                        <th>WD3</th>
-                                        <th>PSIK</th>
-                                        <th>Keuangan</th>
-                                        <th>Action</th>
+                                        <th class="align-middle">No</th>
+                                        <th class="align-middle">Tanggal Pengajuan</th>
+                                        <th class="align-middle">Nama Kegiatan</th>
+                                        <th class="align-middle">Status LPJ</th>
+                                        <th class="align-middle">LM</th>
+                                        <th class="align-middle">KMHS</th>
+                                        <th class="align-middle">WD3</th>
+                                        <th class="align-middle">PSIK</th>
+                                        <th class="align-middle">Keuangan</th>
+                                        <th class="align-middle">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -123,21 +150,31 @@
                                     <?php endforeach; ?>
                                     </tr>
                                 </tbody>
-                                <tfoot>
+                            </table>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col">Status Proposal</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
+                                        <td><b>Keterangan</b></td>
                                     </tr>
-
-                                </tfoot>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>

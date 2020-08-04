@@ -15,7 +15,7 @@
                                 <div class="form-tambah-skp">
                                     <form action="<?= base_url('Kegiatan/tambahProposal/') . $proker['id_daftar_rancangan'] ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                         <div class="bagian-personality">
-                                            <h5>Informasi Personality</h5>
+                                            <h5>Data Pemohon</h5>
                                             <div class="form-group">
                                                 <label for="namaLembaga">Nama Lembaga</label>
                                                 <input type="text" class="form-control" id="namaLembaga" name="namaLembaga" value="<?= $this->session->userdata('nama') ?>" readonly>
@@ -68,9 +68,22 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                <label for="namaPenyelenggara">Nama Penyelenggara</label>
+                                                <input type="text" class="form-control" id="namaPenyelenggara" name="namaPenyelenggara">
+                                                <div class="invalid-feedback">
+                                                    Nama penyelenggara harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="urlPenyelenggara">URL Penyelenggara</label>
+                                                <input type="text" class="form-control" id="urlPenyelenggara" name="urlPenyelenggara">
+                                                <div class="invalid-feedback">
+                                                    URL penyelenggara harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="tahun_kegiatan">Periode Pengajuan</label>
                                                 <input type="text" class="form-control" id="tahun_kegiatan" name="tahun_kegiatan" value="<?= $proker['tahun_kegiatan'] ?>" readonly required>
-
                                             </div>
                                             <div class="form-group">
                                                 <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
@@ -107,10 +120,17 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
-                                                <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
+                                                <label for="tglPelaksanaan">Tanggal Mulai Pelaksanaan</label>
+                                                <input type="text" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
                                                 <div class="invalid-feedback">
-                                                    Tanggal pelaksanaan harap diisi
+                                                    Tanggal mulai pelaksanaan harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="tglPelaksanaan">Tanggal Selesai Pelaksanaan</label>
+                                                <input type="text" class="form-control datepicker" id="tglSelesaiPelaksanaan" name="tglSelesaiPelaksanaan" required>
+                                                <div class="invalid-feedback">
+                                                    Tanggal selesai pelaksanaan harap diisi
                                                 </div>
                                             </div>
                                             <div class="form-group">
@@ -140,15 +160,16 @@
                                                 </div>
                                             </div>
                                             <div class="table-responsive">
-                                                <table class="table table-striped">
+                                                <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
                                                             <th>Nim</th>
                                                             <th>Nama</th>
+                                                            <th>Jurusan</th>
+                                                            <th>Prodi</th>
                                                             <th>Posisi</th>
-                                                            <th>Action</th>
-
+                                                            <th>Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="daftar-mhs">
@@ -199,7 +220,7 @@
                                                     Gambar kegiatan harap diisi
                                                 </div>
                                                 <small class="form-text text-muted">
-                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega. Upload gambar dapat berupa poster, undangan, LOA dan pelengkap lainnya.
                                                 </small>
                                             </div>
                                             <div class="form-group">
@@ -207,12 +228,12 @@
                                                     Pendukung</label>
                                                 <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2">
                                                 <small class="form-text text-muted">
-                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega. Upload gambar dapat berupa poster, undangan, LOA dan pelengkap lainnya.
                                                 </small>
                                             </div>
                                         </div>
                                         <div class="action-button">
-                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+                                            <button onclick="return confirm('Apakah anda sudah yakin ?')" type="submit" onclick="return confirm('Apakah anda sudah yakin ?')" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Kirim Proposal <i class="fas fa-plus"></i></button>
 
                                             <a href="<?= base_url('Kegiatan/pengajuanProposal') ?>" style="float:right" class="btn btn-icon btn-secondary">

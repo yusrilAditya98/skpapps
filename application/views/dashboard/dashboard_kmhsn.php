@@ -15,7 +15,7 @@
                             <h4>Validasi Rancangan</h4>
                         </div>
                         <div class="card-body">
-                            <?= $notif['notif_kmhs_rancangan'] ?>
+                            <a href="<?= base_url('Kemahasiswaan/daftarRancangan?status=2') ?>"><?= $notif['notif_kmhs_rancangan'] ?></a>
                         </div>
                     </div>
                 </div>
@@ -30,7 +30,7 @@
                             <h4>Validasi Proposal</h4>
                         </div>
                         <div class="card-body">
-                            <?= $notif['notif_kmhs_proposal'] ?>
+                            <a href="<?= base_url('Kemahasiswaan/daftarProposal?status=2') ?>"> <?= $notif['notif_kmhs_proposal'] ?></a>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                             <h4>Validasi LPJ</h4>
                         </div>
                         <div class="card-body">
-                            <?= $notif['notif_kmhs_lpj'] ?>
+                            <a href="<?= base_url('Kemahasiswaan/daftarLpj?status=2') ?>"> <?= $notif['notif_kmhs_lpj'] ?></a>
                         </div>
                     </div>
                 </div>
@@ -60,24 +60,16 @@
                             <h4>Validasi Poin Skp</h4>
                         </div>
                         <div class="card-body">
-                            <?= $notif['notif_kmhs_skp'] ?>
+                            <a href="<?= base_url('Kemahasiswaan/daftarPoinSkp?validasi=0') ?>"> <?= $notif['notif_kmhs_skp'] ?></a>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Data Penyebaran Poin skp</h4>
-                    </div>
-                    <div class="card-body chart mb-5 mt-5">
-                        <canvas id="sebaran-skp" style="width: 100%; height: 15rem;"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-8">
+
+            <div class="col-lg-12">
                 <div class="card card-danger">
                     <div class="card-header">
                         <h4>Daftar Kegiatan Sedang Berlangsung</h4>

@@ -32,6 +32,32 @@
             <li><a class="nav-link" href="<?= base_url("Akademik/kegiatan") ?>"><i class="fas fa-calendar-check"></i> <span>Kegiatan</span></a></li>
             <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/kategori") ?>"><i class="fas fa-layer-group"></i> <span>Kategori </span></a></li>
             <li><a class="nav-link" href="<?= base_url("Admin/daftarPimpinan") ?>"><i class="fas fa-users"></i> <span>Daftar Pimpinan </span></a></li>
+
+            <li class="menu-header mt-2">panduan</li>
+            <li class="nav-item dropdown">
+
+                <a href="#" class="nav-link has-dropdown" data-toggle="dropdown"><i class="fas fa-clipboard"></i><span>Panduan</span></a>
+                <ul class="dropdown-menu">
+                    <?php if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 9) : ?>
+                        <li>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a class="nav-link" href="<?= base_url('panduan/PanduanMahasiswa.docx') ?>">Pengaturan File Download</a>
+                                </div>
+                            </div>
+                        </li>
+
+                    <?php else : ?>
+                        <li>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <a class="nav-link" href="<?= base_url('panduan/PanduanPSIK.docx') ?>">Informasi File Download</a>
+                                </div>
+                            </div>
+                        </li>
+                    <?php endif; ?>
+                </ul>
+            </li>
         </ul>
     </aside>
 </div>

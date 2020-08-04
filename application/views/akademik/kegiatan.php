@@ -12,15 +12,27 @@
                         <h4>Daftar Kegiatan</h4>
                     </div>
                     <div class="card-body">
-                        <div class="row mb-3">
-                            <div class="col-lg-12">
-                                <a href="<?= base_url('Akademik/tambahKegiatan') ?>" class="btn btn-primary float-right pl-3 text-white">
-                                    <i class="fas fa-plus"></i><span> Tambah Kegiatan</span>
-                                </a>
+
+                        <form class="m-t-20" action="<?= base_url('Export/exportDaftarKuliahTamu') ?>" method="get">
+                            <span>Range Tanggal Kegiatan</span>
+                            <div class="row">
+                                <div class="col-lg-6 input-group mb-3">
+                                    <input type="date" name="tgl_pengajuan_start" id="tgl_pengajuan_start" class="form-control">
+                                    <input type="date" name="tgl_pengajuan_end" id="tgl_pengajuan_date" class="form-control">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Export</button>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <a href="<?= base_url('Akademik/tambahKegiatan') ?>" class="btn btn-primary float-right pl-3 text-white">
+                                        <i class="fas fa-plus"></i><span> Tambah Kegiatan</span></a>
+                                </div>
                             </div>
-                        </div>
+                        </form>
+
+
                         <div class="table-responsive">
-                            <table class="table table-striped text-wrap" id="table-kegiatan">
+                            <table class="table table-striped text-wrap table-bordered" id="table-kegiatan">
                                 <thead>
                                     <tr>
                                         <th class="text-center">No</th>
@@ -42,31 +54,31 @@
                                             <td><?= $k['pemateri'] ?></td>
                                             <td><?= $k['lokasi'] ?></td>
                                             <?php
-                                                if ($k['status_terlaksana'] == 0) {
-                                                    echo '<td class="text-danger">Belum Terlaksana</td>';
-                                                } else if ($k['status_terlaksana'] == 1) {
-                                                    echo '<td class="text-success">Sudah Terlaksana</td>';
-                                                } else {
-                                                    echo '<td class="text-info">Sedang Berlangsung</td>';
-                                                }
-                                                ?>
+                                            if ($k['status_terlaksana'] == 0) {
+                                                echo '<td class="text-danger">Belum Terlaksana</td>';
+                                            } else if ($k['status_terlaksana'] == 1) {
+                                                echo '<td class="text-success">Sudah Terlaksana</td>';
+                                            } else {
+                                                echo '<td class="text-info">Sedang Berlangsung</td>';
+                                            }
+                                            ?>
                                             <td>
                                                 <?php
-                                                    if ($k['status_terlaksana'] == 0) {
-                                                        echo '<a href="' . base_url('Akademik/setKegiatanBerlangsung/') . $k['id_kuliah_tamu'] . '" class="btn btn-info"><i class="fas fa-check-square"></i></a>';
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>
+                                                if ($k['status_terlaksana'] == 0) {
+                                                    echo '<a href="' . base_url('Akademik/setKegiatanBerlangsung/') . $k['id_kuliah_tamu'] . '" class="btn btn-info"><i class="fas fa-check-square"></i></a>';
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 <?php
-                                                    if ($k['status_terlaksana'] == 2) {
-                                                        echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
-                                                    } else {
-                                                        echo '';
-                                                    }
-                                                    ?>
+                                                if ($k['status_terlaksana'] == 2) {
+                                                    echo '<button class="btn btn-info validasi-kegiatan-akademik" data-toggle="modal" data-target=".modalValidasiKegiatanAkademik" data-id="' . $k['id_kuliah_tamu'] . '"><i class="fas fa-check-square"></i></button>';
+                                                } else {
+                                                    echo '';
+                                                }
+                                                ?>
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>
@@ -95,16 +107,16 @@
                                                         <div class="modal-dialog modal-dialog-scrollable modal-xl">
                                                             <div class="modal-content">
                                                                 <div class="modal-header bg-blue">
-                                                                    <h5 class="modal-title clr-white ml-4" id="exampleModalLabel">Detail Kegiatan</span></h5>
-                                                                    <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
+                                                                    <h3 class="modal-title clr-white ml-4" id="exampleModalLabel">Detail Kegiatan</span></h5>
+                                                                        <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                                                                            <span aria-hidden="true">&times;</span>
+                                                                        </button>
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <div class="card mb-4">
                                                                         <div class="row no-gutters">
                                                                             <div class="col-lg-4">
-                                                                                <img src="" class="card-img kode_qr">
+                                                                                <img src="" class="card-img kode_qr img-thumbnail mb-2">
                                                                             </div>
                                                                             <div class="col-lg-8">
                                                                                 <div class="card-body">
@@ -118,7 +130,13 @@
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            <div class="col-lg-12 kategori-filter float-right mb-2">
+
+                                                                            </div>
                                                                             <div class="col-lg-12 tabel-peserta">
+                                                                                <div class="table-responsive" id="detail-kuliah-tamu">
+
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -201,16 +219,16 @@
                             <div class="modal-dialog modal-dialog-scrollable modal-xl">
                                 <div class="modal-content">
                                     <div class="modal-header bg-blue">
-                                        <h5 class="modal-title clr-white ml-4" id="exampleModalLabel">Validasi Kegiatan Akademik</span></h5>
-                                        <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <h3 class="modal-title clr-white ml-4" id="exampleModalLabel">Validasi Kegiatan Akademik</span></h5>
+                                            <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="card mb-4">
                                             <div class="row no-gutters">
                                                 <div class="col-lg-4">
-                                                    <img src="" class="card-img kode_qr_validasi">
+                                                    <img src="" class="card-img kode_qr_validasi img-thumbnail">
                                                 </div>
                                                 <div class="col-lg-8">
                                                     <div class="card-body">
@@ -226,13 +244,30 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
-                                                <div class="col-lg-12">
-                                                    <button class="btn btn-info mb-3" onclick="eventCheckBox()">Hadir Semua</button>
+                                                <div class="col-lg-12 mt-2">
+                                                    <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                        Perhatian ! untuk melakukan validasi
+                                                        <li>1. Pastikan tabel menampilkan semua data peserta <b>(Show All)</b></li>
+                                                        <li>2. Cheklist kehadarian peserta. Kehadiran yang di cheklist menandakan <b>HADIR</b></li>
+                                                        <li>3. Klik tombol validasi</li>
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <button class="btn btn-info" onclick="eventCheckBox()">Hadir Semua</button>
                                                 </div>
                                                 <form action="<?= base_url('akademik/validasiKegiatan/'); ?>" method="post">
-                                                    <div class="col-lg-12 tabel-peserta_validasi">
+                                                    <div class="col-lg-12 kategori-filter-valid float-right mb-2">
+
                                                     </div>
-                                                    <button type="submit" class="btn btn-success float-right">Validasi</button>
+                                                    <div class="col-lg-12 tabel-peserta_validasi">
+                                                        <div class="table-responsive" id="validasi-kuliah-tamu">
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-12 card-footer">
+                                                        <button onclick="return confirm('Apakah anda yakin akan memvalidasi?')" type="submit" class="btn btn-success float-right">Validasi</button>
+                                                    </div>
                                                 </form>
                                             </div>
                                         </div>

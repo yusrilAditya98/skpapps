@@ -51,23 +51,23 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="kategori-filter float-right mb-2">
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered" id="dataTabelKegiatan">
-
                                 <thead class="text-center">
                                     <tr>
-                                        <th scope="col">No</th>
-                                        <th scope="col">Tanggal Pengajuan</th>
-                                        <th scope="col">Nama Kegiatan</th>
-                                        <th scope="col">Status Proposal</th>
-                                        <th scope="col">BEM</th>
-                                        <th scope="col">Kmhs</th>
-                                        <th scope="col">WD3</th>
-                                        <th scope="col">PSIK</th>
-                                        <th scope="col">Keuangan</th>
-                                        <th scope="col">Action</th>
+                                        <th class="align-middle" scope="col">No</th>
+                                        <th class="align-middle" scope="col">Tanggal Pengajuan</th>
+                                        <th class="align-middle" scope="col">Nama Kegiatan</th>
+                                        <th class="align-middle" scope="col">Status Proposal</th>
+                                        <th class="align-middle" scope="col">LM</th>
+                                        <th class="align-middle" scope="col">KMHS</th>
+                                        <th class="align-middle" scope="col">WD3</th>
+                                        <th class="align-middle" scope="col">PSIK</th>
+                                        <th class="align-middle" scope="col">Keuangan</th>
+                                        <th class="align-middle" scope="col">Aksi</th>
                                     </tr>
-
                                 </thead>
                                 <tbody>
                                     <?php $index = 1; ?>
@@ -115,8 +115,10 @@
                                             <?php endforeach; ?>
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>
+
                                                     <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
                                                     <a href="<?= base_url('Mahasiswa/hapusKegiatan/') . $k['id_kegiatan']; ?>" class="btn btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
+
                                                 <?php elseif ($k['status_selesai_proposal'] == 2) : ?>
                                                     <form action="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>" method="post">
                                                         <input type="hidden" name="jenis_revisi" value="<?= $jenis_revisi ?>">
@@ -128,20 +130,32 @@
                                     <?php endforeach; ?>
                                     </tr>
                                 </tbody>
-                                <tfoot>
+
+                            </table>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <th scope="col"></th>
-                                        <th scope="col"> </th>
-                                        <th scope="col"> </th>
-                                        <th scope="col">Status Proposal</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
+                                        <td><b>Keterangan</b></td>
                                     </tr>
-                                </tfoot>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>

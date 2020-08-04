@@ -15,7 +15,8 @@
                             <h4>Validasi Proposal</h4>
                         </div>
                         <div class="card-body">
-                            <?= $notif['notif_keuangan_proposal'] ?>
+                            <a href="<?= base_url('Keuangan/daftarPengajuanKeuangan?status=2') ?>"><?= $notif['notif_keuangan_proposal'] ?></a>
+
                         </div>
                     </div>
                 </div>
@@ -30,7 +31,7 @@
                             <h4>Validasi LPJ</h4>
                         </div>
                         <div class="card-body">
-                            <?= $notif['notif_keuangan_lpj'] ?>
+                            <a href="<?= base_url('Keuangan/daftarPengajuanLpj?status=2') ?>"><?= $notif['notif_keuangan_lpj'] ?></a>
                         </div>
                     </div>
                 </div>

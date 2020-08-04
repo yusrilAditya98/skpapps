@@ -13,10 +13,10 @@
 
         <div class="row">
             <!-- Bidang Kegiatan -->
-            <div class="col-lg-6 col-md-12 col-12 col-sm-12" id="accordion">
+            <div class="col-lg-12 col-md-12 col-12 col-sm-12" id="accordion">
                 <div class="card">
                     <div class="card-header" id="headingOne" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                        <h4>Bidang Kegiatan</h4>
+                        <h4 class="d-flex align-items-center"> <i class="fas fa-award mr-4" style="font-size: 30px;"></i> Bidang Kegiatan</h4>
                         <div class="card-header-action">
                             <a data-collapse="#collapseOne" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
                         </div>
@@ -30,11 +30,12 @@
                             </div>
                             <div class="table-responsive">
 
-                                <table class="table table-striped table-kategori">
+                                <table class="table table-striped table-kategori table-bordered">
                                     <thead>
                                         <tr class="text-center">
                                             <th>No</th>
                                             <th>Bidang Kegiatan</th>
+                                            <th>Status Bidang</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -44,9 +45,19 @@
                                             <tr>
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $b['nama_bidang'] ?></td>
+                                                <td class="text-center" id="bidang_<?= $b['id_bidang'] ?>"><?php if ($b['status_bidang'] == 1) : ?>
+                                                        Aktif
+                                                    <?php else : ?>
+                                                        Tidak Aktif
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-bidang text-wrap" data-toggle="modal" data-target=".modalEditBidang" data-id="<?= $b['id_bidang'] ?>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger hapus-bidang text-wrap" data-id="<?= $b['id_bidang'] ?>"><i class="fas fa-trash"></i></button>
+                                                    <div class="btn-group">
+                                                        <input type="hidden" value="<?= $b['status_bidang'] ?>" id="status_bidang<?= $b['id_bidang'] ?>">
+                                                        <button class="btn btn-success edit-bidang text-wrap" data-toggle="modal" data-target=".modalEditBidang" data-id="<?= $b['id_bidang'] ?>"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-danger hapus-bidang text-wrap" data-id="<?= $b['id_bidang'] ?>"><i class="fas fa-trash"></i></button>
+                                                        <button class="btn btn-warning text-wrap" onclick="ubahStatus(<?= $b['id_bidang'] ?>,'bidang')">Ubah Status</button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -59,10 +70,10 @@
                 </div>
             </div>
             <!-- Jenis Kegiatan -->
-            <div class="col-lg-6 col-md-12 col-12 col-sm-12" id="accordion">
+            <div class="col-lg-12 col-md-12 col-12 col-sm-12" id="accordion">
                 <div class="card">
                     <div class="card-header" id="headingTwo" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        <h4>Jenis Kegiatan</h4>
+                        <h4 class="d-flex align-items-center"> <i class="fas fa-medal mr-4" style="font-size: 30px;"></i> Jenis Kegiatan</h4>
                         <div class="card-header-action">
                             <a data-collapse="#collapseTwo" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
                         </div>
@@ -75,12 +86,13 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-striped text-wrap table-kategori">
+                                <table class="table table-striped text-wrap table-kategori table-bordered">
                                     <thead>
                                         <tr class="text-center">
                                             <th>No</th>
                                             <th>Jenis Kegiatan</th>
                                             <th>Bidang Kegiatan</th>
+                                            <th>Status Jenis</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -91,9 +103,19 @@
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $j['jenis_kegiatan'] ?></td>
                                                 <td><?= $j['nama_bidang'] ?></td>
+                                                <td class="text-center" id="jenis_<?= $j['id_jenis_kegiatan'] ?>"><?php if ($j['status_jenis']  == 1) : ?>
+                                                        Aktif
+                                                    <?php else : ?>
+                                                        Tidak Aktif
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-jenis" data-toggle="modal" data-target=".modalEditJenis" data-id="<?= $j['id_jenis_kegiatan'] ?>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger hapus-jenis" data-id="<?= $j['id_jenis_kegiatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                    <div class="btn-group">
+                                                        <input type="hidden" value="<?= $j['status_jenis'] ?>" id="status_jenis<?= $j['id_jenis_kegiatan'] ?>">
+                                                        <button class="btn btn-success edit-jenis" data-toggle="modal" data-target=".modalEditJenis" data-id="<?= $j['id_jenis_kegiatan'] ?>"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-danger hapus-jenis" data-id="<?= $j['id_jenis_kegiatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                        <button class="btn btn-warning text-wrap" onclick="ubahStatus(<?= $j['id_jenis_kegiatan'] ?>,'jenis')">Ubah Status</button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -111,10 +133,10 @@
 
         <div class="row">
             <!-- Tingkatan Kegiatan -->
-            <div class="col-lg-6 col-md-12 col-12 col-sm-12" id="accordion">
+            <div class="col-lg-12 col-md-12 col-12 col-sm-12" id="accordion">
                 <div class="card">
                     <div class="card-header" id="headingThree" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        <h4>Tingkatan Kegiatan</h4>
+                        <h4 class="d-flex align-items-center"> <i class="fas fa-trophy mr-4" style="font-size: 30px;"></i> Tingkat Kegiatan</h4>
                         <div class="card-header-action">
                             <a data-collapse="#collapseThree" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
                         </div>
@@ -128,11 +150,12 @@
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-striped table-kategori">
+                                <table class="table table-striped table-kategori table-bordered">
                                     <thead>
                                         <tr class="text-center">
                                             <th>No</th>
                                             <th>Tingkatan Kegiatan</th>
+                                            <th>Status Tingkatan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -142,9 +165,20 @@
                                             <tr>
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $t['nama_tingkatan'] ?></td>
+                                                <td class="text-center" id="tingkatan_<?= $t['id_tingkatan'] ?>">
+                                                    <?php if ($t['status_tingkatan']  == 1) : ?>
+                                                        Aktif
+                                                    <?php else : ?>
+                                                        Tidak Aktif
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-tingkatan" data-toggle="modal" data-target=".modalEditTingkatan" data-id="<?= $t['id_tingkatan'] ?>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger hapus-tingkatan" data-id="<?= $t['id_tingkatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                    <div class="btn-group">
+                                                        <input type="hidden" value="<?= $t['status_tingkatan'] ?>" id="status_tingkatan<?= $t['id_tingkatan'] ?>">
+                                                        <button class="btn btn-success edit-tingkatan" data-toggle="modal" data-target=".modalEditTingkatan" data-id="<?= $t['id_tingkatan'] ?>"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-danger hapus-tingkatan" data-id="<?= $t['id_tingkatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-warning text-wrap" onclick="ubahStatus(<?= $t['id_tingkatan'] ?>,'tingkatan')">Ubah Status</button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -159,10 +193,10 @@
                 </div>
             </div>
             <!-- Prestasi Kegiatan -->
-            <div class="col-lg-6 col-md-12 col-12 col-sm-12" id="accordion">
+            <div class="col-lg-12 col-md-12 col-12 col-sm-12" id="accordion">
                 <div class="card">
                     <div class="card-header" id="headingFour" data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                        <h4>Prestasi Kegiatan</h4>
+                        <h4 class="d-flex align-items-center"> <i class="fas fa-crown mr-4" style="font-size: 30px;"></i> Prestasi Kegiatan</h4>
                         <div class="card-header-action">
                             <a data-collapse="#collapseFour" class="btn btn-icon btn-info" href="#"><i class="fas fa-plus"></i></a>
                         </div>
@@ -178,11 +212,12 @@
                             </div>
                             <div class="table-responsive">
 
-                                <table class="table table-striped text-wrap table-kategori">
+                                <table class="table table-striped text-wrap table-kategori table-bordered">
                                     <thead>
                                         <tr class="text-center">
                                             <th>No</th>
                                             <th>Prestasi Kegiatan</th>
+                                            <th>Status Prestasi</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -192,9 +227,21 @@
                                             <tr>
                                                 <td class="text-center"><?= $i; ?></td>
                                                 <td><?= $p['nama_prestasi'] ?></td>
+                                                <td class="text-center" id="prestasi_<?= $p['id_prestasi'] ?>">
+                                                    <?php if ($p['status_prestasi']  == 1) : ?>
+                                                        Aktif
+                                                    <?php else : ?>
+                                                        Tidak Aktif
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-prestasi" data-toggle="modal" data-target=".modalEditPrestasi" data-id="<?= $p['id_prestasi'] ?>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger hapus-prestasi" data-id="<?= $p['id_prestasi'] ?>"><i class="fas fa-trash"></i></button>
+                                                    <div class="btn-group">
+                                                        <input type="hidden" value="<?= $p['status_prestasi'] ?>" id="status_prestasi<?= $p['id_prestasi'] ?>">
+                                                        <button class="btn btn-success edit-prestasi" data-toggle="modal" data-target=".modalEditPrestasi" data-id="<?= $p['id_prestasi'] ?>"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-danger hapus-prestasi" data-id="<?= $p['id_prestasi'] ?>"><i class="fas fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-warning text-wrap" onclick="ubahStatus(<?= $p['id_prestasi'] ?>,'prestasi')">Ubah Status</button>
+                                                    </div>
+
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -355,6 +402,7 @@
                                             <th>Tingkatan</th>
                                             <th>Jenis Kegiatan</th>
                                             <th>Bidang Kegiatan</th>
+                                            <th>Staus Tingkatan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -366,9 +414,20 @@
                                                 <td><?= $st['nama_tingkatan'] ?></td>
                                                 <td><?= $st['jenis_kegiatan'] ?></td>
                                                 <td><?= $st['nama_bidang'] ?></td>
+                                                <td class="text-center" id="semua_tingkatan_<?= $st['id_semua_tingkatan'] ?>">
+                                                    <?php if ($st['status_st']  == 1) : ?>
+                                                        Aktif
+                                                    <?php else : ?>
+                                                        Tidak Aktif
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-detail-tingkatan text-wrap" data-toggle="modal" data-target=".modalEditDetailTingkatan" data-id="<?= $st['id_semua_tingkatan'] ?>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger hapus-detail-tingkatan text-wrap" data-id="<?= $st['id_semua_tingkatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                    <div class="btn-group">
+                                                        <input type="hidden" value="<?= $st['status_st'] ?>" id="status_semua_tingkatan<?= $st['id_semua_tingkatan'] ?>">
+                                                        <button class="btn btn-success edit-detail-tingkatan text-wrap" data-toggle="modal" data-target=".modalEditDetailTingkatan" data-id="<?= $st['id_semua_tingkatan'] ?>"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-danger hapus-detail-tingkatan text-wrap" data-id="<?= $st['id_semua_tingkatan'] ?>"><i class="fas fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-warning text-wrap" onclick="ubahStatus(<?= $st['id_semua_tingkatan'] ?>,'semua tingkatan')">Ubah Status</button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php $i++;
@@ -504,6 +563,7 @@
                                             <th>Prestasi</th>
                                             <th>Bobot</th>
                                             <th>Dasar Penilaian</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -518,9 +578,20 @@
                                                 <td><?= $sp['nama_prestasi'] ?></td>
                                                 <td><?= $sp['bobot'] ?></td>
                                                 <td><?= $sp['nama_dasar_penilaian'] ?></td>
+                                                <td class="text-center" id="semua_prestasi_<?= $sp['id_semua_prestasi'] ?>">
+                                                    <?php if ($sp['status_sp']  == 1) : ?>
+                                                        Aktif
+                                                    <?php else : ?>
+                                                        Tidak Aktif
+                                                    <?php endif; ?>
+                                                </td>
                                                 <td class="text-center">
-                                                    <button class="btn btn-success edit-detail-prestasi text-wrap" data-toggle="modal" data-target=".modalEditDetailPrestasi" data-id="<?= $sp['id_semua_prestasi'] ?>"><i class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-danger hapus-detail-prestasi text-wrap" data-id="<?= $sp['id_semua_prestasi'] ?>"><i class="fas fa-trash"></i></button>
+                                                    <div class="btn-group">
+                                                        <input type="hidden" value="<?= $sp['status_sp'] ?>" id="status_semua_prestasi<?= $sp['id_semua_prestasi'] ?>">
+                                                        <button class="btn btn-success edit-detail-prestasi text-wrap" data-toggle="modal" data-target=".modalEditDetailPrestasi" data-id="<?= $sp['id_semua_prestasi'] ?>"><i class="fas fa-edit"></i></button>
+                                                        <button class="btn btn-danger hapus-detail-prestasi text-wrap" data-id="<?= $sp['id_semua_prestasi'] ?>"><i class="fas fa-trash"></i></button>
+                                                        <button type="button" class="btn btn-warning text-wrap" onclick="ubahStatus(<?= $sp['id_semua_prestasi'] ?>,'semua prestasi')">Ubah Status</button>
+                                                    </div>
                                                 </td>
                                             </tr>
                                         <?php $i++;

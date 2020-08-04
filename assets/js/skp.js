@@ -1,15 +1,17 @@
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-$('.detail-SKP').on('click', function () {
-	let id = $(this).data('id');
 
+function detailSKP(nim) {
+	let id = nim
+	console.log(id)
 	// Data Mahasiswa
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/get_detail_mahasiswa/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+
 			$('.nama_mahasiswa').html("Nama : " + data['nama']);
 			$('.nim_mahasiswa').html("NIM   : " + data['nim']);
 			$('.prodi_mahasiswa').html("Prodi   : " + data['nama_prodi']);
@@ -29,18 +31,20 @@ $('.detail-SKP').on('click', function () {
 				data.forEach(function (dataA) {
 					$('.body-skp').append(`<tr>
 					<td class="text-center">` + (++i) + `</td>
+					<td>` + dataA['nama_kegiatan'] + `</td>
 					<td>` + dataA['nama_prestasi'] + `</td>
 					<td>` + dataA['nama_tingkatan'] + `</td>
 					<td>` + dataA['jenis_kegiatan'] + `</td>
 					<td>` + dataA['nama_bidang'] + `</td>
-					<td>` + dataA['bobot'] + `</td>
+					<td>` + dataA['bobot'] + ` x ` + dataA['nilai_bobot'] + `</td>
+					<td>` + (dataA['bobot'] * dataA['nilai_bobot']) + `</td>
                     </tr>`)
 				})
 			} else {
 				$('.body-skp').html('');
 				$('.body-skp').html(`
                 <tr>
-                   <td colspan="6">
+                   <td colspan="7">
                         <h3 class="text-center my-2">Belum ada SKP</h3>
                     </td>
                 </tr>`);
@@ -48,7 +52,52 @@ $('.detail-SKP').on('click', function () {
 		}
 	});
 
-})
+}
+
+
+$(document).ready(function (e) {
+	console.log($('#filter_jurusan').val())
+	$('#dataTabelPoinSkp').DataTable({
+		"processing": true,
+		"serverSide": true,
+		"ajax": {
+			"url": segments[0] + '/' + segments[3] + '/kemahasiswaan/get_ajax',
+			"type": "POST",
+			"data": function (data) {
+				data.jurusan = $('#filter_jurusan').val()
+				data.prodi = $('#filter_prodi').val()
+				data.kategori = $('#filter_kategori').val()
+			}
+		},
+		"columnDefs": [{
+			"targets": [0, 7],
+			"orderable": false
+		}]
+
+
+
+
+	});
+
+	$('#filter_jurusan').on('change', function () { //button filter event click
+		console.log($('#filter_jurusan').val())
+		$('#dataTabelPoinSkp').DataTable().ajax.reload(); //just reload table
+	});
+	$('#filter_prodi').on('change', function () { //button filter event click
+		console.log($('#filter_prodi').val())
+		$('#dataTabelPoinSkp').DataTable().ajax.reload(); //just reload table
+	});
+	$('#filter_kategori').on('change', function () { //button filter event click
+		console.log($('#filter_kategori').val())
+		$('#dataTabelPoinSkp').DataTable().ajax.reload(); //just reload table
+	});
+
+});
+
+
+
+
+
 
 let nama_prestasi = [];
 let jumlah_prestasi = [];
@@ -57,19 +106,18 @@ let jumlah_prestasi = [];
 $(document).ready(function () {
 	var tahun = $('#tahun_temp').val();
 	var link = "";
-	if(tahun == ""){
-		link = segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi/';
+	if (tahun == "") {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi/';
+	} else {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi?tahun=' + tahun;
 	}
-	else{
-		link = segments[0] + '/' + segments[3] + '/pimpinan/rekapitulasiSKPApi?tahun='+tahun;
-	}
-	console.log($('#tahun_temp').val() == "")
+
 	$.ajax({
 		url: link,
 		method: "get",
 		dataType: "json",
 		success: function (data) {
-			console.log(data);
+
 			var dataTampung = [];
 			for (var i in data) {
 				nama_prestasi.push(data[i].nama_prestasi);
@@ -87,7 +135,7 @@ $(document).ready(function () {
 				backgroundColor: "#e74c3c"
 			});
 
-			console.log(dataTampung)
+
 
 
 			const canvas = document.querySelector("#rekap-skp-chart");
@@ -194,14 +242,16 @@ $(document).ready(function () {
 		},
 	});
 });
+
+
 $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 	let id = $(this).data('id');
 	var tahun = $('#tahun_temp').val();
 	var link = "";
-	if(tahun == ""){
-		link = segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP?id_prestasi='+id;
-	}else{
-		link = segments[0] + '/' + segments[3] + '/pimpinan/getRekapitulasiSKP?id_prestasi='+id+'&tahun='+tahun;
+	if (tahun == "") {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id;
+	} else {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id + '&tahun=' + tahun;
 	}
 
 	$.ajax({
@@ -210,7 +260,7 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 		dataType: 'json',
 		success: function (data) {
 			$('#table-detail_wrapper').remove()
-			$('#rekap-prestasi').append(`<table class="table table-striped rekap-skp" id="table-detail">
+			$('#rekap-prestasi').append(`<table class="table table-striped table-bordered rekap-skp" id="table-detail">
 			</table>`)
 			if (data['mahasiswa'].length != 0) {
 				var i = 0;
@@ -243,9 +293,71 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 						}
 					]
 				});
+				$('#table-detail').attr('style', 0)
+
 
 			} else if (data['mahasiswa'].length == 0) {
 				$('#rekap-prestasi').append(`<h3 id="table-detail_wrapper" class="text-center my-2">Data Tidak Ada</h3>
+				`)
+
+			}
+		}
+	});
+})
+
+$('.tabel-tingkatan').on('click', '.detail-tingkat-skp', function () {
+	let id = $(this).data('id');
+	var tahun = $('#tahun_temp').val();
+	var link = "";
+	if (tahun == "") {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapTingkatanSKP?id=' + id;
+	} else {
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapTingkatanSKP?id=' + id + '&tahun=' + tahun;
+	}
+
+	$.ajax({
+		url: link,
+		method: 'get',
+		dataType: 'json',
+		success: function (data) {
+			$('#table-detail-rekap_wrapper').remove()
+			$('#rekap-tingkatan').append(`<table class="table table-striped table-bordered rekap-skp" id="table-detail-rekap"></table>`)
+			if (data.length != 0) {
+				var i = 0;
+				let dataTampung = [];
+				for (var j in data) {
+					let temp = [];
+					temp.push(++i)
+					temp.push(data[j].nim)
+					temp.push(data[j].nama)
+					temp.push(data[j].nama_tingkatan)
+					temp.push(data[j].nama_kegiatan)
+					dataTampung[j] = temp;
+				}
+				$("#table-detail-rekap").DataTable({
+					data: dataTampung,
+					columns: [{
+							title: "No"
+						},
+						{
+							title: "Nim"
+						},
+						{
+							title: "Nama"
+						},
+						{
+							title: "Tingkatan"
+						},
+						{
+							title: "Nama Kegiatan"
+						}
+					]
+				});
+				$('#table-detail-rekap').attr('style', 0)
+
+
+			} else {
+				$('#rekap-tingkatan').append(`<h3 id="table-detail-rekap_wrapper" class="text-center my-2">Data Tidak Ada</h3>
 				`)
 
 			}

@@ -19,6 +19,66 @@ class Kemahasiswaan extends CI_Controller
         is_logged_in();
     }
 
+    function get_ajax()
+    {
+        $kategori = '';
+        $this->load->model('Model_kemahasiswaan', 'kmhs_m');
+        $list = $this->kmhs_m->get_datatables();
+
+        $data = array();
+        $no = @$_POST['start'];
+        foreach ($list as $item) {
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $item->nim;
+            $row[] = $item->nama;
+            $row[] = $item->nama_jurusan;
+            $row[] = $item->nama_prodi;
+            $row[] = $item->total_poin_skp;
+            if ($item->total_poin_skp >= 100 && $item->total_poin_skp <= 150) {
+                $kategori = ' Cukup';
+            } elseif ($item->total_poin_skp >= 151 && $item->total_poin_skp <= 200) {
+                $kategori = 'Baik';
+            } elseif ($item->total_poin_skp >= 201 && $item->total_poin_skp <= 300) {
+                $kategori = ' Sangat Baik';
+            } elseif ($item->total_poin_skp > 300) {
+                $kategori = ' Dengan Pujian';
+            } else {
+                $kategori = ' Kurang';
+            }
+            $row[] = $kategori;
+
+            // add html for action
+            $row[] = '<div class="btn-group"><button class="btn btn-icon btn-primary detail-SKP" data-toggle="modal" onclick="detailSKP(' . $item->nim . ')" data-target=".modalDetailSKP" data-id="' . $item->nim . '"><i class="fas fa-eye"></i></button><a href="' . site_url('Kemahasiswaan/cetakSkp?nim=') . $item->nim . '" target="_blank" class="btn btn-icon btn-warning"><i class="fas fa-print"></i></a></div>';
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => @$_POST['draw'],
+            "recordsTotal" => $this->kmhs_m->count_all(),
+            "recordsFiltered" => $this->kmhs_m->count_filtered(),
+            "data" => $data,
+        );
+        // output to json format
+        echo json_encode($output);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private function _notifKmhs()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
@@ -142,7 +202,7 @@ class Kemahasiswaan extends CI_Controller
         if ($cek_status) {
             $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 1);
         } else {
-            $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 2);
+            $this->kemahasiswaan->updateRekapKegiatan($id_lembaga, $tahun_pengajuan, 3);
         }
 
         redirect('Kemahasiswaan/detailRancanganKegiatan?id_lembaga=' . $id_lembaga . '&tahun=' . $tahun_pengajuan);
@@ -155,6 +215,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -182,6 +243,7 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kegiatan', 'kegiatan');
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['notif'] = $this->_notifKmhs();
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -510,7 +572,8 @@ class Kemahasiswaan extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($nim);
-        $this->db->set('total_poin_skp', $this->totalPoinSKp['bobot']);
+
+        $this->db->set('total_poin_skp', $this->totalPoinSKp);
         $this->db->where('nim', $nim);
         $this->db->update('mahasiswa');
     }
@@ -681,6 +744,7 @@ class Kemahasiswaan extends CI_Controller
             }
         }
         foreach ($lembaga as $l) {
+            $data[$l['id_lembaga']]['id_lembaga'] = $l['id_lembaga'];
             for ($j = 1; $j < 13; $j++) {
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
@@ -832,6 +896,13 @@ class Kemahasiswaan extends CI_Controller
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
         $data['mahasiswa'] = $this->kemahasiswaan->getDataMahasiswa();
         $data['notif'] = $this->_notifKmhs();
+
+        foreach ($data['mahasiswa'] as $element) {
+            $result['jurusan'][$element['nama_jurusan']] = $element['nama_jurusan'];
+            $result['prodi'][$element['nama_prodi']] = $element['nama_prodi'];
+        }
+
+        $data['filter_skp'] = $result;
         $data['title'] = 'Poin Skp';
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar");
@@ -885,7 +956,7 @@ class Kemahasiswaan extends CI_Controller
     {
         $data['title'] = 'Kategori';
         $data['bidang'] = $this->db->get('bidang_kegiatan')->result_array();
-        $this->db->select('id_jenis_kegiatan, jenis_kegiatan, nama_bidang');
+        $this->db->select('id_jenis_kegiatan, jenis_kegiatan, nama_bidang,status_jenis');
         $this->db->from('jenis_kegiatan');
         $this->db->join('bidang_kegiatan', 'jenis_kegiatan.id_bidang = bidang_kegiatan.id_bidang');
         $data['jenis'] = $this->db->get()->result_array();
@@ -1453,11 +1524,20 @@ class Kemahasiswaan extends CI_Controller
     public function validasiAnggotaLembaga($id_pengajuan)
     {
         $this->db->where('id', intval($id_pengajuan));
-        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 1]);
+        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 1, 'tanggal_validasi' => date('Y-m-d')]);
 
         $this->session->set_flashdata('message', 'Anggota Lembaga berhasil divalidasi !');
         redirect("Kemahasiswaan/daftarLembaga");
     }
+    public function unvalidasiAnggotaLembaga($id_pengajuan)
+    {
+        $this->db->where('id', intval($id_pengajuan));
+        $this->db->update('pengajuan_anggota_lembaga', ['status_validasi' => 0]);
+
+        $this->session->set_flashdata('message', 'Anggota Lembaga berhasil divalidasi !');
+        redirect("Kemahasiswaan/daftarLembaga");
+    }
+
 
     public function validasiKeaktifanAnggota($id_pengajuan)
     {
@@ -1466,38 +1546,44 @@ class Kemahasiswaan extends CI_Controller
 
         $pengajuan = $this->db->get_where('pengajuan_anggota_lembaga', ['id' => intval($id_pengajuan)])->row_array();
 
-        $tahun_temp = "01-01-" . $pengajuan['periode'];
+        $tahun_temp = $pengajuan['periode'] . "-02-01";
 
         // Tambahkan SKP ke masing" anggota
         $this->db->where('id_pengajuan_anggota_lembaga', intval($id_pengajuan));
         $this->db->from('daftar_anggota_lembaga');
         $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
         $anggota_lembaga = $this->db->get()->result_array();
-
+        $tgl_selesai = $pengajuan['periode'] . "-11-30";
         $anggota_status_aktif = [];
         $mahasiswa = [];
         for ($i = 0; $i < count($anggota_lembaga); $i++) {
             $data = [
                 'nim' => $anggota_lembaga[$i]['nim'],
                 'nama_kegiatan' => 'Keanggotaan Lembaga',
+                'tgl_pengajuan' => date('Y-m-d'),
                 'tgl_pelaksanaan' => $tahun_temp,
+                'tgl_selesai_pelaksanaan' => $tgl_selesai,
+                'file_bukti' => 'sk_lembaga/' . $pengajuan['bukti_pengajuan'],
+                'tempat_pelaksanaan' => 'FEB UB',
                 'validasi_prestasi' => 1,
-                'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi'])
+                'prestasiid_prestasi' => intval($anggota_lembaga[$i]['id_sm_prestasi']),
+                'nilai_bobot' => $anggota_lembaga[$i]['status_aktif']
             ];
             $this->db->where('nim', $anggota_lembaga[$i]['nim']);
             $mahasiswa_temp = $this->db->get('mahasiswa')->row_array();
             $poin_skp_sementara = intval($mahasiswa_temp['total_poin_skp']);
-            $poin_tambahan = intval($anggota_lembaga[$i]['bobot']);
+            $poin_tambahan = intval($anggota_lembaga[$i]['bobot']) * floatval($anggota_lembaga[$i]['status_aktif']);
 
             $data2 = [
                 'nim' => $anggota_lembaga[$i]['nim'],
                 'total_poin_skp' => $poin_skp_sementara + $poin_tambahan
             ];
-            if ($anggota_lembaga[$i]['status_aktif'] == 1) {
-                array_push($mahasiswa, $data2);
-                array_push($anggota_status_aktif, $data);
-            }
+            array_push($mahasiswa, $data2);
+            array_push($anggota_status_aktif, $data);
         }
+        // Header('Content-type: application/json');
+        // echo json_encode($anggota_status_aktif);
+        // die;
         // Update total SKP
         $this->db->update_batch('mahasiswa', $mahasiswa, 'nim');
 
@@ -1541,6 +1627,27 @@ class Kemahasiswaan extends CI_Controller
         $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
         $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($nim);
         $data['poinskp'] = $this->poinskp->getPoinSkp($nim);
+        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+
+        // QR Code
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']        = './assets/'; //string, the default is application/cache/
+        $config['errorlog']        = './assets/'; //string, the default is application/logs/
+        $config['imagedir']        = 'assets/qrcode/'; //direktori penyimpanan qr code
+        $config['quality']        = true; //boolean, the default is true
+        $config['size']            = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+
+        $image_name = 'bukti_skp_' . $nim . '.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = base_url("API_skp/cetakSkp?nim=" . $nim); //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
         $this->load->view('mahasiswa/tampilan_transkrip_poin', $data);
     }
 
@@ -1561,5 +1668,87 @@ class Kemahasiswaan extends CI_Controller
         }
         $data['kegiatan'] = $result;
         $this->load->view('kemahasiswaan/export_skp', $data);
+    }
+
+
+    // menampilkan pengaturan file download
+    public function daftarFileDownload()
+    {
+        $data['title'] = 'Pengaturan File Download';
+        $data['notif'] = $this->_notifKmhs();
+        $data['file_download'] = $this->db->get('file_download')->result_array();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/manage_file_download");
+        $this->load->view("template/footer");
+    }
+
+
+    public function tambahFileDownload()
+    {
+        $data = [
+            'nama_file' => $this->input->post('nama_file'),
+            'status_file' => $this->input->post('status_file'),
+            'dilihat_oleh' => $this->input->post('dilihat_oleh')
+        ];
+
+        if ($_FILES['dir_file']['name']) {
+            $config['allowed_types'] = 'pdf|png|jpg|jpeg|doc|docx';
+            $config['max_size']     = '9048'; //kb
+            $config['upload_path'] = './file_bukti/file_download/';
+            $config['file_name'] = time() . '_download';
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('dir_file')) {
+                $data['dir_file'] = $this->upload->data('file_name');
+                $this->db->insert('file_download', $data);
+                $this->session->set_flashdata('message', 'File Download berhasil ditambahkan!');
+            } else {
+                $this->session->set_flashdata('failed', 'File Download gagal ditambahkan!');
+                redirect("Kemahasiswaan/daftarFileDownload");
+            }
+            redirect("Kemahasiswaan/daftarFileDownload");
+        }
+    }
+
+    public function hapusFileDownload($id)
+    {
+        $nama_file = $this->input->get('nama_file');
+        $this->load->library('upload');
+        unlink(FCPATH . "file_bukti/file_download/" . $nama_file);
+        $this->db->delete('file_download', ['id_file' => $id]);
+        $this->session->set_flashdata('message', 'File Download berhasil dihapus!');
+        redirect("Kemahasiswaan/daftarFileDownload");
+    }
+
+    public function editFileDownload()
+    {
+        $data[0] = [
+            'id_file' => $this->input->post('id_file'),
+            'nama_file' => $this->input->post('nama_file'),
+            'status_file' => $this->input->post('status_file'),
+            'dilihat_oleh' => $this->input->post('dilihat_oleh')
+        ];
+
+
+        if ($_FILES['dir_file']['name']) {
+            $config['allowed_types'] = 'pdf|png|jpg|jpeg|doc|docx';
+            $config['max_size']     = '9048'; //kb
+            $config['upload_path'] = './file_bukti/file_download/';
+            $config['file_name'] = time() . '_download';
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('dir_file')) {
+                $data[0]['dir_file'] = $this->upload->data('file_name');
+            } else {
+                $this->session->set_flashdata('failed', 'File Download gagal diubah!');
+                redirect("Kemahasiswaan/daftarFileDownload");
+            }
+            unlink(FCPATH . "file_bukti/file_download/" . $this->input->post('dir_lama'));
+        } else {
+            $data[0]['dir_file'] = $this->input->post('dir_lama');
+        }
+        $this->db->update_batch('file_download', $data, 'id_file');
+        $this->session->set_flashdata('message', 'File Download berhasil diubah!');
+        redirect("Kemahasiswaan/daftarFileDownload");
     }
 }

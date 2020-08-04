@@ -45,20 +45,22 @@
                                 </div>
                             </div>
                         </form>
+                        <div class="kategori-filter float-right mb-2">
+                        </div>
                         <div class="table-responsive">
                             <table class="table table-bordered table-hover" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Nama Kegiatan</th>
-                                        <th>Status Proposal</th>
-                                        <th>BEM</th>
-                                        <th>Kmhs</th>
-                                        <th>WD3</th>
-                                        <th>PSIK</th>
-                                        <th>Keuangan</th>
-                                        <th>Action</th>
+                                        <th class="align-middle">No</th>
+                                        <th class="align-middle">Tanggal Pengajuan</th>
+                                        <th class="align-middle">Nama Kegiatan</th>
+                                        <th class="align-middle">Status Proposal</th>
+                                        <th class="align-middle">LM</th>
+                                        <th class="align-middle">KMHS</th>
+                                        <th class="align-middle">WD3</th>
+                                        <th class="align-middle">PSIK</th>
+                                        <th class="align-middle">Keuangan</th>
+                                        <th class="align-middle">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -117,20 +119,32 @@
                                         </tr>
                                     <?php endforeach; ?>
                                 </tbody>
-                                <tfoot>
+
+                            </table>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><b>Keterangan</b></td>
                                     </tr>
-                                </tfoot>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>

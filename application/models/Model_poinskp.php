@@ -6,7 +6,7 @@ class Model_poinskp extends CI_Model
 {
     private $jenisKegiatan;
     private $semuaTingkat;
-    public function getTingkatSkp($idJenisKegiatan)
+    public function getTingkatSkp($idJenisKegiatan, $status_st = null)
     {
         $this->jenisKegiatan = $idJenisKegiatan;
         $this->db->select('st.*,t.nama_tingkatan');
@@ -14,12 +14,15 @@ class Model_poinskp extends CI_Model
         $this->db->join('jenis_kegiatan as jk', 'st.id_jenis_kegiatan=jk.id_jenis_kegiatan', 'left');
         $this->db->join('tingkatan as t', 't.id_tingkatan=st.id_tingkatan', 'left');
         $this->db->where('st.id_jenis_kegiatan', $this->jenisKegiatan);
+        if ($status_st) {
+            $this->db->where('st.status_st', $status_st);
+        }
         return $this->db->get()->result_array();
     }
 
     public function getSemuaTingkatan()
     {
-        $this->db->select('id_semua_tingkatan, nama_tingkatan, jenis_kegiatan, nama_bidang');
+        $this->db->select('id_semua_tingkatan, nama_tingkatan, jenis_kegiatan, nama_bidang,status_st');
         $this->db->from('semua_tingkatan');
         $this->db->join('tingkatan', 'semua_tingkatan.id_tingkatan = tingkatan.id_tingkatan');
         $this->db->join('jenis_kegiatan', 'semua_tingkatan.id_jenis_kegiatan = jenis_kegiatan.id_jenis_kegiatan');
@@ -40,7 +43,7 @@ class Model_poinskp extends CI_Model
 
     public function getSemuaPrestasi()
     {
-        $this->db->select('id_semua_prestasi, nama_prestasi, bobot, nama_tingkatan, jenis_kegiatan, nama_bidang, nama_dasar_penilaian');
+        $this->db->select('id_semua_prestasi, nama_prestasi, bobot, nama_tingkatan, jenis_kegiatan, nama_bidang, nama_dasar_penilaian,status_sp');
         $this->db->from('semua_prestasi');
         $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
         $this->db->join('dasar_penilaian', 'semua_prestasi.id_dasar_penilaian = dasar_penilaian.id_dasar_penilaian');
@@ -52,13 +55,16 @@ class Model_poinskp extends CI_Model
         return $data['semua_tingkatan'];
     }
 
-    public function getPrestasi($idSemuaTingkat)
+    public function getPrestasi($idSemuaTingkat, $status_sp = null)
     {
         $this->semuaTingkat = $idSemuaTingkat;
         $this->db->select('sp.*,p.nama_prestasi');
         $this->db->from('semua_prestasi as sp');
         $this->db->join('prestasi as p', 'p.id_prestasi = sp.id_prestasi', 'left');
         $this->db->where('sp.id_semua_tingkatan', $this->semuaTingkat);
+        if ($status_sp) {
+            $this->db->where('sp.status_sp', $status_sp);
+        }
         return $this->db->get()->result_array();
     }
 
@@ -112,12 +118,17 @@ class Model_poinskp extends CI_Model
 
     public function updateTotalPoinSkp($nim)
     {
-        $this->db->select_sum("sp.bobot");
+        $this->db->select("sp.bobot,ps.nilai_bobot");
         $this->db->from("poin_skp as ps");
         $this->db->join('semua_prestasi as sp', 'sp.id_semua_prestasi = ps.prestasiid_prestasi', 'left');
         $this->db->where('ps.nim', $nim);
         $this->db->where('ps.validasi_prestasi', 1);
-        return $this->db->get()->row_array();
+        $data = $this->db->get()->result_array();
+        $total_skp = 0.0;
+        foreach ($data as $d) {
+            $total_skp += floatval($d['bobot'] * $d['nilai_bobot']);
+        }
+        return $total_skp;
     }
     public function getJumlahKategoriSkp()
     {
@@ -210,5 +221,41 @@ class Model_poinskp extends CI_Model
         $data['pimpinan'] = $this->db->get()->result_array();
 
         return $data;
+    }
+
+    public function getDataTingkatan($tahun = null)
+    {
+
+        $this->db->select('*');
+        $this->db->from('tingkatan');
+        $this->db->order_by('nama_tingkatan', 'ASC');
+        $tingkatan =  $this->db->get()->result_array();
+        $data = [];
+        foreach ($tingkatan as  $t) {
+            $data[$t['id_tingkatan']]['id_tingkatan'] = $t['id_tingkatan'];
+            $data[$t['id_tingkatan']]['nama_tingkatan'] = $t['nama_tingkatan'];
+            $data[$t['id_tingkatan']]['jumlah'] = count($this->rekapTingkatan($t['id_tingkatan'], $tahun));
+        }
+        return $data;
+    }
+
+    public function rekapTingkatan($id_tingkatan, $tahun = null)
+    {
+
+        $this->db->select('ps.*,sp.*,p.*,st.*,jk.*,bk.*,t.*,m.nama,m.nim');
+        $this->db->from('poin_skp as ps');
+        $this->db->join('semua_prestasi as sp', 'ps.prestasiid_prestasi=sp.id_semua_prestasi', 'left');
+        $this->db->join('prestasi as p', 'sp.id_prestasi=p.id_prestasi', 'left');
+        $this->db->join('dasar_penilaian as dp', 'dp.id_dasar_penilaian=sp.id_dasar_penilaian', 'left');
+        $this->db->join('semua_tingkatan as st', 'st.id_semua_tingkatan=sp.id_semua_tingkatan', 'left');
+        $this->db->join('jenis_kegiatan as jk', 'jk.id_jenis_kegiatan=st.id_jenis_kegiatan', 'left');
+        $this->db->join('bidang_kegiatan as bk', 'jk.id_bidang=bk.id_bidang', 'left');
+        $this->db->join('tingkatan as t', 't.id_tingkatan=st.id_tingkatan', 'left');
+        $this->db->join('mahasiswa as m', 'm.nim=ps.nim', 'left');
+        $this->db->where('t.id_tingkatan', $id_tingkatan);
+        if ($tahun != null) {
+            $this->db->where('YEAR(ps.tgl_pelaksanaan)', $tahun);
+        }
+        return $this->db->get()->result_array();
     }
 }

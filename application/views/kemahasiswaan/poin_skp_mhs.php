@@ -9,66 +9,67 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
+
                     <div class="card-body">
-                    </div>
-                    <div class="card-body">
-                        <a href="<?= base_url("Kemahasiswaan/exportSkp") ?>" class="btn btn-success float-right text-white mb-2"> <i class="fas fa-file-excel mr-2 "></i> Export to excel </a>
+
+                        <div class="row float-right">
+                            <div class="col-lg-12">
+                                <div class="kategori-filter align-middle  mb-2">
+                                    <select name="jurusan" id="filter_jurusan" class="form-control-sm">
+                                        <option value="" selected>Semua Jurusan..</option>
+                                        <?php foreach ($filter_skp['jurusan'] as $j) : ?>
+                                            <option value="<?= $j ?>"><?= $j ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <select name="prodi" id="filter_prodi" class="form-control-sm">
+                                        <option value="" selected>Semua prodi..</option>
+                                        <?php foreach ($filter_skp['prodi'] as $j) : ?>
+                                            <option value="<?= $j ?>"><?= $j ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <select name="kategori" id="filter_kategori" class="form-control-sm">
+                                        <option value="" selected>Semua kategori..</option>
+                                        <option value="kurang">Kurang</option>
+                                        <option value="cukup">Cukup</option>
+                                        <option value="baik">Baik</option>
+                                        <option value="sangat baik">Sangat Baik</option>
+                                        <option value="dengan pujian">Dengan Pujian</option>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row float-left">
+                            <form class=" m-t-20" action="<?= base_url('Export/exportPoinSkp') ?>" method="get">
+                                <!-- <span>Range Tanggal Pengajuan</span> -->
+                                <div class="col-lg-12 input-group mb-3  ">
+                                    <input type="date" name="tgl_pengajuan_start" id="tgl_pengajuan_start" class="form-control">
+                                    <input type="date" name="tgl_pengajuan_end" id="tgl_pengajuan_date" class="form-control">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Download</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered" id="dataTabelPoinSkp">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Nim</th>
-                                        <th>Nama</th>
-                                        <th>Jurusan</th>
-                                        <th>Prodi</th>
-                                        <th>Poin SKP</th>
-                                        <th>Kategori</th>
-                                        <th>Action</th>
+                                        <th style="width: 10%;">No</th>
+                                        <th style="width: 10%;">Nim</th>
+                                        <th style="width: 40%;">Nama</th>
+                                        <th style="width: 10%;">Jurusan</th>
+                                        <th style="width: 10%;">Prodi</th>
+                                        <th style="width: 5%;">Poin SKP</th>
+                                        <th style="width: 10%;">Kategori</th>
+                                        <th style="width: 10%;">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php $index = 1;
-                                    foreach ($mahasiswa as $m) : ?>
-                                        <tr>
-                                            <td><?= $index++ ?></td>
-                                            <td><?= $m['nim'] ?></td>
-                                            <td><?= $m['nama'] ?></td>
-                                            <td><?= $m['nama_jurusan'] ?></td>
-                                            <td><?= $m['nama_prodi'] ?></td>
-                                            <td>
-                                                <?= $m['total_poin_skp'] ?>
-                                            </td>
-                                            <?php if ($m['total_poin_skp'] >= 100 && $m['total_poin_skp'] <= 150) : ?>
-                                                <td> Cukup</td>
-                                            <?php elseif ($m['total_poin_skp'] >= 151 && $m['total_poin_skp'] <= 200) : ?>
-                                                <td>Baik</td>
-                                            <?php elseif ($m['total_poin_skp'] >= 201 && $m['total_poin_skp'] <= 300) : ?>
-                                                <td> Sangat Baik</td>
-                                            <?php elseif ($m['total_poin_skp'] > 300) : ?>
-                                                <td> Dengan Pujian</td>
-                                            <?php else : ?>
-                                                <td> Kurang</td>
-                                            <?php endif; ?>
-                                            <td>
-                                                <button class="btn btn-primary detail-SKP" data-toggle="modal" data-target=".modalDetailSKP" data-id="<?= $m['nim'] ?>"><i class="fas fa-eye"></i></button>
 
-                                                <a href="<?= base_url('Kemahasiswaan/cetakSkp?nim=') . $m['nim'] ?>" target="_blank" class="btn btn-icon btn-warning mb-3"><i class="fas fa-print"></i></a>
-                                            </td>
-                                        </tr>
-                                    <?php endforeach; ?>
                                 </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nim</th>
-                                        <th>Nama</th>
-                                        <th>Jurusan</th>
-                                        <th>Prodi</th>
-                                        <th>Poin SKP</th>
-                                        <th>Kategori</th>
-                                    </tr>
-                                </tfoot>
+
                             </table>
                         </div>
                     </div>
@@ -101,15 +102,17 @@
                         <div class="col-lg-12">
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-striped table-sm">
-                                        <thead>
+                                    <table class="table table-striped table-bordered table-sm">
+                                        <thead style="background-color: rgb(39, 60, 117);color: #fff;">
                                             <tr>
                                                 <th class="text-center">No</th>
+                                                <th>Nama Kegiatan</th>
                                                 <th>Prestasi</th>
                                                 <th>Tingkatan</th>
                                                 <th>Jenis Kegiatan</th>
                                                 <th>Bidang</th>
                                                 <th>Bobot</th>
+                                                <th>Nilai Bobot</th>
                                             </tr>
                                         </thead>
                                         <tbody class="body-skp">

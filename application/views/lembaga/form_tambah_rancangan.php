@@ -24,7 +24,7 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
+                                <label for="tglPelaksanaan">Tanggal Mulai Pelaksanaan</label>
                                 <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" required>
                                 <div class="invalid-feedback">
                                     Tanggal pelaksanaan harap diisi
@@ -44,7 +44,18 @@
                                     Dana kegiatan harap diisi
                                 </div>
                             </div>
-                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+                            <div class="form-group">
+                                <label for="danaKegiatan">Kategori Kegiatan</label>
+                                <select name="kategori_kegiatan" id="kategori_kegiatan" class="form-control" required>
+                                    <option value="">-- pilih kategori --</option>
+                                    <option value="proker">proker</option>
+                                    <option value="delegasi">delegasi</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Kategori kegiatan harap diisi
+                                </div>
+                            </div>
+                            <button onclick="return confirm('Apakah anda sudah yakin ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                 Tambah Rancangan <i class="fas fa-plus"></i></button>
                             <a href="<?= base_url('Kegiatan/pengajuanRancangan') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                 Kembali <i class="fas fa-arrow-left"></i></a>

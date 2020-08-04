@@ -54,20 +54,17 @@
                             <table class="table table-striped" id="dataTabelProposal">
                                 <thead>
 
-                                    <th class="text">
-                                        No
-
-                                    </th>
-                                    <th>Tanggal Pengajuan</th>
-                                    <th>Nama Pengaju</th>
-                                    <th>Nama Kegiatan</th>
-                                    <th>Status</th>
-                                    <th class="text-center">BEM</th>
-                                    <th class="text-center">Kmhsn</th>
-                                    <th class="text-center">WD 3</th>
-                                    <th class="text-center">PSIK</th>
-                                    <th class="text-center">Keuangan</th>
-                                    <th class="text-center">Action</th>
+                                    <th class="align-middle">No</th>
+                                    <th class="align-middle">Tanggal Pengajuan</th>
+                                    <th class="align-middle">Nama Pengaju</th>
+                                    <th class="align-middle">Nama Kegiatan</th>
+                                    <th class="align-middle">Status LPJ</th>
+                                    <th class="align-middle">LM</th>
+                                    <th class="align-middle">KMHS</th>
+                                    <th class="align-middle">WD3</th>
+                                    <th class="align-middle">PSIK</th>
+                                    <th class="align-middle">Keuangan</th>
+                                    <th class="align-middle">Aksi</th>
 
                                 </thead>
                                 <tbody>
@@ -128,8 +125,8 @@
                                                         <?php elseif ($validasi[$i]['status_validasi'] == 0) : ?>
                                                             <span>Belum bisa validasi</span>
                                                         <?php elseif ($validasi[$i]['status_validasi'] == 2 || $validasi[$i]['status_validasi'] == 4) : ?>
-                                                            <a href="<?= base_url('Kegiatan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=2" class="btn btn-icon btn-success confrim-validasi"><i class="fas fa-check"> </i></a>
-                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-rev   " data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i></a>
+                                                            <a href="<?= base_url('Kegiatan/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=2" class="btn btn-icon btn-success confrim-validasi">valid</a>
+                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-rev   " data-kegiatan="<?= $k['id_kegiatan'] ?>">revisi</a>
                                                         <?php else : ?>
                                                             <span>Selesai</span>
                                                         <?php endif; ?>
@@ -140,6 +137,31 @@
                                         </tr>
                                     <?php endforeach; ?>
 
+                                </tbody>
+                            </table>
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td><b>Keterangan</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>

@@ -68,16 +68,16 @@
                         </form>
                         <div class="table-responsive">
 
-                            <table class="table table-striped table-borderd" id="table-1">
+                            <table class="table table-striped table-bordered" id="table-1">
                                 <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Nim</th>
-                                        <th>Nama Mahasiswa</th>
-                                        <th>Nama Kegiatan</th>
-                                        <th>Validasi</th>
-                                        <th>Action</th>
+                                        <th class="align-middle">No</th>
+                                        <th class="align-middle">Tanggal Pengajuan</th>
+                                        <th class="align-middle">Nim</th>
+                                        <th class="align-middle">Nama Mahasiswa</th>
+                                        <th class="align-middle">Nama Kegiatan</th>
+                                        <th class="align-middle">Validasi</th>
+                                        <th class="align-middle">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -103,14 +103,19 @@
                                                     <input type="hidden" value=1 name="valid">
                                                     <input type="hidden" value="-" name="catatan">
                                                     <?php if ($p['validasi_prestasi'] == 0 || $p['validasi_prestasi'] == 2) :
-                                                            ?>
-                                                        <button type="submit" class="btn btn-icon btn-success"> <i class="fas fa-check"></i></button>
-                                                        <a data-toggle="modal" data-target=".infoRevisi" class="btn btn-icon btn-primary d-revisi" data-skp="<?= $p['id_poin_skp'] ?>"><i class="fas fa-times text-white"></i></a>
+                                                    ?>
+                                                        <div class="btn-group">
+                                                            <button onclick="return confirm('Apakah anda ingin memvalidasi?')" type="submit" class="btn btn-icon btn-success">valid</i></button>
+                                                            <a data-toggle="modal" data-target=".infoRevisi" class="btn btn-icon btn-primary d-revisi text-white" data-skp="<?= $p['id_poin_skp'] ?>">catatan</a>
+                                                            <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-primary">edit</a>
+                                                        </div>
                                                     <?php else :
-                                                            ?>
-                                                        <a data-toggle="modal" data-target=".infoRevisi" class="btn btn-icon btn-primary d-revisi" data-skp="<?= $p['id_poin_skp'] ?>"><i class="fas fa-times text-white"></i></a>
+                                                    ?> <div class="btn-group">
+                                                            <a data-toggle="modal" data-target=".infoRevisi" class="btn btn-icon btn-primary d-revisi text-white" data-skp="<?= $p['id_poin_skp'] ?>">catatan</a>
+                                                            <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-primary">edit</a>
+                                                        </div>
                                                     <?php endif;
-                                                        ?>
+                                                    ?>
                                                 </form>
                                             </td>
                                         </tr>
@@ -167,9 +172,15 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-3 col-form-label">Tanggal Pelaksanaan</label>
+                                <label class="col-sm-3 col-form-label">Tanggal Mulai Pelaksanaan</label>
                                 <div class="col-sm-9">
                                     <input type="text" class="form-control d-tgl" readonly="">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Tanggal Selesai Pelaksanaan</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control d-tgl-selesai" readonly="">
                                 </div>
                             </div>
                             <div class="form-group row">

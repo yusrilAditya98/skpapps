@@ -15,7 +15,7 @@
                                 <div class="form-tambah-skp">
                                     <form action="<?= base_url('Kegiatan/editLpj/') . $kegiatan['id_kegiatan'] ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                         <div class="bagian-personality">
-                                            <h5>Informasi Personality</h5>
+                                            <h5>Data Pemohon</h5>
                                             <div class="form-group">
                                                 <label for="namaMahasiswa">Nama Mahasiswa</label>
                                                 <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa" value="<?= $this->session->userdata('nama') ?>" readonly>
@@ -61,6 +61,20 @@
                                                     Nama Kegiatan harap diisi
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="namaPenyelenggara">Nama Penyelenggara</label>
+                                                <input type="text" class="form-control" id="namaPenyelenggara" value="<?= $kegiatan['nama_penyelenggara'] ?>" name="namaPenyelenggara" readonly>
+                                                <div class="invalid-feedback">
+                                                    Nama penyelenggara harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="urlPenyelenggara">URL Penyelenggara</label>
+                                                <input type="text" class="form-control" id="urlPenyelenggara" value="<?= $kegiatan['url_penyelenggara'] ?>" name="urlPenyelenggara" readonly>
+                                                <div class="invalid-feedback">
+                                                    URL penyelenggara harap diisi
+                                                </div>
+                                            </div>
                                             <?php if ($jenis_revisi == 0 || $jenis_revisi == 2 || $jenis_revisi == 3 || $jenis_revisi == 4) : ?>
                                                 <div class="form-group">
                                                     <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
@@ -92,10 +106,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
+                                                    <label for="tglPelaksanaan">Tanggal Mulai Pelaksanaan</label>
                                                     <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" value="<?= $kegiatan['tanggal_kegiatan'] ?>" required readonly>
                                                     <div class="invalid-feedback">
-                                                        Tanggal pelaksanaan harap diisi
+                                                        Tanggal mulai pelaksanaan harap diisi
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="tglPelaksanaan">Tanggal Selesai Pelaksanaan</label>
+                                                    <input type="text" class="form-control datepicker" id="tglSelesaiPelaksanaan" name="tglSelesaiPelaksanaan" value="<?= $kegiatan['tanggal_selesai_kegiatan'] ?>" readonly required>
+                                                    <div class="invalid-feedback">
+                                                        Tanggal selesai pelaksanaan harap diisi
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -112,24 +133,28 @@
                                                 <h5>Anggota Kegiatan</h5>
                                                 <input type="hidden" name="jumlahAnggota" value="<?= count($anggota) ?>">
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped">
+                                                    <table class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>No</th>
                                                                 <th>Nim</th>
                                                                 <th>Nama</th>
+                                                                <th>Jurusan</th>
+                                                                <th>Prodi</th>
                                                                 <th>Posisi</th>
                                                                 <th>Keaktifan</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody class="daftar-mhs">
                                                             <?php $i = 1;
-                                                                $j = 0;
-                                                                foreach ($anggota as $a) : ?>
+                                                            $j = 0;
+                                                            foreach ($anggota as $a) : ?>
                                                                 <tr>
                                                                     <td><?= $i++ ?></td>
                                                                     <td><?= $a['nim'] ?></td>
                                                                     <td><?= $a['nama'] ?></td>
+                                                                    <td><?= $a['nama_jurusan'] ?></td>
+                                                                    <td><?= $a['nama_prodi'] ?></td>
                                                                     <td>
 
                                                                         <select class="custom-select partisipasiKegiatan" name="prestasi_<?= $a['id_anggota_kegiatan'] ?>" id="partisipasiKegiatan" required>
@@ -152,8 +177,8 @@
                                                                     </td>
                                                                 </tr>
                                                             <?php
-                                                                    $j++;
-                                                                endforeach; ?>
+                                                                $j++;
+                                                            endforeach; ?>
 
                                                         </tbody>
                                                     </table>
@@ -171,8 +196,8 @@
                                                     <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                         Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                         Mega,
-                                                        Format File : Tahun_Nama_Proposal Contoh :
-                                                        2019_AdityaYusrilFikri_Proposal. Format Proposal
+                                                        Format File : Tahun_Nama_LPJ Contoh :
+                                                        2019_AdityaYusrilFikri_LPJ. Format LPJ
                                                         <span><a href="#">Disini</a></span></small>
 
                                                 </div>
@@ -195,7 +220,7 @@
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanLpj1" id="gambarKegiatanLpj1">
 
                                                     <small class="form-text text-muted">
-                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega. LPJ diharuskan upload bukti kegiatan dalam bentuk foto sertifikat atau foto saat menerima penghargaan.
                                                     </small>
                                                 </div>
                                                 <div class="form-group">
@@ -203,7 +228,7 @@
                                                         Pendukung - <a target="_blank" class="btn btn-primary" href="<?= base_url('file_bukti/foto_lpj/') . $dokumentasi['d_lpj_2'] ?>">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanLpj2" id="gambarKegiatanLpj2">
                                                     <small class="form-text text-muted">
-                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega. LPJ diharuskan upload bukti kegiatan dalam bentuk foto sertifikat atau foto saat menerima penghargaan.
                                                     </small>
                                                 </div>
                                             </div>

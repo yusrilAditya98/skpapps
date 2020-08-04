@@ -48,9 +48,11 @@ class Model_mahasiswa extends CI_Model
         $this->db->where('ak.id_kegiatan', $id_kegiatan);
         $from_cluses = $this->db->get_compiled_select();
 
-        $this->db->select('m.*');
+        $this->db->select('m.*,p.nama_prodi,j.nama_jurusan');
         $this->db->from('mahasiswa as m');
         $this->db->join('(' . $from_cluses . ') as bkn_ak', 'm.nim = bkn_ak.nim', 'left');
+        $this->db->join('prodi as p', 'p.kode_prodi = m.kode_prodi', 'left');
+        $this->db->join('jurusan as j', 'p.kode_jurusan = j.kode_jurusan', 'left');
         $this->db->where('bkn_ak.nim', null);
         return $this->db->get()->result_array();
     }

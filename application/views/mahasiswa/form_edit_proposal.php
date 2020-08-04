@@ -4,7 +4,7 @@
             <h1>Form Edit Pengajuan Proposal</h1>
         </div>
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-12">
+            <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h4> Edit Pengajuan Proposal</h4>
@@ -16,7 +16,7 @@
                                     <form action="<?= base_url('Mahasiswa/editProposal/') . $kegiatan['id_kegiatan']  ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                         <input type="hidden" name="id_kegiatan" value="<?= $kegiatan['id_kegiatan'] ?>">
                                         <div class="bagian-personality">
-                                            <h5>Informasi Personality</h5>
+                                            <h5>Data Pemohon</h5>
                                             <div class="form-group">
                                                 <label for="namaMahasiswa">Nama Mahasiswa</label>
                                                 <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa" value="<?= $this->session->userdata('nama') ?>" readonly>
@@ -62,6 +62,20 @@
                                                     Nama Kegiatan harap diisi
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="namaPenyelenggara">Nama Penyelenggara</label>
+                                                <input type="text" class="form-control" id="namaPenyelenggara" value="<?= $kegiatan['nama_penyelenggara'] ?>" name="namaPenyelenggara">
+                                                <div class="invalid-feedback">
+                                                    Nama penyelenggara harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="urlPenyelenggara">URL Penyelenggara</label>
+                                                <input type="text" class="form-control" id="urlPenyelenggara" value="<?= $kegiatan['url_penyelenggara'] ?>" name="urlPenyelenggara">
+                                                <div class="invalid-feedback">
+                                                    URL penyelenggara harap diisi
+                                                </div>
+                                            </div>
                                             <?php if ($jenis_revisi == 0 || $jenis_revisi == 2 || $jenis_revisi == 3 || $jenis_revisi == 4) : ?>
                                                 <div class="form-group">
                                                     <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
@@ -102,8 +116,15 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
-                                                    <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" value="<?= $kegiatan['tanggal_kegiatan'] ?>" required>
+                                                    <label for="tglPelaksanaan">Tanggal Mulai Pelaksanaan</label>
+                                                    <input type="text" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" value="<?= $kegiatan['tanggal_kegiatan'] ?>" required>
+                                                    <div class="invalid-feedback">
+                                                        Tanggal pelaksanaan harap diisi
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="tglPelaksanaan">Tanggal Selesai Pelaksanaan</label>
+                                                    <input type="text" class="form-control datepicker" id="tglSelesaiPelaksanaan" name="tglSelesaiPelaksanaan" value="<?= $kegiatan['tanggal_selesai_kegiatan'] ?>" required>
                                                     <div class="invalid-feedback">
                                                         Tanggal pelaksanaan harap diisi
                                                     </div>
@@ -137,35 +158,36 @@
                                                         <input type="hidden" value="<?= count($tingkat) ?>" name="jumlahAnggota" id="jumlahAnggota">
                                                     </div>
                                                 </div>
+                                                <input type="hidden" name="id_semua_prestasi" id="id_semua_prestasi_mhs" value="<?= $tingkat[0]['id_semua_prestasi'] ?>">
                                                 <div class="table-responsive">
-                                                    <table class="table table-striped">
+                                                    <table class="table table-striped table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th>No</th>
                                                                 <th>Nim</th>
                                                                 <th>Nama</th>
-                                                                <th>Posisi</th>
-                                                                <th>Action</th>
+                                                                <th>Jurusan</th>
+                                                                <th>Prodi</th>
+                                                                <th>Aksi</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody class="daftar-mhs">
                                                             <?php if ($tingkat) : ?>
                                                                 <?php $index = 1;
-                                                                        $id = 1;
-                                                                        foreach ($tingkat as $a) : ?>
+                                                                $id = 1;
+                                                                foreach ($tingkat as $a) : ?>
                                                                     <tr class="d-m" id="data-<?= $a['nim'] ?>">
                                                                         <td><?= $index++ ?></td>
                                                                         <td><?= $a['nim'] ?>
                                                                             <input type="hidden" name="nim_<?= $a['nim'] ?>" value="<?= $a['nim'] ?>" id="nim_<?= $a['nim'] ?>">
                                                                         </td>
                                                                         <td><?= $a['nama'] ?></td>
-                                                                        <td><?= $a['nama_prestasi'] ?>
-                                                                            <input type="hidden" name="prestasi_<?= $a['nim'] ?>" value="<?= $a['id_semua_prestasi'] ?>" id="nim_<?= $a['nim']; ?>">
-                                                                        </td>
+                                                                        <td><?= $a['nama_jurusan'] ?></td>
+                                                                        <td><?= $a['nama_prodi'] ?></td>
                                                                         <td> <button type="button" data-id="<?= $a['nim'] ?>" class="btn btn-danger hps-mhs"><i class="fas fa-trash-alt"></i></button></td>
                                                                     </tr>
                                                                 <?php $id++;
-                                                                        endforeach; ?>
+                                                                endforeach; ?>
                                                             <?php endif; ?>
                                                         </tbody>
                                                     </table>
@@ -205,14 +227,14 @@
                                                     <label for="gambarKegiatanProposal1">Upload Gambar Kegiatan 1 / Acara Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_1'] ?>" target="_blank">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanProposal1" id="gambarKegiatanProposal1">
                                                     <small class="form-text text-muted">
-                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega.Upload gambar dapat berupa poster, undangan, LOA dan pelengkap lainnya.
                                                     </small>
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="gambarKegiatanProposal2">Upload Gambar Kegiatan 2 / Acara Pendukung - <a class="btn btn-primary" href="<?= base_url('file_bukti/foto_proposal/') . $dokumentasi['d_proposal_2'] ?>" target="_blank">Lihat</a></label>
                                                     <input type="file" class="form-control-file btn" name="gambarKegiatanProposal2" id="gambarKegiatanProposal2">
                                                     <small class="form-text text-muted">
-                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                        Format Gambar JPG/JPEG Ukuran Maksimal 2 mega.Upload gambar dapat berupa poster, undangan, LOA dan pelengkap lainnya.
                                                     </small>
                                                 </div>
                                             </div>

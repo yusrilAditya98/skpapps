@@ -10,7 +10,7 @@
                         <div class="col-12 col-md-6 col-lg-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Form Tambah Point SKP</h4>
+                                    <h4>Form Tambah Poin SKP</h4>
                                 </div>
                                 <div class="card-body">
                                     <div class="row">
@@ -71,10 +71,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label for="tanggalKegiatan">Tanggal Pelaksanaan</label>
+                                                        <label for="tanggalKegiatan">Tanggal Mulai Pelaksanaan</label>
                                                         <input type="text" class="form-control datepicker" name="tanggalKegiatan" id="tanggalKegiatan" required>
                                                         <div class=" invalid-feedback">
                                                             Tanggal pelaksanaan kegiatan harap diisi
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="tanggalKegiatan">Tanggal Selesai Pelaksanaan</label>
+                                                        <input type="text" class="form-control datepicker" name="tanggalSelesaiKegiatan" id="tanggalSelesaiKegiatan" required>
+                                                        <div class=" invalid-feedback">
+                                                            Tanggal selesai pelaksanaan kegiatan harap diisi
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
@@ -83,10 +90,8 @@
                                                         <div class=" invalid-feedback">
                                                             Bukti kegiatan harap diisi
                                                         </div>
-                                                        <small>file upload berformat .pdf dengan maksimal 2048Kb</small>
-                                                        <div class=" invalid-feedback">
-                                                            Bukti kegiatan harap diisi
-                                                        </div>
+                                                        <small>file upload berformat .pdf, .jpg, .png dengan maksimal 2048Kb</small>
+
                                                     </div>
 
                                                     <div class="action-button">

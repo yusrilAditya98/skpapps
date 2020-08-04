@@ -15,40 +15,51 @@
                     <div class="card-body">
                         <div class="row mb-4">
                             <div class="col-lg-12">
-                                <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
-                                    <a href="<?= base_url('Kegiatan/tambahRancanganAnggota') ?>" class="btn btn-icon btn-success float-right">
+                                <?php if ($pengajuan == null) { ?>
+                                    <a href="<?= base_url('Kegiatan/tambahRancanganAnggota?tahun=' . $tahun) ?>" class="btn btn-icon btn-success float-right">
                                         Tambah Anggota</a>
-                                    <?php if ($jumlah_anggota != 0) : ?>
-                                        <a href="<?= base_url('Kegiatan/ajukanRancanganAnggota/' . $pengajuan['id']) ?>" class="btn btn-icon btn-primary float-right mr-3">
-                                            Tutup Akses Penambahan Anggota</a>
+                                <?php } else { ?>
+                                    <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
+                                        <a href="<?= base_url('Kegiatan/tambahRancanganAnggota?tahun=' . $tahun) ?>" class="btn btn-icon btn-success float-right">
+                                            Tambah Anggota</a>
+                                        <?php if ($jumlah_anggota != 0) : ?>
+                                            <a href="<?= base_url('Kegiatan/ajukanRancanganAnggota/' . $pengajuan['id'] . '?tahun=' . $tahun) ?>" class="btn btn-icon btn-primary float-right mr-3">
+                                                Tutup Akses Penambahan Anggota</a>
+                                        <?php endif; ?>
+                                    <?php elseif ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 1) : ?>
+                                        <a href="<?= base_url('Kegiatan/ajukanValidasiAnggota/' . $pengajuan['id'] . '?tahun=' . $tahun) ?>" class="btn btn-icon btn-success float-right">
+                                            Ajukan Validasi</a>
+                                        <a href="<?= base_url('Kegiatan/bukaRancanganAnggota/' . $pengajuan['id'] . '?tahun=' . $tahun) ?>" class="btn btn-icon btn-primary float-right mr-3">
+                                            Buka Akses Penambahan Anggota</a>
                                     <?php endif; ?>
-                                <?php elseif ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 1) : ?>
-                                    <a href="<?= base_url('Kegiatan/ajukanValidasiAnggota/' . $pengajuan['id']) ?>" class="btn btn-icon btn-success float-right">
-                                        Ajukan Validasi</a>
-                                    <a href="<?= base_url('Kegiatan/bukaRancanganAnggota/' . $pengajuan['id']) ?>" class="btn btn-icon btn-primary float-right mr-3">
-                                        Buka Akses Penambahan Anggota</a>
-                                <?php endif; ?>
+                                <?php } ?>
                             </div>
                         </div>
                         <div class="row mb-3">
                             <div class="col-lg-8">
-                                <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
+                                <?php if ($pengajuan == null) { ?>
                                     <div class="alert alert-light" role="alert">
                                         Anggota Periode Lembaga <?= $tahun ?> Belum diajukan, Silahkan Tambah Anggota dan tutup akses penambahan anggota untuk mengajukan validasi
                                     </div>
-                                <?php elseif ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 1) : ?>
-                                    <div class="alert alert-light" role="alert">
-                                        Akses Penambahan Anggota Periode Lembaga <?= $tahun ?> Sudah ditutup, Silahkan Validasi
-                                    </div>
-                                <?php elseif ($pengajuan['status_validasi'] == 2 && $pengajuan['status_pembukaan'] == 1) : ?>
-                                    <div class="alert alert-light" role="alert">
-                                        Anggota Lembaga Periode <?= $tahun ?> sedang dalam proses validasi
-                                    </div>
-                                <?php else : ?>
-                                    <div class="alert alert-light" role="alert">
-                                        Anggota Lembaga Periode <?= $tahun ?> sudah di validasi
-                                    </div>
-                                <?php endif; ?>
+                                <?php } else { ?>
+                                    <?php if ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 0) : ?>
+                                        <div class="alert alert-light" role="alert">
+                                            Anggota Periode Lembaga <?= $tahun ?> Belum diajukan, Silahkan Tambah Anggota dan tutup akses penambahan anggota untuk mengajukan validasi
+                                        </div>
+                                    <?php elseif ($pengajuan['status_validasi'] == 0 && $pengajuan['status_pembukaan'] == 1) : ?>
+                                        <div class="alert alert-light" role="alert">
+                                            Akses Penambahan Anggota Periode Lembaga <?= $tahun ?> Sudah ditutup, Silahkan Validasi
+                                        </div>
+                                    <?php elseif ($pengajuan['status_validasi'] == 2 && $pengajuan['status_pembukaan'] == 1) : ?>
+                                        <div class="alert alert-light" role="alert">
+                                            Anggota Lembaga Periode <?= $tahun ?> sedang dalam proses validasi
+                                        </div>
+                                    <?php else : ?>
+                                        <div class="alert alert-light" role="alert">
+                                            Anggota Lembaga Periode <?= $tahun ?> sudah di validasi
+                                        </div>
+                                    <?php endif; ?>
+                                <?php } ?>
                             </div>
                             <div class="col-lg-4">
                                 <form action="<?= base_url('Kegiatan/rancanganAnggota') ?>" method="get">
@@ -77,12 +88,14 @@
                                         <th>NIM</th>
                                         <th>Posisi</th>
                                         <th>Bobot</th>
-                                        <?php if ($pengajuan['status_validasi'] == 1 || $pengajuan['status_pembukaan'] == 1) : ?>
-                                            <th>Status</th>
-                                        <?php endif; ?>
-                                        <?php if ($pengajuan['status_pembukaan'] == 0) : ?>
-                                            <th>Action</th>
-                                        <?php endif; ?>
+                                        <?php if ($pengajuan != null) { ?>
+                                            <?php if ($pengajuan['status_validasi'] == 1 || $pengajuan['status_pembukaan'] == 1) : ?>
+                                                <th>Status</th>
+                                            <?php endif; ?>
+                                            <?php if ($pengajuan['status_pembukaan'] == 0) : ?>
+                                                <th>Action</th>
+                                            <?php endif; ?>
+                                        <?php } ?>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -104,7 +117,7 @@
                                                 <?php else : ?>
                                                 <?php endif; ?>
                                                 <?php if ($a['status_pembukaan'] == 0) : ?>
-                                                    <td><a href="<?= base_url('Kegiatan/hapusRancanganAnggota?id=' . $pengajuan['id'] . '&nim=' . $a['nim'] . '&id_sm_prestasi=' . $a['id_sm_prestasi']) ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
+                                                    <td><a href="<?= base_url('Kegiatan/hapusRancanganAnggota?id=' . $a['id'] . '&nim=' . $a['nim'] . '&id_sm_prestasi=' . $a['id_sm_prestasi'] . '&tahun=' . $tahun) ?>" class="btn btn-danger"><i class="fas fa-trash-alt"></i></a></td>
                                                 <?php endif; ?>
                                             </tr>
                                         <?php endforeach; ?>

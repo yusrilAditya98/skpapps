@@ -10,7 +10,8 @@ class Keuangan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') == 6 || $this->session->userdata('user_profil_kode') == 9) { } else {
+        if ($this->session->userdata('user_profil_kode') == 6 || $this->session->userdata('user_profil_kode') == 9) {
+        } else {
             redirect('auth/blocked');
         }
     }
@@ -46,6 +47,7 @@ class Keuangan extends CI_Controller
         $data['title'] = 'Validasi';
         $data['notif'] = $this->_notif();
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -65,6 +67,7 @@ class Keuangan extends CI_Controller
     {
         $data['title'] = 'Validasi';
         $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['filter'] = $this->kegiatan->getDaftarTahunKegiatan();
         if ($this->input->get('start_date') && $this->input->get('end_date')) {
             $start_date = $this->input->get('start_date');
             $end_date = $this->input->get('end_date');
@@ -175,8 +178,8 @@ class Keuangan extends CI_Controller
     private function _update($nim)
     {
         $this->load->model('Model_poinskp', 'poinskp');
-        $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($nim);
-        $this->db->set('total_poin_skp', $this->totalPoinSKp['bobot']);
+        $totalPoinSkp = $this->poinskp->updateTotalPoinSkp($nim);
+        $this->db->set('total_poin_skp', $totalPoinSkp);
         $this->db->where('nim', $nim);
         $this->db->update('mahasiswa');
     }
@@ -187,19 +190,20 @@ class Keuangan extends CI_Controller
         $kegiatan = $this->db->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
         $i = 0;
         foreach ($anggota as $a) {
-            $this->dataskp[$i++] = [
+            $dataskp[$i++] = [
                 'nim' => $a['nim'],
                 'nama_kegiatan' => $kegiatan['nama_kegiatan'],
                 'validasi_prestasi' => 1,
                 'tgl_pengajuan' => $kegiatan['tgl_pengajuan_lpj'],
                 'tgl_pelaksanaan' => $kegiatan['tanggal_kegiatan'],
+                'tgl_selesai_pelaksanaan' => $kegiatan['tanggal_selesai_kegiatan'],
                 'file_bukti' => 'lpj/' . $kegiatan['lpj_kegiatan'],
                 'tempat_pelaksanaan' => $kegiatan['lokasi_kegiatan'],
                 'catatan' => '-',
                 'prestasiid_prestasi' => $a['id_prestasi'],
             ];
         }
-        $this->kemahasiswaan->insertPoinSkp($this->dataskp);
+        $this->kemahasiswaan->insertPoinSkp($dataskp);
         foreach ($anggota as $a) {
             $this->_update($a['nim']);
         }
@@ -368,6 +372,7 @@ class Keuangan extends CI_Controller
             }
         }
         foreach ($lembaga as $l) {
+            $data[$l['id_lembaga']]['id_lembaga'] = $l['id_lembaga'];
             for ($j = 1; $j < 13; $j++) {
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
@@ -420,5 +425,16 @@ class Keuangan extends CI_Controller
             $data['kegiatan'] = $this->db->select('nama_kegiatan,nama_penanggung_jawab,dana_proposal as dana,periode')->get_where('kegiatan', ['id_kegiatan' => $id_kegiatan])->row_array();
         }
         $this->load->view('kemahasiswaan/bukti_pengajuan', $data);
+    }
+    public function daftarFileDownload()
+    {
+        $data['title'] = 'File Download';
+        $data['notif'] = $this->_notif();
+        $data['file_download'] = $this->db->get('file_download')->result_array();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_file_download");
+        $this->load->view("template/footer");
     }
 }

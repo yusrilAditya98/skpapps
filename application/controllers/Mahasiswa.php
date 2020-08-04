@@ -5,7 +5,10 @@ class Mahasiswa extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        is_logged_in();
+        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 9) {
+        } else {
+            is_logged_in();
+        }
         $this->load->library('form_validation');
     }
     public $bidangKegiatan = [];
@@ -18,6 +21,17 @@ class Mahasiswa extends CI_Controller
     private $id_kegiatan;
 
 
+    private function _notifKmhs()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_kmhs_lpj'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $this->notif['notif_kmhs_proposal'] = count($this->kemahasiswaan->getNotifValidasi(3, 'proposal'));
+        $this->notif['notif_kmhs_rancangan'] = count($this->kemahasiswaan->getNotifValidasiRancangan());
+        $this->notif['notif_kmhs_skp'] = count($this->kemahasiswaan->getNotifValidasiSkp());
+        $this->notif['notif_kmhs_validasi_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiAnggotaLembaga());
+        $this->notif['notif_kmhs_keaktifan_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiKeaktifanLembaga());
+        return $this->notif;
+    }
     // tampilan dashboard
     public function index()
     {
@@ -89,10 +103,11 @@ class Mahasiswa extends CI_Controller
                 'tgl_pelaksanaan' => $this->input->post('tanggalKegiatan'),
                 'tempat_pelaksanaan' => $this->input->post('tempatKegiatan'),
                 'prestasiid_prestasi' => $this->input->post('partisipasiKegiatan'),
-                'tgl_pengajuan' => date("Y-m-d")
+                'tgl_pengajuan' => date("Y-m-d"),
+                'tgl_selesai_pelaksanaan' => $this->input->post('tanggalSelesaiKegiatan')
             ];
             if ($_FILES['uploadBukti']['name']) {
-                $config['allowed_types'] = 'pdf';
+                $config['allowed_types'] = 'pdf|png|jpg|jpeg';
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/poinskp/';
                 $config['file_name'] = time() . '_poinskp_' . $this->session->userdata('username');
@@ -125,9 +140,18 @@ class Mahasiswa extends CI_Controller
     // Function melakukan edit/ubah poin skp
     public function editPoinSkp($id_kegiatan)
     {
+
+        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 9) {
+            $skp = $this->db->get_where('poin_skp', ['id_poin_skp' => $id_kegiatan])->row_array();
+            $nim = $skp['nim'];
+            $data['notif'] = $this->_notifKmhs();
+        } else {
+            $nim = $this->session->userdata('username');
+        }
+
         $this->id_kegiatan = $id_kegiatan;
         $this->load->model('Model_poinskp', 'poinskp');
-        $this->dataPoinSkp = $this->poinskp->getPoinSkp($this->session->userdata('username'), $this->id_kegiatan);
+        $this->dataPoinSkp = $this->poinskp->getPoinSkp($nim, $this->id_kegiatan);
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
         if ($this->form_validation->run() == false) {
@@ -144,12 +168,14 @@ class Mahasiswa extends CI_Controller
                 'tgl_pelaksanaan' => $this->input->post('tanggalKegiatan'),
                 'tempat_pelaksanaan' => $this->input->post('tempatKegiatan'),
                 'catatan' => $this->input->post('informasiTambahan'),
+                'tgl_selesai_pelaksanaan' => $this->input->post('tanggalSelesaiKegiatan'),
                 'prestasiid_prestasi' => $this->input->post('partisipasiKegiatan'),
                 'tgl_pengajuan' => date("Y-m-d")
             ];
+
             $this->session->set_flashdata('message', 'Skp berhasil diperbaharui!');
             if ($_FILES['uploadBukti']['name']) {
-                $config['allowed_types'] = 'pdf';
+                $config['allowed_types'] = 'pdf|jpg|jpeg|png';
                 $config['max_size']     = '2048'; //kb
                 $config['upload_path'] = './file_bukti/poinskp/';
                 $config['file_name'] = time() . '_poinskp_' . $this->session->userdata('username');
@@ -162,8 +188,14 @@ class Mahasiswa extends CI_Controller
                     echo $this->upload->display_errors();
                 }
             }
-            $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);
-            redirect("Mahasiswa/poinSkp");
+            if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 9) {
+                $data['validasi_prestasi'] = $this->dataPoinSkp[0]['validasi_prestasi'];
+                $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);
+                redirect("Kemahasiswaan/daftarPoinSkp");
+            } else {
+                $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);
+                redirect("Mahasiswa/poinSkp");
+            }
         }
     }
 
@@ -233,7 +265,10 @@ class Mahasiswa extends CI_Controller
                 'nama_penanggung_jawab' => $this->input->post('namaMahasiswa'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
-                'waktu_pengajuan' => time()
+                'waktu_pengajuan' => time(),
+                'tanggal_selesai_kegiatan' => $this->input->post('tglSelesaiPelaksanaan'),
+                'nama_penyelenggara' => $this->input->post('namaPenyelenggara'),
+                'url_penyelenggara' => $this->input->post('urlPenyelenggara'),
             ];
             // upload file proposal
             if ($_FILES['fileProposal']['name']) {
@@ -315,16 +350,35 @@ class Mahasiswa extends CI_Controller
 
             // insert anggota kegiatan
             $data_anggota = [];
+            $kode_prestasi = 0;
             foreach ($data['mahasiswa'] as $m) {
                 if ($this->input->post('nim_' . $m['nim'])) {
                     $data_anggota[$m['nim']] = [
                         'nim' => $this->input->post('nim_' . $m['nim']),
                         'id_kegiatan' => $kegiatan['id_kegiatan'],
                         'keaktifan' => 0,
-                        'id_prestasi' => $this->input->post('prestasi_' . $m['nim'])
+                        'id_prestasi' => $this->input->post('id_semua_prestasi')
                     ];
+                    $kode_prestasi = $this->input->post('id_semua_prestasi');
                 }
             }
+            // apakah mahasiswa pemohon ada pada daftar anggota
+            $cek_pemohon = true;
+            foreach ($data_anggota as $da) {
+                if ($da['nim'] == $this->session->userdata('username')) {
+                    $cek_pemohon = false;
+                }
+            }
+            if ($cek_pemohon) {
+                $data_anggota[$this->session->userdata('username')] = [
+                    'nim' => $this->session->userdata('username'),
+                    'id_kegiatan' => $kegiatan['id_kegiatan'],
+                    'keaktifan' => 0,
+                    'id_prestasi' => $kode_prestasi
+                ];
+            }
+
+
             $this->kegiatan->insertAnggotaKegiatan($data_anggota);
             // insert validasi 
             $data_validasi = [];
@@ -393,7 +447,7 @@ class Mahasiswa extends CI_Controller
         $data['dana_kegiatan'] = $this->kegiatan->getInfoDana($id_kegiatan);
         $data['dana'] = $this->kegiatan->getSumberDanaLain($id_kegiatan);
         $data['validasi'] = $this->kegiatan->getDataValidasi($id_kegiatan, null, 'proposal');
-        $data['jenis_revisi'] = $this->input->post('jenis_revisi');
+        $data['jenis_revisi'] = $this->input->post_get('jenis_revisi');
         $gambar = [];
         if ($data['kegiatan'] == null || $data['kegiatan']['status_selesai_proposal'] == 3) {
             redirect('Mahasiswa/pengajuanProposal');
@@ -432,11 +486,23 @@ class Mahasiswa extends CI_Controller
                 'id_penanggung_jawab' => $this->input->post('nim'),
                 'no_whatsup' => $this->input->post('noTlpn'),
                 'id_tingkatan' => $idTingkatan['id_tingkatan'],
-                'waktu_pengajuan' => time()
+                'waktu_pengajuan' => time(),
+                'tanggal_selesai_kegiatan' => $this->input->post('tglSelesaiPelaksanaan'),
+                'nama_penyelenggara' => $this->input->post('namaPenyelenggara'),
+                'url_penyelenggara' => $this->input->post('urlPenyelenggara'),
             ];
             if ($this->input->post('jenis_revisi') == 0) {
                 $proposal['status_selesai_proposal'] = 0;
-            } elseif ($this->input->post('jenis_revisi') == 5 || $this->input->post('jenis_revisi') == 6) { // jika revisi dari keuangan dan psik
+            } elseif ($this->input->post('jenis_revisi') == 5) { // jika revisi dari keuangan dan psik
+                $proposal = [];
+                $proposal = [
+                    'nama_kegiatan' => $this->input->post('namaKegiatan'),
+                    'status_selesai_proposal' => 1,
+                    'no_whatsup' => $this->input->post('noTlpn'),
+                    'nama_penyelenggara' => $this->input->post('namaPenyelenggara'),
+                    'url_penyelenggara' => $this->input->post('urlPenyelenggara'),
+                ];
+            } elseif ($this->input->post('jenis_revisi') == 6) {
                 $proposal = [];
                 $proposal = [
                     'nama_kegiatan' => $this->input->post('namaKegiatan'),
@@ -444,74 +510,78 @@ class Mahasiswa extends CI_Controller
                     'no_whatsup' => $this->input->post('noTlpn'),
                     'dana_kegiatan' => $this->input->post('danaKegiatan'),
                     'dana_proposal' => $this->input->post('danaKegiatanDiterima'),
+                    'nama_penyelenggara' => $this->input->post('namaPenyelenggara'),
+                    'url_penyelenggara' => $this->input->post('urlPenyelenggara'),
                 ];
             }
-            // update file proposal
-            if ($_FILES['fileProposal']['name']) {
-                $config['allowed_types'] = 'pdf';
-                $config['max_size']     = '2048'; //kb
-                $config['upload_path'] = './file_bukti/proposal/';
-                $config['file_name'] = time() . '_file_proposal_' . $this->session->userdata('username');
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
-                if ($this->upload->do_upload('fileProposal')) {
-                    // unlink(FCPATH . "file_bukti/proposal/" . $data['kegiatan']['proposal_kegiatan']);
-                    $proposal['proposal_kegiatan'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('failed', 'File proposal tidak sesuai format (.pdf/2mb)');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanProposal");
+            // update file proposal jika buka keuangan
+            if ($this->input->post('jenis_revisi') != 6) {
+                if ($_FILES['fileProposal']['name']) {
+                    $config['allowed_types'] = 'pdf';
+                    $config['max_size']     = '2048'; //kb
+                    $config['upload_path'] = './file_bukti/proposal/';
+                    $config['file_name'] = time() . '_file_proposal_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+                    if ($this->upload->do_upload('fileProposal')) {
+                        // unlink(FCPATH . "file_bukti/proposal/" . $data['kegiatan']['proposal_kegiatan']);
+                        $proposal['proposal_kegiatan'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('failed', 'File proposal tidak sesuai format (.pdf/2mb)');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanProposal");
+                    }
                 }
-            }
-            // update berita proposal
-            if ($_FILES['beritaProposal']['name']) {
-                $config2['allowed_types'] = 'pdf';
-                $config2['max_size']     = '2048'; //kb
-                $config2['upload_path'] = './file_bukti/berita_proposal/';
-                $config2['file_name'] =  time() . '_berita_proposal' . $this->session->userdata('username');
-                $this->load->library('upload', $config2);
-                $this->upload->initialize($config2);
-                if ($this->upload->do_upload('beritaProposal')) {
-                    // unlink(FCPATH . "file_bukti/berita_proposal/" . $data['kegiatan']['berita_proposal']);
-                    $proposal['berita_proposal'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('failed', 'File berita proposal tidak sesuai format (.pdf/2mb) !');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanProposal");
+                // update berita proposal
+                if ($_FILES['beritaProposal']['name']) {
+                    $config2['allowed_types'] = 'pdf';
+                    $config2['max_size']     = '2048'; //kb
+                    $config2['upload_path'] = './file_bukti/berita_proposal/';
+                    $config2['file_name'] =  time() . '_berita_proposal_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config2);
+                    $this->upload->initialize($config2);
+                    if ($this->upload->do_upload('beritaProposal')) {
+                        // unlink(FCPATH . "file_bukti/berita_proposal/" . $data['kegiatan']['berita_proposal']);
+                        $proposal['berita_proposal'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('failed', 'File berita proposal tidak sesuai format (.pdf/2mb) !');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanProposal");
+                    }
                 }
-            }
-            // update gambar1 kegiatan
-            if ($_FILES['gambarKegiatanProposal1']['name']) {
-                $config3['allowed_types'] = 'jpg|jpeg';
-                $config3['max_size']     = '2048'; //kb
-                $config3['upload_path'] = './file_bukti/foto_proposal/';
-                $config3['file_name'] = time() . '_gambar1_proposal_' . $this->session->userdata('username');
-                $this->load->library('upload', $config3);
-                $this->upload->initialize($config3);
-                if ($this->upload->do_upload('gambarKegiatanProposal1')) {
-                    // unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_1']);
-                    $gambar['d_proposal_1'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanProposal");
+                // update gambar1 kegiatan
+                if ($_FILES['gambarKegiatanProposal1']['name']) {
+                    $config3['allowed_types'] = 'jpg|jpeg';
+                    $config3['max_size']     = '2048'; //kb
+                    $config3['upload_path'] = './file_bukti/foto_proposal/';
+                    $config3['file_name'] = time() . '_gambar1_proposal_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config3);
+                    $this->upload->initialize($config3);
+                    if ($this->upload->do_upload('gambarKegiatanProposal1')) {
+                        // unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_1']);
+                        $gambar['d_proposal_1'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanProposal");
+                    }
                 }
-            }
-            // update gambar2 kegiatan
-            if ($_FILES['gambarKegiatanProposal2']['name']) {
-                $config4['allowed_types'] = 'jpg|jpeg';
-                $config4['max_size']     = '2048'; //kb
-                $config4['upload_path'] = './file_bukti/foto_proposal/';
-                $config4['file_name'] = time() . '_gambar2_proposal_' . $this->session->userdata('username');
-                $this->load->library('upload', $config4);
-                $this->upload->initialize($config4);
-                if ($this->upload->do_upload('gambarKegiatanProposal2')) {
-                    // unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_2']);
-                    $gambar['d_proposal_2'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanProposal");
+                // update gambar2 kegiatan
+                if ($_FILES['gambarKegiatanProposal2']['name']) {
+                    $config4['allowed_types'] = 'jpg|jpeg';
+                    $config4['max_size']     = '2048'; //kb
+                    $config4['upload_path'] = './file_bukti/foto_proposal/';
+                    $config4['file_name'] = time() . '_gambar2_proposal_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config4);
+                    $this->upload->initialize($config4);
+                    if ($this->upload->do_upload('gambarKegiatanProposal2')) {
+                        // unlink(FCPATH . "file_bukti/foto_proposal/" . $data['dokumentasi']['d_proposal_2']);
+                        $gambar['d_proposal_2'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('failed', 'File gambar tidak sesuai format (.jpg/2mb)');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanProposal");
+                    }
                 }
             }
 
@@ -521,8 +591,9 @@ class Mahasiswa extends CI_Controller
                 $this->kegiatan->updateDokumentasiKegiatan($gambar, $id_kegiatan);
             }
 
-            if ($data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
+            if ($data['jenis_revisi'] == 0 || $data['jenis_revisi'] == 2 || $data['jenis_revisi'] == 3 || $data['jenis_revisi'] == 4) {
                 $data_anggota = [];
+                $kode_prestasi = 0;
                 if ($jumlahAnggota) {
                     foreach ($data['mahasiswa'] as $m) {
                         if ($this->input->post('nim_' . $m['nim'])) {
@@ -530,10 +601,27 @@ class Mahasiswa extends CI_Controller
                                 'nim' => $this->input->post('nim_' . $m['nim']),
                                 'id_kegiatan' => $id_kegiatan,
                                 'keaktifan' => 0,
-                                'id_prestasi' => $this->input->post('prestasi_' . $m['nim'])
+                                'id_prestasi' => $this->input->post('id_semua_prestasi')
                             ];
+                            $kode_prestasi = $this->input->post('id_semua_prestasi');
                         }
                     }
+                    // apakah mahasiswa pemohon ada pada daftar anggota
+                    $cek_pemohon = true;
+                    foreach ($data_anggota as $da) {
+                        if ($da['nim'] == $this->session->userdata('username')) {
+                            $cek_pemohon = false;
+                        }
+                    }
+                    if ($cek_pemohon) {
+                        $data_anggota[$this->session->userdata('username')] = [
+                            'nim' => $this->session->userdata('username'),
+                            'id_kegiatan' => $id_kegiatan,
+                            'keaktifan' => 0,
+                            'id_prestasi' => $kode_prestasi
+                        ];
+                    }
+
                     $this->db->delete('anggota_kegiatan', ['id_kegiatan' => $id_kegiatan]);
                     $this->kegiatan->insertAnggotaKegiatan($data_anggota);
                 }
@@ -611,6 +699,7 @@ class Mahasiswa extends CI_Controller
                 'tgl_pengajuan_lpj' => date("Y-m-d"),
             ];
             // upload file proposal
+
             if ($_FILES['fileLpj']['name']) {
                 $config['allowed_types'] = 'pdf';
                 $config['max_size']     = '2048'; //kb
@@ -739,7 +828,7 @@ class Mahasiswa extends CI_Controller
         $data['tingkat'] = $this->kegiatan->getInfoTingkat($id_kegiatan);
         $data['prestasi'] = $this->poinskp->getPrestasi($data['tingkat'][0]['id_semua_tingkatan']);
         $data['dokumentasi'] = $this->kegiatan->getDokumentasi($id_kegiatan);
-        $data['jenis_revisi'] = $this->input->post('jenis_revisi');
+        $data['jenis_revisi'] = $this->input->post_get('jenis_revisi');
         // set rules form validation
         $this->form_validation->set_rules('namaKegiatan', 'Nama Kegiatan', 'required');
         if ($this->form_validation->run() == false) {
@@ -760,71 +849,73 @@ class Mahasiswa extends CI_Controller
                 $lpj['status_selesai_lpj'] = 1;
             }
 
-            // upload file proposal
-            if ($_FILES['fileLpj']['name']) {
-                $config['allowed_types'] = 'pdf';
-                $config['max_size']     = '2048'; //kb
-                $config['upload_path'] = './file_bukti/lpj/';
-                $config['file_name'] = time() . '_file_lpj_' . $this->session->userdata('username');
-                $this->load->library('upload', $config);
-                $this->upload->initialize($config);
-                if ($this->upload->do_upload('fileLpj')) {
-                    // unlink(FCPATH . "file_bukti/lpj/" . $data['kegiatan']['lpj_kegiatan']);
-                    $lpj['lpj_kegiatan'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('failed', 'File lpj tidak sesuai format (.pdf/(2mb)!');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+            if ($data['jenis_revisi'] != 6) {
+                // upload file lpj
+                if ($_FILES['fileLpj']['name']) {
+                    $config['allowed_types'] = 'pdf';
+                    $config['max_size']     = '2048'; //kb
+                    $config['upload_path'] = './file_bukti/lpj/';
+                    $config['file_name'] = time() . '_file_lpj_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config);
+                    $this->upload->initialize($config);
+                    if ($this->upload->do_upload('fileLpj')) {
+                        // unlink(FCPATH . "file_bukti/lpj/" . $data['kegiatan']['lpj_kegiatan']);
+                        $lpj['lpj_kegiatan'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('failed', 'File lpj tidak sesuai format (.pdf/(2mb)!');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanLpj");
+                    }
                 }
-            }
-            // upload berita proposal
-            if ($_FILES['beritaLpj']['name']) {
-                $config2['allowed_types'] = 'pdf';
-                $config2['max_size']     = '2048'; //kb
-                $config2['upload_path'] = './file_bukti/berita_lpj/';
-                $config2['file_name'] = time() . '_berita_lpj_' . $this->session->userdata('username');
-                $this->load->library('upload', $config2);
-                $this->upload->initialize($config2);
-                if ($this->upload->do_upload('beritaLpj')) {
-                    //  unlink(FCPATH . "file_bukti/berita_lpj/" . $data['kegiatan']['berita_pelaporan']);
-                    $lpj['berita_pelaporan'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('failed', 'Berita lpj tidak sesuai format (.pdf/(2mb)!');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                // upload berita proposal
+                if ($_FILES['beritaLpj']['name']) {
+                    $config2['allowed_types'] = 'pdf';
+                    $config2['max_size']     = '2048'; //kb
+                    $config2['upload_path'] = './file_bukti/berita_lpj/';
+                    $config2['file_name'] = time() . '_berita_lpj_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config2);
+                    $this->upload->initialize($config2);
+                    if ($this->upload->do_upload('beritaLpj')) {
+                        //  unlink(FCPATH . "file_bukti/berita_lpj/" . $data['kegiatan']['berita_pelaporan']);
+                        $lpj['berita_pelaporan'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('failed', 'Berita lpj tidak sesuai format (.pdf/(2mb)!');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanLpj");
+                    }
                 }
-            }
-            // upload gambar kegiatan
-            if ($_FILES['gambarKegiatanLpj1']['name']) {
-                $config3['allowed_types'] = 'jpg|jpeg';
-                $config3['max_size']     = '2048'; //kb
-                $config3['upload_path'] = './file_bukti/foto_lpj/';
-                $config3['file_name'] = time() . '_gambar1_lpj_' . $this->session->userdata('username');
-                $this->load->library('upload', $config3);
-                $this->upload->initialize($config3);
-                if ($this->upload->do_upload('gambarKegiatanLpj1')) {
-                    // unlink(FCPATH . "file_bukti/foto_lpj/" . $data['dokumentasi']['d_lpj_1']);
-                    $gambar['d_lpj_1'] = $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('message', 'Gambar 1 tidak sesuai format (.jpg/2mb)');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                // upload gambar kegiatan
+                if ($_FILES['gambarKegiatanLpj1']['name']) {
+                    $config3['allowed_types'] = 'jpg|jpeg';
+                    $config3['max_size']     = '2048'; //kb
+                    $config3['upload_path'] = './file_bukti/foto_lpj/';
+                    $config3['file_name'] = time() . '_gambar1_lpj_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config3);
+                    $this->upload->initialize($config3);
+                    if ($this->upload->do_upload('gambarKegiatanLpj1')) {
+                        // unlink(FCPATH . "file_bukti/foto_lpj/" . $data['dokumentasi']['d_lpj_1']);
+                        $gambar['d_lpj_1'] = $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('message', 'Gambar 1 tidak sesuai format (.jpg/2mb)');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanLpj");
+                    }
                 }
-            }
-            if ($_FILES['gambarKegiatanLpj2']['name']) {
-                $config4['allowed_types'] = 'jpg|jpeg';
-                $config4['max_size']     = '2048'; //kb
-                $config4['upload_path'] = './file_bukti/foto_lpj/';
-                $config4['file_name'] = time() . '_gambar2_lpj_' . $this->session->userdata('username');
-                $this->load->library('upload', $config4);
-                $this->upload->initialize($config4);
-                if ($this->upload->do_upload('gambarKegiatanLpj2')) {
-                    // unlink(FCPATH . "file_bukti/foto_lpj/" . $data['dokumentasi']['d_lpj_2']);
-                    $gambar['d_lpj_2'] =  $this->upload->data('file_name');
-                } else {
-                    $this->session->set_flashdata('message', 'Gambar 2 tidak sesuai format (.jpg/2mb)');
-                    echo $this->upload->display_errors();
-                    redirect("Mahasiswa/pengajuanLpj");
+                if ($_FILES['gambarKegiatanLpj2']['name']) {
+                    $config4['allowed_types'] = 'jpg|jpeg';
+                    $config4['max_size']     = '2048'; //kb
+                    $config4['upload_path'] = './file_bukti/foto_lpj/';
+                    $config4['file_name'] = time() . '_gambar2_lpj_' . $this->session->userdata('username');
+                    $this->load->library('upload', $config4);
+                    $this->upload->initialize($config4);
+                    if ($this->upload->do_upload('gambarKegiatanLpj2')) {
+                        // unlink(FCPATH . "file_bukti/foto_lpj/" . $data['dokumentasi']['d_lpj_2']);
+                        $gambar['d_lpj_2'] =  $this->upload->data('file_name');
+                    } else {
+                        $this->session->set_flashdata('message', 'Gambar 2 tidak sesuai format (.jpg/2mb)');
+                        echo $this->upload->display_errors();
+                        redirect("Mahasiswa/pengajuanLpj");
+                    }
                 }
             }
 
@@ -877,6 +968,29 @@ class Mahasiswa extends CI_Controller
         $data['pimpinan'] = $this->db->get('list_pimpinan')->result_array();
         $data['mahasiswa'] = $this->mahasiswa->getDataMahasiswa($this->session->userdata('username'));
         $data['poinskp'] = $this->poinskp->getPoinSkp($this->session->userdata('username'));
+
+        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+
+        // QR Code
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']        = './assets/'; //string, the default is application/cache/
+        $config['errorlog']        = './assets/'; //string, the default is application/logs/
+        $config['imagedir']        = 'assets/qrcode/'; //direktori penyimpanan qr code
+        $config['quality']        = true; //boolean, the default is true
+        $config['size']            = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+
+        $image_name = 'bukti_skp_' . $this->session->userdata('username') . '.png'; //buat name dari qr code sesuai dengan nim
+
+        $params['data'] = base_url("API_skp/cetakSkp?nim=" . $this->session->userdata('username')); //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir'] . $image_name; //simpan image QR CODE ke folder assets/images/
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+
+
         $this->load->view('mahasiswa/tampilan_transkrip_poin', $data);
     }
     // form pengajuan beasiswa 
@@ -952,24 +1066,24 @@ class Mahasiswa extends CI_Controller
 
     public function bidangKegiatan()
     {
-        $this->bidangKegiatan = $this->db->get('bidang_kegiatan')->result_array();
+        $this->bidangKegiatan = $this->db->get_where('bidang_kegiatan', ['status_bidang' => 1])->result_array();
         echo json_encode($this->bidangKegiatan);
     }
     public function jenisKegiatan($id_bidang)
     {
-        $this->jenisKegiatan = $this->db->get_where('jenis_kegiatan', ['id_bidang' => $id_bidang])->result_array();
+        $this->jenisKegiatan = $this->db->get_where('jenis_kegiatan', ['id_bidang' => $id_bidang, 'status_jenis' => 1])->result_array();
         echo json_encode($this->jenisKegiatan);
     }
     public function tingkatKegiatan($id_jenis)
     {
         $this->load->model('Model_poinskp', 'poinskp');
-        $this->tingkatKegiatan = $this->poinskp->getTingkatSkp($id_jenis);
+        $this->tingkatKegiatan = $this->poinskp->getTingkatSkp($id_jenis, 1);
         echo json_encode($this->tingkatKegiatan);
     }
     public function partisipasiKegiatan($id_sm_tingkat)
     {
         $this->load->model('Model_poinskp', 'poinskp');
-        $this->partisipasiKegiatan = $this->poinskp->getPrestasi($id_sm_tingkat);
+        $this->partisipasiKegiatan = $this->poinskp->getPrestasi($id_sm_tingkat, 1);
         echo json_encode($this->partisipasiKegiatan);
     }
 
@@ -982,5 +1096,16 @@ class Mahasiswa extends CI_Controller
     {
         $this->load->model('Model_poinskp', 'poinskp');
         echo json_encode($this->poinskp->getPoinSkp($this->session->userdata('username'), $id_kegiatan));
+    }
+
+    public function daftarFileDownload()
+    {
+        $data['title'] = 'Pengaturan File Download';
+        $data['file_download'] = $this->db->get('file_download')->result_array();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_file_download");
+        $this->load->view("template/footer");
     }
 }

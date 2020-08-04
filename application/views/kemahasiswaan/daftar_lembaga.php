@@ -67,6 +67,7 @@
                                         <th>Jumlah Anggota</th>
                                         <th>Validasi Anggota</th>
                                         <th>Validasi Keaktifan</th>
+                                        <th>Bukti Pengajuan</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -95,6 +96,9 @@
                                                 <?php elseif ($p['status_keaktifan'] == 0) : ?>
                                                     <i class="fa fa-circle text-secondary" aria-hidden="true"></i>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td>
+                                                <a target="_blank" href="<?= base_url('file_bukti/sk_lembaga/' . $p['bukti_pengajuan']) ?>"><i class="fas fa-file-alt"></i></a>
                                             </td>
                                             <td>
                                                 <?php if ($p['status_validasi'] == 2) :  ?>
@@ -151,6 +155,8 @@
                                                 <th class="text-center">No</th>
                                                 <th>Nama</th>
                                                 <th>NIM</th>
+                                                <th>Jurusan</th>
+                                                <th>Prodi</th>
                                                 <th>Posisi</th>
                                             </tr>
                                         </thead>
@@ -201,12 +207,18 @@
                                                 <th class="text-center">No</th>
                                                 <th>Nama</th>
                                                 <th>NIM</th>
+                                                <th>Jurusan</th>
+                                                <th>Prodi</th>
                                                 <th>Posisi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="body-validasi-anggota-fix">
                                         </tbody>
                                     </table>
+                                    <div class="action-button">
+                                        <a href="<?= base_url('Kemahasiswaan/validasiAnggota/unvalid') ?>" style="width:auto; float:right" class="btn btn-icon btn-danger detailValidasiAnggotaFix">
+                                            Unvalidasi Anggota <i class="fas fa-check"></i></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -248,6 +260,8 @@
                                                 <th class="text-center">No</th>
                                                 <th>Nama</th>
                                                 <th>NIM</th>
+                                                <th>Jurusan</th>
+                                                <th>Prodi</th>
                                                 <th>Posisi</th>
                                                 <th>Bobot</th>
                                                 <th>Keaktifan</th>
@@ -300,9 +314,11 @@
                                                 <th class="text-center">No</th>
                                                 <th>Nama</th>
                                                 <th>NIM</th>
+                                                <th>Jurusan</th>
+                                                <th>Prodi</th>
                                                 <th>Posisi</th>
                                                 <th>Bobot</th>
-                                                <th>Keaktifan</th>
+                                                <th>Nilai Keaktifan</th>
                                             </tr>
                                         </thead>
                                         <tbody class="body-keaktifan-anggota-fix">

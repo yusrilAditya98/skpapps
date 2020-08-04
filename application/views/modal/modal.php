@@ -58,7 +58,7 @@
 
                 <ul class="nav nav-pills" id="myTab3" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active show" id="personality-tab3" data-toggle="tab" href="#personality" role="tab" aria-controls="personalitya" aria-selected="true">Personality</a>
+                        <a class="nav-link active show" id="personality-tab3" data-toggle="tab" href="#personality" role="tab" aria-controls="personalitya" aria-selected="true">Data Pemohon</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="dana-tab3" data-toggle="tab" href="#dana" role="tab" aria-controls="dana" aria-selected="false">Dana</a>
@@ -105,11 +105,22 @@
                             <small id="anggaranHelp" class="form-text text-muted">Dana
                                 anggaran yang akan diterima</small>
                         </div>
+                        <div class="form-group f-proposal">
+
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="acara" role="tabpanel" aria-labelledby="acara-tab3">
                         <div class="form-group">
                             <label for="namaKegiatan">Judul Acara / Kegiatan</label>
                             <input type="text" class="form-control k-nama_kegiatan" id="namaKegiatan" name="namaKegiatan" value="" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="namaPenyelenggara">Nama Penyelenggara</label>
+                            <input type="text" class="form-control k-nama_penyelenggara" id="namaPenyelenggara" name="namaPenyelenggara" value="" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="urlPenyelenggara">URL Penyelenggara</label>
+                            <input type="text" class="form-control k-url_penyelenggara" id="urlPenyelenggara" name="urlPenyelenggara" value="ce" readonly>
                         </div>
                         <div class="form-group">
                             <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
@@ -128,8 +139,12 @@
                             <input type="text" class="form-control k-tingkat_kegiatan" value="" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
+                            <label for="tglPelaksanaan">Tanggal Mulai Pelaksanaan</label>
                             <input type="date" class="form-control k-tgl_kegiatan" id="tglPelaksanaan" name="tglPelaksanaan" value="" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="tglSelesaiPelaksanaan">Tanggal Selesai Pelaksanaan</label>
+                            <input type="date" class="form-control k-tgl_selesai_kegiatan" id="tglSelesaiPelaksanaan" name="tglSelesaiPelaksanaan" value="" readonly>
                         </div>
                         <div class="form-group">
                             <label for="tempatPelaksanaan">Tempat Pelaksanaan</label>
@@ -144,7 +159,11 @@
                                         <th>No</th>
                                         <th>Nim</th>
                                         <th>Nama</th>
-                                        <th>Posisi</th>
+                                        <th>Jurusan</th>
+                                        <th>Prodi</th>
+                                        <th class="th-posisi">Posisi</th>
+                                        <th class="th-bobot">Bobot</th>
+                                        <th>Keaktifan</th>
                                     </tr>
                                 </thead>
                                 <tbody class="daftar-mhs">

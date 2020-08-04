@@ -15,7 +15,7 @@
                                 <div class="form-tambah-skp">
                                     <form action="<?= base_url('Kegiatan/tambahLpj/') . $kegiatan['id_kegiatan'] ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                         <div class="bagian-personality">
-                                            <h5>Informasi Personality</h5>
+                                            <h5>Data Pemohon</h5>
                                             <div class="form-group">
                                                 <label for="namaMahasiswa">Nama Lembaga</label>
                                                 <input type="text" class="form-control" id="namaMahasiswa" name="namaMahasiswa" value="<?= $this->session->userdata('nama') ?>" readonly>
@@ -62,6 +62,20 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
+                                                <label for="namaPenyelenggara">Nama Penyelenggara</label>
+                                                <input type="text" class="form-control" id="namaPenyelenggara" value="<?= $kegiatan['nama_penyelenggara'] ?>" name="namaPenyelenggara" readonly>
+                                                <div class="invalid-feedback">
+                                                    Nama penyelenggara harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="urlPenyelenggara">URL Penyelenggara</label>
+                                                <input type="text" class="form-control" id="urlPenyelenggara" value="<?= $kegiatan['url_penyelenggara'] ?>" name="urlPenyelenggara" readonly>
+                                                <div class="invalid-feedback">
+                                                    URL penyelenggara harap diisi
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="deskripsiKegiatan">Deskripsi Kegiatan</label>
                                                 <textarea class="form-control" id="deskripsiKegiatan" name="deskripsiKegiatan" style="height: 100px" readonly required><?= $kegiatan['deskripsi_kegiatan'] ?></textarea>
                                                 <div class="invalid-feedback">
@@ -91,12 +105,20 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="tglPelaksanaan">Tanggal Pelaksanaan</label>
-                                                <input type="date" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" value="<?= $kegiatan['tanggal_kegiatan'] ?>" required readonly>
+                                                <label for="tglPelaksanaan">Tanggal Mulai Pelaksanaan</label>
+                                                <input type="text" class="form-control datepicker" id="tglPelaksanaan" name="tglPelaksanaan" value="<?= $kegiatan['tanggal_kegiatan'] ?>" required readonly>
                                                 <div class="invalid-feedback">
-                                                    Tanggal pelaksanaan harap diisi
+                                                    Tanggal mulai pelaksanaan harap diisi
                                                 </div>
                                             </div>
+                                            <div class="form-group">
+                                                <label for="tglPelaksanaan">Tanggal Selesai Pelaksanaan</label>
+                                                <input type="text" class="form-control datepicker" id="tglSelesaiPelaksanaan" name="tglSelesaiPelaksanaan" value="<?= $kegiatan['tanggal_selesai_kegiatan'] ?>" readonly required>
+                                                <div class="invalid-feedback">
+                                                    Tanggal selesai pelaksanaan harap diisi
+                                                </div>
+                                            </div>
+
                                             <div class="form-group">
                                                 <label for="tempatPelaksanaan">Tempat Pelaksanaan</label>
                                                 <input type="text" class="form-control" id="tempatPelaksanaan" name="tempatPelaksanaan" value="<?= $kegiatan['lokasi_kegiatan'] ?>" required readonly>
@@ -110,12 +132,14 @@
                                             <h5>Anggota Kegiatan</h5>
                                             <input type="hidden" name="jumlahAnggota" value="<?= count($anggota) ?>">
                                             <div class="table-responsive">
-                                                <table class="table table-striped">
+                                                <table class="table table-striped table-bordered">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
                                                             <th>Nim</th>
                                                             <th>Nama</th>
+                                                            <th>Jurusan</th>
+                                                            <th>Prodi</th>
                                                             <th>Posisi</th>
                                                             <th>Keaktifan</th>
                                                         </tr>
@@ -127,6 +151,8 @@
                                                                 <td><?= $i++ ?></td>
                                                                 <td><?= $a['nim'] ?></td>
                                                                 <td><?= $a['nama'] ?></td>
+                                                                <td><?= $a['nama_jurusan'] ?></td>
+                                                                <td><?= $a['nama_prodi'] ?></td>
                                                                 <td>
                                                                     <select class="custom-select partisipasiKegiatan" name="prestasi_<?= $a['id_anggota_kegiatan'] ?>" id="partisipasiKegiatan" required>
                                                                         <?php foreach ($prestasi as $p) : ?>
@@ -165,8 +191,8 @@
                                                 <small id="anggaranHelp" class="form-text text-muted">Silahkan
                                                     Upload File Dokumen Dalam Bentuk File PDF Maksimal 2
                                                     Mega,
-                                                    Format File : Tahun_Nama_Proposal Contoh :
-                                                    2019_AdityaYusrilFikri_Proposal. Format Proposal
+                                                    Format File : Tahun_Nama_LPJ Contoh :
+                                                    2019_AdityaYusrilFikri_LPJ. Format LPJ
                                                     <span><a href="#">Disini</a></span></small>
 
                                             </div>
@@ -194,7 +220,7 @@
                                                     Gambar kegiatan harap diisi
                                                 </div>
                                                 <small class="form-text text-muted">
-                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega. LPJ diharuskan upload bukti kegiatan dalam bentuk foto sertifikat atau foto saat menerima penghargaan.
                                                 </small>
                                             </div>
                                             <div class="form-group">
@@ -205,12 +231,12 @@
                                                     Gambar kegiatan harap diisi
                                                 </div>
                                                 <small class="form-text text-muted">
-                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega
+                                                    Format Gambar JPG/JPEG Ukuran Maksimal 2 mega. LPJ diharuskan upload bukti kegiatan dalam bentuk foto sertifikat atau foto saat menerima penghargaan.
                                                 </small>
                                             </div>
                                         </div>
                                         <div class="action-button">
-                                            <button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+                                            <button onclick="return confirm('Apakah anda sudah yakin ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
                                                 Kirim Lpj <i class="fas fa-plus"></i></button>
                                             <a href="<?= base_url('Kegiatan/pengajuanLpj') ?>" style="float:right" class="btn btn-icon btn-secondary">
                                                 Kembali <i class="fas fa-arrow-left"></i></a>

@@ -47,24 +47,44 @@
                                 </div>
                             </div>
                         </form>
+                        <form class="m-t-20" action="<?= base_url('Export/exportLpjKegiatan') ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-5 input-group mb-3">
+                                    <select class="custom-select" id="kategori" name="kategori">
+                                        <option selected value="null">Semua Kategori</option>
+                                        <option value="mhs">Non Lembaga</option>
+                                        <option value="lbg">Lembaga</option>
+
+                                    </select>
+                                    <select class="custom-select" id="tahun" name="tahun">
+                                        <option value="kosong">Semua Periode</option>
+                                        <?php foreach ($filter as $p) : ?>
+                                            <option value="<?= $p['periode'] ?>"><?= $p['periode'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                         <div class="kategori-filter float-right mb-2">
 
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="dataTabelProposal">
+                            <table class="table table-striped table-bordered" id="dataTabelProposal">
                                 <thead class="text-center">
-
-                                    <th> No</th>
-                                    <th>Tanggal Pengajuan</th>
-                                    <th>Nama Pengaju</th>
-                                    <th>Nama Kegiatan</th>
-                                    <th>Status</th>
-                                    <th>BEM</th>
-                                    <th>Kmhsn</th>
-                                    <th>WD 3</th>
-                                    <th>PSIK</th>
-                                    <th>Keuangan</th>
-                                    <th>Action</th>
+                                    <th class="align-middle">No</th>
+                                    <th class="align-middle">Tanggal Pengajuan</th>
+                                    <th class="align-middle">Nama Pengaju</th>
+                                    <th class="align-middle">Nama Kegiatan</th>
+                                    <th class="align-middle">Status LPJ</th>
+                                    <th class="align-middle">LM</th>
+                                    <th class="align-middle">KMHS</th>
+                                    <th class="align-middle">WD3</th>
+                                    <th class="align-middle">PSIK</th>
+                                    <th class="align-middle">Keuangan</th>
+                                    <th class="align-middle">Aksi</th>
 
                                 </thead>
                                 <tbody>
@@ -72,7 +92,11 @@
                                     <?php foreach ($kegiatan as $k) : ?>
                                         <tr>
                                             <td><?= $index++; ?></td>
-                                            <td><?= date("d-m-Y", strtotime($k['tgl_pengajuan_lpj'])) ?></td>
+                                            <?php if ($k['tgl_pengajuan_lpj'] == '0000-00-00') : ?>
+                                                <td>Belum Mengajukan LPJ</td>
+                                            <?php else : ?>
+                                                <td><?= date("d-m-Y", strtotime($k['tgl_pengajuan_lpj']))   ?></td>
+                                            <?php endif; ?>
                                             <td><?= $k['nama_lembaga'] ?></td>
                                             <td>
                                                 <a href="#" class="detail-kegiatan" data-id="<?= $k['id_kegiatan'] ?>" data-toggle="modal" data-target="#i-kegiatan" data-jenis="lpj"><?= $k['nama_kegiatan'] ?></a>
@@ -121,8 +145,8 @@
                                                         <?php endif; ?>
                                                     <?php elseif ($validasi[$i]['id_kegiatan'] == $k['id_kegiatan'] && $validasi[$i]['jenis_validasi'] == 5) : ?>
                                                         <?php if ($validasi[$i]['status_validasi'] == 2 || $validasi[$i]['status_validasi'] == 4) : ?>
-                                                            <a href="<?= base_url('Publikasi/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=5" class="btn btn-icon btn-success confirm-validasi"><i class="fas fa-check"> </i></a>
-                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-rev" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i></a>
+                                                            <a href="<?= base_url('Publikasi/validasiLpj/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=5" class="btn btn-icon btn-success confirm-validasi">valid</a>
+                                                            <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn btn-icon btn-primary d-valid-rev" data-kegiatan="<?= $k['id_kegiatan'] ?>">revisi</a>
                                                         <?php elseif ($validasi[$i]['status_validasi'] == 1) : ?>
                                                             <span>Selesai</span>
                                                         <?php elseif ($validasi[$i]['status_validasi'] == 0) : ?>
@@ -135,20 +159,32 @@
                                     <?php endforeach; ?>
 
                                 </tbody>
-                                <tfoot>
+
+                            </table>
+                            <table>
+                                <thead>
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><b>Keterangan</b></td>
                                     </tr>
-                                </tfoot>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>

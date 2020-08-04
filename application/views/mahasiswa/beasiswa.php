@@ -11,9 +11,6 @@
 				<div class="card">
 					<div class="card-header">
 						<h4>Daftar Pengajuan Beasiswa</h4>
-						<div class="card-header-action">
-							<a class="btn btn-success" href=""><i class="fas fa-plus mr-2"></i>Tambah Riwayat Beasiswa</a>
-						</div>
 					</div>
 					<div class="card-body">
 						<div class="row">
@@ -122,10 +119,9 @@
 												<label for="lampiran">Lampiran</label>
 												<input type="file" name="lampiran" class="form-control-file btn" id="lampiran" required>
 												<small id="anggaranHelp" class="form-text text-muted">File
-													Upload PDF atau JPG Maksimal 2 Mega. Silahkan di isikan
+													Upload PDF Maksimal 2 Mega. Silahkan di isikan
 													lampiran Surat Tidak Pernah Menerima Beasiswa dari
-													tempat lain/Bermaterai 6000. Format surat
-													<span><a href="#">Disini</a></span></small>
+													tempat lain/Bermaterai 6000.</small>
 												<div class="invalid-feedback">
 													Lampiran harap di Isi
 												</div>
@@ -135,14 +131,14 @@
 													Proposal</label>
 												<input type="file" class="form-control-file btn" name="uploadBukti" id="uploadBukti" required>
 												<small id="anggaranHelp" class="form-text text-muted">File
-													Upload PDF atau JPG Maksimal 2 Mega. </small>
+													Upload PDF Maksimal 2 Mega. </small>
 												<div class="invalid-feedback">
 													bukti harapa harap di Isi
 												</div>
 											</div>
 										</div>
 										<div class="action-button">
-											<button type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
+											<button onclick="return confirm('Apakah anda sudah yakin dengan data pengajuan beasiswa ?')" type="submit" style="width:auto; float:right" class="btn btn-icon btn-success ml-3">
 												Kirim <i class="fab fa-telegram-plane"></i></button>
 
 										</div>

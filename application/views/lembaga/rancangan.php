@@ -81,13 +81,13 @@
 										<span class="font-weight-bold">Perhatian!</span> Pastikan anda memeriksa
 										kembali
 										data kegiatan
-										sebelum diajakun
+										sebelum diajukan
 									</div>
 									<div class="col-12 col-lg-4">
 										<form action="<?= base_url('Kegiatan/ajukanRancangan') ?>" method="post">
 											<input type="hidden" class="t-anggaran" name="totalAnggaran">
 											<input type="hidden" class="t-pengajuan" name="tahunPengajuan" value="<?= $lembaga['tahun_rancangan'] ?>">
-											<button type="submit" class="btn btn-icon btn-success" style="box-shadow: none; float:right">
+											<button type="submit" onclick="return confirm('Apakah anda sudah yakin dengan rancangan kegiatan anda ?')" class="btn btn-icon btn-success" style="box-shadow: none; float:right">
 												Ajukan Kegiatan <i class="fab fa-telegram-plane pl-2"></i></button>
 										</form>
 									</div>
@@ -130,7 +130,8 @@
 										<th scope="col">Tahun Periode</th>
 										<th scope="col">Tanggal Pelaksanaan</th>
 										<th scope="col">Nama Kegiatan</th>
-										<th scope="col">Anggaran Kegiatan</th>
+										<th scope="col">Kategori Kegiatan</th>
+										<th scope="col">Anggaran Kegiatan (Rp)</th>
 										<th scope="col">Status Kegiatan</th>
 										<th scope="col">Action</th>
 									</tr>
@@ -146,15 +147,16 @@
 											<td><?= $r['tahun_kegiatan'] ?>
 											<td class="text-left">
 												<?php $date = date_create($r['tanggal_mulai_pelaksanaan']);
-													echo date_format($date, "d M Y"); ?>
+												echo date_format($date, "d M Y"); ?>
 												-
 												<?php $date = date_create($r['tanggal_selesai_pelaksanaan']);
-													echo date_format($date, "d M Y"); ?>
+												echo date_format($date, "d M Y"); ?>
 											</td>
 
 											<td class="text-left"><?= $r['nama_proker'] ?></td>
+											<td class="text-left"><?= $r['kategori_kegiatan'] ?></td>
 											<?php $temp += $r['anggaran_kegiatan']; ?>
-											<td>Rp.<?= number_format($r['anggaran_kegiatan'], 2, ',', '.') ?> </td>
+											<td><?= number_format($r['anggaran_kegiatan'], 2, ',', '.') ?> </td>
 											<td>
 												<?php if ($r['status_rancangan'] == 1 || $r['status_rancangan'] == 4) :  ?>
 													<i class="fa fa-check text-success" aria-hidden="true"></i>
@@ -198,8 +200,33 @@
 										</tr>
 									<?php endforeach; ?>
 									<tr class="text-center">
-										<td scope="col" colspan="4">Total Anggaran</td>
-										<td scope="col">Rp.<span class="total-anggaran"> <?= number_format($temp, 2, ',', '.') ?> </span></td>
+										<td scope="col" colspan="5">Total Anggaran (Rp)</td>
+										<td scope="col"><span class="total-anggaran"> <?= number_format($temp, 2, ',', '.') ?> </span></td>
+									</tr>
+								</tbody>
+							</table>
+							<table>
+								<thead>
+									<tr>
+										<td><b>Keterangan</b></td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+										<td> : Telah Divalidasi</td>
+									</tr>
+									<tr>
+										<td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+										<td> : Proses Validasi</td>
+									</tr>
+									<tr>
+										<td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+										<td> : Menunggu Pengajuan</td>
+									</tr>
+									<tr>
+										<td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+										<td> : Revisi (Menampilkan Catatan Revisi)</td>
 									</tr>
 								</tbody>
 							</table>

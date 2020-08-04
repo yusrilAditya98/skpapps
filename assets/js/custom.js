@@ -73,11 +73,15 @@ $('.detail-kegiatan').on('click', function (e) {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			$('.f-proposal').html(``)
+
 			$('.k-pengaju').val(data.kegiatan['nama_penanggung_jawab'])
 			$('.k-nim').val(data.kegiatan['nama_lembaga'])
 			$('.k-notlpn').val(data.kegiatan['no_whatsup'])
 			$('.k-dana').val(rubah(data.kegiatan['dana_kegiatan']))
-			console.log()
+			$('.k-nama_penyelenggara').val(data.kegiatan['nama_penyelenggara'])
+			$('.k-url_penyelenggara').val(data.kegiatan['url_penyelenggara'])
+
 			if (jenis == 'proposal') {
 				$('.k-dana-cair').val(rubah(data.kegiatan['dana_proposal']))
 				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/proposal/' + data.kegiatan['proposal_kegiatan'])
@@ -85,6 +89,8 @@ $('.detail-kegiatan').on('click', function (e) {
 				$('.k-gmbr-1').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_1'])
 				$('.k-gmbr-2').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/foto_proposal/' + data.dokumentasi['d_proposal_2'])
 			} else if (jenis == 'lpj') {
+				$('.f-proposal').html(`<label for="danaKegiatanDiterima">Anggran Proposal</label>
+				<input type="text" class="form-control k-dana-proposal" id="danaProposal" value="` + rubah(data.kegiatan['dana_proposal']) + `" readonly>`);
 				$('.k-dana-cair').val(rubah(data.kegiatan['dana_lpj']))
 				$('.k-proposal').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/lpj/' + data.kegiatan['lpj_kegiatan'])
 				$('.k-berita-p').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/berita_lpj/' + data.kegiatan['berita_pelaporan'])
@@ -102,19 +108,50 @@ $('.detail-kegiatan').on('click', function (e) {
 			$('.k-jenis_kegiatan').val(data.tingkat[0]['jenis_kegiatan'])
 			$('.k-tingkat_kegiatan').val(data.tingkat[0]['nama_tingkatan'])
 			$('.k-tgl_kegiatan').val(data.kegiatan['tanggal_kegiatan'])
+			$('.k-tgl_selesai_kegiatan').val(data.kegiatan['tanggal_selesai_kegiatan'])
 			$('.k-tempat').val(data.kegiatan['lokasi_kegiatan'])
 
 
 			let index = 1;
+			if (data.kegiatan['id_lembaga'] == 0 && jenis == 'proposal') {
+				$('.th-posisi').hide()
+				$('.th-bobot').hide()
+			} else {
+				$('.th-posisi').show()
+				$('.th-bobot').show()
+			}
 			for (var j in data.tingkat) {
-				$('.daftar-mhs').append(`
-				<tr class="k-anggota">
-					<td>` + (index++) + `</td>
-					<td>` + data.tingkat[j].nim + `</td>
-					<td>` + data.tingkat[j].nama + `</td>
-					<td>` + data.tingkat[j].nama_prestasi + `</td>
-				</tr>
-				`)
+				let keaktifan = "";
+				if (data.tingkat[j].keaktifan == 0) {
+					keaktifan = "Tidak Aktif"
+				} else {
+					keaktifan = "Aktif";
+				}
+				if (data.kegiatan['id_lembaga'] == 0 && jenis == 'proposal') {
+					$('.daftar-mhs').append(`
+					<tr class="k-anggota">
+						<td>` + (index++) + `</td>
+						<td>` + data.tingkat[j].nim + `</td>
+						<td>` + data.tingkat[j].nama + `</td>
+						<td>` + data.tingkat[j].nama_jurusan + `</td>
+						<td>` + data.tingkat[j].nama_prodi + `</td>
+						<td>` + keaktifan + `</td>
+					</tr>
+					`)
+				} else {
+					$('.daftar-mhs').append(`
+					<tr class="k-anggota">
+						<td>` + (index++) + `</td>
+						<td>` + data.tingkat[j].nim + `</td>
+						<td>` + data.tingkat[j].nama + `</td>
+						<td>` + data.tingkat[j].nama_jurusan + `</td>
+						<td>` + data.tingkat[j].nama_prodi + `</td>
+						<td>` + data.tingkat[j].nama_prestasi + `</td>
+						<td>` + data.tingkat[j].bobot + `</td>
+						<td>` + keaktifan + `</td>
+					</tr>
+					`)
+				}
 			}
 		}
 	})
@@ -154,10 +191,11 @@ $(document).ready(function (e) {
 $(document).ready(function (e) {
 	$('#dataTabelKegiatan').DataTable({
 		initComplete: function () {
+			var select;
 			this.api().columns([3]).every(function () {
 				var column = this;
-				var select = $('<select class="form-control-sm selectric" tabindex="-1"><option value="">--pilih status--</option></select>')
-					.appendTo($(column.footer()).empty())
+				select = $('<select class="form-control-sm"><option value="">--- status ---</option></select>')
+					.prependTo($('.kategori-filter'))
 					.on('change', function () {
 						var val = $.fn.dataTable.util.escapeRegex(
 							$(this).val()
@@ -172,6 +210,9 @@ $(document).ready(function (e) {
 			});
 		}
 	});
+
+
+
 });
 
 function copyDiv(e) {
@@ -196,29 +237,7 @@ function copyDiv(e) {
 }
 
 
-$(document).ready(function (e) {
-	$('#dataTabelPoinSkp').DataTable({
-		initComplete: function () {
-			this.api().columns([3, 4, 6]).every(function () {
-				var column = this;
-				var select = $('<select class="form-control-sm" ><option value=""></option></select>')
-					.appendTo($(column.footer()).empty())
-					.on('change', function () {
-						var val = $.fn.dataTable.util.escapeRegex(
-							$(this).val()
-						);
-						column
-							.search(val ? '^' + val + '$' : '', true, false)
-							.draw();
-					});
-				column.data().unique().sort().each(function (d, j) {
-					select.append('<option value="' + d + '">' + d + '</option>')
-				});
-			});
-		}
-	});
 
-});
 
 let nama_lembaga = [];
 let dana_pagu = [];
@@ -314,7 +333,7 @@ $(document).ready(function () {
 							yAxes: [{
 								ticks: {
 									min: 0,
-									max: 20000000,
+									max: 100000000,
 									maxTicksLimit: 20,
 									padding: 30
 									// Include a dollar sign in the ticks
@@ -539,4 +558,176 @@ $(document).ready(function () {
 		}
 	})
 })
+
+
+$('.laporan-serapan').on('click', function () {
+	const id_lembaga = $(this).data('id')
+	const tahun = $(this).data('tahun')
+
+	$.ajax({
+		url: segments[0] + '/' + segments[3] + '/API_skp/detaillaporanSerapan/?id_lembaga=' + id_lembaga + '&&tahun=' + tahun,
+		method: "get",
+		dataType: "json",
+		beforeSend: function () {
+			$('.table-detail-serapan').append(` <div class="loader">
+			<img src="` + segments[0] + '/' + segments[3] + `/assets/img/loader.gif" alt="">
+			</div>`)
+		},
+		success: function (data) {
+			$('.loader').remove();
+			$('.table-detail-serapan').html('')
+			$('.total-anggaran').html('')
+			$('.total-terserap').html('')
+			let rowTahun = ""
+			let trSerapan = ''
+			let tdSerapan = ''
+			let indek = 1;
+			data['kegiatan'].forEach(element => {
+				trSerapan += `<tr id="tr-` + element.nama_kegiatan + `">`
+				tdSerapan = '';
+				rowTahun = ""
+				for (let index = 1; index < 13; index++) {
+					rowTahun += "<td>" + rubah(data['laporan'][element.id_kegiatan][index]) + "</td>"
+				}
+				tdSerapan = `<td>` + (indek++) + `</td><td>` + element.nama_kegiatan + `</td>` + rowTahun + `<td>` + rubah(data['laporan'][element.id_kegiatan]['anggaran_kegiatan']) + `</td><td>` + rubah(data['laporan'][element.id_kegiatan]['dana_terserap']) + `</td>`
+				trSerapan += tdSerapan
+				trSerapan += "</tr>"
+			});
+			$('.table-detail-serapan').html(trSerapan)
+			$('.total-anggaran').html(rubah(data['total']['total']['anggaran_kegiatan']))
+			$('.total-terserap').html(rubah(data['total']['total']['dana_terserap']))
+
+		}
+	})
+
+
+})
+const id_lembaga_d = 0
+const tahun_d = $('#tahun_anggran').val()
+$.ajax({
+	url: segments[0] + '/' + segments[3] + '/API_skp/detaillaporanSerapan/?id_lembaga=' + id_lembaga_d + '&&tahun=' + tahun_d,
+	method: "get",
+	dataType: "json",
+	beforeSend: function () {
+		$('.table-detail-delegasi').append(` <div class="loader">
+		<img src="` + segments[0] + '/' + segments[3] + `/assets/img/loader.gif" alt="">
+		</div>`)
+	},
+	success: function (data) {
+		$('.loader').remove();
+		$('.table-detail-delegasi').html('')
+		$('.total-anggaran-delegasi').html('')
+		$('.total-terserap-delegeasi').html('')
+		let rowTahun = ""
+		let trSerapan = ''
+		let tdSerapan = ''
+		let indek = 1;
+		data['kegiatan'].forEach(element => {
+			trSerapan += `<tr id="tr-` + element.nama_kegiatan + `">`
+			tdSerapan = '';
+			rowTahun = ""
+			for (let index = 1; index < 13; index++) {
+				rowTahun += "<td>" + rubah(data['laporan'][element.id_kegiatan][index]) + "</td>"
+			}
+			tdSerapan = `<td>` + (indek++) + `</td><td>` + element.nama_kegiatan + `</td>` + rowTahun + `<td>` + rubah(data['laporan'][element.id_kegiatan]['anggaran_kegiatan']) + `</td><td>` + rubah(data['laporan'][element.id_kegiatan]['dana_terserap']) + `</td>`
+			trSerapan += tdSerapan
+			trSerapan += "</tr>"
+		});
+		$('.table-detail-delegasi').html(trSerapan)
+		$('.total-anggaran-delegasi').html(rubah(data['total']['total']['anggaran_kegiatan']))
+		$('.total-terserap-delegasi').html(rubah(data['total']['total']['dana_terserap']))
+
+	}
+})
+
+
+$('.edit-file').on('click', function () {
+	let id = $(this).data('id')
+	let nama = $(this).data('nama')
+	let dir = $(this).data('dir')
+	let status = $(this).data('status')
+	let lihat = $(this).data('lihat')
+	$('#id_file_edit').val(id)
+	$('#nama_file_edit').val(nama)
+	$('#file_edit').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/file_download/' + dir)
+	$('#dir_lama').val(dir)
+	if (status == 'panduan') {
+		$('#status_file_edit').html(`
+		<option selected value="panduan">panduan</option>
+		<option value="template">template</option>`)
+	} else {
+		$('#status_file_edit').html(`
+		<option value="panduan">panduan</option>
+		<option selected value="template">template</option>`)
+	}
+
+
+	if (lihat == 'all') {
+		$('#dilihat_oleh_edit').html(`  <option selected value="all">semua</option>
+		<option value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	} else if (lihat == 'mahasiswa') {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option selected value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	} else if (lihat == 'lembaga') {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option value="mahasiswa">mahasiswa</option>
+		<option selected value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	} else if (lihat == 'bem') {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option selected value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	} else if (lihat == 'kemahasiswaan') {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option selected value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	} else if (lihat == 'psik') {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option selected value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	} else if (lihat == 'keuangan') {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option  value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option selected value="keuangan">keuangan</option>`)
+	} else {
+		$('#dilihat_oleh_edit').html(`  <option  value="all">semua</option>
+		<option  value="mahasiswa">mahasiswa</option>
+		<option value="lembaga">lembaga</option>
+		<option value="bem">bem</option>
+		<option value="kemahasiswaan">kemahasiswaan</option>
+		<option value="psik">psik</option>
+		<option value="keuangan">keuangan</option>`)
+	}
+})
+
+
 "use strict";

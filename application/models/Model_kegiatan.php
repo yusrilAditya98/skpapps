@@ -66,11 +66,13 @@ class Model_kegiatan extends CI_Model
     }
     public function getInfoAnggota($id_kegiatan)
     {
-        $this->db->select('ak.*,m.nama,p.*,sp.id_semua_prestasi');
+        $this->db->select('ak.*,m.nama,p.*,sp.id_semua_prestasi,pro.nama_prodi,jur.nama_jurusan');
         $this->db->from('anggota_kegiatan as ak');
         $this->db->join('mahasiswa as m', 'm.nim=ak.nim', 'left');
         $this->db->join('semua_prestasi as sp', 'ak.id_prestasi=sp.id_semua_prestasi', 'left');
         $this->db->join('prestasi as p', 'sp.id_prestasi =p.id_prestasi', 'left');
+        $this->db->join('prodi as pro', 'pro.kode_prodi = m.kode_prodi', 'left');
+        $this->db->join('jurusan as jur', 'pro.kode_jurusan = jur.kode_jurusan', 'left');
         $this->db->where('ak.id_kegiatan', $id_kegiatan);
         return $this->db->get()->result_array();
     }
@@ -83,7 +85,7 @@ class Model_kegiatan extends CI_Model
     }
     public function getInfoTingkat($id_kegiatan)
     {
-        $this->db->select('m.nama,ak.*,sp.*,p.*,bk.*,jk.*,t.*');
+        $this->db->select('m.nama,ak.*,sp.*,p.*,bk.*,jk.*,t.*,pro.nama_prodi,jur.nama_jurusan');
         $this->db->from('anggota_kegiatan as ak');
         $this->db->join('mahasiswa as m', 'm.nim=ak.nim', 'left');
         $this->db->join('semua_prestasi as sp', 'ak.id_prestasi=sp.id_semua_prestasi', 'left');
@@ -92,6 +94,8 @@ class Model_kegiatan extends CI_Model
         $this->db->join('jenis_kegiatan as jk', 'jk.id_jenis_kegiatan=st.id_jenis_kegiatan', 'left');
         $this->db->join('tingkatan as t ', 't.id_tingkatan=st.id_tingkatan', 'left');
         $this->db->join('bidang_kegiatan as bk', 'bk.id_bidang=jk.id_bidang', 'left');
+        $this->db->join('prodi as pro', 'pro.kode_prodi = m.kode_prodi', 'left');
+        $this->db->join('jurusan as jur', 'pro.kode_jurusan = jur.kode_jurusan', 'left');
         $this->db->where('ak.id_kegiatan', $id_kegiatan);
         return $this->db->get()->result_array();
     }
@@ -216,6 +220,14 @@ class Model_kegiatan extends CI_Model
         return $data;
     }
 
+    public function getDaftarTahunKegiatan()
+    {
+        $this->db->select('periode');
+        $this->db->from('kegiatan');
+        $this->db->group_by('periode');
+        return $this->db->get()->result_array();
+    }
+
     public function getDaftarProposalKegiatan()
     {
         $this->db->select('*');
@@ -232,6 +244,17 @@ class Model_kegiatan extends CI_Model
         $this->db->where('status_selesai_proposal', 3);
         $this->db->where('status_selesai_lpj !=', 3);
         $this->db->limit(5);
+        return $this->db->get()->result_array();
+    }
+
+    public function getKegiatanAPI($tahun, $id_lembaga)
+    {
+
+        $this->db->select('kegiatan.*,lembaga.nama_lembaga');
+        $this->db->from('kegiatan');
+        $this->db->join('lembaga', 'lembaga.id_lembaga=kegiatan.id_lembaga', 'left');
+        $this->db->where('YEAR(kegiatan.tgl_pengajuan_proposal)', $tahun);
+        $this->db->where('kegiatan.id_lembaga', $id_lembaga);
         return $this->db->get()->result_array();
     }
 }

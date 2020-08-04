@@ -46,34 +46,60 @@
                                 </div>
                             </div>
                         </form>
+
+                        <form class="m-t-20" action="<?= base_url('Export/exportProposalKegiatan') ?>" method="get">
+                            <div class="row">
+                                <div class="col-lg-5 input-group mb-3">
+                                    <select class="custom-select" id="kategori" name="kategori">
+                                        <option selected value="null">Semua Kategori</option>
+                                        <option value="mhs">Non Lembaga</option>
+                                        <option value="lbg">Lembaga</option>
+
+                                    </select>
+                                    <select class="custom-select" id="tahun" name="tahun">
+                                        <option value="kosong">Semua Periode</option>
+                                        <?php foreach ($filter as $p) : ?>
+                                            <option value="<?= $p['periode'] ?>"><?= $p['periode'] ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Download</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
+
+
+
                     <form action="<?= base_url('Kemahasiswaan/cetakPengajuanProposal') ?>" method="post" target="_blank">
                         <div class="card-body mb-2">
                             <div class="kategori-filter float-right mb-2">
+
                                 <button type="submit" class="btn btn-icon icon-left btn-warning float-right ml-5"><i class="fas fa-print"></i> Cetak Pengajuan</button>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
-                                <table class="table table-striped" id="dataTabelProposal">
+                                <table class="table table-striped table-bordered" id="dataTabelProposal">
                                     <thead>
-                                        <th class="text">
+                                        <th class="text-center align-middle">
                                             <div class="custom-checkbox custom-control">
                                                 <input type="checkbox" data-checkboxes="mygroup" data-checkbox-role="dad" class="custom-control-input" id="checkbox-all">
                                                 <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
                                                 No
                                             </div>
                                         </th>
-                                        <th>Tanggal Pengajuan</th>
-                                        <th>Nama Pengaju</th>
-                                        <th>Nama Kegiatan</th>
-                                        <th>Status</th>
-                                        <th class="text-center">BEM</th>
-                                        <th class="text-center">Kmhsn</th>
-                                        <th class="text-center">WD 3</th>
-                                        <th class="text-center">PSIK</th>
-                                        <th class="text-center">Keuangan</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="text-center align-middle">Tanggal Pengajuan</th>
+                                        <th class="text-center align-middle">Nama Pengaju</th>
+                                        <th class="text-center align-middle">Nama Kegiatan</th>
+                                        <th class="text-center align-middle">Status Proposal</th>
+                                        <th class="text-center align-middle">LM</th>
+                                        <th class="text-center align-middle">KMHS</th>
+                                        <th class="text-center align-middle">WD3</th>
+                                        <th class="text-center align-middle">PSIK</th>
+                                        <th class="text-center align-middle">KEU</th>
+                                        <th class="text-center align-middle">Aksi</th>
                                         <th></th>
 
                                     </thead>
@@ -135,16 +161,16 @@
                                                     <?php foreach ($validasi as $v) : ?>
                                                         <?php if ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 3)) : ?>
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                                <a href="<?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>kmhsn</a>
-                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid-km" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>kmhsn</a>
+                                                                <a href="<?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=3" class="btn btn-sm btn-success confirm-validasi">valid kmhsn</a>
+                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid-km" data-kegiatan="<?= $k['id_kegiatan'] ?>">revisi kmhsn</a>
                                                                 <input type="hidden" class="role_id" value="3">
                                                             <?php elseif ($v['status_validasi'] == 0) : ?>
                                                                 Belum bisa validasi
                                                             <?php endif; ?>
                                                         <?php elseif ($v['id_kegiatan'] == $k['id_kegiatan'] && ($v['jenis_validasi'] == 4)) : ?>
                                                             <?php if ($v['status_validasi'] == 4 || $v['status_validasi'] == 2) : ?>
-                                                                <a href=" <?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn  btn-sm btn-success confirm-validasi"><i class="fas fa-check"> </i>wd3</a>
-                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid" data-kegiatan="<?= $k['id_kegiatan'] ?>"><i class="fas fa-times"> </i>wd3</a>
+                                                                <a href=" <?= base_url('Kemahasiswaan/validasiProposal/') . $k['id_kegiatan'] ?>?valid=1&&jenis_validasi=4" class="btn  btn-sm btn-success confirm-validasi">valid wd 3</a>
+                                                                <a href="#" data-toggle="modal" data-target="#infoRevisi" class="btn  btn-sm btn-primary d-valid" data-kegiatan="<?= $k['id_kegiatan'] ?>">revisi wd 3</a>
                                                                 <input type="hidden" class="role_id" value="4">
                                                             <?php elseif ($v['status_validasi'] == 1) : ?>
                                                                 Selesai
@@ -158,20 +184,32 @@
                                         <?php endforeach; ?>
 
                                     </tbody>
-                                    <tfoot>
-                                        <th class="text">
-                                        </th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th></th>
-                                        <th class="text-center"></th>
-                                        <th class="text-center"></th>
-                                        <th class="text-center"></th>
-                                        <th class="text-center"></th>
-                                        <th class="text-center"></th>
-                                        <th class="text-center"></th>
-                                    </tfoot>
+
+                                </table>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <td><b>Keterangan</b></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                            <td> : Telah Divalidasi</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                            <td> : Proses Validasi</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                            <td> : Menunggu Pengajuan</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                            <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>

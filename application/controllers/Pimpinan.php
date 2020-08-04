@@ -12,7 +12,8 @@ class Pimpinan extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5 || $this->session->userdata('user_profil_kode') == 9) { } else {
+        if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 5 || $this->session->userdata('user_profil_kode') == 9) {
+        } else {
             redirect('Auth/blocked');
         }
     }
@@ -226,6 +227,7 @@ class Pimpinan extends CI_Controller
             }
         }
         foreach ($lembaga as $l) {
+            $data[$l['id_lembaga']]['id_lembaga'] = $l['id_lembaga'];
             for ($j = 1; $j < 13; $j++) {
                 $data[$l['id_lembaga']]['dana_terserap'] += $data[$l['id_lembaga']][$j];
             }
@@ -274,13 +276,15 @@ class Pimpinan extends CI_Controller
     public function rekapitulasiSKP()
     {
         $data['title'] = 'Rekapitulasi SKP';
-        // $this->db->where('id_prestasi', 7);
-        // $this->db->or_where('id_prestasi', 8);
-        // $this->db->or_where('id_prestasi', 9);
         $data['notif'] = $this->_notifKmhs();
         $data['prestasi'] = $this->db->get('prestasi')->result_array();
 
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->load->model('Model_poinskp', 'poinskp');
+
+        // mengambil data tingkatan
+
+
         $data['tahun_filter'] = $this->kemahasiswaan->getTahunRancangan();
 
         $tahun = "";
@@ -288,6 +292,8 @@ class Pimpinan extends CI_Controller
             $tahun = $this->input->get('tahun');
         }
         $data['tahun'] = $tahun;
+        $data['tingkatan'] = $this->poinskp->getDataTingkatan($tahun);
+
         for ($i = 0; $i < count($data['prestasi']); $i++) {
             $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
             $count = 0;
@@ -401,6 +407,7 @@ class Pimpinan extends CI_Controller
             array_push($id_semua_prestasi_arr, $id_semua_prestasi);
         }
         $this->db->where_in('prestasiid_prestasi', $id_semua_prestasi_arr);
+        $this->db->where('poin_skp.validasi_prestasi', 1);
         $this->db->select('poin_skp.id_poin_skp, YEAR(poin_skp.tgl_pelaksanaan) as tahun, mahasiswa.nim, mahasiswa.nama, poin_skp.nama_kegiatan');
         $this->db->from('poin_skp');
         $this->db->join('mahasiswa', 'poin_skp.nim = mahasiswa.nim');
@@ -433,7 +440,24 @@ class Pimpinan extends CI_Controller
         // echo json_encode($id_semua_prestasi_arr);
         echo json_encode($data);
         // die;
+    }
 
-
+    public function getRekapTingkatanSKP()
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $tahun = $this->input->get_post('tahun');
+        $id_tingkat = $this->input->get_post('id');
+        $data = $this->poinskp->rekapTingkatan($id_tingkat, $tahun);
+        echo json_encode($data);
+    }
+    public function daftarFileDownload()
+    {
+        $data['title'] = 'File Download';
+        $data['file_download'] = $this->db->get('file_download')->result_array();
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_file_download");
+        $this->load->view("template/footer");
     }
 }

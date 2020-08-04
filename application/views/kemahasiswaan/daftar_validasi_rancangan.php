@@ -57,17 +57,33 @@
                             </div>
                         </form>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="table-1">
-                                <thead>
+                            <form class="m-t-20" action="<?= base_url('Export/exportRancanganKegiatan') ?>" method="get">
+                                <div class="row">
+                                    <div class="col-lg-4 input-group mb-3">
+                                        <select id="inputState" name="tahun" class="form-control">
+                                            <option value="" selected="">tahun rancangan...</option>
+                                            <?php foreach ($filter['tahun'] as $t) : ?>
+                                                <option value="<?=
+                                                                    $t['tahun_pengajuan'] ?>"><?= $t['tahun_pengajuan'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Download</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-striped table-bordered" id="table-1">
+                                <thead class="text-center">
                                     <tr>
-                                        <th>No</th>
-                                        <th>Tahun</th>
-                                        <th>Nama Lembaga</th>
-                                        <th>Jumlah Kegiatan</th>
-                                        <th>Total Anggaran</th>
-                                        <th>Anggaran Diajukan</th>
-                                        <th>Validasi</th>
-                                        <th>Action</th>
+                                        <th class="align-middle">No</th>
+                                        <th class="align-middle">Tahun</th>
+                                        <th class="align-middle">Nama Lembaga</th>
+                                        <th class="align-middle">Jumlah Kegiatan</th>
+                                        <th class="align-middle">Total Anggaran</th>
+                                        <th class="align-middle">Anggaran Diajukan</th>
+                                        <th class="align-middle">Validasi</th>
+                                        <th class="align-middle">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -103,8 +119,31 @@
 
                                 </tbody>
                             </table>
-
-
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <td><b>Keterangan</b></td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class=" text-center"> <i class="fa fa-check text-success" aria-hidden="true"></i></td>
+                                        <td> : Telah Divalidasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-primary" aria-hidden="true"></i></td>
+                                        <td> : Proses Validasi</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <i class="fa fa-circle text-secondary" aria-hidden="true"></i></td>
+                                        <td> : Menunggu Pengajuan</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="text-center"> <span class="btn btn-warning circle-content"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></span></td>
+                                        <td> : Revisi (Menampilkan Catatan Revisi)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

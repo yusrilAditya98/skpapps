@@ -7,7 +7,7 @@
         <div class="flash-data" data-flashdata="<?= $this->session->flashdata('message'); ?>"></div>
         <div class="flash-failed" data-flashdata="<?= $this->session->flashdata('failed'); ?>"></div>
         <div class="row">
-            <div class="col-12 col-md-12 col-lg-8">
+            <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
                     <div class="card-header">
                         <h4>Form Mahasiswa Penerima Beasiswa</h4>
@@ -18,7 +18,7 @@
                                 <div class="form-tambah-skp">
                                     <form action="<?= base_url('Kemahasiswaan/editBeasiswa/') . $penerima['id_penerima'] ?>" method="post" class="needs-validation" novalidate="" enctype="multipart/form-data">
                                         <div class="bagian-personality">
-                                            <h5>Informasi Personality</h5>
+                                            <h5>Data Pemohon</h5>
                                             <div class="form-group">
                                                 <label for="nimMahasiswa">NIM</label>
                                                 <input type="text" required name="nimMahasiswa" class="form-control" id="nimMahasiswa" value="<?= $penerima['nim'] ?>" required>
@@ -80,7 +80,7 @@
                                                 <label for="lampiran">Lampiran - <a target="_blank" href="<?= base_url() ?>assets/pdfjs/web/viewer.html?file=../../../file_bukti/beasiswa/<?= $penerima['bukti']  ?>">lihat</a></label>
                                                 <input type="file" name="lampiran" class="form-control-file btn" id="lampiran">
                                                 <small id="anggaranHelp" class="form-text text-muted">File
-                                                    Upload PDF atau JPG Maksimal 2 Mega. Silahkan di isikan
+                                                    Upload PDF 2 Mega. Silahkan di isikan
                                                     lampiran Surat Tidak Pernah Menerima Beasiswa dari
                                                     tempat lain/Bermaterai 6000. Format surat
                                                     <span><a href="#">Disini</a></span></small>
@@ -91,7 +91,7 @@
                                                     Proposal - <a target="_blank" href="<?= base_url() ?>/assets/pdfjs/web/viewer.html?file=../../../file_bukti/beasiswa/<?= $penerima['lampiran']  ?>">lihat</a></label>
                                                 <input type="file" class="form-control-file btn" name="uploadBukti" id="uploadBukti">
                                                 <small id="anggaranHelp" class="form-text text-muted">File
-                                                    Upload PDF atau JPG Maksimal 2 Mega. </small>
+                                                    Upload PDF Maksimal 2 Mega. </small>
 
                                             </div>
                                         </div>

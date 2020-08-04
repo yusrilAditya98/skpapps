@@ -65,12 +65,13 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header">
                         <h4>Data Penyebaran Poin skp</h4>
                         <div class="card-header-action">
-                            <a href="<?= base_url('Pimpinan/poinSkp') ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
+                            <a href="<?php // base_url('Pimpinan/poinSkp') 
+                                        ?>" class="btn btn-info btn-icon icon-right">View more <i class="fas fa-chevron-right"></i></a>
                         </div>
                     </div>
                     <div class="card-body chart mb-5 mt-5">
@@ -79,8 +80,8 @@
 
                     </div>
                 </div>
-            </div>
-            <div class="col-lg-8">
+            </div> -->
+            <div class="col-lg-12">
                 <div class="card">
                     <input type="hidden" id="tahun_anggran" value="<?= $tahun_saat_ini ?>">
                     <div class="card-header">

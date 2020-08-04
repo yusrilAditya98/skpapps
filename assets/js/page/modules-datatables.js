@@ -75,6 +75,13 @@ $('#dataTabelProposal').DataTable({
 	}
 });
 
+
+
+
+
+
+
+
 $("#table-2").DataTable({
 	"columnDefs": [{
 		"sortable": false,
@@ -86,7 +93,10 @@ $(".table-kategori").DataTable({
 	"pageLength": 5
 });
 $(".table-anggota-lembaga").DataTable({
-	"pageLength": 5
+	aLengthMenu: [
+		[25, 50, 100, 200, -1],
+		[25, 50, 100, 200, "All"]
+	]
 });
 
 $("#table-kegiatan").DataTable({

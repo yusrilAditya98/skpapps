@@ -2,7 +2,7 @@ var url = $(location).attr("href");
 var segments = url.split("/");
 
 $.ajax({
-	url: segments[0] + '/' + segments[3] + '/mahasiswa/bidangKegiatan',
+	url: segments[0] + '/' + segments[3] + '/Mahasiswa/bidangKegiatan',
 	method: 'get',
 	dataType: 'json',
 	success: function (data) {
@@ -22,7 +22,7 @@ $.ajax({
 		$('.jenis').remove();
 		if (bidangKegiatan) {
 			$.ajax({
-				url: segments[0] + '/' + segments[3] + '/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+				url: segments[0] + '/' + segments[3] + '/Mahasiswa/jenisKegiatan/' + bidangKegiatan,
 				method: 'get',
 				dataType: 'json',
 				success: function (data) {
@@ -42,7 +42,7 @@ $.ajax({
 					let jenisKegiatan = $('.jenisKegiatan').val()
 					$('.tingkat').remove();
 					$.ajax({
-						url: segments[0] + '/' + segments[3] + '/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+						url: segments[0] + '/' + segments[3] + '/Mahasiswa/tingkatKegiatan/' + jenisKegiatan,
 						method: 'get',
 						dataType: 'json',
 						success: function (data) {
@@ -61,7 +61,7 @@ $.ajax({
 							let tingkatKegiatan = $('.tingkatKegiatan').val()
 							$('.partisipasi').remove();
 							$.ajax({
-								url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+								url: segments[0] + '/' + segments[3] + '/Mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 								method: 'get',
 								dataType: 'json',
 								success: function (data) {
@@ -90,7 +90,7 @@ $('.bidangKegiatan').on("change", function () {
 	let bidangKegiatan = $('.bidangKegiatan').val()
 	$('.jenis').remove();
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/jenisKegiatan/' + bidangKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/jenisKegiatan/' + bidangKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -112,7 +112,7 @@ $('.jenisKegiatan').on("change", function () {
 	let jenisKegiatan = $('.jenisKegiatan').val()
 	$('.tingkat').remove();
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/tingkatKegiatan/' + jenisKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/tingkatKegiatan/' + jenisKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -135,6 +135,7 @@ var cek = [];
 $('.tingkatKegiatan').on('change', function () {
 	$('.dataTables_wrapper').remove()
 })
+
 $('#tingkatKegiatan').on("change", function () {
 	$('#jumlahAnggota').val(0);
 	let tingkatKegiatan = $('.tingkatKegiatan').val()
@@ -142,10 +143,12 @@ $('#tingkatKegiatan').on("change", function () {
 	$('.d-m').remove()
 
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/partisipasiKegiatan/' + tingkatKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			console.log(data)
+			$('#id_semua_prestasi_mhs').val(data[0].id_semua_prestasi)
 			let partisipasi = '';
 			let poin = '';
 			for (var i in data) {
@@ -170,12 +173,11 @@ $('.daftarMahasiswa').on("click", function () {
 			method: 'get',
 			dataType: 'json',
 			success: function (data) {
+				console.log(data)
 				let partisipasi = "";
-				partisipasi += `<select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>`
-				for (var i in data) {
-					partisipasi += `<option class="partisipasi" value="` + data[i].id_semua_prestasi + `">` + data[i].nama_prestasi + `</option>`
-				}
-				partisipasi += `</select>`;
+				// partisipasi += `<select class="custom-select partisipasiKegiatan" name="partisipasiKegiatan" id="partisipasiKegiatan" required>`
+
+				partisipasi = data[0].id_semua_prestasi
 				let id_kegiatan;
 				if (segments[6]) {
 					id_kegiatan = segments[6]
@@ -203,7 +205,8 @@ $('.daftarMahasiswa').on("click", function () {
 									temp.push(index++)
 									temp.push(`<span id="t-nim-` + dataMhs[j].nim + `">` + dataMhs[j].nim + `</span>`)
 									temp.push(`<span id="t-nama-` + dataMhs[j].nim + `">` + dataMhs[j].nama + `</span>`)
-									temp.push(`<span id="t-prestasi-` + dataMhs[j].nim + `">` + partisipasi + `</span>`)
+									temp.push(`<span id="t-jurusan-` + dataMhs[j].nim + `">` + dataMhs[j].nama_jurusan + `</span>`)
+									temp.push(`<span id="t-prodi-` + dataMhs[j].nim + `">` + dataMhs[j].nama_prodi + `</span>`)
 									temp.push(`<span id="t-cek-` + dataMhs[j].nim + `"><input checked type="checkbox" class="cek" id="checkbox` + dataMhs[j].nim + `"></span>`)
 									dataTampung.push(temp);
 								}
@@ -214,7 +217,8 @@ $('.daftarMahasiswa').on("click", function () {
 							temp.push(index++)
 							temp.push(`<span id="t-nim-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nim + `</span>`)
 							temp.push(`<span id="t-nama-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nama + `</span>`)
-							temp.push(`<span id="t-prestasi-` + bkn_anggota[j].nim + `">` + partisipasi + `</span>`)
+							temp.push(`<span id="t-jurusan-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nama_jurusan + `</span>`)
+							temp.push(`<span id="t-prodi-` + bkn_anggota[j].nim + `">` + bkn_anggota[j].nama_prodi + `</span>`)
 							temp.push(`<span id="t-cek-` + bkn_anggota[j].nim + `"><input type="checkbox" class="cek" id="checkbox` + bkn_anggota[j].nim + `"></span>`)
 							dataTampung.push(temp);
 						}
@@ -230,10 +234,13 @@ $('.daftarMahasiswa').on("click", function () {
 									title: "Nama"
 								},
 								{
-									title: "Prestasi"
+									title: "Jurusan"
 								},
 								{
-									title: "Action"
+									title: "Prodi"
+								},
+								{
+									title: "Aksi"
 								}
 							]
 						})
@@ -246,14 +253,15 @@ $('.daftarMahasiswa').on("click", function () {
 	}
 })
 
-$('#partisipasiKegiatan').on("change", function () {
+$('.partisipasiKegiatan').on("change", function () {
 	let partisipasiKegiatan = $('.partisipasiKegiatan').val()
 	$('#bobotKegiatan').val(0);
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/bobotkegiatan/' + partisipasiKegiatan,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/bobotkegiatan/' + partisipasiKegiatan,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			console.log('cel')
 			$('#bobotKegiatan').val(data[0].bobot);
 		}
 	})
@@ -263,7 +271,7 @@ $('.detailSkp').on("click", function () {
 	let id_skp = $(this).data('id');
 
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -274,9 +282,25 @@ $('.detailSkp').on("click", function () {
 			$('.d-bobot').html(data[0].bobot)
 			$('.d-nama').val(data[0].nama_kegiatan)
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
+			$('.d-tgl-selesai').val(data[0].tgl_selesai_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)
 			$('.d-catatan').val(data[0].catatan)
-			$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
+
+			// cek format file
+			const lastThree = data[0].file_bukti.substr(data[0].file_bukti.length - 3)
+			console.log(lastThree)
+			if (lastThree == 'pdf') {
+				$('.d-file').html('	lihat');
+				$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)
+			} else if (lastThree == 'jpg' || lastThree == 'jpeg' || lastThree == 'png') {
+				$('.d-file').html('lihat');
+				$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/file_bukti/' + data[0].file_bukti)
+			} else {
+				$('.d-file').removeAttr('href');
+				$('.d-file').addClass('text-white');
+				$('.d-file').html('Tidak ada');
+
+			}
 
 		}
 	})
@@ -285,7 +309,7 @@ $('.detailSkp').on("click", function () {
 $('.d-revisi').on('click', function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
-		url: segments[0] + '/' + segments[3] + '/mahasiswa/detailKegiatan/' + id_skp,
+		url: segments[0] + '/' + segments[3] + '/Mahasiswa/detailKegiatan/' + id_skp,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
@@ -304,6 +328,8 @@ $('.submit-mhs').on('click', function () {
 	let posisi = []
 	let valPosisi = []
 	let check = []
+	let jurusan = []
+	let prodi = []
 	let oMhs = []
 	let aMhs = []
 	$.ajax({
@@ -315,8 +341,9 @@ $('.submit-mhs').on('click', function () {
 
 				nim.push($('#t-nim-' + data[i].nim).text());
 				nama.push($('#t-nama-' + data[i].nim).text());
-				posisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan option:selected').text());
-				valPosisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan option:selected').val());
+				jurusan.push($('#t-jurusan-' + data[i].nim).text());
+				prodi.push($('#t-prodi-' + data[i].nim).text());
+				valPosisi.push($('#t-prestasi-' + data[i].nim + ' .partisipasiKegiatan').val());
 				check.push($('#checkbox' + data[i].nim).is(":checked"));
 			}
 			for (var j in data) {
@@ -324,7 +351,8 @@ $('.submit-mhs').on('click', function () {
 					oMhs = [];
 					oMhs.push(nim[j]);
 					oMhs.push(nama[j]);
-					oMhs.push(posisi[j]);
+					oMhs.push(jurusan[j]);
+					oMhs.push(prodi[j]);
 					oMhs.push(valPosisi[j]);
 					aMhs.push(oMhs);
 				}
@@ -334,6 +362,7 @@ $('.submit-mhs').on('click', function () {
 			if (jumlahAnggota != 0) {
 				id = parseInt(jumlahAnggota) + 1;
 			}
+			console.log(aMhs)
 			for (var k in aMhs) {
 				$('.d-m#data-' + aMhs[k][0] + '').remove()
 				$('.daftar-mhs').append(`
@@ -343,9 +372,8 @@ $('.submit-mhs').on('click', function () {
 							<input  type="hidden" name="nim_` + aMhs[k][0] + `" value="` + aMhs[k][0] + `" id="nim_` + aMhs[k][0] + `" >
 						</td>
 						<td>` + aMhs[k][1] + `</td>
-						<td>` + aMhs[k][2] + `
-							<input  type="hidden" name="prestasi_` + aMhs[k][0] + `" value="` + aMhs[k][3] + `" id="nim_` + aMhs[k][0] + `" >
-						</td>
+						<td>` + aMhs[k][2] + `</td>
+						<td>` + aMhs[k][3] + `</td>
 						<td> <button onclick="myFunction(` + aMhs[k][0] + `)" type="button" data-id="` + aMhs[k][0] + `" class="btn btn-danger hps-mhs-1"><i class="fas fa-trash-alt"></i></h2></td>
 					</tr>
 				`)
@@ -384,5 +412,3 @@ $('#danaKegiatan').keyup(function () {
 	let nominal = $('#danaKegiatan').val() * 0.7
 	$('#danaKegiatanDiterima').val(nominal)
 })
-
-

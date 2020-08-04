@@ -20,32 +20,21 @@
 		}
 
 		p {
-			font-size: 12px
+			font-size: 14px
 		}
 	</style>
 </head>
 
 <body>
-	<div class="kop-surat mt-2 pb-2" style="border-bottom: 3px solid black;">
+	<div class="kop-surat mt-2 pb-1" style="border-bottom: 3px solid black;">
 		<div class="row">
-			<div class="col-2">
-				<div id="logo-ub"><img src="https://kadowisudaku.com/wp-content/uploads/2016/11/Logo-Universitas-Brawijaya-UB.jpg" alt="logo ub" style="width: 150px;"></div>
-			</div>
-			<div class="col-10 text-center" style="padding-right: 10rem">
-				<span class="h4 font-weight-normal">KEMENTRIAN PENDIDIKAN DAN KEBUDAYAAN</span> <br>
-				<span class="h4 font-weight-normal">UNIVERSITAS BRAWIJAYA</span> <br>
-				<span class="h4 font-weight-bold">FAKULTAS EKONOMI DAN BISNIS</span> <br>
-				<!-- yang ini nanti disesuaikan dengan fakultas ekonomi nya -->
-				<span class="p" style="font-size: 14px;">
-					Jl. Veteran No.8, Malang, 65145, Indonesia
-					<br> Telp.: +62-341-577911; Fax : +62-341577911
-					<br> http://feb.ub.ac.id E-mail : feb@ub.ac.id
-				</span>
+			<div class="col-12">
+				<img src="<?= base_url('/assets/img/kop.png') ?>" alt="" srcset="">
 			</div>
 		</div>
 	</div>
 	<div class="judul text-center mt-3">
-		<h5>DRAFT TRANSKRIP NON AKADEMIK</h5>
+		<h5>TRANSKRIP PRESTASI MAHASISWA</h5>
 	</div>
 	<div class="row mt-3">
 		<div class="col-6">
@@ -113,7 +102,7 @@
 											<td style="width: 16.66%"><?= $p['nama_prestasi'] ?></td>
 											<td style="width: 16.66%"><?= date("d-m-Y", strtotime($p['tgl_pelaksanaan']))  ?></td>
 											<td style="width: 16.66%"><?= $p['nama_tingkatan'] ?></td>
-											<td style="width: 16.66%"><?= $p['bobot'] ?></td>
+											<td style="width: 16.66%"><?= ($p['bobot'] * $p['nilai_bobot']) ?></td>
 										</tr>
 									<?php endif; ?>
 								<?php endif; ?>
@@ -127,20 +116,19 @@
 	</div>
 
 	<div class="row mt-3">
-		<div class="col-4">
-			<form action="">
-				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-4 col-form-label">Total Poin: </label>
-					<div class="col-sm-8">
-						<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<?= $mahasiswa[0]['total_poin_skp'] ?>">
-					</div>
-				</div>
-				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-4 col-form-label">Predikat :
+		<div class="col-8">
 
-					</label>
-					<div class="col-sm-8">
-						<?php if ($mahasiswa[0]['total_poin_skp'] >= 100 && $mahasiswa[0]['total_poin_skp'] <= 150) : ?>
+			<table class="table table-sm table-borderless mt-3">
+				<thead>
+					<tr>
+						<th style="width: 10%" scope="col">Total Poin</th>
+						<th style="width: 60%" scope="col">: <?= $mahasiswa[0]['total_poin_skp'] ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th style="width: 10%" scope="row">Predikat</th>
+						<td style="width: 60%">:<?php if ($mahasiswa[0]['total_poin_skp'] >= 100 && $mahasiswa[0]['total_poin_skp'] <= 150) : ?>
 							Cukup
 						<?php elseif ($mahasiswa[0]['total_poin_skp'] >= 151 && $mahasiswa[0]['total_poin_skp'] <= 200) : ?>
 							Baik
@@ -150,34 +138,14 @@
 							Dengan Pujian
 						<?php else : ?>
 							Kurang
-						<?php endif; ?>
-					</div>
-
-				</div>
-			</form>
-		</div>
-		<div class="col-4">
-			a.n Dekan <br>
-			<?= $pimpinan[5]['jabatan'] ?>,<br>
-			<p style="margin-top:100px;"><?= $pimpinan[5]['nama'] ?> <br> NIP. <?= $pimpinan[5]['nip'] ?></p>
-		</div>
-		<div class="col-4">
-
-			<?= date('d M Y') ?> <br>
-			Mahasiswa,<br>
-			<p style="margin-top:100px;"><?= $mahasiswa[0]['nama'] ?> <br> NIM. <?= $mahasiswa[0]['nim'] ?></p>
-		</div>
-
-	</div>
-	<div class="row">
-		<div class="col-lg-4">
-			<table class="table table-sm table-borderless mt-3">
-				<thead>
-					<tr>
-						<th style="width: 10%" scope="col">Predikat</th>
-						<th style="width: 60%" scope="col">Nilai SKP</th>
+						<?php endif; ?></td>
 					</tr>
-				</thead>
+
+				</tbody>
+			</table>
+
+			<table class="table table-sm table-borderless mt-5">
+
 				<tbody>
 					<tr>
 						<th style="width: 10%" scope="row">Dengan Pujian</th>
@@ -198,7 +166,17 @@
 				</tbody>
 			</table>
 		</div>
+
+		<div class="col-4">
+			<?= date('d-m-Y') ?> <br>
+			a.n Dekan <br>
+			<?= $pimpinan[5]['jabatan'] ?>,<br>
+			<img height="200" src="<?= base_url('assets/qrcode/bukti_skp_' . $mahasiswa[0]['nim'] . '.png') ?>" alt="qrcode">
+			<p style="margin-top:10px;"><?= $pimpinan[5]['nama'] ?> <br> NIP. <?= $pimpinan[5]['nip'] ?></p>
+		</div>
+
 	</div>
+
 	<script>
 		window.print()
 	</script>
