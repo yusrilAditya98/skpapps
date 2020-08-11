@@ -351,11 +351,7 @@ class Pimpinan extends CI_Controller
             $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
             $count = 0;
             $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
-            // for ($j = 0; $j < count($semua_prestasi); $j++) {
-            //     $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
-            //     $mahasiswa = $this->db->get_where('poin_skp', ['prestasiid_prestasi' => $id_semua_prestasi, 'validasi_prestasi' => 1])->result_array();
-            //     $count += count($mahasiswa);
-            // }
+
 
             // Update
             for ($j = 0; $j < count($semua_prestasi); $j++) {
@@ -375,10 +371,6 @@ class Pimpinan extends CI_Controller
                             if (intval($mahasiswa[$k]['tahun']) == $tahun) {
                                 $count += 1;
                             }
-                            // Header('Content-type: application/json');
-                            // echo json_encode($tahun);
-                            // die;
-
                         }
                     } else {
                         $count += $count_temp;
@@ -392,6 +384,8 @@ class Pimpinan extends CI_Controller
         header('Content-type: application/json');
         echo json_encode($data['prestasi']);
     }
+
+
     public function getRekapitulasiSKP()
     {
         $id_prestasi = $this->input->get('id_prestasi');

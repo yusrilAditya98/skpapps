@@ -253,6 +253,7 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 			$('#rekap-prestasi').append(`<table class="table table-striped table-bordered rekap-skp" id="table-detail">
 			</table>`)
 			if (data['mahasiswa'].length != 0) {
+				console.log(data['mahasiswa'])
 				var i = 0;
 				let dataTampung = [];
 				for (var j in data['mahasiswa']) {

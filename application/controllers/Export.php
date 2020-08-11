@@ -769,38 +769,107 @@ class Export extends CI_Controller
             $data['prestasi'][$i]['jumlah'] = $count;
         }
 
-
-
         $jumlah_data = count($data['prestasi']) + 1;
 
 
-        $objPHPExcel->setActiveSheetIndex()->setTitle("Rekapitulasi SKP");
-        $objPHPExcel->setActiveSheetIndex()->setCellValue('A1', 'No');
-        $objPHPExcel->setActiveSheetIndex()->setCellValue('B1', 'Prestasi');
-        $objPHPExcel->setActiveSheetIndex()->setCellValue('C1', 'Jumlah');
 
-
-
-        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
-        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
-
-
-
-        $objPHPExcel->getActiveSheet()->getStyle('A1:C' . $jumlah_data)->applyFromArray($styleArray);
-        $objPHPExcel->getActiveSheet()->getStyle("A1:C1")->getFont()->setBold(true);
-        $no = 1;
-        $baris = 2;
-
-        foreach ($data['prestasi'] as $r) {
-
-            $objPHPExcel->setActiveSheetIndex()->setCellValue('A' . $baris, '' . $no);
-            $objPHPExcel->setActiveSheetIndex()->setCellValue('B' . $baris, '' . $r['nama_prestasi']);
-            $objPHPExcel->setActiveSheetIndex()->setCellValue('C' . $baris, '' . $r['jumlah']);
-
-            $baris++;
-            $no++;
+        $prestasi = [];
+        $i  = 0;
+        foreach ($data['prestasi'] as $p) {
+            $temp = 0;
+            $temp =  $this->_getRekapitulasiSKP($p['id_prestasi'], $tahun);
+            if ($temp != null) {
+                $prestasi[$i++] = $temp;
+            }
         }
+
+        $jumlah_prestasi = 0;
+        foreach ($prestasi as $pew) {
+            $temp = 0;
+            foreach ($pew as $re) {
+                $temp++;
+            }
+            $jumlah_prestasi += $temp;
+        }
+
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+
+        );
+
+        $indek = 0;
+
+        while ($indek < 2) {
+            if ($indek == 0) {
+                $objPHPExcel->setActiveSheetIndex($indek)->setTitle("Rekapitulasi Prestasi SKP");
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A1', 'No');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B1', 'Prestasi');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C1', 'Jumlah');
+
+
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+
+
+
+                $objPHPExcel->getActiveSheet()->getStyle('A1:C' . $jumlah_data)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle("A1:C1")->getFont()->setBold(true);
+                $no = 1;
+                $baris = 2;
+
+                foreach ($data['prestasi'] as $r) {
+
+                    $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A' . $baris, '' . $no);
+                    $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B' . $baris, '' . $r['nama_prestasi']);
+                    $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C' . $baris, '' . $r['jumlah']);
+
+                    $baris++;
+                    $no++;
+                }
+                $indek++;
+                $objPHPExcel->createSheet($indek);
+            } else {
+                $objPHPExcel->setActiveSheetIndex($indek)->setTitle("Detail Prestasi SKP");
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A1', 'No');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B1', 'Nim');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C1', 'Nama');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D1', 'Prestasi');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E1', 'Kegiatan');
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+
+                $objPHPExcel->getActiveSheet()->getStyle('A1:E' . ($jumlah_prestasi + 1))->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle("A1:E1")->getFont()->setBold(true);
+                $no = 1;
+                $baris = 2;
+
+                foreach ($prestasi as $p) {
+                    foreach ($p as $r) {
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A' . $baris, '' . $no);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B' . $baris, '' . $r['nim']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C' . $baris, '' . $r['nama']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D' . $baris, '' . $r['nama_prestasi']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E' . $baris, '' . $r['nama_kegiatan']);
+                        $baris++;
+                        $no++;
+                    }
+                }
+                $indek++;
+                $objPHPExcel->createSheet($indek);
+            }
+        }
+
         $filename = 'reakpitulasi-skp' . '.xls'; //save our workbook as this file name
         header('Content-Type: application/vnd.ms-excel'); //mime type
         header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
@@ -810,19 +879,133 @@ class Export extends CI_Controller
         $objWriter->save('php://output');
     }
 
-    public function exportDaftarAnggota()
+
+
+    public function exportRekapitulasiTingkatan()
     {
+        include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
 
-        // $this->db->select('');
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->getProperties()->setCreator("creater");
+        $objPHPExcel->getProperties()->setLastModifiedBy("Middle field");
+        $objPHPExcel->getProperties()->setSubject("Subject");
 
-        // $lembaga = $this->db->get;
-        // $this->db->where('id_pengajuan_anggota_lembaga', intval($id));
-        // $this->db->from('daftar_anggota_lembaga');
-        // $this->db->join('mahasiswa', 'daftar_anggota_lembaga.nim = mahasiswa.nim');
-        // $this->db->join('semua_prestasi', 'daftar_anggota_lembaga.id_sm_prestasi = semua_prestasi.id_semua_prestasi');
-        // $this->db->join('prestasi', 'semua_prestasi.id_prestasi = prestasi.id_prestasi');
-        // $anggota_lembaga = $this->db->get()->result_array();
-        // echo json_encode($anggota_lembaga);
+
+        $this->load->model('Model_poinskp', 'poinskp');
+        // mengambil data tingkatan
+        $tahun = "";
+        if ($this->input->get('tahun')) {
+            $tahun = $this->input->get('tahun');
+        }
+
+        $tingkatan = $this->poinskp->getDataTingkatan($tahun);
+
+        $data = [];
+        foreach ($tingkatan as $t) {
+            $temp = [];
+            $temp = $this->_getRekapTingkatanSKP($t['id_tingkatan'], $tahun);
+            if ($temp) {
+                $data[$t['id_tingkatan']] = $temp;
+            }
+        }
+
+        $styleArray = array(
+            'borders' => array(
+                'allborders' => array(
+                    'style' => PHPExcel_Style_Border::BORDER_THIN
+                )
+            ),
+
+        );
+
+
+
+        $jumlah_tingkatan = count($tingkatan) + 1;
+
+        $jum = 0;
+        foreach ($data as $d) {
+            $jtemp = 0;
+            foreach ($d as $r) {
+                $jtemp++;
+            }
+            $jum += $jtemp;
+        }
+
+        $indek = 0;
+
+        while ($indek < 2) {
+            if ($indek == 0) {
+                $objPHPExcel->setActiveSheetIndex($indek)->setTitle("Rekapitulasi Tingkatan SKP");
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A1', 'No');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B1', 'Tingkatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C1', 'Jumlah');
+
+
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+
+
+
+                $objPHPExcel->getActiveSheet()->getStyle('A1:C' . $jumlah_tingkatan)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle("A1:C1")->getFont()->setBold(true);
+                $no = 1;
+                $baris = 2;
+
+                foreach ($tingkatan as $r) {
+
+                    $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A' . $baris, '' . $no);
+                    $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B' . $baris, '' . $r['nama_tingkatan']);
+                    $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C' . $baris, '' . $r['jumlah']);
+
+                    $baris++;
+                    $no++;
+                }
+                $indek++;
+                $objPHPExcel->createSheet($indek);
+            } else {
+                $objPHPExcel->setActiveSheetIndex($indek)->setTitle("Detail Tingkatan SKP");
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A1', 'No');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B1', 'Nim');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C1', 'Nama');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D1', 'Tingkatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E1', 'Kegiatan');
+
+                $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+
+                $objPHPExcel->getActiveSheet()->getStyle('A1:E' . $jum)->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle("A1:E1")->getFont()->setBold(true);
+                $no = 1;
+                $baris = 2;
+
+                foreach ($data as $t) {
+                    foreach ($t as $r) {
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A' . $baris, '' . $no);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B' . $baris, '' . $r['nim']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C' . $baris, '' . $r['nama']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D' . $baris, '' . $r['nama_kegiatan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E' . $baris, '' . $r['nama_kegiatan']);
+                        $baris++;
+                        $no++;
+                    }
+                }
+                $indek++;
+                $objPHPExcel->createSheet($indek);
+            }
+        }
+
+        $filename = 'reakpitulasi-tingkatan-skp' . '.xls'; //save our workbook as this file name
+        header('Content-Type: application/vnd.ms-excel'); //mime type
+        header('Content-Disposition: attachment;filename="' . $filename . '"'); //tell browser what's the file name
+        header('Cache-Control: max-age=0'); //no cach
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
+        $objWriter->save('php://output');
     }
 
 
@@ -845,7 +1028,6 @@ class Export extends CI_Controller
             $temp[$l['id_lembaga']]['laporan'] = $detail['laporan'];
             $temp[$l['id_lembaga']]['total'] = $detail['total']['total'];
         }
-
 
         // var_dump($non_delegasi);
         // var_dump($data);
@@ -1074,6 +1256,32 @@ class Export extends CI_Controller
             $data['total']['persen_sisa'] = $data['total']['dana_sisa'] / $data['total']['dana_pagu'] * 100;
         }
 
+        return $data;
+    }
+
+    private function _getRekapitulasiSKP($id_prestasi, $tahun = null)
+    {
+
+        $this->db->select('ps.*,sp.id_prestasi,p.nama_prestasi,m.nama');
+        $this->db->from('poin_skp as ps');
+        $this->db->join('semua_prestasi as sp', 'ps.prestasiid_prestasi=sp.id_semua_prestasi', 'left');
+        $this->db->join('prestasi as p', 'p.id_prestasi=sp.id_prestasi', 'left');
+        $this->db->join('mahasiswa as m', 'm.nim=ps.nim', 'left');
+        if ($tahun) {
+            $this->db->where('YEAR(ps.tgl_pelaksanaan)', $tahun);
+        }
+        $this->db->where('p.id_prestasi', $id_prestasi);
+        $this->db->where('ps.validasi_prestasi', 1);
+        $data['semua_tingkatan'] = $this->db->get()->result_array();
+        return $data['semua_tingkatan'];
+    }
+
+    private function _getRekapTingkatanSKP($id, $tahun)
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $tahun = $tahun;
+        $id_tingkat = $id;
+        $data = $this->poinskp->rekapTingkatan($id_tingkat, $tahun);
         return $data;
     }
 }

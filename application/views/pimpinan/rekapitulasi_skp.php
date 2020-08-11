@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                         </form>
-                        <form action="<?= base_url('Export/exportRekapitulasiSKP') ?>" method="get">
+                        <form action="<?= base_url('Export/exportRekapitulasiTingkatan') ?>" method="get">
                             <div class="form-group  float-right mr-2">
                                 <div class="input-group">
                                     <select name="tahun" class="custom-select" id="inputGroupSelect04">
