@@ -21,7 +21,7 @@ if (failed) {
 
 
 // confirm-hapus
-$('.confirm-hapus').on('click', function (e) {
+$('table').on('click', '.confirm-hapus', function (e) {
 	e.preventDefault();
 	const href = $(this).attr('href');
 	Swal.fire({
@@ -40,7 +40,7 @@ $('.confirm-hapus').on('click', function (e) {
 });
 
 // confirm-hapus
-$('.confirm-validasi').on('click', function (e) {
+$('table').on('click', '.confirm-validasi', function (e) {
 	e.preventDefault();
 	const href = $(this).attr('href');
 	Swal.fire({

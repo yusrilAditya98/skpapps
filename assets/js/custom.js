@@ -26,7 +26,7 @@ function rubah_date(tanggal) {
 	return formatted_date;
 }
 
-$('.detail-revisi').on('click', function () {
+$('table').on('click', '.detail-revisi', function () {
 	let id = $(this).data('id');
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/validasiKegiatan/' + id,
@@ -54,15 +54,11 @@ $('.detail-revisi').on('click', function () {
 // 	})
 // })
 
-$('.detail-revisi-rancangan').on('click', function () {
+$('table').on('click', '.detail-revisi-rancangan', function () {
 	let catatan = $(this).data('catatan')
 	$('.d-catatan').html(catatan)
 })
-// $('#dataTabelProposal').on('click', '.detail-kegiatan', function (e) {
-// 	console.log(e)
-// 	$('.temp-class').remove()
-// 	copyDiv(e)
-// });
+
 
 
 $('.table').on('click', '.detail-kegiatan', function (e) {
@@ -572,7 +568,7 @@ $(document).ready(function () {
 })
 
 
-$('.laporan-serapan').on('click', function () {
+$('table').on('click', '.laporan-serapan', function () {
 	const id_lembaga = $(this).data('id')
 	const tahun = $(this).data('tahun')
 
@@ -653,7 +649,7 @@ $.ajax({
 })
 
 
-$('.edit-file').on('click', function () {
+$('table').on('click', '.edit-file', function () {
 	let id = $(this).data('id')
 	let nama = $(this).data('nama')
 	let dir = $(this).data('dir')
@@ -672,7 +668,6 @@ $('.edit-file').on('click', function () {
 		<option value="panduan">panduan</option>
 		<option selected value="template">template</option>`)
 	}
-
 
 	if (lihat == 'all') {
 		$('#dilihat_oleh_edit').html(`  <option selected value="all">semua</option>

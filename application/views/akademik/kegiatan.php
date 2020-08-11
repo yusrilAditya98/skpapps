@@ -82,10 +82,10 @@
                                             </td>
                                             <td>
                                                 <button class="btn btn-primary detail-kegiatan-info" data-toggle="modal" data-target=".modalDetailKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Detail</button>
-                                                <?php if ($k['status_terlaksana'] == 0) : ?>
-                                                    <button class="btn btn-success edit-kegiatan" data-toggle="modal" data-target=".modalEditKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Edit</button>
-                                                    <a href="<?= base_url("akademik/hapusKegiatan/") . $k['id_kuliah_tamu']  ?>" class="btn btn-danger confirm-hapus" ">Hapus</button>
-                                                <?php endif ?>
+                                                <?php// if ($k['status_terlaksana'] == 0) : ?>
+                                                <button class="btn btn-success edit-kegiatan" data-toggle="modal" data-target=".modalEditKegiatan" data-id="<?= $k['id_kuliah_tamu'] ?>">Edit</button>
+                                                <a href="<?= base_url("akademik/hapusKegiatan/") . $k['id_kuliah_tamu']  ?>" class="btn btn-danger confirm-hapus" ">Hapus</button>
+                                                <?php// endif ?>
 
                                             </td>
                                         </tr>
@@ -104,45 +104,45 @@
 
 <!-- Awal Modal Detail Kegiatan -->
 <div class=" modal fade bd-example-modal-lg modalDetailKegiatan" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog modal-dialog-scrollable modal-xl">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header bg-blue">
-                                                                    <h3 class="modal-title clr-white ml-4" id="exampleModalLabel">Detail Kegiatan</span></h5>
-                                                                        <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
-                                                                            <span aria-hidden="true">&times;</span>
-                                                                        </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <div class="card mb-4">
-                                                                        <div class="row no-gutters">
-                                                                            <div class="col-lg-4">
-                                                                                <img src="" class="card-img kode_qr img-thumbnail mb-2">
-                                                                            </div>
-                                                                            <div class="col-lg-8">
-                                                                                <div class="card-body">
-                                                                                    <h5 class="card-title judul_kegiatan"></h5>
-                                                                                    <p class="card-text pemateri"></p>
-                                                                                    <p class="card-text deskripsi"></p>
-                                                                                    <p class="card-text lokasi"></p>
-                                                                                    <div class="row">
-                                                                                        <p class="col-lg-5"><small class="text-muted tanggal_event"></small></p>
-                                                                                        <p class="col-lg-7"><small class="text-muted waktu_kegiatan"></small></p>
-                                                                                    </div>
+                                                    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header bg-blue">
+                                                                <h3 class="modal-title clr-white ml-4" id="exampleModalLabel">Detail Kegiatan</span></h5>
+                                                                    <button type="button" class="close clr-white" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="card mb-4">
+                                                                    <div class="row no-gutters">
+                                                                        <div class="col-lg-4">
+                                                                            <img src="" class="card-img kode_qr img-thumbnail mb-2">
+                                                                        </div>
+                                                                        <div class="col-lg-8">
+                                                                            <div class="card-body">
+                                                                                <h5 class="card-title judul_kegiatan"></h5>
+                                                                                <p class="card-text pemateri"></p>
+                                                                                <p class="card-text deskripsi"></p>
+                                                                                <p class="card-text lokasi"></p>
+                                                                                <div class="row">
+                                                                                    <p class="col-lg-5"><small class="text-muted tanggal_event"></small></p>
+                                                                                    <p class="col-lg-7"><small class="text-muted waktu_kegiatan"></small></p>
                                                                                 </div>
                                                                             </div>
-                                                                            <div class="col-lg-12 kategori-filter float-right mb-2">
+                                                                        </div>
+                                                                        <div class="col-lg-12 kategori-filter float-right mb-2">
 
-                                                                            </div>
-                                                                            <div class="col-lg-12 tabel-peserta">
-                                                                                <div class="table-responsive" id="detail-kuliah-tamu">
+                                                                        </div>
+                                                                        <div class="col-lg-12 tabel-peserta">
+                                                                            <div class="table-responsive" id="detail-kuliah-tamu">
 
-                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
                         </div>
                         <!-- Akhir Modeal Detail Kegiatan -->
 
@@ -161,6 +161,10 @@
                                             <div class="row no-gutters">
                                                 <div class="col-lg-12">
                                                     <?= form_open_multipart('akademik/editKegiatan/'); ?>
+                                                    <input type="hidden" name="nama_lama" id="nama_kegiatan_lama" value="">
+                                                    <input type="hidden" name="tempat_lama" id="tempat_lama" value="">
+                                                    <input type="hidden" name="tgl_plksn_lama" id="tgl_plksn_lama" value="">
+                                                    <input type="hidden" name="status_terlaksana" id="status_terlaksana" value="">
                                                     <div class="form-group">
                                                         <label for="nama_kegiatan">Nama Kegiatan</label>
                                                         <input type="text" class="form-control" id="nama_kegiatan" name="nama_kegiatan" placeholder="Masukkan nama kegiatan">

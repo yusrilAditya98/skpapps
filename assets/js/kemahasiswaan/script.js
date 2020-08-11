@@ -264,7 +264,10 @@ $('.partisipasiKegiatan').on("change", function () {
 function detailValidasiSKP(id) {
 	let id_skp = id;
 	console.log('cek')
-	$('.temp-class').remove()
+	$('table').on('click', '.detailSkp', function (e) {
+		$('.temp-class').remove()
+		copyDivValidasiSkp(e)
+	})
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/Kemahasiswaan/detailKegiatan/' + id_skp,
 		method: 'get',
@@ -298,7 +301,7 @@ function detailValidasiSKP(id) {
 			}
 		}
 	})
-	copyDivValidasiSkp(e)
+
 }
 
 function copyDivValidasiSkp(e) {
@@ -311,7 +314,7 @@ function copyDivValidasiSkp(e) {
 	$('.t-validasi').append(cldrnvalid[0])
 }
 
-$('.d-revisi').on("click", function () {
+$('table').on("click", '.d-revisi', function () {
 	let id_skp = $(this).data('skp');
 
 	$.ajax({
@@ -325,34 +328,34 @@ $('.d-revisi').on("click", function () {
 	})
 })
 
-$('.d-valid-km').on("click", function () {
+$('table').on("click", '.d-valid-km', function () {
 
 	let id_kegiatan = $(this).data('kegiatan');
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kemahasiswaan/validasiProposal/' + id_kegiatan)
 	$('.jenis_validasi').val(3)
 
 })
-$('.d-valid').on("click", function () {
+$('table').on("click", '.d-valid', function () {
 	let id_kegiatan = $(this).data('kegiatan');
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kemahasiswaan/validasiProposal/' + id_kegiatan)
 	$('.jenis_validasi').val(4)
 })
 
-$('.d-valid-km-lpj').on("click", function () {
+$('table').on("click", '.d-valid-km-lpj', function () {
 
 	let id_kegiatan = $(this).data('kegiatan');
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kemahasiswaan/validasiLpj/' + id_kegiatan)
 	$('.jenis_validasi').val(3)
 
 })
-$('.d-valid-lpj').on("click", function () {
+$('table').on("click", '.d-valid-lpj', function () {
 	let id_kegiatan = $(this).data('kegiatan');
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kemahasiswaan/validasiLpj/' + id_kegiatan)
 	$('.jenis_validasi').val(4)
 })
 
 
-$('.detail-kegiatan').on('click', function () {
+$('table').on('click', '.detail-kegiatan', function () {
 	let tipe_kegiatan = $(this).data('jenis');
 	let id_kegiatan = $(this).data('id');
 	let role_id = 0;
@@ -367,10 +370,6 @@ $('.detail-kegiatan').on('click', function () {
 		$('.jenis_validasi').val(role_id)
 	}
 })
-
-
-
-
 
 
 $('.tambahAnggaran').on('click', function () {

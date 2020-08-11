@@ -43,8 +43,8 @@ $("#table-1").DataTable({
 
 $('#dataTabelProposal').DataTable({
 	aLengthMenu: [
-		[5, 50, 100, 200, -1],
-		[5, 50, 100, 200, "All"]
+		[1, 50, 100, 200, -1],
+		[1, 50, 100, 200, "All"]
 	],
 	initComplete: function () {
 		var select;

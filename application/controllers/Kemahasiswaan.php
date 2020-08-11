@@ -556,6 +556,18 @@ class Kemahasiswaan extends CI_Controller
         redirect('Kemahasiswaan/lembaga');
     }
 
+    public function hapusPoinSkp($id_poinSkp)
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $skp = $this->db->get_where('poin_skp', ['id_poin_skp' => $id_poinSkp])->row_array();
+        $this->poinskp->deletePoinSkp($id_poinSkp);
+
+
+        $this->_update($skp['nim']);
+        $this->session->set_flashdata('message', 'Skp Berhasil dihapus!');
+        redirect('Kemahasiswaan/daftarPoinSkp');
+    }
+
     // detail kegiatan skp
     public function detailKegiatan($id_kegiatan = null)
     {

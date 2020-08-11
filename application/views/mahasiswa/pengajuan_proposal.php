@@ -115,7 +115,6 @@
                                             <?php endforeach; ?>
                                             <td>
                                                 <?php if ($k['status_selesai_proposal'] == 0) : ?>
-
                                                     <a href="<?= base_url('Mahasiswa/editProposal/') . $k['id_kegiatan'] ?>?jenis_revisi=<?= $jenis_revisi ?>" class="btn btn-icon btn-primary"><i class="fas fa-edit"></i></a>
                                                     <a href="<?= base_url('Mahasiswa/hapusKegiatan/') . $k['id_kegiatan']; ?>" class="btn btn-icon btn-danger confirm-hapus"><i class="fas fa-trash"></i></a>
 

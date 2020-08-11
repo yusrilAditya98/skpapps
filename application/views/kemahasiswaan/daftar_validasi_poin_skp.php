@@ -108,11 +108,13 @@
                                                             <button onclick="return confirm('Apakah anda ingin memvalidasi?')" type="submit" class="btn btn-icon btn-success">valid</i></button>
                                                             <a data-toggle="modal" data-target=".infoRevisi" class="btn btn-icon btn-primary d-revisi text-white" data-skp="<?= $p['id_poin_skp'] ?>">catatan</a>
                                                             <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-primary">edit</a>
+                                                            <a href="<?= base_url('Kemahasiswaan/hapusPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-danger confirm-hapus">hapus</a>
                                                         </div>
                                                     <?php else :
                                                     ?> <div class="btn-group">
                                                             <a data-toggle="modal" data-target=".infoRevisi" class="btn btn-icon btn-primary d-revisi text-white" data-skp="<?= $p['id_poin_skp'] ?>">catatan</a>
                                                             <a href="<?= base_url('Mahasiswa/editPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-primary">edit</a>
+                                                            <a href="<?= base_url('Kemahasiswaan/hapusPoinSkp/') . $p['id_poin_skp']  ?>" class="btn btn-danger confirm-hapus">hapus</a>
                                                         </div>
                                                     <?php endif;
                                                     ?>

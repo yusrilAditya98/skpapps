@@ -306,7 +306,7 @@ $('#table-1').on("click", '.detailSkp', function () {
 	})
 })
 
-$('.d-revisi').on('click', function () {
+$('table').on('click', '.d-revisi', function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/Mahasiswa/detailKegiatan/' + id_skp,
@@ -400,7 +400,6 @@ function myFunction(nim) {
 
 $('.hps-mhs').on('click', function () {
 	let nim = $(this).data('id')
-	console.log('hapus')
 	$('.d-m#data-' + nim + '').remove()
 	$('#jumlahAnggota').val(jumlahAnggota - 1);
 	jumlahAnggota = $('#jumlahAnggota').val();
@@ -408,7 +407,6 @@ $('.hps-mhs').on('click', function () {
 
 // Mengenerarat anggaran yang ditermi
 $('#danaKegiatan').keyup(function () {
-
 	let nominal = $('#danaKegiatan').val() * 0.7
 	$('#danaKegiatanDiterima').val(nominal)
 })

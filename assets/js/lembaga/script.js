@@ -5,13 +5,13 @@ $('.t-anggaran').val(totalAnggaran)
 var url = $(location).attr("href");
 var segments = url.split("/");
 
-$('.d-valid').on("click", function () {
+$('table').on("click", '.d-valid', function () {
 	let id_kegiatan = $(this).data('kegiatan');
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kegiatan/validasiProposal/' + id_kegiatan)
 	$('.jenis_validasi').val(2)
 })
 
-$('.d-valid-rev').on("click", function () {
+$('table').on("click", '.d-valid-rev', function () {
 	let id_kegiatan = $(this).data('kegiatan');
 	$('.form-revisi').attr('action', segments[0] + '//' + segments[2] + '/' + segments[3] + '/Kegiatan/validasiLpj/' + id_kegiatan)
 	$('.jenis_validasi').val(2)
@@ -291,7 +291,7 @@ $('#partisipasiKegiatan').on("change", function () {
 })
 
 
-$('.d-revisi').on('click', function () {
+$('table').on('click', '.d-revisi', function () {
 	let id_skp = $(this).data('id');
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/API_skp/detailKegiatan/' + id_skp,

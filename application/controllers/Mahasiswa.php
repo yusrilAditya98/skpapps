@@ -191,12 +191,22 @@ class Mahasiswa extends CI_Controller
             if ($this->session->userdata('user_profil_kode') == 4 || $this->session->userdata('user_profil_kode') == 9) {
                 $data['validasi_prestasi'] = $this->dataPoinSkp[0]['validasi_prestasi'];
                 $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);
+                $this->_update($nim);
                 redirect("Kemahasiswaan/daftarPoinSkp");
             } else {
                 $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);
                 redirect("Mahasiswa/poinSkp");
             }
         }
+    }
+    private function _update($nim)
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($nim);
+
+        $this->db->set('total_poin_skp', $this->totalPoinSKp);
+        $this->db->where('nim', $nim);
+        $this->db->update('mahasiswa');
     }
 
     // Pengajuan Proposal kegiatan

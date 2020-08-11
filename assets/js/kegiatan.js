@@ -125,6 +125,11 @@ $('#table-kegiatan').on('click', '.edit-kegiatan', function () {
 			console.log(data);
 			var link_a = window.location.origin + '/' + segments[3] + '/Akademik/editKegiatan/' + id;
 			$('form').attr('action', link_a);
+			$('#nama_kegiatan_lama').val(data['nama_event']);
+			$('#tempat_lama').val(data['lokasi']);
+			$('#tgl_plksn_lama').val(data['tanggal_format']);
+			$('#status_terlaksana').val(data['status_terlaksana']);
+
 			$('#nama_kegiatan').val(data['nama_event']);
 			$('#tanggal_kegiatan').val(data['tanggal_format']);
 			$('#deskripsi_kegiatan').val(data['deskripsi']);

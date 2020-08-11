@@ -234,21 +234,38 @@ class Akademik extends CI_Controller
 
     public function editKegiatan($id_kegiatan)
     {
+        $status = $this->input->post('status_terlaksana');
+        $nama_lama = $this->input->post('nama_lama');
+        $tgl_lama = $this->input->post('tgl_plksn_lama');
+        $tmpt_lama = $this->input->post('tempat_lama');
+        if ($status == 1) {
+            $dataSkp = [
+                'nama_kegiatan' => $this->input->post('nama_kegiatan'),
+                'tgl_pelaksanaan' => $this->input->post('tanggal_kegiatan'),
+                'tgl_selesai_pelaksanaan' => $this->input->post('tanggal_kegiatan'),
+                'tempat_pelaksanaan' => $this->input->post('ruangan'),
+            ];
+
+            $this->db->set($dataSkp);
+            $this->db->where('nama_kegiatan', $nama_lama);
+            $this->db->where('tgl_pelaksanaan', $tgl_lama);
+            $this->db->where('tempat_pelaksanaan', $tmpt_lama);
+            $this->db->update('poin_skp');
+        }
         $data_kuliah_tamu = [
-            // 'kode_qr' => $this->generate_string(),
             'nama_event' => $this->input->post('nama_kegiatan'),
             'deskripsi' => $this->input->post('deskripsi_kegiatan'),
             'lokasi' => $this->input->post('ruangan'),
             'tanggal_event' => $this->input->post('tanggal_kegiatan'),
             'waktu_mulai' => $this->input->post('waktu_kegiatan_mulai'),
             'waktu_selesai' => $this->input->post('waktu_kegiatan_selesai'),
-            // 'poster' => $this->input->post('kodeUjian'),
             'pemateri' => $this->input->post('pemateri')
         ];
 
         $this->db->set($data_kuliah_tamu);
         $this->db->where('id_kuliah_tamu', $id_kegiatan);
         $this->db->update('kuliah_tamu');
+
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kegiatan berhasil diperbarui</div>');
         redirect('akademik/kegiatan');
     }
@@ -267,14 +284,42 @@ class Akademik extends CI_Controller
         // var_dump($image_location);
         // die;
 
+        if ($kuliah_tamu['status_terlaksana'] == 1) {
+
+            $this->db->where('nama_kegiatan', $kuliah_tamu['nama_event']);
+            $this->db->where('tgl_pelaksanaan', $kuliah_tamu['tanggal_event']);
+            $this->db->where('tempat_pelaksanaan', $kuliah_tamu['lokasi']);
+            $this->db->delete('poin_skp');
+
+            $anggota = $this->db->get_where('peserta_kuliah_tamu', ['id_kuliah_tamu' => intval($id_kegiatan)])->result_array();
+            foreach ($anggota as $a) {
+                $this->_updateTotalPoinSkpMHS($a['nim']);
+            }
+        }
+
         $this->db->where('id_kuliah_tamu', intval($id_kegiatan));
         $this->db->delete('peserta_kuliah_tamu');
 
         $this->db->where('id_kuliah_tamu', intval($id_kegiatan));
         $this->db->delete('kuliah_tamu');
+
+
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Kegiatan berhasil dihapus</div>');
         redirect('akademik/kegiatan');
     }
+
+
+
+    private function _updateTotalPoinSkpMHS($nim)
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $totalPoinSKp = $this->poinskp->updateTotalPoinSkp($nim);
+
+        $this->db->set('total_poin_skp', $totalPoinSKp);
+        $this->db->where('nim', $nim);
+        $this->db->update('mahasiswa');
+    }
+
 
     public function generate_qr()
     {

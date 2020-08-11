@@ -73,10 +73,6 @@ $(document).ready(function (e) {
 			"targets": [0, 7],
 			"orderable": false
 		}]
-
-
-
-
 	});
 
 	$('#filter_jurusan').on('change', function () { //button filter event click
@@ -94,14 +90,8 @@ $(document).ready(function (e) {
 
 });
 
-
-
-
-
-
 let nama_prestasi = [];
 let jumlah_prestasi = [];
-
 
 $(document).ready(function () {
 	var tahun = $('#tahun_temp').val();

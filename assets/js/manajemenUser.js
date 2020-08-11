@@ -2,7 +2,6 @@ var url = $(location).attr("href");
 var segments = url.split("/");
 
 $('#status_user').on('change', function () {
-	console.log($('#status_user').val());
 	$('.prodi').remove()
 	if ($('#status_user').val() == "1") {
 		$.ajax({
@@ -79,8 +78,7 @@ $('.table-kategori').on('click', '.edit-user', function () {
 			$('#username_edit').val(data['user']['username']);
 			$('#nama_edit').val(data['user']['nama']);
 			data['status_user'].forEach(function (dataA) {
-				// console.log(dataA['user_profil_kode']);
-				// console.log(data['user']['user_profil_kode']);
+
 				if (dataA['user_profil_kode'] == data['user']['user_profil_kode']) {
 					$('#status_user_edit').append(`<option value="` + dataA['user_profil_kode'] + `" selected>` + dataA['jenis_user'] + `</option>`)
 				} else {
