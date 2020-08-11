@@ -32,12 +32,20 @@ $("[data-checkboxes]").each(function () {
 $("#table-1").DataTable({
 	"columnDefs": [{
 		"sortable": false,
-		"targets": [2, 3]
+		"targets": []
 	}],
+	aLengthMenu: [
+		[10, 50, 100, 200, -1],
+		[10, 50, 100, 200, "All"]
+	],
 
 });
 
 $('#dataTabelProposal').DataTable({
+	aLengthMenu: [
+		[5, 50, 100, 200, -1],
+		[5, 50, 100, 200, "All"]
+	],
 	initComplete: function () {
 		var select;
 		this.api().columns([2]).every(function () {

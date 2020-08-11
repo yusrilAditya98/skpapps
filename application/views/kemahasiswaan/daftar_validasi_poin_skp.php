@@ -88,7 +88,7 @@
                                             <td><?= date("d-m-Y", strtotime($p['tgl_pengajuan']))  ?></td>
                                             <td><?= $p['nim'] ?></td>
                                             <td><?= $p['nama'] ?> </td>
-                                            <td><a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" class="detailSkp"><?= $p['nama_kegiatan'] ?></a></td>
+                                            <td><a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" onclick="detailValidasiSKP(<?= $p['id_poin_skp'] ?>)" class="detailSkp"><?= $p['nama_kegiatan'] ?></a></td>
                                             <td>
                                                 <?php if ($p['validasi_prestasi'] == 0) : ?>
                                                     <div class="badge badge-primary">Proses</div>

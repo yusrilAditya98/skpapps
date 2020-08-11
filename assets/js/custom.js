@@ -58,12 +58,17 @@ $('.detail-revisi-rancangan').on('click', function () {
 	let catatan = $(this).data('catatan')
 	$('.d-catatan').html(catatan)
 })
+// $('#dataTabelProposal').on('click', '.detail-kegiatan', function (e) {
+// 	console.log(e)
+// 	$('.temp-class').remove()
+// 	copyDiv(e)
+// });
 
-$('.detail-kegiatan').on('click', function (e) {
+
+$('.table').on('click', '.detail-kegiatan', function (e) {
 	let id = $(this).data('id');
-	let jenis = $(this).data('jenis')
+	let jenis = $(this).data('jenis');
 	let dana = '';
-
 	$('.s-dana').remove()
 	$('.k-anggota').remove()
 	$('.temp-class').remove()
@@ -155,10 +160,13 @@ $('.detail-kegiatan').on('click', function (e) {
 			}
 		}
 	})
+
 	copyDiv(e)
 
-
 })
+
+
+
 
 $(document).ready(function (e) {
 
@@ -190,6 +198,10 @@ $(document).ready(function (e) {
 
 $(document).ready(function (e) {
 	$('#dataTabelKegiatan').DataTable({
+		aLengthMenu: [
+			[10, 50, 100, 200, -1],
+			[10, 50, 100, 200, "All"]
+		],
 		initComplete: function () {
 			var select;
 			this.api().columns([3]).every(function () {

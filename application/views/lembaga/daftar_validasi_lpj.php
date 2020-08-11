@@ -51,7 +51,7 @@
 
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-striped" id="dataTabelProposal">
+                            <table class="table table-striped table-bordered" id="dataTabelProposal">
                                 <thead>
 
                                     <th class="align-middle">No</th>

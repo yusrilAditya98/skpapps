@@ -267,7 +267,7 @@ $('.partisipasiKegiatan').on("change", function () {
 	})
 })
 
-$('.detailSkp').on("click", function () {
+$('#table-1').on("click", '.detailSkp', function () {
 	let id_skp = $(this).data('id');
 
 	$.ajax({

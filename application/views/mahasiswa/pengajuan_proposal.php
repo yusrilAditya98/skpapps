@@ -54,7 +54,7 @@
                         <div class="kategori-filter float-right mb-2">
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTabelKegiatan">
+                            <table class="table table-bordered table-striped" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
                                         <th class="align-middle" scope="col">No</th>

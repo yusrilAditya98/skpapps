@@ -261,8 +261,9 @@ $('.partisipasiKegiatan').on("change", function () {
 
 
 
-$('.detailSkp').on("click", function (e) {
-	let id_skp = $(this).data('id');
+function detailValidasiSKP(id) {
+	let id_skp = id;
+	console.log('cek')
 	$('.temp-class').remove()
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/Kemahasiswaan/detailKegiatan/' + id_skp,
@@ -298,7 +299,7 @@ $('.detailSkp').on("click", function (e) {
 		}
 	})
 	copyDivValidasiSkp(e)
-})
+}
 
 function copyDivValidasiSkp(e) {
 	let tombol = e.target

@@ -73,7 +73,7 @@
 
                         </div>
                         <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTabelKegiatan">
+                            <table class="table table-bordered table-striped" id="dataTabelKegiatan">
                                 <thead class="text-center">
                                     <tr>
                                         <th class="align-middle">No</th>
