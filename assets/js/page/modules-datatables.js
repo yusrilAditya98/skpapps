@@ -43,8 +43,8 @@ $("#table-1").DataTable({
 
 $('#dataTabelProposal').DataTable({
 	aLengthMenu: [
-		[1, 50, 100, 200, -1],
-		[1, 50, 100, 200, "All"]
+		[10, 50, 100, 200, -1],
+		[10, 50, 100, 200, "All"]
 	],
 	initComplete: function () {
 		var select;
@@ -102,8 +102,8 @@ $(".table-kategori").DataTable({
 });
 $(".table-anggota-lembaga").DataTable({
 	aLengthMenu: [
-		[25, 50, 100, 200, -1],
-		[25, 50, 100, 200, "All"]
+		[10, 50, 100, 200, -1],
+		[10, 50, 100, 200, "All"]
 	]
 });
 
