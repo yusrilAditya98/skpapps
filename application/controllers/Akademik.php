@@ -353,8 +353,8 @@ class Akademik extends CI_Controller
     public function validasiKegiatan()
     {
         $data = $this->input->post('validasi');
+
         if ($data == null) {
-            // echo "HAHA";
             $this->db->set('status_terlaksana', 1);
             $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             $this->db->update('kuliah_tamu');
@@ -380,31 +380,23 @@ class Akademik extends CI_Controller
                     'prestasiid_prestasi' => 115,
                     'file_bukti' => '../assets/qrcode/' . $this->input->post('kode_qr')
                 ];
-                // header('Content-type: application/json');
-                // echo json_encode($data_poin_skp);
-                // die;
                 $this->db->insert('poin_skp', $data_poin_skp);
 
                 // update poin skp
-                $this->load->model('Model_poinskp', 'poinskp');
-                $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($mahasiswa['nim']);
-                $this->db->set('total_poin_skp', $this->totalPoinSKp['bobot']);
-                $this->db->where('nim', $mahasiswa['nim']);
-                $this->db->update('mahasiswa');
+                $this->_update($mahasiswa['nim']);
             }
-            // $this->db->set('status_terlaksana', 1);
-            // $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
-            // $this->db->update('kuliah_tamu');
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
-        redirect('akademik/kegiatan');
+        redirect('Akademik/kegiatan');
     }
-    public function hei()
+    private function _update($nim)
     {
-        // echo json_encode($this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => 14])->row_array());
-        // $this->db->set('status_terlaksana', 1);
-        // $this->db->where('id_kuliah_tamu', 14);
-        // $this->db->update('kuliah_tamu');
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($nim);
+
+        $this->db->set('total_poin_skp', $this->totalPoinSKp);
+        $this->db->where('nim', $nim);
+        $this->db->update('mahasiswa');
     }
     public function setKegiatanBerlangsung($id_kuliah_tamu)
     {
