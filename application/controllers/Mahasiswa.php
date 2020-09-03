@@ -195,6 +195,7 @@ class Mahasiswa extends CI_Controller
                 redirect("Kemahasiswaan/daftarPoinSkp");
             } else {
                 $this->poinskp->updatePoinSkp($this->dataPoinSkp[0]['id_poin_skp'], $data);
+                $this->_update($nim);
                 redirect("Mahasiswa/poinSkp");
             }
         }

@@ -241,8 +241,7 @@ class Model_poinskp extends CI_Model
 
     public function rekapTingkatan($id_tingkatan, $tahun = null)
     {
-
-        $this->db->select('ps.*,sp.*,p.*,st.*,jk.*,bk.*,t.*,m.nama,m.nim');
+        $this->db->select('ps.*,sp.*,p.*,st.*,jk.*,bk.*,t.*,m.nama,m.nim,prodi.nama_prodi,jurusan.nama_jurusan');
         $this->db->from('poin_skp as ps');
         $this->db->join('semua_prestasi as sp', 'ps.prestasiid_prestasi=sp.id_semua_prestasi', 'left');
         $this->db->join('prestasi as p', 'sp.id_prestasi=p.id_prestasi', 'left');
@@ -252,10 +251,29 @@ class Model_poinskp extends CI_Model
         $this->db->join('bidang_kegiatan as bk', 'jk.id_bidang=bk.id_bidang', 'left');
         $this->db->join('tingkatan as t', 't.id_tingkatan=st.id_tingkatan', 'left');
         $this->db->join('mahasiswa as m', 'm.nim=ps.nim', 'left');
+        $this->db->join('prodi', 'm.kode_prodi = prodi.kode_prodi', 'left');
+        $this->db->join('jurusan', 'prodi.kode_jurusan = jurusan.kode_jurusan', 'left');
         $this->db->where('t.id_tingkatan', $id_tingkatan);
         if ($tahun != null) {
             $this->db->where('YEAR(ps.tgl_pelaksanaan)', $tahun);
         }
         return $this->db->get()->result_array();
+    }
+
+    public function getSemuaPrestasByRange($start_date = null, $end_date = null)
+    {
+        $this->db->select('COUNT(p.id_prestasi)as jumlah,p.nama_prestasi,p.id_prestasi');
+        $this->db->from('poin_skp as ps');
+        $this->db->join('semua_prestasi as sp', 'ps.prestasiid_prestasi=sp.id_semua_prestasi', 'left');
+        $this->db->join('prestasi as p', 'sp.id_prestasi=p.id_prestasi', 'left');
+        $this->db->where('ps.validasi_prestasi', 1);
+        if ($start_date != null && $end_date != null) {
+            $this->db->where('ps.tgl_pelaksanaan >=', $start_date);
+            $this->db->where('ps.tgl_pelaksanaan <=', $end_date);
+        }
+
+        $this->db->group_by('p.id_prestasi');
+        $data = $this->db->get()->result_array();
+        return $data;
     }
 }

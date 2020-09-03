@@ -141,6 +141,7 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                         <li><a class="nav-link" href="<?= base_url("Kegiatan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
                     <?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
                         <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Pengaturan File</span></a></li>
+                        <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileExport") ?>"><i class="fas fa-file-excel"></i> <span>Laporan</span></a></li>
                     <?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>
                         <li><a class="nav-link" href="<?= base_url("Pimpinan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
                     <?php elseif ($this->session->userdata('user_profil_kode') == 6) : ?>
@@ -149,6 +150,7 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                         <li><a class="nav-link" href="<?= base_url("Publikasi/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
                     <?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
                         <li><a class="nav-link" href="<?= base_url("Akademik/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+
                     <?php endif ?>
 
             </ul>
@@ -179,6 +181,30 @@ $subSubMenu = $this->db->query($querySubSubMenu)->result_array();
                 <li><a class="nav-link" href="<?= base_url("Akademik/kegiatan") ?>"><i class="fas fa-calendar-check"></i> <span>Kegiatan</span></a></li>
                 <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/kategori") ?>"><i class="fas fa-layer-group"></i> <span>Kategori </span></a></li>
                 <li><a class="nav-link" href="<?= base_url("Admin/daftarPimpinan") ?>"><i class="fas fa-users"></i> <span>Daftar Pimpinan </span></a></li>
+
+
+                <li class="menu-header mt-2">Download</li>
+                <?php if ($this->session->userdata('user_profil_kode') == 1) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Mahasiswa/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 2) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Kegiatan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 3) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Kegiatan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 4) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Pengaturan File</span></a></li>
+                    <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileExport") ?>"><i class="fas fa-file-excel"></i> <span>Laporan</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 5) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Pimpinan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 6) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Keuangan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 7) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Publikasi/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php elseif ($this->session->userdata('user_profil_kode') == 8) : ?>
+                    <li><a class="nav-link" href="<?= base_url("Akademik/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Panduan File</span></a></li>
+                <?php else : ?>
+                    <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileDownload") ?>"><i class="fas fa-cog"></i> <span>Pengaturan File</span></a></li>
+                    <li><a class="nav-link" href="<?= base_url("Kemahasiswaan/daftarFileExport") ?>"><i class="fas fa-file-excel"></i> <span>Laporan</span></a></li>
+                <?php endif ?>
             </ul>
         <?php endif; ?>
     </aside>

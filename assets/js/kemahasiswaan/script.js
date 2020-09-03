@@ -277,7 +277,7 @@ function detailValidasiSKP(id) {
 			$('.d-jenis').html(data[0].jenis_kegiatan)
 			$('.d-tingkat').html(data[0].nama_tingkatan)
 			$('.d-partisipasi').html(data[0].nama_prestasi)
-			$('.d-bobot').html(data[0].bobot)
+			$('.d-bobot').html((data[0].bobot * data[0].nilai_bobot))
 			$('.d-nama').val(data[0].nama_kegiatan)
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tempat').val(data[0].tempat_pelaksanaan)

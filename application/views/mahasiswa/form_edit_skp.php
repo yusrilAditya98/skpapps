@@ -88,7 +88,7 @@
                                                         ?>
                                                         <?php if ($lastThree == 'pdf') : ?>
                                                             <label for="uploadBukti">Upload Bukti - <a target="_blank" class="btn btn-primary" href="<?= base_url('/assets/pdfjs/web/viewer.html?file=../../../file_bukti/') . $file_bukti ?>"><i class="fas fa-file-pdf"></i> Lihat</a></label>
-                                                        <?php elseif ($lastThree == 'jpg') : ?>
+                                                        <?php elseif ($lastThree == 'jpg' || $lastThree == 'png') : ?>
                                                             <label for="uploadBukti">Upload Bukti - <a target="_blank" class="btn btn-primary" href="<?= base_url('file_bukti/') . $file_bukti ?>"><i class="fas fa-file-pdf"></i> Lihat</a></label>
                                                         <?php else : ?>
                                                             <label for="uploadBukti">Upload Bukti - <button type="button" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Tdaik ada file</button></label>

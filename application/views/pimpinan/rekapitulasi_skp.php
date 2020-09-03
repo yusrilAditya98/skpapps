@@ -10,6 +10,11 @@
             </div>
         </div>
 
+        <?php
+        $start = date_format(date_create($start_date), "d-m-Y");
+        $end = date_format(date_create($end_date), "d-m-Y");
+        ?>
+
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12 col-sm-12">
                 <div class="card">
@@ -17,14 +22,17 @@
                         <h4>Grafik Rekapitulasi Prestasi SKP Mahasiswa</h4>
                     </div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <input type="hidden" id="tahun_temp" value="<?= $tahun ?>">
-                            <?php if ($tahun != "") : ?>
-                                <h3>Tahun <?= $tahun ?></h3>
-                            <?php else : ?>
-                                <h3>Semua Tahun</h3>
-                            <?php endif ?>
-                            <div class="card-body chart">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <input type="hidden" id="start_temp" value="<?= $start_date ?>">
+                                <input type="hidden" id="end_temp" value="<?= $end_date ?>">
+                                <?php if ($start_date != "" && $end_date != "") : ?>
+                                    <h4 class="float-right">Tanggal <?= $start ?> hingga <?= $end ?></h4>
+                                <?php else : ?>
+                                    <h4 class="float-right">Semua</h4>
+                                <?php endif ?>
+                            </div>
+                            <div class="col-lg-12">
                                 <canvas id="rekap-skp-chart" style="width: 100%; height: 30rem;"></canvas>
                             </div>
                         </div>
@@ -40,42 +48,83 @@
                         <h4>Rekapitulasi Prestasi SKP Mahasiswa</h4>
                     </div>
                     <div class="card-body">
-                        <?php if ($tahun != "") : ?>
-                            <h3>Tahun <?= $tahun ?></h3>
-                        <?php else : ?>
-                            <h3>Semua Tahun</h3>
-                        <?php endif ?>
-
+                        <div class="row">
+                            <div class="col-12">
+                                <?php if ($start_date != "" && $end_date != "") : ?>
+                                    <h4 class="float-right">Tanggal <?= $start ?> hingga <?= $end ?></h4>
+                                <?php else : ?>
+                                    <h4 class="float-right">Semua</h4>
+                                <?php endif ?>
+                            </div>
+                        </div>
                         <form action="<?= base_url('Pimpinan/rekapitulasiSKP') ?>" method="get">
-                            <div class="form-group float-right">
-                                <div class="input-group">
-                                    <select name="tahun" class="custom-select" id="inputGroupSelect04">
-                                        <option value="" selected="">Tahun...</option>
-                                        <?php foreach ($tahun_filter as $tf) : ?>
-                                            <option value="<?= $tf['tahun_kegiatan'] ?>"><?= $tf['tahun_kegiatan'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="submit">cari</button>
+                            <div class="row float-right">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" id="start_temp" type="date" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" id="end_temp" class="form-control">
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-primary">submit</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </form>
                         <form action="<?= base_url('Export/exportRekapitulasiSKP') ?>" method="get">
-                            <div class="form-group  float-right mr-2">
-                                <div class="input-group">
-                                    <select name="tahun" class="custom-select" id="inputGroupSelect04">
-                                        <option value="" selected="">Tahun...</option>
-                                        <?php foreach ($tahun_filter as $tf) : ?>
-                                            <option value="<?= $tf['tahun_kegiatan'] ?>"><?= $tf['tahun_kegiatan'] ?></option>
-                                        <?php endforeach; ?>
-                                    </select>
-                                    <div class="input-group-append">
-                                        <button class="btn btn-success" type="submit"><i class="fas fa-file-excel mr-2"></i>Download</button>
+                            <div class="row float-right mr-2">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Mulai</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="start_date" type="date" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label>Tanggal Akhir</label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <i class="fas fa-calendar-alt"></i>
+                                                </div>
+                                            </div>
+                                            <input name="end_date" type="date" class="form-control">
+                                            <div class="input-group-prepend">
+                                                <button type="submit" class="btn btn-success">Download excel</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                             </div>
                         </form>
+
 
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered text-center tabel-rekap" id="table-2">
@@ -95,7 +144,7 @@
                                             <td><?= $p['nama_prestasi'] ?></td>
                                             <td><?= $p['jumlah'] ?></td>
                                             <td>
-                                                <button class="btn btn-primary detail-rekap-skp" data-toggle="modal" data-target=".modalDetailRekapSKP" data-id="<?= $p['id_prestasi'] ?>">Detail</button>
+                                                <button class="btn btn-primary detail-rekap-skp" data-toggle="modal" data-target=".modalDetailRekapSKP" data-id="<?= $p['id_prestasi'] ?>" data-start="<?= $start_date ?>" data-end="<?= $end_date ?>">Detail</button>
                                             </td>
                                         </tr>
                                     <?php $i++;
@@ -170,7 +219,7 @@
                                             <td><?= $t['nama_tingkatan'] ?></td>
                                             <td><?= $t['jumlah'] ?></td>
                                             <td>
-                                                <button class="btn btn-primary detail-tingkat-skp" data-toggle="modal" data-target=".modalTingkatSKP" data-id="<?= $t['id_tingkatan'] ?>">Detail</button>
+                                                <button class="btn btn-primary detail-tingkat-skp" data-toggle="modal" data-target=".modalTingkatSKP" data-id="<?= $t['id_tingkatan'] ?>" data-tahun="<?= $tf['tahun_kegiatan'] ?>">Detail</button>
                                             </td>
                                         </tr>
                                     <?php $i++;

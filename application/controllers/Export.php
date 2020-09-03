@@ -721,9 +721,7 @@ class Export extends CI_Controller
 
     public function exportRekapitulasiSKP()
     {
-
         include APPPATH . 'third_party/PHPExcel/PHPExcel.php';
-
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->getProperties()->setCreator("creater");
         $objPHPExcel->getProperties()->setLastModifiedBy("Middle field");
@@ -733,51 +731,50 @@ class Export extends CI_Controller
         $data['prestasi'] = $this->db->get('prestasi')->result_array();
 
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->load->model('Model_poinskp', 'poinskp');
 
-        $tahun = "";
-        if ($this->input->get('tahun')) {
-            $tahun = $this->input->get('tahun');
+        $start_date = $this->input->get('start_date');
+        $end_date = $this->input->get('end_date');
+
+        $data['prestasi'] = [];
+        $prestasi = $this->db->get('prestasi')->result_array();
+        for ($i = 0; $i < count($prestasi); $i++) {
+            $data['prestasi'][$i] = [
+                'id_prestasi' => $prestasi[$i]['id_prestasi'],
+                'nama_prestasi' => $prestasi[$i]['nama_prestasi'],
+                'jumlah' => 0
+            ];
         }
-        $data['tahun'] = $tahun;
-        for ($i = 0; $i < count($data['prestasi']); $i++) {
-            $id_prestasi = intval($data['prestasi'][$i]['id_prestasi']);
-            $count = 0;
-            $semua_prestasi = $this->db->get_where('semua_prestasi', ['id_prestasi' => $id_prestasi])->result_array();
-            for ($j = 0; $j < count($semua_prestasi); $j++) {
-                $id_semua_prestasi = intval($semua_prestasi[$j]['id_semua_prestasi']);
-                $this->db->select('id_poin_skp, YEAR(tgl_pelaksanaan) as tahun');
-                $this->db->where('prestasiid_prestasi', $id_semua_prestasi);
-                $this->db->where('validasi_prestasi', 1);
-                $mahasiswa = $this->db->get('poin_skp')->result_array();
+        if ($start_date != "" && $end_date != "") {
+            $data['start_date'] = $start_date;
+            $data['end_date'] = $end_date;
+        } else {
+            $data['start_date'] = "";
+            $data['end_date'] = "";
+        }
 
-                // $count += count($mahasiswa);
+        $gPrestasi = $this->poinskp->getSemuaPrestasByRange($start_date, $end_date);
 
-                // Hitung sesuai tahun
-                $count_temp = count($mahasiswa);
-                if ($count_temp != 0) {
-                    if ($tahun != "") {
-                        for ($k = 0; $k < $count_temp; $k++) {
-                            if (intval($mahasiswa[$k]['tahun']) == $tahun) {
-                                $count += 1;
-                            }
-                        }
-                    } else {
-                        $count += $count_temp;
-                    }
+        foreach ($gPrestasi as $p) {
+            for ($i = 0; $i < count($data['prestasi']); $i++) {
+                if ($data['prestasi'][$i]['id_prestasi'] == $p['id_prestasi']) {
+                    $data['prestasi'][$i] = [
+                        'id_prestasi' => $p['id_prestasi'],
+                        'nama_prestasi' => $p['nama_prestasi'],
+                        'jumlah' => intval($p['jumlah'])
+
+                    ];
                 }
             }
-            $data['prestasi'][$i]['jumlah'] = $count;
         }
 
         $jumlah_data = count($data['prestasi']) + 1;
-
-
 
         $prestasi = [];
         $i  = 0;
         foreach ($data['prestasi'] as $p) {
             $temp = 0;
-            $temp =  $this->_getRekapitulasiSKP($p['id_prestasi'], $tahun);
+            $temp =  $this->_getRekapitulasiSKP($p['id_prestasi'], $start_date, $end_date);
             if ($temp != null) {
                 $prestasi[$i++] = $temp;
             }
@@ -791,6 +788,7 @@ class Export extends CI_Controller
             }
             $jumlah_prestasi += $temp;
         }
+
 
 
         $styleArray = array(
@@ -840,17 +838,23 @@ class Export extends CI_Controller
                 $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A1', 'No');
                 $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B1', 'Nim');
                 $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C1', 'Nama');
-                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D1', 'Prestasi');
-                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E1', 'Kegiatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D1', 'Prodi');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E1', 'Jurusan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('F1', 'Prestasi');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('G1', 'Kegiatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('H1', 'Link Bukti');
 
                 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(35);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(72);
 
-                $objPHPExcel->getActiveSheet()->getStyle('A1:E' . ($jumlah_prestasi + 1))->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle("A1:E1")->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A1:H' . ($jumlah_prestasi + 1))->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle("A1:H1")->getFont()->setBold(true);
                 $no = 1;
                 $baris = 2;
 
@@ -859,8 +863,11 @@ class Export extends CI_Controller
                         $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A' . $baris, '' . $no);
                         $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B' . $baris, '' . $r['nim']);
                         $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C' . $baris, '' . $r['nama']);
-                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D' . $baris, '' . $r['nama_prestasi']);
-                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E' . $baris, '' . $r['nama_kegiatan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D' . $baris, '' . $r['nama_prodi']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E' . $baris, '' . $r['nama_jurusan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('F' . $baris, '' . $r['nama_prestasi']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('G' . $baris, '' . $r['nama_kegiatan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('H' . $baris, '' . base_url($r['file_bukti']));
                         $baris++;
                         $no++;
                     }
@@ -969,17 +976,23 @@ class Export extends CI_Controller
                 $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A1', 'No');
                 $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B1', 'Nim');
                 $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C1', 'Nama');
-                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D1', 'Tingkatan');
-                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E1', 'Kegiatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D1', 'Prodi');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E1', 'Jurusan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('F1', 'Tingkatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('G1', 'Kegiatan');
+                $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('H1', 'Link Bukti');
 
                 $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(5);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(30);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(30);
                 $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(35);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setWidth(35);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setWidth(35);
+                $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setWidth(72);
 
-                $objPHPExcel->getActiveSheet()->getStyle('A1:E' . $jum)->applyFromArray($styleArray);
-                $objPHPExcel->getActiveSheet()->getStyle("A1:E1")->getFont()->setBold(true);
+                $objPHPExcel->getActiveSheet()->getStyle('A1:H' . ($jum + 1))->applyFromArray($styleArray);
+                $objPHPExcel->getActiveSheet()->getStyle("A1:H1")->getFont()->setBold(true);
                 $no = 1;
                 $baris = 2;
 
@@ -988,8 +1001,11 @@ class Export extends CI_Controller
                         $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('A' . $baris, '' . $no);
                         $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('B' . $baris, '' . $r['nim']);
                         $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('C' . $baris, '' . $r['nama']);
-                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D' . $baris, '' . $r['nama_kegiatan']);
-                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E' . $baris, '' . $r['nama_kegiatan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('D' . $baris, '' . $r['nama_prodi']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('E' . $baris, '' . $r['nama_jurusan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('F' . $baris, '' . $r['nama_tingkatan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('G' . $baris, '' . $r['nama_kegiatan']);
+                        $objPHPExcel->setActiveSheetIndex($indek)->setCellValue('H' . $baris, '' . base_url($r['file_bukti']));
                         $baris++;
                         $no++;
                     }
@@ -1259,16 +1275,19 @@ class Export extends CI_Controller
         return $data;
     }
 
-    private function _getRekapitulasiSKP($id_prestasi, $tahun = null)
+    private function _getRekapitulasiSKP($id_prestasi, $start_date = null, $end_date = null)
     {
 
-        $this->db->select('ps.*,sp.id_prestasi,p.nama_prestasi,m.nama');
+        $this->db->select('ps.*,sp.id_prestasi,p.nama_prestasi,m.nama,prodi.nama_prodi,jurusan.nama_jurusan');
         $this->db->from('poin_skp as ps');
         $this->db->join('semua_prestasi as sp', 'ps.prestasiid_prestasi=sp.id_semua_prestasi', 'left');
         $this->db->join('prestasi as p', 'p.id_prestasi=sp.id_prestasi', 'left');
         $this->db->join('mahasiswa as m', 'm.nim=ps.nim', 'left');
-        if ($tahun) {
-            $this->db->where('YEAR(ps.tgl_pelaksanaan)', $tahun);
+        $this->db->join('prodi', 'm.kode_prodi = prodi.kode_prodi', 'left');
+        $this->db->join('jurusan', 'prodi.kode_jurusan = jurusan.kode_jurusan', 'left');
+        if ($start_date != null && $end_date != null) {
+            $this->db->where('ps.tgl_pelaksanaan >=', $start_date);
+            $this->db->where('ps.tgl_pelaksanaan <=', $end_date);
         }
         $this->db->where('p.id_prestasi', $id_prestasi);
         $this->db->where('ps.validasi_prestasi', 1);
@@ -1283,5 +1302,9 @@ class Export extends CI_Controller
         $id_tingkat = $id;
         $data = $this->poinskp->rekapTingkatan($id_tingkat, $tahun);
         return $data;
+    }
+
+    public function exportBeasiswa()
+    {
     }
 }

@@ -275,11 +275,12 @@ $('#table-1').on("click", '.detailSkp', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+
 			$('.d-bidang').html(data[0].nama_bidang)
 			$('.d-jenis').html(data[0].jenis_kegiatan)
 			$('.d-tingkat').html(data[0].nama_tingkatan)
 			$('.d-partisipasi').html(data[0].nama_prestasi)
-			$('.d-bobot').html(data[0].bobot)
+			$('.d-bobot').html((data[0].bobot * data[0].nilai_bobot))
 			$('.d-nama').val(data[0].nama_kegiatan)
 			$('.d-tgl').val(data[0].tgl_pelaksanaan)
 			$('.d-tgl-selesai').val(data[0].tgl_selesai_pelaksanaan)
@@ -288,7 +289,7 @@ $('#table-1').on("click", '.detailSkp', function () {
 
 			// cek format file
 			const lastThree = data[0].file_bukti.substr(data[0].file_bukti.length - 3)
-			console.log(lastThree)
+
 			if (lastThree == 'pdf') {
 				$('.d-file').html('	lihat');
 				$('.d-file').attr('href', segments[0] + '/' + segments[3] + '/assets/pdfjs/web/viewer.html?file=../../../file_bukti/' + data[0].file_bukti)

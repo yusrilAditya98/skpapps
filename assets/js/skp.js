@@ -94,20 +94,22 @@ let nama_prestasi = [];
 let jumlah_prestasi = [];
 
 $(document).ready(function () {
-	var tahun = $('#tahun_temp').val();
+	var start = $('#start_temp').val();
+	var end = $('#end_temp').val();
+	console.log(start)
+	console.log(end)
 	var link = "";
-	if (tahun == "") {
+	if (start == "" && end == "") {
 		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi/';
 	} else {
-		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi?tahun=' + tahun;
+		link = segments[0] + '/' + segments[3] + '/Pimpinan/rekapitulasiSKPApi?start_date=' + start + '&end_date=' + end;
 	}
-
 	$.ajax({
 		url: link,
 		method: "get",
 		dataType: "json",
 		success: function (data) {
-
+			console.log(data)
 			var dataTampung = [];
 			for (var i in data) {
 				nama_prestasi.push(data[i].nama_prestasi);
@@ -124,8 +126,6 @@ $(document).ready(function () {
 				spanGaps: true,
 				backgroundColor: "#e74c3c"
 			});
-
-
 
 
 			const canvas = document.querySelector("#rekap-skp-chart");
@@ -236,19 +236,25 @@ $(document).ready(function () {
 
 $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 	let id = $(this).data('id');
-	var tahun = $('#tahun_temp').val();
+	var start_date = $(this).data('start');
+	var end_date = $(this).data('end');
+	console.log(id)
+	console.log(start_date)
+	console.log(end_date)
 	var link = "";
-	if (tahun == "") {
-		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id;
+	if (start_date == "" && end_date == "") {
+		link = segments[0] + '//' + segments[2] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id;
 	} else {
-		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id + '&tahun=' + tahun;
+		link = segments[0] + '//' + segments[2] + '/' + segments[3] + '/Pimpinan/getRekapitulasiSKP?id_prestasi=' + id + '&start_date=' + start_date + '&end_date=' + end_date;
 	}
+	console.log(link)
 
 	$.ajax({
 		url: link,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			console.log(data)
 			$('#table-detail_wrapper').remove()
 			$('#rekap-prestasi').append(`<table class="table table-striped table-bordered rekap-skp" id="table-detail">
 			</table>`)
@@ -261,6 +267,8 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 					temp.push(++i)
 					temp.push(data['mahasiswa'][j].nim)
 					temp.push(data['mahasiswa'][j].nama)
+					temp.push(data['mahasiswa'][j].nama_prodi)
+					temp.push(data['mahasiswa'][j].nama_jurusan)
 					temp.push(data['prestasi']['nama_prestasi'])
 					temp.push(data['mahasiswa'][j].nama_kegiatan)
 					dataTampung[j] = temp;
@@ -275,6 +283,12 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 						},
 						{
 							title: "Nama"
+						},
+						{
+							title: "Prodi"
+						},
+						{
+							title: "Jurusan"
 						},
 						{
 							title: "Prestasi"
@@ -298,7 +312,7 @@ $('.tabel-rekap').on('click', '.detail-rekap-skp', function () {
 
 $('.tabel-tingkatan').on('click', '.detail-tingkat-skp', function () {
 	let id = $(this).data('id');
-	var tahun = $('#tahun_temp').val();
+	var tahun = $(this).data('tahun');
 	var link = "";
 	if (tahun == "") {
 		link = segments[0] + '/' + segments[3] + '/Pimpinan/getRekapTingkatanSKP?id=' + id;
@@ -313,6 +327,7 @@ $('.tabel-tingkatan').on('click', '.detail-tingkat-skp', function () {
 		success: function (data) {
 			$('#table-detail-rekap_wrapper').remove()
 			$('#rekap-tingkatan').append(`<table class="table table-striped table-bordered rekap-skp" id="table-detail-rekap"></table>`)
+			console.log(data)
 			if (data.length != 0) {
 				var i = 0;
 				let dataTampung = [];
@@ -321,6 +336,8 @@ $('.tabel-tingkatan').on('click', '.detail-tingkat-skp', function () {
 					temp.push(++i)
 					temp.push(data[j].nim)
 					temp.push(data[j].nama)
+					temp.push(data[j].nama_prodi)
+					temp.push(data[j].nama_jurusan)
 					temp.push(data[j].nama_tingkatan)
 					temp.push(data[j].nama_kegiatan)
 					dataTampung[j] = temp;
@@ -335,6 +352,12 @@ $('.tabel-tingkatan').on('click', '.detail-tingkat-skp', function () {
 						},
 						{
 							title: "Nama"
+						},
+						{
+							title: "Prodi"
+						},
+						{
+							title: "Jurusan"
 						},
 						{
 							title: "Tingkatan"

@@ -63,22 +63,6 @@ class Kemahasiswaan extends CI_Controller
         echo json_encode($output);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private function _notifKmhs()
     {
         $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
@@ -1761,6 +1745,51 @@ class Kemahasiswaan extends CI_Controller
         }
         $this->db->update_batch('file_download', $data, 'id_file');
         $this->session->set_flashdata('message', 'File Download berhasil diubah!');
+        redirect("Kemahasiswaan/daftarFileDownload");
+    }
+
+    public function daftarFileExport()
+    {
+        $this->load->model('Model_kegiatan', 'kegiatan');
+        $data['title'] = 'Daftar File Export';
+        $data['notif'] = $this->_notifKmhs();
+        $temp = $this->kegiatan->getDataFilterRancangan();
+        $data['filter'] = $temp['tahun'];
+
+        $this->load->view("template/header", $data);
+        $this->load->view("template/navbar");
+        $this->load->view("template/sidebar", $data);
+        $this->load->view("kemahasiswaan/daftar_file_export");
+        $this->load->view("template/footer");
+    }
+
+    public function uploadKop()
+    {
+        $dir = "assets/img/kop";
+
+        // Sort in ascending order - this is default
+        $file = scandir($dir, 1);
+
+        if ($_FILES['kop']['name']) {
+            $config['allowed_types'] = 'png';
+            $config['max_size']     = '1024'; //kb
+            $config['upload_path'] = './assets/img/kop/';
+            $config['file_name'] = 'kop.png';
+            $this->load->library('upload', $config);
+            if ($this->upload->do_upload('kop')) {
+                foreach ($file as $f) {
+                    if ($f != ".." || $f != ".") {
+                        unlink(FCPATH . "assets/img/kop/" . $f);
+                    }
+                }
+                $this->upload->do_upload('kop');
+                $this->session->set_flashdata('message', 'KOP berhasil diubah!');
+            } else {
+                $this->session->set_flashdata('failed', 'KOP gagal diubah!');
+            }
+        } else {
+            $this->session->set_flashdata('failed', 'KOP tidak ditemukan!');
+        }
         redirect("Kemahasiswaan/daftarFileDownload");
     }
 }

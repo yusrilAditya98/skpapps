@@ -24,12 +24,39 @@
 		}
 	</style>
 </head>
+<?php
+function tanggal_indonesia($tanggal)
+{
+	$bulan = array(
+		1 =>   'Januari',
+		'Februari',
+		'Maret',
+		'April',
+		'Mei',
+		'Juni',
+		'Juli',
+		'Agustus',
+		'September',
+		'Oktober',
+		'November',
+		'Desember'
+	);
+
+	$pecahkan = explode('-', $tanggal);
+
+	// variabel pecahkan 0 = tanggal
+	// variabel pecahkan 1 = bulan
+	// variabel pecahkan 2 = tahun
+
+	return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+}
+?>
 
 <body>
 	<div class="kop-surat mt-2 pb-1" style="border-bottom: 3px solid black;">
 		<div class="row">
 			<div class="col-12">
-				<img src="<?= base_url('/assets/img/kop.png') ?>" alt="" srcset="">
+				<img src="<?= base_url('/assets/img/kop/kop.png') ?>" alt="" srcset="">
 			</div>
 		</div>
 	</div>
@@ -100,9 +127,10 @@
 											<td style="width: 5%"><?= $index++; ?></td>
 											<td style="width: 26.66%"><?= $p['nama_kegiatan'] ?></td>
 											<td style="width: 16.66%"><?= $p['nama_prestasi'] ?></td>
-											<td style="width: 16.66%"><?= date("d-m-Y", strtotime($p['tgl_pelaksanaan']))  ?></td>
+											<td style="width: 16.66%"><?= tanggal_indonesia($p['tgl_pelaksanaan']) ?></td>
 											<td style="width: 16.66%"><?= $p['nama_tingkatan'] ?></td>
 											<td style="width: 16.66%"><?= ($p['bobot'] * $p['nilai_bobot']) ?></td>
+											<!-- date("d-m-Y", strtotime($p['tgl_pelaksanaan']))  -->
 										</tr>
 									<?php endif; ?>
 								<?php endif; ?>
@@ -168,7 +196,7 @@
 		</div>
 
 		<div class="col-4">
-			<?= date('d-m-Y') ?> <br>
+			<?= tanggal_indonesia(date('Y-m-d')) ?> <br>
 			a.n Dekan <br>
 			<?= $pimpinan[5]['jabatan'] ?>,<br>
 			<img height="200" src="<?= base_url('assets/qrcode/bukti_skp_' . $mahasiswa[0]['nim'] . '.png') ?>" alt="qrcode">

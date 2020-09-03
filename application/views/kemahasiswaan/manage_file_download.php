@@ -61,6 +61,36 @@
             </div>
 
         </div>
+
+
+        <div class="card">
+            <div class="card-header">
+                <h4>KOP Header Transkrip SKP</h4>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+
+                </div>
+                <table class="table ">
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <a target="_blank" href="<?= base_url('/assets/img/kop/kop.png') ?>"><img src="<?= base_url('/assets/img/kop/kop.png') ?>" class="img-thumbnail" alt=""></a></td>
+                            <td>
+                                <form action="<?= base_url('Kemahasiswaan/uploadKop') ?>" method="post" enctype="multipart/form-data">
+                                    <input type="file" name="kop">
+                                    <small>KOP harus berformat .png dengan maksimal size 1024kb</small>
+                                    <button class="btn btn-primary mt-2">Ubah KOP</button>
+                                </form>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
     </section>
 </div>
 <div class="modal fade" id="modalTambahFile" tabindex="-1" role="dialog" aria-labelledby="modalTambahFileLabel" aria-hidden="true">

@@ -102,7 +102,6 @@
                                         <th scope="col">Tanggal Pengajuan</th>
                                         <th scope="col" style="width:17rem;">Nama Kegiatan</th>
                                         <th scope="col">Tingkat</th>
-                                        <th scope="col">Bobot SKP</th>
                                         <th scope="col">Nilai Bobot</th>
                                         <th scope="col">Validasi</th>
                                         <th scope="col">Action</th>
@@ -116,7 +115,6 @@
                                             <td><?= date("d-m-Y", strtotime($p['tgl_pengajuan'])) ?></td>
                                             <td> <a href="#" data-toggle="modal" data-target="#detailKegiatan" data-id="<?= $p['id_poin_skp'] ?>" class="detailSkp"><?= $p['nama_kegiatan'] ?></a> </td>
                                             <td><?= $p['nama_tingkatan'] ?><br><small><?= $p['nama_prestasi'] ?></small></td>
-                                            <td><?= $p['bobot'] ?> x <?= $p['nilai_bobot'] ?></td>
                                             <td><?= ($p['bobot'] * $p['nilai_bobot']) ?></td>
                                             <td>
                                                 <?php if ($p['validasi_prestasi'] == 0) : ?>

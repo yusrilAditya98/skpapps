@@ -32,11 +32,12 @@
     </style>
 </head>
 
-<body>
+<body style="border: 1px solid #ccc">
     <!-- Main Content -->
     <?php
     header("Content-type: application/vnd-ms-excel");
     header("Content-Disposition: attachment; filename=Data Beasiswa.xls");
+    header('Cache-Control: max-age=0'); //no cach
     ?>
     <div class="main-content">
         <section class="section">
@@ -47,10 +48,13 @@
                         <th>Nim</th>
                         <th>Nama Mahasiswa</th>
                         <th>Jenis Beasiswa</th>
+                        <th>Instansi Beasiswa</th>
                         <th>Tahun Menerima</th>
                         <th>Lama Menerima</th>
                         <th>Nominal</th>
                         <th>Status</th>
+                        <th>File Bukti</th>
+                        <th>Lampiran</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,18 +64,20 @@
                             <td><?= $index++; ?></td>
                             <td><?= $b['nim'] ?></td>
                             <td><?= $b['nama'] ?></td>
+                            <td><?= $b['nama_instansi'] ?></td>
                             <td><?= $b['jenis_beasiswa'] ?></td>
                             <td><?= date("d-m-Y", strtotime($b['tahun_menerima'])) ?></td>
                             <td><?= date("d-m-Y", strtotime($b['lama_menerima'])) ?></td>
                             <td>Rp.<?= number_format($b['nominal'], 0, ',', '.'); ?></td>
-                            <th><?php if ($b['validasi_beasiswa'] == 0) : ?>
+                            <td><?php if ($b['validasi_beasiswa'] == 0) : ?>
                                     Proses
                                 <?php elseif ($b['validasi_beasiswa'] == 1) : ?>
                                     Valid
                                 <?php elseif ($b['validasi_beasiswa'] == 2) : ?>
                                     Revisi
-                                <?php endif; ?></th>
-
+                                <?php endif; ?></td>
+                            <td><?= base_url('file_bukti/beasiswa/' . $b['bukti']) ?></td>
+                            <td><?= base_url('file_bukti/beasiswa/' . $b['lampiran']) ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
