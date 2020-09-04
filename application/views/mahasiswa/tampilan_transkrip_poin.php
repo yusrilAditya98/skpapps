@@ -60,40 +60,56 @@ function tanggal_indonesia($tanggal)
 			</div>
 		</div>
 	</div>
-	<div class="judul text-center mt-3">
-		<h5>TRANSKRIP PRESTASI MAHASISWA</h5>
+	<div class="judul text-center mt-5 mb-5">
+		<h1 style="font-family: 'Times New Roman', Times, serif;"><b><u>TRANSKRIP PRESTASI MAHASISWA</u></b></h1>
 	</div>
-	<div class="row mt-3">
+	<div class="row mt-5">
 		<div class="col-6">
 			<form action="">
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-1 col-form-label">Nama</label>
-					<div class="col-sm-1 col-form-label">:</div>
-					<div class="col-sm-10">
-						<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<?= $mahasiswa[0]['nama'] ?>">
+					<h4 for="staticEmail" class="col-sm-4">NAMA</h4>
+					<div class="col-sm-1">:</div>
+					<div class="col-sm-7">
+						<h4><?= $mahasiswa[0]['nama'] ?></h4>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-1 col-form-label">NIM</label>
-					<div class="col-sm-1 col-form-label">:</div>
-					<div class="col-sm-10">
-						<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<?= $mahasiswa[0]['nim'] ?>">
+					<h4 for="staticEmail" class="col-sm-4">NOMOR INDUK</h4>
+					<div class="col-sm-1">:</div>
+					<div class="col-sm-7">
+						<h4><?= $mahasiswa[0]['nim'] ?></h4>
+					</div>
+				</div>
+				<div class="form-group row">
+					<h4 for="staticEmail" class="col-sm-4">JENJANG PENDIDIKAN</h4>
+					<div class="col-sm-1">:</div>
+					<div class="col-sm-7">
+						<h4>Sarjana</h4>
 					</div>
 				</div>
 			</form>
 		</div>
 		<div class="col-6">
-			<form action="" style="margin-left: 15em;">
+			<form action="" style="margin-right: 5em;">
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-4 col-form-label">Program Studi :</label>
-					<div class="col-sm-8">
-						<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<?= $mahasiswa[0]['nama_prodi'] ?>">
+					<h4 for="staticEmail" class="col-sm-5">FAKULTAS</h4>
+					<div class="col-sm-1">:</div>
+					<div class="col-sm-6">
+						<h4>Ekonomi dan Bisnis</h4>
+					</div>
+				</div>
+				<div class="form-group  row">
+					<h4 for="staticEmail" class="col-sm-5">PROGRAM STUDI</h4>
+					<div class="col-sm-1">:</div>
+					<div class="col-sm-6">
+						<h4><?= $mahasiswa[0]['nama_prodi'] ?></h4>
 					</div>
 				</div>
 				<div class="form-group row">
-					<label for="staticEmail" class="col-sm-4 col-form-label">Jurusan :</label>
-					<div class="col-sm-8">
-						<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="<?= $mahasiswa[0]['nama_jurusan'] ?>">
+					<h4 for="staticEmail" class="col-sm-5">JURUSAN</h4>
+					<div class="col-sm-1">:</div>
+					<div class="col-sm-6">
+						<h4><?= $mahasiswa[0]['nama_jurusan'] ?></h4>
 					</div>
 				</div>
 			</form>
