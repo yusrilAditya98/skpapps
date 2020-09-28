@@ -11,8 +11,21 @@ class Akademik extends CI_Controller
         // $this->load->helper('url');
     }
 
+    private function _notifKmhs()
+    {
+        $this->load->model('Model_kemahasiswaan', 'kemahasiswaan');
+        $this->notif['notif_kmhs_lpj'] = count($this->kemahasiswaan->getNotifValidasi(3, 'lpj'));
+        $this->notif['notif_kmhs_proposal'] = count($this->kemahasiswaan->getNotifValidasi(3, 'proposal'));
+        $this->notif['notif_kmhs_rancangan'] = count($this->kemahasiswaan->getNotifValidasiRancangan());
+        $this->notif['notif_kmhs_skp'] = count($this->kemahasiswaan->getNotifValidasiSkp());
+        $this->notif['notif_kmhs_validasi_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiAnggotaLembaga());
+        $this->notif['notif_kmhs_keaktifan_anggota_lembaga'] = count($this->kemahasiswaan->getNotifValidasiKeaktifanLembaga());
+        return $this->notif;
+    }
+
     public function template($data)
     {
+        $data['notif'] = $this->_notifKmhs();
         $this->load->view("template/header", $data);
         $this->load->view("template/navbar", $data);
         if ($this->session->userdata('user_profil_kode') == 9) {
@@ -24,7 +37,7 @@ class Akademik extends CI_Controller
 
     public function index()
     {
-        $data['title'] = 'Dashboard';
+        $data['title'] = 'Dashboard Akademik';
         $data['kuliah_tamu'] = $this->db->get('kuliah_tamu')->result_array();
         $data['jumlah_kuliah_tamu'] = count($data['kuliah_tamu']);
 
