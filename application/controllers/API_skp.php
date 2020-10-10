@@ -773,4 +773,53 @@ class API_skp extends CI_Controller
         }
         echo json_encode($result);
     }
+
+    public function ubahStatusKehadiran()
+    {
+        $nim = $this->input->post('nim');
+        $id_kegiatan =  $this->input->post('id_kegiatan');
+        $status =  $this->input->post('status');
+
+        $kegiatan = $this->db->get_where('kuliah_tamu', ['id_kuliah_tamu' => $id_kegiatan])->row_array();
+        if ($status == 1) {
+            $data_poin_skp = [
+                'nim' => $nim,
+                'nama_kegiatan' => $kegiatan['nama_event'],
+                'validasi_prestasi' => 1,
+                'tgl_pengajuan' => $kegiatan['tanggal_event'],
+                'tgl_pelaksanaan' => $kegiatan['tanggal_event'],
+                'tgl_selesai_pelaksanaan' => $kegiatan['tanggal_event'],
+                'tempat_pelaksanaan' => $kegiatan['lokasi'],
+                'prestasiid_prestasi' => 115,
+                'file_bukti' => '../assets/qrcode/kuliah_tamu_' . $kegiatan['kode_qr'] . '.png'
+            ];
+            $this->db->insert('poin_skp', $data_poin_skp);
+            // update poin skp
+            $this->_update($nim);
+
+            // ubah status kehadiran
+            $this->db->set('kehadiran', 1);
+            $this->db->where('id_kuliah_tamu', $id_kegiatan);
+            $this->db->where('nim', $nim);
+            $this->db->update('peserta_kuliah_tamu');
+
+            $data = [
+                'kegiatan' => $data_poin_skp,
+                'status' => 'hadir'
+            ];
+        } else {
+        }
+
+        echo json_encode($data);
+    }
+
+    private function _update($nim)
+    {
+        $this->load->model('Model_poinskp', 'poinskp');
+        $this->totalPoinSKp = $this->poinskp->updateTotalPoinSkp($nim);
+
+        $this->db->set('total_poin_skp', $this->totalPoinSKp);
+        $this->db->where('nim', $nim);
+        $this->db->update('mahasiswa');
+    }
 }

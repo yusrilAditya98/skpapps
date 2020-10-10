@@ -43,7 +43,8 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 					temp.push(data['peserta_kegiatan'][j]['nim'])
 					temp.push(data['peserta_kegiatan'][j]['nama'])
 					temp.push(data['peserta_kegiatan'][j]['nama_prodi'])
-					temp.push(data['peserta_kegiatan'][j]['kehadiran_teks'])
+					temp.push('<span id="dkehadiran_' + data['peserta_kegiatan'][j]['nim'] + '">' + data['peserta_kegiatan'][j]['kehadiran_teks'] + '</span>')
+					temp.push('<a class="btn btn-success" onclick="valid(' + data['peserta_kegiatan'][j]['nim'] + ',' + id + ',' + 1 + ')">valid hadir</a>')
 					dataTampung[j] = temp;
 				}
 				$("#kuliah-tamu").DataTable({
@@ -62,6 +63,9 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 						},
 						{
 							title: "Kehadiran"
+						},
+						{
+							title: "Action"
 						}
 					],
 					aLengthMenu: [
@@ -225,14 +229,6 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 			} else {
 				$('#validasi-kuliah-tamu').append(`<tr id="kuliah-tamu-valid_wrapper" ><input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu" value="` + data['id_kuliah_tamu'] + `"><td colspan="5"><h3 class="text-center">Belum ada peserta</h3></td></tr>`)
 			}
-
-
-
-
-
-
-
-
 		}
 	});
 })
@@ -246,4 +242,33 @@ function eventCheckBox() {
 		checkboxs[i].checked = !checkboxs[i].checked;
 	}
 	// selectAll[i].checked = !selectAll[i].checked;
+}
+
+// mengubah status kehadiran peserta
+
+function valid(nim, id_kegiatan, status) {
+	console.log(nim, id_kegiatan, status)
+	let ket = $('#dkehadiran_' + nim).html()
+
+	if (ket == 'Hadir') {
+		alert('Data peserta sudah hadir')
+	} else {
+		$.ajax({
+			url: segments[0] + '/' + segments[3] + '/API_skp/ubahStatusKehadiran',
+			data: {
+				'nim': nim,
+				'id_kegiatan': id_kegiatan,
+				'status': status
+			},
+			method: "post",
+			dataType: 'json',
+			success: function (result) {
+				console.log(result)
+				// alert('Data kehadiran berhasil diubah')
+				$('#dkehadiran_' + nim).html('Hadir')
+			}
+		})
+
+	}
+
 }
