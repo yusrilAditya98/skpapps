@@ -365,9 +365,8 @@ class Akademik extends CI_Controller
     }
     public function validasiKegiatan()
     {
-        $data = $this->input->post('validasi');
-
-        if ($data == null) {
+        $data = $this->_cekKehadiranPeserta();
+        if ($data['id'] == null) {
             $this->db->set('status_terlaksana', 1);
             $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             $this->db->update('kuliah_tamu');
@@ -376,32 +375,56 @@ class Akademik extends CI_Controller
             $this->db->where('id_kuliah_tamu', intval($this->input->post('id_kuliah_tamu')));
             $this->db->update('kuliah_tamu');
             $tgl_pengajuan = date('Y-m-d');
-            for ($i = 0; $i < count($data); $i++) {
-                $this->db->set('kehadiran', 1);
-                $this->db->where('id_peserta_kuliah_tamu', intval($data[$i]));
-                $this->db->update('peserta_kuliah_tamu');
-
-                $mahasiswa = $this->db->get_where('peserta_kuliah_tamu', ['id_peserta_kuliah_tamu' => intval($data[$i])])->row_array();
-                $data_poin_skp = [
-                    'nim' => $mahasiswa['nim'],
-                    'nama_kegiatan' => $this->input->post('nama_kegiatan'),
-                    'validasi_prestasi' => 1,
-                    'tgl_pengajuan' => $tgl_pengajuan,
-                    'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
-                    'tgl_selesai_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
-                    'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
-                    'prestasiid_prestasi' => 115,
-                    'file_bukti' => '../assets/qrcode/' . $this->input->post('kode_qr')
-                ];
-                $this->db->insert('poin_skp', $data_poin_skp);
-
-                // update poin skp
-                $this->_update($mahasiswa['nim']);
+            $kehadiran = [];
+            $mahasiswa = [];
+            $i = 0;
+            $j = 0;
+            foreach ($data['id'] as $id) {
+                if ($id) {
+                    $kehadiran[$i] = [
+                        'id_peserta_kuliah_tamu' => $id,
+                        'kehadiran' => 1
+                    ];
+                    $i++;
+                }
             }
+            $this->db->update_batch('peserta_kuliah_tamu', $kehadiran, 'id_peserta_kuliah_tamu');
+
+            foreach ($data['nim'] as $n) {
+                if ($n) {
+                    $mahasiswa[$j] = [
+                        'nim' => $n,
+                        'nama_kegiatan' => $this->input->post('nama_kegiatan'),
+                        'validasi_prestasi' => 1,
+                        'tgl_pengajuan' => $tgl_pengajuan,
+                        'tgl_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
+                        'tgl_selesai_pelaksanaan' => $this->input->post('tgl_pelaksanaan'),
+                        'tempat_pelaksanaan' => $this->input->post('tempat_pelaksanaan'),
+                        'prestasiid_prestasi' => 115,
+                        'file_bukti' => '../assets/qrcode/' . $this->input->post('kode_qr')
+                    ];
+                    $this->_update($n);
+                    $j++;
+                }
+            }
+            $this->db->insert_batch('poin_skp', $mahasiswa);
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
         redirect('Akademik/kegiatan');
     }
+
+    private function _cekKehadiranPeserta()
+    {
+
+        $id_peserta = $this->input->post('peserta_kt');
+        $peserta_nim = $this->input->post('peserta_nim');
+        $data = [
+            'id' => explode(",", $id_peserta),
+            'nim' => explode(",", $peserta_nim)
+        ];
+        return $data;
+    }
+
     private function _update($nim)
     {
         $this->load->model('Model_poinskp', 'poinskp');

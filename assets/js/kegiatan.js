@@ -44,7 +44,11 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 					temp.push(data['peserta_kegiatan'][j]['nama'])
 					temp.push(data['peserta_kegiatan'][j]['nama_prodi'])
 					temp.push('<span id="dkehadiran_' + data['peserta_kegiatan'][j]['nim'] + '">' + data['peserta_kegiatan'][j]['kehadiran_teks'] + '</span>')
-					temp.push('<a class="btn btn-success" onclick="valid(' + data['peserta_kegiatan'][j]['nim'] + ',' + id + ',' + 1 + ')">valid hadir</a>')
+					if (data['status_terlaksana'] == 1) {
+						temp.push('<a class="btn btn-success" onclick="valid(' + data['peserta_kegiatan'][j]['nim'] + ',' + id + ',' + 1 + ')">valid hadir</a>')
+					} else {
+						temp.push('<a class="btn btn-secondary">valid hadir</a>')
+					}
 					dataTampung[j] = temp;
 				}
 				$("#kuliah-tamu").DataTable({
@@ -171,6 +175,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
+			$('#id_kt').val(id)
 			$('.kategori-filter-valid .fil-validasi').remove()
 			var link_image = window.location.origin + '/' + segments[3] + '/assets/qrcode/kuliah_tamu_' + data['kode_qr'] + '.png';
 			$('.kode_qr_validasi').attr('src', link_image);
@@ -185,6 +190,12 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 			$('#kuliah-tamu-valid_wrapper').remove()
 			$('#validasi-kuliah-tamu').append(`<table class="table table-striped table-bordered" id="kuliah-tamu-valid"></table>`)
 			if (data['peserta_kegiatan'].length != 0) {
+				$("#id_kuliah_tamu").val(data['id_kuliah_tamu'])
+				$("#nama_kegiatan").val(data['nama_event'])
+				$("#tgl_pelaksanaan").val(data['tanggal_format'])
+				$("#tempat_pelaksanaan").val(data['lokasi'])
+				$("#kode_qr").val(`kuliah_tamu_` + data['kode_qr'] + `.png`)
+
 				var i = 0;
 				let dataTampung = [];
 				for (var j in data['peserta_kegiatan']) {
@@ -193,11 +204,7 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 					temp.push(data['peserta_kegiatan'][j]['nim'])
 					temp.push(data['peserta_kegiatan'][j]['nama'])
 					temp.push(data['peserta_kegiatan'][j]['nama_prodi'])
-					temp.push(`<input type="checkbox" name="validasi[]" value="` + data['peserta_kegiatan'][j]['id_peserta_kuliah_tamu'] + `" checked> <input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu" value="` + data['id_kuliah_tamu'] + `">
-					<input type="hidden" id="nama_kegiatan" name="nama_kegiatan" value="` + data['nama_event'] + `">
-					<input type="hidden" id="tgl_pelaksanaan" name="tgl_pelaksanaan" value="` + data['tanggal_format'] + `">
-					<input type="hidden" id="tempat_pelaksanaan" name="tempat_pelaksanaan" value="` + data['lokasi'] + `">
-					<input type="hidden" id="kode_qr" name="kode_qr" value="kuliah_tamu_` + data['kode_qr'] + `.png">`)
+					temp.push(`<input type="checkbox" name="validasi[]" value="` + data['peserta_kegiatan'][j]['id_peserta_kuliah_tamu'] + `,` + data['peserta_kegiatan'][j]['nim'] + `" checked>`)
 					dataTampung[j] = temp;
 				}
 				$("#kuliah-tamu-valid").DataTable({
@@ -271,4 +278,23 @@ function valid(nim, id_kegiatan, status) {
 
 	}
 
+}
+
+function cekPeserta(params) {
+	var x = document.getElementsByName("validasi[]");
+	let idPeserta = "";
+	let nimPeserta = "";
+	let str;
+	let peserta;
+	for (var i in x) {
+		str = [];
+		if (x[i].checked) {
+			str = x[i].value;
+			peserta = str.split(",")
+			idPeserta += peserta[0] + ","
+			nimPeserta += peserta[1] + ","
+		}
+	}
+	$('#peserta_kt').val(idPeserta)
+	$('#peserta_nim').val(nimPeserta)
 }

@@ -261,6 +261,14 @@
                                                     <button class="btn btn-info" onclick="eventCheckBox()">Hadir Semua</button>
                                                 </div>
                                                 <form action="<?= base_url('akademik/validasiKegiatan/'); ?>" method="post">
+                                                    <input type="hidden" name="peserta_kt" id="peserta_kt">
+                                                    <input type="hidden" name="peserta_nim" id="peserta_nim">
+                                                    <input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu">
+                                                    <input type="hidden" id="nama_kegiatan" name="nama_kegiatan">
+                                                    <input type="hidden" id="tgl_pelaksanaan" name="tgl_pelaksanaan">
+                                                    <input type="hidden" id="tempat_pelaksanaan" name="tempat_pelaksanaan">
+                                                    <input type="hidden" id="kode_qr" name="kode_qr">
+
                                                     <div class="col-lg-12 kategori-filter-valid float-right mb-2">
 
                                                     </div>
@@ -270,7 +278,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12 card-footer">
-                                                        <button onclick="return confirm('Apakah anda yakin akan memvalidasi?')" type="submit" class="btn btn-success float-right">Validasi</button>
+                                                        <button onclick="cekPeserta();return confirm('Apakah anda yakin akan memvalidasi?')" type="submit" class="btn btn-success float-right">Validasi</button>
                                                     </div>
                                                 </form>
                                             </div>
