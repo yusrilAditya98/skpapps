@@ -16,7 +16,6 @@ $(window).on('load', function () {
 
 $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 	let id = $(this).data('id');
-	// console.log(id);
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/Akademik/get_kegiatan/' + id,
 		method: 'get',
@@ -43,9 +42,9 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 					temp.push(data['peserta_kegiatan'][j]['nim'])
 					temp.push(data['peserta_kegiatan'][j]['nama'])
 					temp.push(data['peserta_kegiatan'][j]['nama_prodi'])
-					temp.push('<span id="dkehadiran_' + data['peserta_kegiatan'][j]['nim'] + '">' + data['peserta_kegiatan'][j]['kehadiran_teks'] + '</span>')
+					temp.push(data['peserta_kegiatan'][j]['kehadiran_teks'])
 					if (data['status_terlaksana'] == 1) {
-						temp.push('<a class="btn btn-success" onclick="valid(' + data['peserta_kegiatan'][j]['nim'] + ',' + id + ',' + 1 + ')">valid hadir</a>')
+						temp.push('<a class="btn btn-success" onclick="valid(' + data['peserta_kegiatan'][j]['nim'] + ',' + id + ',' + 1 + ',' + data['peserta_kegiatan'][j]['kehadiran'] + ')">valid hadir</a>')
 					} else {
 						temp.push('<a class="btn btn-secondary">valid hadir</a>')
 					}
@@ -108,6 +107,7 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 										.draw();
 								});
 							column.data().unique().sort().each(function (d, j) {
+
 								select.append('<option value="' + d + '">' + d + '</option>')
 							});
 						});
@@ -124,13 +124,11 @@ $('#table-kegiatan').on('click', '.detail-kegiatan-info', function () {
 
 $('#table-kegiatan').on('click', '.edit-kegiatan', function () {
 	let id = $(this).data('id');
-	// console.log(id);
 	$.ajax({
 		url: segments[0] + '/' + segments[3] + '/Akademik/get_kegiatan/' + id,
 		method: 'get',
 		dataType: 'json',
 		success: function (data) {
-			console.log(data);
 			var link_a = window.location.origin + '/' + segments[3] + '/Akademik/editKegiatan/' + id;
 			$('form').attr('action', link_a);
 			$('#nama_kegiatan_lama').val(data['nama_event']);
@@ -152,7 +150,6 @@ $('#table-kegiatan').on('click', '.edit-kegiatan', function () {
 
 $('#table-kegiatan').on('click', '.hapus-kegiatan', function () {
 	let id_kuliah_tamu = $(this).data('id');
-	// console.log(id_kuliah_tamu);
 	Swal.fire({
 		title: 'Anda yakin?',
 		text: "Kegiatan akan dihapus",
@@ -253,11 +250,10 @@ function eventCheckBox() {
 
 // mengubah status kehadiran peserta
 
-function valid(nim, id_kegiatan, status) {
-	console.log(nim, id_kegiatan, status)
-	let ket = $('#dkehadiran_' + nim).html()
-
-	if (ket == 'Hadir') {
+function valid(nim, id_kegiatan, status, kehadiran) {
+	let tombol = event.target
+	let hadir = (tombol.parentElement.previousSibling)
+	if (kehadiran == 1) {
 		alert('Data peserta sudah hadir')
 	} else {
 		$.ajax({
@@ -269,15 +265,11 @@ function valid(nim, id_kegiatan, status) {
 			},
 			method: "post",
 			dataType: 'json',
-			success: function (result) {
-				console.log(result)
-				// alert('Data kehadiran berhasil diubah')
-				$('#dkehadiran_' + nim).html('Hadir')
+			success: function () {
+				hadir.innerHTML = "Hadir"
 			}
 		})
-
 	}
-
 }
 
 function cekPeserta(params) {
