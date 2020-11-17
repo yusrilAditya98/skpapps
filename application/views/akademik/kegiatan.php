@@ -264,7 +264,7 @@
                                                     <input type="hidden" name="peserta_kt" id="peserta_kt">
                                                     <input type="hidden" name="peserta_nim" id="peserta_nim">
                                                     <input type="hidden" id="id_kuliah_tamu" name="id_kuliah_tamu">
-                                                    <input type="hidden" id="nama_kegiatan" name="nama_kegiatan">
+                                                    <input type="hidden" class="nama_kegiatan" id="nm_kgtn" name="nama_kegiatan">
                                                     <input type="hidden" id="tgl_pelaksanaan" name="tgl_pelaksanaan">
                                                     <input type="hidden" id="tempat_pelaksanaan" name="tempat_pelaksanaan">
                                                     <input type="hidden" id="kode_qr" name="kode_qr">

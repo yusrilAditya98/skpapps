@@ -186,9 +186,10 @@ $('#table-kegiatan').on('click', '.validasi-kegiatan-akademik', function () {
 
 			$('#kuliah-tamu-valid_wrapper').remove()
 			$('#validasi-kuliah-tamu').append(`<table class="table table-striped table-bordered" id="kuliah-tamu-valid"></table>`)
+			console.log(data);
 			if (data['peserta_kegiatan'].length != 0) {
 				$("#id_kuliah_tamu").val(data['id_kuliah_tamu'])
-				$("#nama_kegiatan").val(data['nama_event'])
+				$("#nm_kgtn").val(data['nama_event'])
 				$("#tgl_pelaksanaan").val(data['tanggal_format'])
 				$("#tempat_pelaksanaan").val(data['lokasi'])
 				$("#kode_qr").val(`kuliah_tamu_` + data['kode_qr'] + `.png`)

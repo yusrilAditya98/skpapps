@@ -403,9 +403,11 @@ class Akademik extends CI_Controller
                         'prestasiid_prestasi' => 115,
                         'file_bukti' => '../assets/qrcode/' . $this->input->post('kode_qr')
                     ];
-                    $this->_update($n);
                     $j++;
                 }
+            }
+            foreach ($data['nim'] as $n) {
+                $this->_update($n);
             }
             $this->db->insert_batch('poin_skp', $mahasiswa);
         }
