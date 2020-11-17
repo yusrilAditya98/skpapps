@@ -406,10 +406,10 @@ class Akademik extends CI_Controller
                     $j++;
                 }
             }
+            $this->db->insert_batch('poin_skp', $mahasiswa);
             foreach ($data['nim'] as $n) {
                 $this->_update($n);
             }
-            $this->db->insert_batch('poin_skp', $mahasiswa);
         }
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Validasi berhasil</div>');
         redirect('Akademik/kegiatan');
